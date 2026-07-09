@@ -2,6 +2,7 @@ export type MigratedProduct = {
   slug: string;
   title: string;
   sku: string;
+  categorySlug: CatalogCategorySlug;
   basePriceCents: number;
   salePriceCents?: number;
   stockStatus: "instock" | "outofstock";
@@ -15,11 +16,87 @@ export type MigratedProduct = {
   searchKeywords?: string[];
 };
 
+export type CatalogCategorySlug =
+  | "google-review-stands"
+  | "google-review-plates"
+  | "review-platform-stands"
+  | "business-bundles"
+  | "feedback-stands";
+
+export type CatalogCategory = {
+  slug: CatalogCategorySlug;
+  title: string;
+  eyebrow: string;
+  description: string;
+  seoTitle: string;
+  seoDescription: string;
+  buyerIntent: string;
+};
+
+export const catalogCategories: CatalogCategory[] = [
+  {
+    slug: "google-review-stands",
+    title: "Google Review Stands",
+    eyebrow: "Best sellers",
+    description:
+      "Countertop NFC stands that send customers straight to your Google review link after checkout, service, or pickup.",
+    seoTitle: "Google Review Stands for Local Businesses | Tap Rater",
+    seoDescription:
+      "Shop NFC Google review stands for restaurants, salons, clinics, retail stores, and service businesses that want more customer reviews.",
+    buyerIntent: "For businesses that mainly want more Google reviews from in-person customers."
+  },
+  {
+    slug: "google-review-plates",
+    title: "Google Review Plates",
+    eyebrow: "Low profile",
+    description:
+      "Compact NFC review plates for front desks, tables, counters, and tight spaces where a stand is not the right fit.",
+    seoTitle: "Google Review Plates for Counters and Tables | Tap Rater",
+    seoDescription:
+      "Buy compact Google review NFC plates for counters, tables, reception desks, and checkout areas.",
+    buyerIntent: "For desks, tables, and compact counters where a flat plate looks cleaner."
+  },
+  {
+    slug: "review-platform-stands",
+    title: "Review Platform Stands",
+    eyebrow: "Google, Facebook, Yelp",
+    description:
+      "NFC review stands for the review platform your customers already use, including Google, Facebook, and Yelp.",
+    seoTitle: "NFC Review Platform Stands | Google, Facebook and Yelp",
+    seoDescription:
+      "Shop NFC review stands for Google reviews, Facebook recommendations, Yelp reviews, and customer feedback links.",
+    buyerIntent: "For businesses that care about more than one review platform."
+  },
+  {
+    slug: "business-bundles",
+    title: "Business Review Bundles",
+    eyebrow: "Save with sets",
+    description:
+      "Multi-piece Tap Rater bundles for businesses with several counters, rooms, tables, or team members.",
+    seoTitle: "Business Review Bundles for NFC Review Stands | Tap Rater",
+    seoDescription:
+      "Save on Tap Rater business bundles with multiple NFC review stands and plates for collecting more customer reviews.",
+    buyerIntent: "For multi-station businesses that need review prompts in several customer touchpoints."
+  },
+  {
+    slug: "feedback-stands",
+    title: "Feedback Stands",
+    eyebrow: "Custom links",
+    description:
+      "Flexible NFC stands that open surveys, feedback forms, experience pages, or any custom review destination.",
+    seoTitle: "NFC Feedback Stands for Customer Surveys | Tap Rater",
+    seoDescription:
+      "Shop NFC feedback stands for customer surveys, rate-your-experience pages, and custom review links.",
+    buyerIntent: "For businesses that want a survey or custom feedback flow instead of one review platform."
+  }
+];
+
 export const migratedProducts: MigratedProduct[] = [
   {
     slug: "google-review-white-stand",
     title: "White Stand - Google Review",
     sku: "TRATER01",
+    categorySlug: "google-review-stands",
     basePriceCents: 4900,
     stockStatus: "instock",
     shortDescription: "NFC Google review stand for counters, checkout desks, salons, restaurants, clinics, and local service businesses.",
@@ -38,6 +115,7 @@ export const migratedProducts: MigratedProduct[] = [
     slug: "google-review-white-plate",
     title: "White Plate - Google Review",
     sku: "TRATER02",
+    categorySlug: "google-review-plates",
     basePriceCents: 3900,
     stockStatus: "instock",
     shortDescription: "Low-profile NFC Google review plate for desks, tables, counters, and checkout areas.",
@@ -56,6 +134,7 @@ export const migratedProducts: MigratedProduct[] = [
     slug: "facebook-review-stand",
     title: "White Stand - Facebook Review",
     sku: "TRATER05",
+    categorySlug: "review-platform-stands",
     basePriceCents: 4900,
     stockStatus: "outofstock",
     shortDescription: "NFC Facebook review stand for businesses that collect recommendations and social proof on Facebook.",
@@ -71,6 +150,7 @@ export const migratedProducts: MigratedProduct[] = [
     slug: "yelp-review-stand",
     title: "White Stand - Yelp Review",
     sku: "TRATER06",
+    categorySlug: "review-platform-stands",
     basePriceCents: 4900,
     stockStatus: "outofstock",
     shortDescription: "NFC Yelp review stand for restaurants, salons, service businesses, and local storefronts.",
@@ -86,6 +166,7 @@ export const migratedProducts: MigratedProduct[] = [
     slug: "tap-rater-business-white-bundle",
     title: "Business - Google White Bundle",
     sku: "TRATER07",
+    categorySlug: "business-bundles",
     basePriceCents: 12700,
     salePriceCents: 10160,
     stockStatus: "instock",
@@ -102,6 +183,7 @@ export const migratedProducts: MigratedProduct[] = [
     slug: "tap-rater-business-white-stands-bundle",
     title: "Business - Google White Stands Bundle",
     sku: "TRATER10",
+    categorySlug: "business-bundles",
     basePriceCents: 14700,
     salePriceCents: 11760,
     stockStatus: "instock",
@@ -118,6 +200,7 @@ export const migratedProducts: MigratedProduct[] = [
     slug: "tap-rater-white-stand-rate-your-experience",
     title: "White Stand - Rate Your Experience",
     sku: "TRATER12",
+    categorySlug: "feedback-stands",
     basePriceCents: 4900,
     stockStatus: "instock",
     shortDescription: "NFC feedback stand for custom review links, surveys, and rate-your-experience pages.",
