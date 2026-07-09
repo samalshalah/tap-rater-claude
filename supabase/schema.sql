@@ -31,6 +31,153 @@ create table if not exists change_link_requests (
   created_at timestamptz not null default now()
 );
 
+create table if not exists customers (
+  id uuid primary key default gen_random_uuid(),
+  email text unique not null,
+  name text,
+  phone text,
+  role text default 'customer',
+  email_verified_at timestamptz,
+  created_at timestamptz default now(),
+  updated_at timestamptz default now()
+);
+
+create table if not exists businesses (
+  id uuid primary key default gen_random_uuid(),
+  customer_id uuid references customers(id) on delete set null,
+  business_name text not null,
+  logo_url text,
+  website_url text,
+  phone text,
+  address text,
+  google_place_id text,
+  google_review_url text,
+  facebook_url text,
+  yelp_url text,
+  instagram_url text,
+  booking_url text,
+  status text default 'active',
+  created_at timestamptz default now(),
+  updated_at timestamptz default now()
+);
+
+create table if not exists landing_pages (
+  id uuid primary key default gen_random_uuid(),
+  business_id uuid references businesses(id) on delete cascade,
+  template_type text not null,
+  slug text unique not null,
+  title text,
+  headline text,
+  description text,
+  logo_url text,
+  buttons_json jsonb default '[]'::jsonb,
+  form_config_json jsonb default '{}'::jsonb,
+  status text default 'draft',
+  created_at timestamptz default now(),
+  updated_at timestamptz default now(),
+  constraint landing_pages_status_check check (status in ('draft', 'published', 'paused'))
+);
+
+create table if not exists devices (
+  id uuid primary key default gen_random_uuid(),
+  device_code text unique not null,
+  activation_code_hash text not null,
+  product_type text not null,
+  service_mode text not null,
+  status text not null default 'unactivated',
+  customer_id uuid references customers(id) on delete set null,
+  business_id uuid references businesses(id) on delete set null,
+  destination_type text,
+  destination_url text,
+  landing_page_id uuid references landing_pages(id) on delete set null,
+  label text,
+  activated_at timestamptz,
+  created_at timestamptz default now(),
+  updated_at timestamptz default now(),
+  constraint devices_status_check check (status in ('unactivated', 'active', 'paused', 'lost', 'retired')),
+  constraint devices_service_mode_check check (service_mode in ('basic_redirect', 'managed_redirect', 'premium_landing_page')),
+  constraint devices_product_type_check check (
+    product_type in (
+      'google_review',
+      'facebook_review',
+      'yelp_profile',
+      'appointment_booking',
+      'social_follow',
+      'wifi_menu',
+      'multi_platform_review',
+      'feedback_form',
+      'referral_form',
+      'business_card',
+      'custom_url'
+    )
+  ),
+  constraint devices_destination_type_check check (
+    destination_type is null or destination_type in (
+      'google_review',
+      'facebook_review',
+      'yelp_profile',
+      'booking',
+      'social',
+      'menu',
+      'wifi',
+      'custom',
+      'landing_page'
+    )
+  )
+);
+
+create table if not exists tap_events (
+  id uuid primary key default gen_random_uuid(),
+  device_id uuid references devices(id) on delete set null,
+  business_id uuid references businesses(id) on delete set null,
+  landing_page_id uuid references landing_pages(id) on delete set null,
+  event_type text not null,
+  destination_type text,
+  ip_hash text,
+  user_agent text,
+  referrer text,
+  created_at timestamptz default now()
+);
+
+create table if not exists form_submissions (
+  id uuid primary key default gen_random_uuid(),
+  landing_page_id uuid references landing_pages(id) on delete set null,
+  business_id uuid references businesses(id) on delete set null,
+  device_id uuid references devices(id) on delete set null,
+  name text,
+  email text,
+  phone text,
+  message text,
+  payload_json jsonb default '{}'::jsonb,
+  created_at timestamptz default now()
+);
+
+create table if not exists device_activation_attempts (
+  id uuid primary key default gen_random_uuid(),
+  device_code text not null,
+  email text,
+  ip_hash text,
+  success boolean not null default false,
+  reason text,
+  created_at timestamptz default now()
+);
+
+create index if not exists customers_email_idx on customers(email);
+create index if not exists businesses_customer_id_idx on businesses(customer_id);
+create index if not exists businesses_google_place_id_idx on businesses(google_place_id);
+create index if not exists devices_device_code_idx on devices(device_code);
+create index if not exists devices_customer_id_idx on devices(customer_id);
+create index if not exists devices_business_id_idx on devices(business_id);
+create index if not exists devices_status_idx on devices(status);
+create index if not exists landing_pages_slug_idx on landing_pages(slug);
+create index if not exists landing_pages_business_id_idx on landing_pages(business_id);
+create index if not exists tap_events_device_id_idx on tap_events(device_id);
+create index if not exists tap_events_business_id_idx on tap_events(business_id);
+create index if not exists tap_events_landing_page_id_idx on tap_events(landing_page_id);
+create index if not exists tap_events_created_at_idx on tap_events(created_at desc);
+create index if not exists device_activation_attempts_device_code_created_at_idx on device_activation_attempts(device_code, created_at desc);
+create index if not exists device_activation_attempts_ip_hash_created_at_idx on device_activation_attempts(ip_hash, created_at desc);
+
 create table if not exists products (
   id uuid primary key default gen_random_uuid(),
   slug text not null unique,

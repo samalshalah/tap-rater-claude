@@ -24,8 +24,9 @@ Stripe checkout is available for test mode only. Live payments, live paid orders
 
 ## Supabase Schema
 
-- [ ] Run `docs/supabase-schema.sql` in the production Supabase SQL editor.
-- [ ] Run `supabase/schema.sql` for storefront/admin CMS product tables if they are not already installed.
+- [ ] Run `supabase/schema.sql` in the production Supabase SQL editor before testing activation, redirects, hosted landing pages, analytics, or Stripe test orders.
+- [ ] Run `npm run check:platform-schema` locally to confirm the deployable schema includes the required platform tables.
+- [ ] Run `supabase/demo-seed.sql` only in local development or a non-production Supabase project.
 - [ ] Confirm these platform tables exist:
   - [ ] `customers`
   - [ ] `businesses`
@@ -37,6 +38,7 @@ Stripe checkout is available for test mode only. Live payments, live paid orders
 - [ ] Confirm these storefront/admin tables exist:
   - [ ] `site_content`
   - [ ] `products`
+  - [ ] `orders`
   - [ ] `media_assets`
   - [ ] `contact_requests`
   - [ ] `setup_requests`
@@ -206,6 +208,7 @@ Run these commands before each production deployment:
 ```bash
 npm run build
 npm test
+npm run check:platform-schema
 npm run start
 ```
 

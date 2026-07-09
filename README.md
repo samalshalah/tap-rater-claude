@@ -1,16 +1,16 @@
 # Tap Rater
 
-Tap Rater is a Next.js ecommerce storefront for NFC review stands, review plates, and business bundles. The site is replacing the old WordPress/WooCommerce build with a faster storefront, a simple admin/CMS layer, Supabase-backed persistence, and Resend-powered request notifications.
+Tap Rater is a Next.js ecommerce storefront for NFC review stands, review plates, and business bundles. The site is replacing the old WordPress/WooCommerce build with a faster storefront, a simple admin/CMS layer, Supabase-backed persistence, platform device activation, and Resend-powered request notifications.
 
-Stripe checkout is intentionally deferred until the business bank account and final payment setup are ready. The current cart is ecommerce-prep only.
+Stripe checkout is available in test mode only until the business bank account and final live payment setup are explicitly approved.
 
 ## Stack
 
 - Next.js storefront for product pages, categories, cart, and SEO content.
 - Static `migratedProducts` catalog fallback so local preview and builds work without Supabase.
-- Supabase-backed admin/CMS for homepage content, product records, request inbox data, and ecommerce settings.
+- Supabase-backed admin/CMS for homepage content, product records, request inbox data, platform devices, activation, analytics, and ecommerce settings.
 - Resend notifications for customer inquiry forms.
-- Stripe planned for the final launch stage, not required now.
+- Stripe Checkout test mode foundation. Live payment processing is not enabled.
 
 ## Local Setup
 
@@ -28,6 +28,7 @@ Useful commands:
 npm run build
 npm test
 npm run smoke
+npm run check:platform-schema
 ```
 
 Local dev usually runs at:
@@ -132,7 +133,17 @@ Do not enable live payment processing until the business bank account and live S
 
 ## Supabase Table Checklist
 
-The admin and request workflows expect these tables when Supabase persistence is enabled:
+Run `supabase/schema.sql` before testing activation, device redirects, hosted landing pages, analytics, or Stripe test orders. The app expects these platform tables when Supabase persistence is enabled:
+
+- `customers`
+- `businesses`
+- `devices`
+- `landing_pages`
+- `tap_events`
+- `form_submissions`
+- `device_activation_attempts`
+
+The same schema file also includes the storefront, admin, request, CMS, media, and test-order tables:
 
 - `site_content`
 - `products`
@@ -146,23 +157,36 @@ The storefront remains safe without Supabase because it falls back to the static
 
 ## Supabase Schema Setup
 
-The platform device, activation, landing page, tap event, and form submission schema is documented in:
+The canonical deployment schema is:
 
 ```text
-docs/supabase-schema.sql
+supabase/schema.sql
 ```
 
 To apply it:
 
 1. Open the Supabase project SQL editor.
-2. Review `docs/supabase-schema.sql`.
+2. Review `supabase/schema.sql`.
 3. Run it against the target project.
-4. Confirm the demo devices exist:
-   - `TR-DEMO-GOOGLE`
-   - `TR-DEMO-SOCIAL`
-   - `TR-DEMO-FEEDBACK`
+4. Run the local safety check:
 
-The schema file is intentionally non-destructive. It uses `create table if not exists`, `create index if not exists`, and `insert ... on conflict do nothing` for demo devices.
+```bash
+npm run check:platform-schema
+```
+
+For local development or a non-production Supabase project, you may also run:
+
+```text
+supabase/demo-seed.sql
+```
+
+That optional seed creates demo devices:
+
+- `TR-DEMO-GOOGLE`
+- `TR-DEMO-SOCIAL`
+- `TR-DEMO-FEEDBACK`
+
+The schema file is intentionally non-destructive. It uses `create table if not exists` and `create index if not exists`. The optional demo seed uses `insert ... on conflict do nothing`.
 
 Platform schema tables:
 
@@ -174,7 +198,7 @@ Platform schema tables:
 - `form_submissions`
 - `device_activation_attempts`
 
-The demo activation hashes are placeholders only. Replace them with real hashed activation codes before manufacturing or production use.
+The demo activation hashes are development examples only. Replace them with real hashed activation codes before manufacturing or production use, and do not print real activation codes in public listing images.
 
 Landing page template JSON for premium hosted pages is documented in:
 
@@ -197,6 +221,7 @@ Pre-launch command sequence:
 ```bash
 npm run build
 npm test
+npm run check:platform-schema
 npm run start
 npm run smoke
 ```
