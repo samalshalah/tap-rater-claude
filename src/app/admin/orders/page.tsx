@@ -1,15 +1,19 @@
+import { AdminSectionPage } from "@/components/admin/admin-section-page";
+import { AdminShell } from "@/components/admin/admin-shell";
 import { requireAdmin } from "@/lib/admin-auth";
 
 export default async function AdminOrdersPage() {
   await requireAdmin();
 
   return (
-    <section className="mx-auto max-w-5xl px-4 py-12">
-      <p className="text-sm font-semibold uppercase text-brand">Admin</p>
-      <h1 className="mt-3 text-4xl font-black text-ink">Orders</h1>
-      <p className="mt-4 leading-7 text-muted">
-        Orders will be connected when Stripe checkout is added in the final launch stage.
-      </p>
-    </section>
+    <AdminShell>
+      <AdminSectionPage
+        eyebrow="Commerce"
+        title="Orders"
+        description="Manage paid orders, fulfillment, order notes, customer communication, and refund status after Stripe is connected in the final launch stage."
+        primaryItems={["Order list and filters", "Order detail timeline", "Fulfillment status", "Customer notes", "Refund/payment state"]}
+        nextItems={["Add Stripe checkout and webhook order creation.", "Store shipping address and order items.", "Add admin order status transitions and email notifications."]}
+      />
+    </AdminShell>
   );
 }

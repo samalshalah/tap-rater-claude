@@ -1,3 +1,4 @@
+import { AdminShell } from "@/components/admin/admin-shell";
 import { requireAdmin } from "@/lib/admin-auth";
 import { getSupabaseAdmin, hasSupabaseAdminConfig } from "@/lib/db";
 
@@ -19,13 +20,15 @@ export default async function AdminRequestsPage() {
 
   if (!hasSupabaseAdminConfig()) {
     return (
-      <section className="mx-auto max-w-5xl px-4 py-12">
+      <AdminShell>
+      <section className="mx-auto max-w-5xl px-4 py-8 md:px-8 lg:py-12">
         <p className="text-sm font-semibold uppercase text-brand">Admin</p>
         <h1 className="mt-3 text-4xl font-black text-ink">Requests</h1>
         <p className="mt-4 leading-7 text-muted">
           Supabase is not configured in this environment. Add `NEXT_PUBLIC_SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` to view saved requests.
         </p>
       </section>
+      </AdminShell>
     );
   }
 
@@ -37,7 +40,8 @@ export default async function AdminRequestsPage() {
   ]);
 
   return (
-    <section className="mx-auto max-w-7xl px-4 py-12">
+    <AdminShell>
+    <section className="mx-auto max-w-7xl px-4 py-8 md:px-8 lg:py-12">
       <p className="text-sm font-semibold uppercase text-brand">Admin</p>
       <h1 className="mt-3 text-4xl font-black text-ink">Requests</h1>
       <div className="mt-8 grid gap-8">
@@ -46,6 +50,7 @@ export default async function AdminRequestsPage() {
         <RequestList title="Change-link requests" rows={(changes.data ?? []) as RequestRow[]} detailKey="new_review_url" secondaryKey="taprater_id" />
       </div>
     </section>
+    </AdminShell>
   );
 }
 

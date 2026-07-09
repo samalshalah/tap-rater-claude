@@ -1,3 +1,4 @@
+import { AdminShell } from "@/components/admin/admin-shell";
 import { HomepageEditor } from "@/components/admin/homepage-editor";
 import { requireAdmin } from "@/lib/admin-auth";
 import { getHomepageContent } from "@/lib/cms-repository";
@@ -7,7 +8,8 @@ export default async function AdminHomepageEditorPage() {
   const content = await getHomepageContent();
 
   return (
-    <section className="mx-auto max-w-4xl px-4 py-12">
+    <AdminShell>
+    <section className="mx-auto max-w-4xl px-4 py-8 md:px-8 lg:py-12">
       <p className="text-sm font-semibold uppercase text-brand">Admin</p>
       <h1 className="mt-3 text-4xl font-black text-ink">Homepage editor</h1>
       <p className="mt-4 leading-7 text-muted">
@@ -17,5 +19,6 @@ export default async function AdminHomepageEditorPage() {
         <HomepageEditor content={content} />
       </div>
     </section>
+    </AdminShell>
   );
 }

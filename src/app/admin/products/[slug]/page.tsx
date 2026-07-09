@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { AdminShell } from "@/components/admin/admin-shell";
 import { ProductEditor } from "@/components/admin/product-editor";
 import { requireAdmin } from "@/lib/admin-auth";
 import { getProductBySlug } from "@/lib/products";
@@ -17,7 +18,8 @@ export default async function AdminProductEditorPage({ params }: AdminProductEdi
   }
 
   return (
-    <section className="mx-auto max-w-5xl px-4 py-12">
+    <AdminShell>
+    <section className="mx-auto max-w-5xl px-4 py-8 md:px-8 lg:py-12">
       <p className="text-sm font-semibold uppercase text-brand">Admin</p>
       <h1 className="mt-3 text-4xl font-black text-ink">Edit product</h1>
       <p className="mt-4 leading-7 text-muted">
@@ -27,5 +29,6 @@ export default async function AdminProductEditorPage({ params }: AdminProductEdi
         <ProductEditor product={product} />
       </div>
     </section>
+    </AdminShell>
   );
 }

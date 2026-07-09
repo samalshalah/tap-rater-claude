@@ -1,11 +1,13 @@
 import Link from "next/link";
+import { AdminShell } from "@/components/admin/admin-shell";
 import { requireAdmin } from "@/lib/admin-auth";
 
 export default async function AdminContentPage() {
   await requireAdmin();
 
   return (
-    <section className="mx-auto max-w-6xl px-4 py-12">
+    <AdminShell>
+    <section className="mx-auto max-w-6xl px-4 py-8 md:px-8 lg:py-12">
       <p className="text-sm font-semibold uppercase text-brand">Admin</p>
       <h1 className="mt-3 text-4xl font-black text-ink">Website content</h1>
       <p className="mt-4 max-w-3xl leading-7 text-muted">
@@ -26,5 +28,6 @@ export default async function AdminContentPage() {
         </Link>
       </div>
     </section>
+    </AdminShell>
   );
 }

@@ -1,13 +1,15 @@
 import { requireAdmin } from "@/lib/admin-auth";
 import { formatPrice, getActiveProducts, getCategoryBySlug, getProductPriceCents } from "@/lib/products";
 import Link from "next/link";
+import { AdminShell } from "@/components/admin/admin-shell";
 
 export default async function AdminProductsPage() {
   await requireAdmin();
   const products = getActiveProducts();
 
   return (
-    <section className="mx-auto max-w-7xl px-4 py-12">
+    <AdminShell>
+    <section className="mx-auto max-w-7xl px-4 py-8 md:px-8 lg:py-12">
       <p className="text-sm font-semibold uppercase text-brand">Admin</p>
       <div className="mt-3 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
         <h1 className="text-4xl font-black text-ink">Products</h1>
@@ -42,5 +44,6 @@ export default async function AdminProductsPage() {
         </table>
       </div>
     </section>
+    </AdminShell>
   );
 }

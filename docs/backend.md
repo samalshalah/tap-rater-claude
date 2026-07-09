@@ -48,6 +48,27 @@ This creates request tables, product tables, `site_content`, and `media_assets`.
 - `/admin/content/homepage`
 - `/admin/content/pages`
 - `/admin/products/[slug]`
+- `/admin/categories`
+- `/admin/inventory`
+- `/admin/customers`
+- `/admin/media`
+- `/admin/discounts`
+- `/admin/shipping`
+- `/admin/taxes`
+- `/admin/seo`
+- `/admin/analytics`
+- `/admin/settings`
+
+## Admin Control Menu
+
+The admin dashboard has a persistent sidebar with four groups:
+
+- Operations: Dashboard, Requests, Orders, Customers.
+- Commerce: Products, Categories, Inventory, Discounts, Shipping, Taxes.
+- Growth: Website, Media, SEO, Analytics.
+- System: Settings.
+
+Some sections are structural placeholders with implementation checklists. They define the professional ecommerce backend surface before each deeper CRUD workflow is built.
 
 ## CMS Editing
 

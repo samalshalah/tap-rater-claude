@@ -1,3 +1,4 @@
+import { AdminShell } from "@/components/admin/admin-shell";
 import { PageEditor } from "@/components/admin/page-editor";
 import { requireAdmin } from "@/lib/admin-auth";
 
@@ -5,7 +6,8 @@ export default async function AdminPagesEditorPage() {
   await requireAdmin();
 
   return (
-    <section className="mx-auto max-w-4xl px-4 py-12">
+    <AdminShell>
+    <section className="mx-auto max-w-4xl px-4 py-8 md:px-8 lg:py-12">
       <p className="text-sm font-semibold uppercase text-brand">Admin</p>
       <h1 className="mt-3 text-4xl font-black text-ink">Page editor</h1>
       <p className="mt-4 leading-7 text-muted">
@@ -15,5 +17,6 @@ export default async function AdminPagesEditorPage() {
         <PageEditor />
       </div>
     </section>
+    </AdminShell>
   );
 }
