@@ -8,7 +8,10 @@ export type MigratedProduct = {
   stockStatus: "instock" | "outofstock";
   shortDescription: string;
   description: string;
+  productType: ProductCommerceType;
   serviceMode: ProductServiceMode;
+  checkoutMode: ProductCheckoutMode;
+  requiresAccount: boolean;
   requiresSubscription: boolean;
   requiresLandingPage: boolean;
   activationType: ProductActivationType;
@@ -21,7 +24,11 @@ export type MigratedProduct = {
   searchKeywords?: string[];
 };
 
-export type ProductServiceMode = "basic_redirect" | "managed_redirect" | "premium_landing_page";
+export type ProductCommerceType = "physical_redirect" | "physical_managed" | "platform_landing_page" | "bundle";
+
+export type ProductServiceMode = "basic_redirect" | "managed_redirect" | "hosted_landing_page" | "multi_location_platform";
+
+export type ProductCheckoutMode = "buy_now" | "request_quote" | "subscription" | "contact_sales";
 
 export type ProductActivationType = "free_basic_activation" | "managed_setup" | "premium_hosted_activation";
 
@@ -139,7 +146,10 @@ export const migratedProducts: MigratedProduct[] = [
     stockStatus: "instock",
     shortDescription: "NFC Google review stand for counters, checkout desks, salons, restaurants, clinics, and local service businesses.",
     description: "A Tap Rater Google Review NFC stand helps customers open your Google review link with one tap. Place it near checkout, the front desk, or the service counter so customers can tap or scan before they leave.",
+    productType: "physical_redirect",
     serviceMode: "basic_redirect",
+    checkoutMode: "buy_now",
+    requiresAccount: false,
     requiresSubscription: false,
     requiresLandingPage: false,
     activationType: "free_basic_activation",
@@ -163,7 +173,10 @@ export const migratedProducts: MigratedProduct[] = [
     stockStatus: "instock",
     shortDescription: "Low-profile NFC Google review plate for desks, tables, counters, and checkout areas.",
     description: "A Tap Rater Google Review NFC plate gives customers a clean, compact way to open your Google review link. It is built for counters, front desks, table service, and tight spaces where a stand is not the right fit.",
+    productType: "physical_redirect",
     serviceMode: "basic_redirect",
+    checkoutMode: "buy_now",
+    requiresAccount: false,
     requiresSubscription: false,
     requiresLandingPage: false,
     activationType: "free_basic_activation",
@@ -187,7 +200,10 @@ export const migratedProducts: MigratedProduct[] = [
     stockStatus: "outofstock",
     shortDescription: "NFC Facebook review stand for businesses that collect recommendations and social proof on Facebook.",
     description: "A Tap Rater Facebook Review NFC stand sends customers to your Facebook recommendation or review destination with one tap. Use it at your counter, reception desk, or checkout area.",
+    productType: "physical_redirect",
     serviceMode: "basic_redirect",
+    checkoutMode: "buy_now",
+    requiresAccount: false,
     requiresSubscription: false,
     requiresLandingPage: false,
     activationType: "free_basic_activation",
@@ -208,7 +224,10 @@ export const migratedProducts: MigratedProduct[] = [
     stockStatus: "outofstock",
     shortDescription: "NFC Yelp review stand for restaurants, salons, service businesses, and local storefronts.",
     description: "A Tap Rater Yelp Review NFC stand helps customers open your Yelp review destination with one tap. It is useful for businesses where Yelp visibility helps customers choose where to go next.",
+    productType: "physical_redirect",
     serviceMode: "basic_redirect",
+    checkoutMode: "buy_now",
+    requiresAccount: false,
     requiresSubscription: false,
     requiresLandingPage: false,
     activationType: "free_basic_activation",
@@ -230,7 +249,10 @@ export const migratedProducts: MigratedProduct[] = [
     stockStatus: "instock",
     shortDescription: "Google review NFC bundle for businesses that need multiple review touchpoints.",
     description: "The Tap Rater Google White Bundle gives your business multiple NFC review touchpoints, making it easier to request reviews at the front desk, checkout counter, reception area, or table.",
+    productType: "bundle",
     serviceMode: "managed_redirect",
+    checkoutMode: "buy_now",
+    requiresAccount: false,
     requiresSubscription: false,
     requiresLandingPage: false,
     activationType: "managed_setup",
@@ -252,7 +274,10 @@ export const migratedProducts: MigratedProduct[] = [
     stockStatus: "instock",
     shortDescription: "Multi-stand Google review NFC bundle for businesses with several counters, rooms, or service points.",
     description: "The Tap Rater Google White Stands Bundle is made for businesses that need several NFC Google review stands across a location or team. Place them where customers check in, pay, or finish service.",
+    productType: "bundle",
     serviceMode: "managed_redirect",
+    checkoutMode: "buy_now",
+    requiresAccount: false,
     requiresSubscription: false,
     requiresLandingPage: false,
     activationType: "managed_setup",
@@ -273,7 +298,10 @@ export const migratedProducts: MigratedProduct[] = [
     stockStatus: "instock",
     shortDescription: "Feedback NFC stand for hosted feedback forms, custom customer flows, surveys, and rate-your-experience pages.",
     description: "The Tap Rater Feedback NFC stand opens a hosted Tap Rater landing page, feedback form, survey, or verified customer flow. Use it when you need a flexible platform-powered experience instead of one direct review destination.",
-    serviceMode: "premium_landing_page",
+    productType: "platform_landing_page",
+    serviceMode: "hosted_landing_page",
+    checkoutMode: "subscription",
+    requiresAccount: true,
     requiresSubscription: true,
     requiresLandingPage: true,
     activationType: "premium_hosted_activation",

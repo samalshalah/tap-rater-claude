@@ -83,7 +83,12 @@ export function normalizeStorefrontProductRow(row: unknown): MigratedProduct | n
   const shortDescription =
     readString(productRow.short_description) ?? readString(productRow.shortDescription) ?? staticProduct?.shortDescription;
   const description = readString(productRow.description) ?? staticProduct?.description;
+  const productType =
+    readProductType(productRow.product_type) ?? readProductType(productRow.productType) ?? staticProduct?.productType ?? "physical_redirect";
   const serviceMode = readServiceMode(productRow.service_mode) ?? readServiceMode(productRow.serviceMode) ?? staticProduct?.serviceMode;
+  const checkoutMode = readCheckoutMode(productRow.checkout_mode) ?? readCheckoutMode(productRow.checkoutMode) ?? staticProduct?.checkoutMode ?? "buy_now";
+  const requiresAccount =
+    readBoolean(productRow.requires_account) ?? readBoolean(productRow.requiresAccount) ?? staticProduct?.requiresAccount ?? false;
   const requiresSubscription =
     readBoolean(productRow.requires_subscription) ?? readBoolean(productRow.requiresSubscription) ?? staticProduct?.requiresSubscription;
   const requiresLandingPage =
@@ -102,7 +107,10 @@ export function normalizeStorefrontProductRow(row: unknown): MigratedProduct | n
     !stockStatus ||
     !shortDescription ||
     !description ||
+    !productType ||
     !serviceMode ||
+    !checkoutMode ||
+    requiresAccount === undefined ||
     requiresSubscription === undefined ||
     requiresLandingPage === undefined ||
     !activationType ||
@@ -121,7 +129,10 @@ export function normalizeStorefrontProductRow(row: unknown): MigratedProduct | n
     stockStatus,
     shortDescription,
     description,
+    productType,
     serviceMode,
+    checkoutMode,
+    requiresAccount,
     requiresSubscription,
     requiresLandingPage,
     activationType,
@@ -153,7 +164,23 @@ function readStockStatus(value: unknown): MigratedProduct["stockStatus"] | undef
 }
 
 function readServiceMode(value: unknown): MigratedProduct["serviceMode"] | undefined {
-  return value === "basic_redirect" || value === "managed_redirect" || value === "premium_landing_page" ? value : undefined;
+  if (value === "premium_landing_page") {
+    return "hosted_landing_page";
+  }
+
+  return value === "basic_redirect" || value === "managed_redirect" || value === "hosted_landing_page" || value === "multi_location_platform"
+    ? value
+    : undefined;
+}
+
+function readProductType(value: unknown): MigratedProduct["productType"] | undefined {
+  return value === "physical_redirect" || value === "physical_managed" || value === "platform_landing_page" || value === "bundle"
+    ? value
+    : undefined;
+}
+
+function readCheckoutMode(value: unknown): MigratedProduct["checkoutMode"] | undefined {
+  return value === "buy_now" || value === "request_quote" || value === "subscription" || value === "contact_sales" ? value : undefined;
 }
 
 function readActivationType(value: unknown): MigratedProduct["activationType"] | undefined {

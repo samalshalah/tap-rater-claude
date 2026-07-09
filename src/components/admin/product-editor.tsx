@@ -40,7 +40,10 @@ export function ProductEditor({ product, categories, mode }: ProductEditorProps)
           stockStatus: form.get("stockStatus"),
           shortDescription: form.get("shortDescription"),
           description: form.get("description"),
+          productType: form.get("productType"),
           serviceMode: form.get("serviceMode"),
+          checkoutMode: form.get("checkoutMode"),
+          requiresAccount: form.get("requiresAccount") === "true",
           requiresSubscription: form.get("requiresSubscription") === "true",
           requiresLandingPage: form.get("requiresLandingPage") === "true",
           activationType: form.get("activationType"),
@@ -139,11 +142,30 @@ export function ProductEditor({ product, categories, mode }: ProductEditorProps)
           </div>
           <div className="grid gap-4 md:grid-cols-2">
             <label className="grid gap-2 text-sm font-bold text-ink">
+              Product type
+              <select className="rounded-md border border-line bg-white px-4 py-3 font-normal" name="productType" defaultValue={product.productType}>
+                <option value="physical_redirect">Physical direct redirect</option>
+                <option value="physical_managed">Physical managed setup</option>
+                <option value="platform_landing_page">Platform landing page</option>
+                <option value="bundle">Bundle</option>
+              </select>
+            </label>
+            <label className="grid gap-2 text-sm font-bold text-ink">
               Service mode
               <select className="rounded-md border border-line bg-white px-4 py-3 font-normal" name="serviceMode" defaultValue={product.serviceMode}>
                 <option value="basic_redirect">Basic redirect</option>
                 <option value="managed_redirect">Managed redirect</option>
-                <option value="premium_landing_page">Premium landing page</option>
+                <option value="hosted_landing_page">Hosted landing page</option>
+                <option value="multi_location_platform">Multi-location platform</option>
+              </select>
+            </label>
+            <label className="grid gap-2 text-sm font-bold text-ink">
+              Checkout mode
+              <select className="rounded-md border border-line bg-white px-4 py-3 font-normal" name="checkoutMode" defaultValue={product.checkoutMode}>
+                <option value="buy_now">Buy now</option>
+                <option value="request_quote">Request quote</option>
+                <option value="subscription">Subscription</option>
+                <option value="contact_sales">Contact sales</option>
               </select>
             </label>
             <label className="grid gap-2 text-sm font-bold text-ink">
@@ -152,6 +174,17 @@ export function ProductEditor({ product, categories, mode }: ProductEditorProps)
                 <option value="free_basic_activation">Free basic activation</option>
                 <option value="managed_setup">Managed setup</option>
                 <option value="premium_hosted_activation">Premium hosted activation</option>
+              </select>
+            </label>
+            <label className="grid gap-2 text-sm font-bold text-ink">
+              Account requirement
+              <select
+                className="rounded-md border border-line bg-white px-4 py-3 font-normal"
+                name="requiresAccount"
+                defaultValue={product.requiresAccount ? "true" : "false"}
+              >
+                <option value="false">No customer account required</option>
+                <option value="true">Customer account required</option>
               </select>
             </label>
             <label className="grid gap-2 text-sm font-bold text-ink">

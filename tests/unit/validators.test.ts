@@ -100,4 +100,32 @@ describe("backend validators", () => {
       }).tapraterId
     ).toBe("TR-TEST123");
   });
+
+  it("accepts the ecommerce product model fields separate from device product types", async () => {
+    const { productContentSchema } = await import("@/lib/validators");
+    const product = productContentSchema.parse({
+      slug: "platform-feedback-stand",
+      title: "Platform Feedback Stand",
+      sku: "TR-PLATFORM",
+      categorySlug: "feedback-referral-stands",
+      basePriceCents: 4900,
+      stockStatus: "instock",
+      shortDescription: "Hosted feedback product.",
+      description: "Hosted feedback product with Tap Rater landing page support.",
+      productType: "platform_landing_page",
+      serviceMode: "hosted_landing_page",
+      checkoutMode: "subscription",
+      requiresAccount: true,
+      requiresSubscription: true,
+      requiresLandingPage: true,
+      activationType: "premium_hosted_activation",
+      includedServiceLabel: "Premium landing page",
+      isActive: true
+    });
+
+    expect(product.productType).toBe("platform_landing_page");
+    expect(product.serviceMode).toBe("hosted_landing_page");
+    expect(product.checkoutMode).toBe("subscription");
+    expect(product.requiresAccount).toBe(true);
+  });
 });

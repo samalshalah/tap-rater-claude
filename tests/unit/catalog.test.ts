@@ -50,7 +50,10 @@ describe("catalog categories", () => {
     expect(
       products.every((product) => {
         return (
-          ["basic_redirect", "managed_redirect", "premium_landing_page"].includes(product.serviceMode) &&
+          ["physical_redirect", "physical_managed", "platform_landing_page", "bundle"].includes(product.productType) &&
+          ["basic_redirect", "managed_redirect", "hosted_landing_page", "multi_location_platform"].includes(product.serviceMode) &&
+          ["buy_now", "request_quote", "subscription", "contact_sales"].includes(product.checkoutMode) &&
+          typeof product.requiresAccount === "boolean" &&
           typeof product.requiresSubscription === "boolean" &&
           typeof product.requiresLandingPage === "boolean" &&
           product.activationType.length > 0 &&
@@ -60,13 +63,27 @@ describe("catalog categories", () => {
     ).toBe(true);
 
     expect(getProductBySlug("google-review-white-stand")).toMatchObject({
+      productType: "physical_redirect",
       serviceMode: "basic_redirect",
+      checkoutMode: "buy_now",
+      requiresAccount: false,
       requiresSubscription: false,
       requiresLandingPage: false,
       includedServiceLabel: "Free basic activation"
     });
+    expect(getProductBySlug("tap-rater-business-white-bundle")).toMatchObject({
+      productType: "bundle",
+      serviceMode: "managed_redirect",
+      checkoutMode: "buy_now",
+      requiresAccount: false,
+      requiresSubscription: false,
+      requiresLandingPage: false
+    });
     expect(getProductBySlug("tap-rater-white-stand-rate-your-experience")).toMatchObject({
-      serviceMode: "premium_landing_page",
+      productType: "platform_landing_page",
+      serviceMode: "hosted_landing_page",
+      checkoutMode: "subscription",
+      requiresAccount: true,
       requiresSubscription: true,
       requiresLandingPage: true
     });

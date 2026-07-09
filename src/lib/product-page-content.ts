@@ -18,7 +18,7 @@ export type ProductActivationCopy = {
 };
 
 export function getProductServiceBadges(product: MigratedProduct): string[] {
-  if (product.serviceMode === "premium_landing_page") {
+  if (product.requiresLandingPage || product.serviceMode === "hosted_landing_page") {
     return ["Premium landing page", "Subscription required for hosted features"];
   }
 
@@ -35,7 +35,7 @@ export function getProductServiceBadges(product: MigratedProduct): string[] {
 }
 
 export function getProductActivationCopy(product: MigratedProduct): ProductActivationCopy {
-  if (product.requiresLandingPage || product.serviceMode === "premium_landing_page") {
+  if (product.requiresLandingPage || product.serviceMode === "hosted_landing_page") {
     return {
       title: "Hosted platform experience",
       body:

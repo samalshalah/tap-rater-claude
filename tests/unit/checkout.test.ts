@@ -38,6 +38,13 @@ describe("Stripe checkout helpers", () => {
     });
   });
 
+  it("allows only buy-now products in the current one-time checkout", () => {
+    expect(validateCheckoutCart([{ productId: "tap-rater-white-stand-rate-your-experience", quantity: 1 }], migratedProducts)).toMatchObject({
+      ok: false,
+      reason: "empty_cart"
+    });
+  });
+
   it("only accepts Stripe test secret keys", () => {
     expect(isStripeTestSecretKey("sk_test_123")).toBe(true);
     expect(isStripeTestSecretKey("sk_live_123")).toBe(false);

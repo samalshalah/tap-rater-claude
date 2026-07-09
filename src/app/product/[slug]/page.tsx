@@ -79,6 +79,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
   const destination = getReviewDestination(product);
   const serviceBadges = getProductServiceBadges(product);
   const activationCopy = getProductActivationCopy(product);
+  const checkoutAction = getCheckoutAction(product);
   const productFaqs = [
     {
       question: `How does ${product.title} work?`,
@@ -160,10 +161,19 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 </div>
               ) : null}
 
-              <AddToCartButton productId={product.slug} disabled={product.stockStatus !== "instock"} />
+              {product.checkoutMode === "buy_now" ? (
+                <AddToCartButton productId={product.slug} disabled={product.stockStatus !== "instock"} />
+              ) : (
+                <Link
+                  href={checkoutAction.href}
+                  className="mt-6 inline-flex w-full items-center justify-center rounded-md bg-brand px-5 py-3 text-sm font-bold text-white transition hover:bg-ink"
+                >
+                  {checkoutAction.label}
+                </Link>
+              )}
               <div className="mt-4 grid gap-2 text-sm text-muted sm:grid-cols-2">
-                <p className="flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-brand" /> Preview cart only</p>
-                <p className="flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-brand" /> Stripe added at launch stage</p>
+                <p className="flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-brand" /> {checkoutAction.supportingCopy}</p>
+                <p className="flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-brand" /> Stripe remains test-mode only</p>
               </div>
             </div>
 
@@ -382,4 +392,36 @@ export default async function ProductPage({ params }: ProductPageProps) {
       ) : null}
     </>
   );
+}
+
+function getCheckoutAction(product: { checkoutMode: string }) {
+  if (product.checkoutMode === "request_quote") {
+    return {
+      href: "/contact-us",
+      label: "Request a quote",
+      supportingCopy: "Quote required before checkout"
+    };
+  }
+
+  if (product.checkoutMode === "subscription") {
+    return {
+      href: "/contact-us",
+      label: "Contact us for subscription setup",
+      supportingCopy: "Subscription setup required"
+    };
+  }
+
+  if (product.checkoutMode === "contact_sales") {
+    return {
+      href: "/contact-us",
+      label: "Contact sales",
+      supportingCopy: "Sales consultation required"
+    };
+  }
+
+  return {
+    href: "/cart",
+    label: "Add to cart",
+    supportingCopy: "Buy-now product"
+  };
 }

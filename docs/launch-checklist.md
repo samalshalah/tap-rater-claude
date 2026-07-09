@@ -43,7 +43,8 @@ Stripe checkout is available for test mode only. Live payments, live paid orders
   - [ ] `contact_requests`
   - [ ] `setup_requests`
   - [ ] `change_link_requests`
-- [ ] Confirm product metadata columns exist: `service_mode`, `requires_subscription`, `requires_landing_page`, `activation_type`, `included_service_label`.
+- [ ] Confirm product metadata columns exist: `product_type`, `service_mode`, `checkout_mode`, `requires_account`, `requires_subscription`, `requires_landing_page`, `activation_type`, `included_service_label`.
+- [ ] Confirm `buy_now` products can use Stripe test checkout and quote/subscription/contact-sales products do not enter one-time checkout.
 - [ ] Confirm demo rows such as `TR-DEMO-GOOGLE` are not used as real customer devices.
 
 ## Admin QA

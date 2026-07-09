@@ -155,6 +155,17 @@ The same schema file also includes the storefront, admin, request, CMS, media, a
 
 The storefront remains safe without Supabase because it falls back to the static migrated product catalog.
 
+Product records include ecommerce strategy fields:
+
+- `product_type`: `physical_redirect`, `physical_managed`, `platform_landing_page`, or `bundle`
+- `service_mode`: `basic_redirect`, `managed_redirect`, `hosted_landing_page`, or `multi_location_platform`
+- `checkout_mode`: `buy_now`, `request_quote`, `subscription`, or `contact_sales`
+- `requires_account`
+- `requires_landing_page`
+- `requires_subscription`
+
+Only `checkout_mode = buy_now` products use the current one-time Stripe test checkout path. Quote, subscription, and contact-sales products route customers to a contact/setup flow until those workflows are built.
+
 ## Supabase Schema Setup
 
 The canonical deployment schema is:

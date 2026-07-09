@@ -189,7 +189,10 @@ create table if not exists products (
   stock_status text not null check (stock_status in ('instock', 'outofstock')),
   short_description text not null default '',
   description text not null default '',
-  service_mode text not null default 'basic_redirect' check (service_mode in ('basic_redirect', 'managed_redirect', 'premium_landing_page')),
+  product_type text not null default 'physical_redirect' check (product_type in ('physical_redirect', 'physical_managed', 'platform_landing_page', 'bundle')),
+  service_mode text not null default 'basic_redirect' check (service_mode in ('basic_redirect', 'managed_redirect', 'hosted_landing_page', 'multi_location_platform')),
+  checkout_mode text not null default 'buy_now' check (checkout_mode in ('buy_now', 'request_quote', 'subscription', 'contact_sales')),
+  requires_account boolean not null default false,
   requires_subscription boolean not null default false,
   requires_landing_page boolean not null default false,
   activation_type text not null default 'free_basic_activation' check (activation_type in ('free_basic_activation', 'managed_setup', 'premium_hosted_activation')),
@@ -201,11 +204,35 @@ create table if not exists products (
   updated_at timestamptz not null default now()
 );
 
-alter table products add column if not exists service_mode text not null default 'basic_redirect' check (service_mode in ('basic_redirect', 'managed_redirect', 'premium_landing_page'));
+alter table products add column if not exists product_type text not null default 'physical_redirect' check (product_type in ('physical_redirect', 'physical_managed', 'platform_landing_page', 'bundle'));
+alter table products add column if not exists service_mode text not null default 'basic_redirect';
+alter table products add column if not exists checkout_mode text not null default 'buy_now' check (checkout_mode in ('buy_now', 'request_quote', 'subscription', 'contact_sales'));
+alter table products add column if not exists requires_account boolean not null default false;
 alter table products add column if not exists requires_subscription boolean not null default false;
 alter table products add column if not exists requires_landing_page boolean not null default false;
 alter table products add column if not exists activation_type text not null default 'free_basic_activation' check (activation_type in ('free_basic_activation', 'managed_setup', 'premium_hosted_activation'));
 alter table products add column if not exists included_service_label text not null default 'Free basic activation';
+
+do $$
+begin
+  alter table products drop constraint if exists products_service_mode_check;
+  update products set service_mode = 'hosted_landing_page' where service_mode = 'premium_landing_page';
+  alter table products add constraint products_service_mode_check check (service_mode in ('basic_redirect', 'managed_redirect', 'hosted_landing_page', 'multi_location_platform'));
+end $$;
+
+update products
+set product_type = 'bundle'
+where slug in ('tap-rater-business-white-bundle', 'tap-rater-business-white-stands-bundle');
+
+update products
+set
+  product_type = 'platform_landing_page',
+  service_mode = 'hosted_landing_page',
+  checkout_mode = 'subscription',
+  requires_account = true,
+  requires_subscription = true,
+  requires_landing_page = true
+where slug = 'tap-rater-white-stand-rate-your-experience';
 
 create table if not exists product_images (
   id uuid primary key default gen_random_uuid(),

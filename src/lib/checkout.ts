@@ -29,7 +29,7 @@ export type ValidatedCheckoutCart =
 export function validateCheckoutCart(items: CartItem[], products: MigratedProduct[]): ValidatedCheckoutCart {
   const productById = new Map(
     products
-      .filter((product) => product.isActive && product.stockStatus === "instock")
+      .filter((product) => product.isActive && product.stockStatus === "instock" && product.checkoutMode === "buy_now")
       .map((product) => [product.slug, product])
   );
   const quantityByProductId = new Map<string, number>();
