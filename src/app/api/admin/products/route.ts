@@ -14,7 +14,7 @@ export async function POST(request: Request) {
   }
 
   if (!hasSupabaseAdminConfig()) {
-    return NextResponse.json({ error: "Supabase is not configured yet." }, { status: 503 });
+    return NextResponse.json({ error: "Supabase is not configured yet. Product edits cannot be saved." }, { status: 503 });
   }
 
   try {

@@ -1,0 +1,59 @@
+import type { MigratedProduct } from "@/data/migrated-products";
+import { migratedProducts } from "@/data/migrated-products";
+import { getSupabaseAdmin, hasSupabaseAdminConfig } from "@/lib/db";
+import { normalizeStorefrontProductRow } from "@/lib/product-repository";
+
+type AdminProductQueryResult = PromiseLike<{ data: unknown[] | null; error: null | { message: string } }>;
+
+type AdminProductClient = {
+  from: (table: string) => {
+    select: (columns?: string) => AdminProductQueryResult;
+  };
+};
+
+export function createBlankAdminProduct(): MigratedProduct {
+  return {
+    slug: "",
+    title: "",
+    sku: "",
+    categorySlug: "google-review-stands",
+    basePriceCents: 0,
+    stockStatus: "instock",
+    shortDescription: "",
+    description: "",
+    images: [],
+    variants: [],
+    isActive: false,
+    seoTitle: "",
+    seoDescription: "",
+    searchKeywords: []
+  };
+}
+
+export async function getAdminProducts(): Promise<MigratedProduct[]> {
+  if (!hasSupabaseAdminConfig()) {
+    return migratedProducts;
+  }
+
+  try {
+    const { data, error } = await (getSupabaseAdmin() as AdminProductClient).from("products").select("*");
+
+    if (error || !data) {
+      return migratedProducts;
+    }
+
+    const products = data
+      .map((row) => normalizeStorefrontProductRow(row))
+      .filter((product): product is MigratedProduct => Boolean(product));
+
+    return products.length > 0 ? products : migratedProducts;
+  } catch {
+    return migratedProducts;
+  }
+}
+
+export async function getAdminProductBySlug(slug: string): Promise<MigratedProduct | undefined> {
+  const products = await getAdminProducts();
+
+  return products.find((product) => product.slug === slug);
+}
