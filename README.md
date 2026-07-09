@@ -104,6 +104,38 @@ The admin and request workflows expect these tables when Supabase persistence is
 
 The storefront remains safe without Supabase because it falls back to the static migrated product catalog.
 
+## Supabase Schema Setup
+
+The platform device, activation, landing page, tap event, and form submission schema is documented in:
+
+```text
+docs/supabase-schema.sql
+```
+
+To apply it:
+
+1. Open the Supabase project SQL editor.
+2. Review `docs/supabase-schema.sql`.
+3. Run it against the target project.
+4. Confirm the demo devices exist:
+   - `TR-DEMO-GOOGLE`
+   - `TR-DEMO-SOCIAL`
+   - `TR-DEMO-FEEDBACK`
+
+The schema file is intentionally non-destructive. It uses `create table if not exists`, `create index if not exists`, and `insert ... on conflict do nothing` for demo devices.
+
+Platform schema tables:
+
+- `customers`
+- `businesses`
+- `devices`
+- `landing_pages`
+- `tap_events`
+- `form_submissions`
+- `device_activation_attempts`
+
+The demo activation hashes are placeholders only. Replace them with real hashed activation codes before manufacturing or production use.
+
 ## Deployment Checklist
 
 - Set required environment variables in the deployment platform.
