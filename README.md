@@ -27,12 +27,19 @@ Useful commands:
 ```bash
 npm run build
 npm test
+npm run smoke
 ```
 
 Local dev usually runs at:
 
 ```text
 http://localhost:3000
+```
+
+`npm run smoke` expects a running local server at `http://127.0.0.1:3000` by default. To test another target:
+
+```bash
+SMOKE_BASE_URL=https://taprater.com npm run smoke
 ```
 
 ## Environment Variables
@@ -164,6 +171,25 @@ Landing page template JSON for premium hosted pages is documented in:
 docs/landing-pages.md
 ```
 
+## QA And Launch Checklist
+
+Before selling or shipping devices that point to `/r/{deviceCode}`, use:
+
+```text
+docs/launch-checklist.md
+```
+
+The checklist covers environment variables, Supabase schema installation, admin login, device creation, activation codes, activation flow, Google Places API key restrictions, redirect testing, landing page testing, analytics testing, customer portal testing, Resend email testing, Amazon packaging instructions, and security notes.
+
+Pre-launch command sequence:
+
+```bash
+npm run build
+npm test
+npm run start
+npm run smoke
+```
+
 ## Device Activation
 
 Every Tap Rater NFC chip and QR code should point to the permanent route:
@@ -215,6 +241,7 @@ No Stripe configuration is required for activation.
 - Set required environment variables in the deployment platform.
 - Run `npm run build`.
 - Run `npm test`.
+- Run `npm run smoke` against the local production server or deployed URL.
 - Test public product pages and category pages.
 - Test cart persistence after refresh.
 - Test customer forms: contact, setup, and change-link.
@@ -230,5 +257,6 @@ No Stripe configuration is required for activation.
 - Stripe webhooks.
 - Live tax calculation.
 - Live shipping calculation.
+- Subscription billing for premium hosted features.
 
 Until checkout is launched, the cart button remains a “Checkout coming soon” flow and no payment is processed.
