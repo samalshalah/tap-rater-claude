@@ -18,7 +18,7 @@ describe("cms repository", () => {
   it("provides default homepage content", () => {
     const content = getDefaultHomepageContent();
 
-    expect(content.heroTitle).toContain("Google reviews");
+    expect(content.heroTitle).toContain("NFC review products");
     expect(content.primaryButtonHref).toBe("/shop");
   });
 
@@ -114,6 +114,7 @@ describe("cms repository", () => {
       requiresAccount: false,
       requiresSubscription: false,
       requiresLandingPage: false,
+      supportedDestinations: ["google"],
       activationType: "free_basic_activation",
       includedServiceLabel: "Free basic activation",
       seoTitle: "SEO title",
@@ -138,6 +139,7 @@ describe("cms repository", () => {
       requires_account: false,
       requires_subscription: false,
       requires_landing_page: false,
+      supported_destinations: ["google"],
       activation_type: "free_basic_activation",
       included_service_label: "Free basic activation",
       seo_title: "SEO title",

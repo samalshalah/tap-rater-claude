@@ -12,12 +12,12 @@ describe("catalog categories", () => {
     const categories = getCatalogCategories();
 
     expect(categories.map((category) => category.title)).toEqual([
-      "Google Review Stands",
-      "Review Plates",
+      "Google Review Products",
+      "Review Platform Products",
+      "Social & Booking Products",
+      "Feedback & Referral Products",
+      "Hosted Landing Page Products",
       "Business Bundles",
-      "Social & Booking Stands",
-      "Feedback & Referral Stands",
-      "Custom UV Printed Stands"
     ]);
   });
 
@@ -29,18 +29,18 @@ describe("catalog categories", () => {
   });
 
   it("filters active products by category", () => {
-    const products = getProductsByCategory("google-review-stands");
+    const products = getProductsByCategory("google-review-products");
 
-    expect(products.map((product) => product.slug)).toContain("google-review-white-stand");
-    expect(products.every((product) => product.categorySlug === "google-review-stands")).toBe(true);
+    expect(products.map((product) => product.title)).toContain("Google Review NFC Stand");
+    expect(products.every((product) => product.categorySlug === "google-review-products")).toBe(true);
   });
 
   it("keeps old category slugs working as aliases", () => {
-    const category = getCategoryBySlug("google-review-plates");
-    const products = getProductsByCategory("google-review-plates");
+    const category = getCategoryBySlug("google-review-stands");
+    const products = getProductsByCategory("google-review-stands");
 
-    expect(category?.slug).toBe("review-plates");
-    expect(products.map((product) => product.slug)).toContain("google-review-white-plate");
+    expect(category?.slug).toBe("google-review-products");
+    expect(products.map((product) => product.title)).toContain("Google Review NFC Plate");
   });
 
   it("adds product strategy metadata to every active product", () => {
@@ -56,37 +56,74 @@ describe("catalog categories", () => {
           typeof product.requiresAccount === "boolean" &&
           typeof product.requiresSubscription === "boolean" &&
           typeof product.requiresLandingPage === "boolean" &&
+          Array.isArray(product.supportedDestinations) &&
+          product.supportedDestinations.length > 0 &&
           product.activationType.length > 0 &&
           product.includedServiceLabel.length > 0
         );
       })
     ).toBe(true);
 
-    expect(getProductBySlug("google-review-white-stand")).toMatchObject({
+    expect(getProductBySlug("google-review-nfc-stand")).toMatchObject({
+      title: "Google Review NFC Stand",
       productType: "physical_redirect",
       serviceMode: "basic_redirect",
       checkoutMode: "buy_now",
       requiresAccount: false,
       requiresSubscription: false,
       requiresLandingPage: false,
+      supportedDestinations: ["google"],
       includedServiceLabel: "Free basic activation"
     });
-    expect(getProductBySlug("tap-rater-business-white-bundle")).toMatchObject({
+    expect(getProductBySlug("business-review-starter-kit")).toMatchObject({
+      title: "Business Review Starter Kit",
       productType: "bundle",
       serviceMode: "managed_redirect",
-      checkoutMode: "buy_now",
+      checkoutMode: "request_quote",
       requiresAccount: false,
       requiresSubscription: false,
       requiresLandingPage: false
     });
-    expect(getProductBySlug("tap-rater-white-stand-rate-your-experience")).toMatchObject({
+    expect(getProductBySlug("multi-location-dashboard")).toMatchObject({
+      title: "Multi-Location Dashboard",
       productType: "platform_landing_page",
-      serviceMode: "hosted_landing_page",
-      checkoutMode: "subscription",
+      serviceMode: "multi_location_platform",
+      checkoutMode: "contact_sales",
       requiresAccount: true,
       requiresSubscription: true,
       requiresLandingPage: true
     });
+  });
+
+  it("includes the complete Tap Rater platform catalog", () => {
+    const products = getActiveProducts();
+    const titles = products.map((product) => product.title);
+
+    expect(products.length).toBeGreaterThanOrEqual(20);
+    expect(titles).toEqual(
+      expect.arrayContaining([
+        "Google Review NFC Stand",
+        "Google Review NFC Plate",
+        "Google Review NFC Card",
+        "Employee Review Name Tag",
+        "Facebook Review Stand",
+        "Yelp Review Stand",
+        "TripAdvisor Review Stand",
+        "Appointment Booking Stand",
+        "Social Follow NFC Stand",
+        "Menu / WiFi / Direct Link Stand",
+        "Multi-Platform Review Page",
+        "Reputation Hub Page",
+        "Rate Your Experience Page",
+        "Private Feedback Page",
+        "Referral Request Page",
+        "Social Media Hub Page",
+        "Review + Feedback Combo Page",
+        "Staff Review Tracking Page",
+        "Multi-Location Dashboard",
+        "Business Review Starter Kit"
+      ])
+    );
   });
 
   it("keeps product and category copy compliant with review platform rules", () => {

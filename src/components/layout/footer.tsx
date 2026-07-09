@@ -7,15 +7,16 @@ export function Footer() {
         <div>
           <p className="text-xl font-bold">Tap Rater</p>
           <p className="mt-3 max-w-sm text-sm leading-6 text-gray-300">
-            NFC review stands and plates that make it easier for customers to leave feedback before they walk away.
+            NFC review products and hosted reputation pages for local businesses.
           </p>
-          <p className="mt-5 text-sm font-semibold text-accent">Built for Google, Facebook, Yelp, and custom review links.</p>
+          <p className="mt-5 text-sm font-semibold text-accent">Built for Google, Facebook, Yelp, feedback, referrals, and custom business links.</p>
         </div>
         <div className="grid content-start gap-2 text-sm text-gray-300">
           <p className="mb-2 font-bold text-white">Shop</p>
           <Link href="/shop">All products</Link>
-          <Link href="/product/google-review-white-stand">Google stands</Link>
-          <Link href="/product/google-review-white-plate">Review plates</Link>
+          <Link href="/product/google-review-nfc-stand">Google stands</Link>
+          <Link href="/product/google-review-nfc-plate">Review plates</Link>
+          <Link href="/category/hosted-landing-page-products">Hosted pages</Link>
         </div>
         <div className="grid content-start gap-2 text-sm text-gray-300">
           <p className="mb-2 font-bold text-white">Support</p>

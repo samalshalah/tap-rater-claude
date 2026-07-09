@@ -3,6 +3,22 @@
 import { type FormEvent, useState } from "react";
 import type { CatalogCategory, MigratedProduct } from "@/data/migrated-products";
 
+const supportedDestinationOptions = [
+  "google",
+  "facebook",
+  "yelp",
+  "tripadvisor",
+  "instagram",
+  "tiktok",
+  "booking",
+  "website",
+  "menu",
+  "wifi",
+  "feedback",
+  "referral",
+  "custom"
+];
+
 type ProductEditorProps = {
   product: MigratedProduct;
   categories: CatalogCategory[];
@@ -46,6 +62,7 @@ export function ProductEditor({ product, categories, mode }: ProductEditorProps)
           requiresAccount: form.get("requiresAccount") === "true",
           requiresSubscription: form.get("requiresSubscription") === "true",
           requiresLandingPage: form.get("requiresLandingPage") === "true",
+          supportedDestinations: form.getAll("supportedDestinations"),
           activationType: form.get("activationType"),
           includedServiceLabel: form.get("includedServiceLabel"),
           seoTitle: form.get("seoTitle"),
@@ -216,6 +233,22 @@ export function ProductEditor({ product, categories, mode }: ProductEditorProps)
               placeholder="Free basic activation"
             />
           </div>
+          <fieldset className="grid gap-3">
+            <legend className="text-sm font-bold text-ink">Supported destinations</legend>
+            <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+              {supportedDestinationOptions.map((destination) => (
+                <label key={destination} className="flex items-center gap-2 rounded-md border border-line bg-white px-3 py-2 text-sm font-semibold text-ink">
+                  <input
+                    type="checkbox"
+                    name="supportedDestinations"
+                    value={destination}
+                    defaultChecked={product.supportedDestinations.includes(destination as MigratedProduct["supportedDestinations"][number])}
+                  />
+                  {destination}
+                </label>
+              ))}
+            </div>
+          </fieldset>
         </section>
 
         <section className="grid gap-4 rounded-md border border-line bg-gray-50 p-4">

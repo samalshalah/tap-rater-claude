@@ -4,20 +4,20 @@ import type { Metadata } from "next";
 import { ProductCard } from "@/components/product/product-card";
 import { getHomepageContent } from "@/lib/cms-repository";
 import { getStorefrontProducts } from "@/lib/product-repository";
-import { formatPrice, getProductPriceCents } from "@/lib/products";
+import { formatPrice, getCatalogCategories, getProductPriceCents } from "@/lib/products";
 import { faqJsonLd, JsonLd, organizationJsonLd, websiteJsonLd } from "@/lib/seo";
 
 export const metadata: Metadata = {
-  title: "Google Review NFC Stands, Plates and Tap Cards",
+  title: "NFC Review Products and Hosted Reputation Pages",
   description:
-    "Shop Tap Rater NFC review stands and plates for Google reviews, Facebook reviews, Yelp reviews, customer feedback, and local business reputation growth.",
+    "NFC review products and hosted reputation pages for local businesses. Shop Tap Rater physical products, managed setup, hosted pages, and business bundles.",
   alternates: {
     canonical: "/"
   },
   openGraph: {
-    title: "Google Review NFC Stands and Plates | Tap Rater",
+    title: "NFC Review Products and Hosted Reputation Pages | Tap Rater",
     description:
-      "Help customers tap their phone to open your review link. Built for restaurants, salons, clinics, retail stores, and local service businesses.",
+      "Tap Rater combines NFC review products, managed setup, hosted reputation pages, and dashboard-ready platform features.",
     url: "/"
   }
 };
@@ -77,7 +77,7 @@ const useCases = [
   },
   {
     title: "Salons, spas, and clinics",
-    copy: "Use a review stand at reception to help satisfied clients quickly open your review link after an appointment."
+    copy: "Use a review stand at reception to help clients quickly open your review link after an appointment."
   },
   {
     title: "Retail and repair shops",
@@ -92,32 +92,21 @@ const useCases = [
 export default async function HomePage() {
   const homepage = await getHomepageContent();
   const products = await getStorefrontProducts();
+  const catalogCategories = getCatalogCategories();
   const featured = products[0];
   const plate = products.find((product) => product.slug.includes("plate")) ?? products[1] ?? featured;
-  const bundle = products.find((product) => product.slug.includes("bundle")) ?? products[4] ?? featured;
-  const categories = [
-    {
-      title: "Review Stands",
-      copy: "Countertop NFC stands for high-traffic customer touchpoints.",
-      href: "/shop",
-      image: featured.images[0].src,
-      alt: featured.images[0].alt
-    },
-    {
-      title: "Review Plates",
-      copy: "Low-profile plates for desks, tables, and compact spaces.",
-      href: `/product/${plate.slug}`,
-      image: plate.images[0].src,
-      alt: plate.images[0].alt
-    },
-    {
-      title: "Business Bundles",
-      copy: "Discounted multi-piece sets for teams and multiple locations.",
-      href: `/product/${bundle.slug}`,
-      image: bundle.images[0].src,
-      alt: bundle.images[0].alt
-    }
-  ];
+  const bundle = products.find((product) => product.categorySlug === "business-bundles") ?? products[products.length - 1] ?? featured;
+  const categories = catalogCategories.map((category, index) => {
+    const product = products.find((item) => item.categorySlug === category.slug) ?? [featured, plate, bundle][index % 3] ?? featured;
+
+    return {
+      title: category.title,
+      copy: category.buyerIntent,
+      href: `/category/${category.slug}`,
+      image: product.images[0].src,
+      alt: product.images[0].alt
+    };
+  });
 
   return (
     <div>
@@ -134,9 +123,9 @@ export default async function HomePage() {
           </div>
           <p className="text-sm font-black uppercase text-brand">{homepage.eyebrow}</p>
           <h1 className="mt-4 max-w-3xl text-5xl font-black leading-[1.06] text-ink md:text-7xl">{homepage.heroTitle}</h1>
-          <p className="mt-6 max-w-xl text-lg leading-8 text-muted md:text-xl">
-            {homepage.heroDescription}
-          </p>
+           <p className="mt-6 max-w-xl text-lg leading-8 text-muted md:text-xl">
+             NFC review products and hosted reputation pages for local businesses.
+           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Link href={homepage.primaryButtonHref} className="rounded-md bg-brand px-5 py-3 text-sm font-bold text-white">
               {homepage.primaryButtonLabel}
@@ -147,16 +136,16 @@ export default async function HomePage() {
           </div>
           <div className="mt-8 grid max-w-xl grid-cols-3 gap-3 text-center text-sm">
             <div className="rounded-md border border-line px-3 py-4">
-              <p className="text-xl font-bold text-ink">7</p>
-              <p className="mt-1 text-muted">Products</p>
+               <p className="text-xl font-bold text-ink">{products.length}+</p>
+               <p className="mt-1 text-muted">Products</p>
             </div>
             <div className="rounded-md border border-line px-3 py-4">
               <p className="text-xl font-bold text-ink">NFC</p>
               <p className="mt-1 text-muted">Tap ready</p>
             </div>
             <div className="rounded-md border border-line px-3 py-4">
-              <p className="text-xl font-bold text-ink">3+</p>
-              <p className="mt-1 text-muted">Platforms</p>
+               <p className="text-xl font-bold text-ink">13</p>
+               <p className="mt-1 text-muted">Destinations</p>
             </div>
           </div>
         </div>
@@ -196,8 +185,8 @@ export default async function HomePage() {
         <div className="mx-auto max-w-7xl px-4 py-14">
           <div className="mb-8 text-center">
             <p className="text-sm font-black uppercase text-brand">Product Categories</p>
-            <h2 className="mt-3 text-3xl font-black text-ink">Shop by Tap Rater type</h2>
-            <p className="mx-auto mt-3 max-w-xl text-muted">Choose the Google review stand, NFC review plate, or business bundle that matches where your customers are most likely to leave a review.</p>
+             <h2 className="mt-3 text-3xl font-black text-ink">Shop by Tap Rater product type</h2>
+             <p className="mx-auto mt-3 max-w-xl text-muted">Choose standalone NFC products, managed setup, hosted reputation pages, feedback flows, or business bundles.</p>
           </div>
           <div className="grid gap-5 md:grid-cols-3">
           {categories.map((category) => (
@@ -295,11 +284,11 @@ export default async function HomePage() {
         <div className="rounded-md bg-ink p-8 text-white">
           <p className="text-sm font-semibold uppercase text-accent">Google review bundle</p>
           <h2 className="mt-3 text-3xl font-bold">Google Review NFC Bundle for More Customer Touchpoints</h2>
-          <p className="mt-4 leading-7 text-gray-300">{bundle.description}</p>
-          <div className="mt-6 flex items-center gap-4">
-            <p className="text-3xl font-bold">{formatPrice(getProductPriceCents(bundle))}</p>
-            {bundle.salePriceCents ? <p className="text-sm text-gray-300 line-through">{formatPrice(bundle.basePriceCents)}</p> : null}
-          </div>
+           <p className="mt-4 leading-7 text-gray-300">{bundle.description}</p>
+           <div className="mt-6 flex items-center gap-4">
+             <p className="text-3xl font-bold">{bundle.checkoutMode === "buy_now" ? formatPrice(getProductPriceCents(bundle)) : "Request quote"}</p>
+             {bundle.checkoutMode === "buy_now" && bundle.salePriceCents ? <p className="text-sm text-gray-300 line-through">{formatPrice(bundle.basePriceCents)}</p> : null}
+           </div>
           <Link href={`/product/${bundle.slug}`} className="mt-7 inline-block rounded-md bg-accent px-5 py-3 text-sm font-bold text-ink">
             View bundle
           </Link>

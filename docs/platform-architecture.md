@@ -1,556 +1,216 @@
 # Tap Rater Platform Architecture
 
-This document defines the long-term Tap Rater platform architecture before the next implementation phases. It is intentionally planning-only: no Stripe checkout, payment processing, or UI rebuild is included here.
+Tap Rater is both a storefront and a reputation platform. The public site sells NFC/QR products and explains the offer. The platform layer owns permanent device URLs, activation, customer accounts, businesses, locations, hosted pages, feedback, analytics, quotes, orders, and future subscriptions.
 
-## Strategic Direction
+This architecture keeps the current Next.js/Supabase foundation where it is useful and avoids live Stripe checkout until billing is explicitly approved.
 
-Tap Rater sells physical NFC and QR products that help businesses send customers to the right post-service action. Some products are simple one-time hardware sales. Other products require a hosted Tap Rater platform layer for activation, hosted pages, analytics, forms, and multi-location management.
+## Public Surfaces
 
-The core platform principle is:
+Marketing site: `taprater.com`
 
-```text
-Every platform-powered stand uses a permanent Tap Rater URL:
-https://taprater.com/r/{deviceCode}
-```
+- SEO pages, homepage, shop, category pages, product detail pages, FAQs, setup/contact forms, and quote request entry points.
+- Public product discovery should clearly separate simple physical products from platform products.
 
-The physical NFC chip and QR code should point to that permanent Tap Rater URL. The Tap Rater backend decides what happens next:
+Customer portal: `app.taprater.com`
 
-- redirect directly to a destination URL
-- show an activation page for unactivated devices
-- open a hosted Tap Rater landing page
-- record tap events and form submissions when allowed by the service mode
+- Account login, business profiles, locations, devices, landing pages, destinations, feedback, analytics, support, quotes, billing later, and subscription management later.
+- The first implementation may live under `/account` in the same Next.js app, but the target product boundary is the `app.taprater.com` portal.
 
-## Product Categories
+Redirect engine: `/r/{deviceCode}` or `r.taprater.com/{token}`
 
-### One-Time Products
+- Every NFC chip and QR code should point to a permanent Tap Rater URL.
+- `https://taprater.com/r/{deviceCode}` is the primary route because it works inside the current Next.js app.
+- `https://r.taprater.com/{token}` is the future edge-optimized redirect domain for faster scans and cleaner packaging URLs.
 
-These products can be sold as hardware without requiring a customer account or recurring service. They can still optionally use a permanent Tap Rater URL if the business wants managed updates later.
+## Product Strategy Connection
 
-- `google_review`: Google Review Stand or Plate that links to a Google review URL.
-- `facebook_review`: Facebook Review Stand that links to a Facebook page, recommendation, or review destination.
-- `yelp_profile`: Yelp Profile Stand that links to a Yelp business profile.
-- `appointment_booking`: Appointment Booking Stand that links to Calendly, Square, Fresha, Google booking, or another booking URL.
-- `social_follow`: Social Follow Stand that links to Instagram, TikTok, Facebook, LinkedIn, or a social hub.
-- `wifi_menu`: Menu or Wi-Fi Stand that links to a menu, Wi-Fi info page, or hosted static page.
-- `custom_url`: Custom UV printed direct-link stand that opens any approved customer URL.
+Products connect to activation, accounts, landing pages, and dashboards through `productType`, `serviceMode`, and `checkoutMode`.
 
-### Platform Products
+- `physical_redirect` plus `basic_redirect`: customer buys a physical NFC product and activates it with one destination URL. No account or monthly fee is required for the basic path.
+- `physical_managed` plus `managed_redirect`: customer buys or requests a managed NFC product where Tap Rater helps configure the destination and future changes.
+- `platform_landing_page` plus `hosted_landing_page`: customer needs an account, business, location, device, hosted page, and analytics/dashboard access.
+- `platform_landing_page` plus `multi_location_platform`: customer needs account-based multi-location management, multiple devices, reporting, and usually a sales-led setup.
+- `bundle`: a package that may create multiple devices and may include managed setup or platform onboarding.
 
-These products need Tap Rater platform support because they require hosted pages, forms, routing logic, analytics, staff/location management, or customer self-service.
+Simple buy-now products can go through ecommerce checkout when checkout is ready. Platform products and bundles should use `request_quote` or `contact_sales` until live billing is approved.
 
-- `multi_platform_review`: Hosted page with Google, Facebook, Yelp, and other review options.
-- `feedback_form`: Hosted feedback form that captures customer comments before redirecting or notifying the business.
-- `referral_form`: Hosted referral capture page.
-- `business_card`: Digital business card page for a person, staff member, or business.
-- `staff_cards_with_analytics`: Staff-specific cards with tap/event attribution.
-- `multi_location_dashboard`: Dashboard for multiple business locations and device groups.
-- `hosted_landing_pages`: Tap Rater-managed landing pages for campaigns, menus, reviews, and service links.
-- `analytics_dashboard`: Tap and conversion reporting for devices, pages, staff, and locations.
-
-## Product Type Enum
-
-Use these product type identifiers in the database and application code:
-
-- `google_review`
-- `facebook_review`
-- `yelp_profile`
-- `appointment_booking`
-- `social_follow`
-- `wifi_menu`
-- `multi_platform_review`
-- `feedback_form`
-- `referral_form`
-- `business_card`
-- `custom_url`
-
-## Service Modes
-
-### `basic_redirect`
-
-Best for one-time products.
-
-- No customer login required after setup.
-- Device resolves to one destination URL.
-- No monthly fee.
-- Destination can be configured during activation or by admin support.
-- Minimal or no analytics.
-
-### `managed_redirect`
-
-Best for businesses that want Tap Rater to host a permanent redirect URL and allow future destination changes.
-
-- Customer login can be optional for first version; admin can manage changes.
-- Device resolves through Tap Rater before redirecting.
-- Destination changes do not require rewriting NFC chips or QR codes.
-- Basic tap logs may be captured.
-
-### `premium_landing_page`
-
-Best for multi-option review pages, feedback forms, referrals, business cards, and analytics products.
-
-- Customer login required.
-- Device opens a hosted Tap Rater page or form.
-- Supports page templates, branding, form submissions, analytics, locations, staff, and premium features.
-- Can become subscription-backed later.
-
-## Core Entities
+## Core Database Entities
 
 ### `customer`
 
-Represents the person who owns an account or manages one or more businesses.
+The person or account owner who can log in to the portal.
 
-Suggested fields:
+Key responsibilities:
 
-- `id`
-- `email`
-- `name`
-- `phone`
-- `role`
-- `created_at`
-- `updated_at`
-- `email_verified_at`
+- Owns businesses and locations.
+- Receives activation, login, quote, and support emails.
+- Can manage devices and pages when permissions allow.
 
 ### `business`
 
-Represents a company, location group, or single local business.
+The company or brand using Tap Rater.
 
-Suggested fields:
+Key responsibilities:
 
-- `id`
-- `customer_id`
-- `name`
-- `website_url`
-- `phone`
-- `address`
-- `google_place_id`
-- `default_review_url`
-- `created_at`
-- `updated_at`
+- Stores business-level identity such as name, logo, website, and default review links.
+- Groups locations, devices, landing pages, and analytics.
+
+### `location`
+
+A physical branch, office, store, service area, or staff group under a business.
+
+Key responsibilities:
+
+- Stores address, phone, local review URLs, and local destination settings.
+- Allows multi-location dashboards to separate device performance by location.
 
 ### `device`
 
-Represents a physical NFC/QR product.
+A physical NFC/QR product with a public code and a private activation code.
 
-Suggested fields:
+Key responsibilities:
 
-- `id`
-- `device_code`
-- `activation_code_hash`
-- `product_type`
-- `service_mode`
-- `status`
-- `business_id`
-- `destination_id`
-- `landing_page_id`
-- `order_id`
-- `batch_id`
-- `printed_at`
-- `activated_at`
-- `created_at`
-- `updated_at`
-
-`device_code` is public and appears in `/r/{deviceCode}`. The activation code is private and should be stored hashed, not in plain text.
-
-### `activation`
-
-Represents a device activation event.
-
-Suggested fields:
-
-- `id`
-- `device_id`
-- `customer_id`
-- `business_id`
-- `activation_code_verified`
-- `ip_hash`
-- `user_agent`
-- `created_at`
-
-### `destination`
-
-Represents the URL or target action for a device.
-
-Suggested fields:
-
-- `id`
-- `business_id`
-- `type`
-- `url`
-- `label`
-- `is_active`
-- `created_at`
-- `updated_at`
-
-Destination types can include `google_review`, `facebook_review`, `yelp_profile`, `booking`, `social`, `menu`, `wifi`, `custom`, and `landing_page`.
+- Stores `device_code`, `activation_code_hash`, product type, service mode, status, customer, business, location, destination URL, landing page, label, and activation timestamp.
+- Never stores the plain activation code.
+- Resolves through the redirect engine.
 
 ### `landing_page`
 
-Represents a hosted Tap Rater page.
+A hosted Tap Rater page used by platform products.
 
-Suggested fields:
+Key responsibilities:
 
-- `id`
-- `business_id`
-- `slug`
-- `template_type`
-- `title`
-- `logo_url`
-- `theme`
-- `content`
-- `status`
-- `created_at`
-- `updated_at`
+- Stores template type, slug, business, location, title, copy, logo, buttons, form settings, status, and publishing metadata.
+- Powers multi-platform review pages, feedback forms, referral forms, social hubs, reputation hubs, and digital business card style pages.
 
 ### `tap_event`
 
-Represents a device scan/tap or hosted page view.
+A privacy-conscious event generated by device scans, page views, or destination clicks.
 
-Suggested fields:
+Key responsibilities:
 
-- `id`
-- `device_id`
-- `business_id`
-- `landing_page_id`
-- `event_type`
-- `referrer`
-- `ip_hash`
-- `user_agent`
-- `country`
-- `region`
-- `created_at`
+- Stores device, business, location, landing page, event type, destination type, referrer, user agent, hashed IP, and created date.
+- Should not store raw IP addresses.
 
-Do not store raw IP addresses unless there is a clear compliance need. Prefer hashing or coarse analytics.
+### `feedback_submission`
 
-### `form_submission`
+A customer feedback, referral, or hosted form submission.
 
-Represents a hosted feedback, referral, or contact form submission.
+Key responsibilities:
 
-Suggested fields:
+- Stores business, location, landing page, device, form type, name/email/phone when provided, message, rating if used, payload JSON, status, and created date.
+- The current `form_submissions` table can serve as the first implementation until a dedicated `feedback_submissions` migration is introduced.
 
-- `id`
-- `business_id`
-- `device_id`
-- `landing_page_id`
-- `form_type`
-- `name`
-- `email`
-- `phone`
-- `rating`
-- `message`
-- `payload`
-- `status`
-- `created_at`
+### `product`
+
+The sellable catalog item.
+
+Key responsibilities:
+
+- Stores title, slug, SKU, category, price, sale price, product type, service mode, checkout mode, service requirements, supported destinations, SEO metadata, images, variants, stock status, and active state.
+- Drives product page badges, checkout eligibility, quote/contact-sales behavior, and activation expectations.
+
+### `quote_request`
+
+A sales or setup inquiry for products that should not use immediate checkout.
+
+Key responsibilities:
+
+- Captures customer details, business details, requested product, expected quantity, locations, notes, status, and follow-up ownership.
+- Supports platform products, bundles, custom UV printed products, multi-location dashboards, and sales-led subscriptions.
 
 ### `order`
 
-Represents ecommerce order metadata once checkout is implemented.
+The ecommerce order record once checkout is intentionally enabled.
 
-Suggested fields:
+Key responsibilities:
 
-- `id`
-- `customer_id`
-- `email`
-- `status`
-- `subtotal_cents`
-- `tax_cents`
-- `shipping_cents`
-- `total_cents`
-- `stripe_checkout_session_id`
-- `stripe_payment_intent_id`
-- `created_at`
-- `updated_at`
+- Stores customer, email, line items, totals, payment status, fulfillment status, shipping data, and payment provider references.
+- Should remain inactive for live payment capture until Stripe is approved.
 
-Payment fields are reserved for the future Stripe phase and should not be used before checkout is live.
+### `subscription`
+
+The recurring service relationship for hosted pages, analytics, dashboards, and multi-location platform features.
+
+Key responsibilities:
+
+- Stores customer, business, plan, status, period dates, entitlement limits, and payment provider references later.
+- Should not be used for live billing before Stripe approval.
 
 ## Activation Model
 
-Each platform-capable device should have:
+Physical redirect products can activate with only:
 
-- Public `device_code`: used in `https://taprater.com/r/{deviceCode}`.
-- Private activation code: printed inside packaging, on an insert card, or included with order paperwork.
-- Device status: `unactivated`, `active`, `paused`, `lost`, or `retired`.
+- device code
+- private activation code
+- customer email
+- business name
+- destination type
+- destination URL
 
-Flow:
+Platform landing page products must create or connect:
 
-1. Device NFC/QR opens `/r/{deviceCode}`.
-2. Backend looks up `device_code`.
-3. If device is missing, show a not-found/support page.
-4. If device is unactivated, open an activation page.
-5. Customer enters private activation code and setup details.
-6. Backend verifies activation code, creates/links customer and business records, and assigns service mode.
-7. Activated device either redirects to a destination or opens a hosted landing page.
+- customer account
+- business
+- location when applicable
+- device
+- landing page
+- destination buttons or forms
+- analytics dashboard access
 
-Activation-code rules:
+Bundles may create multiple devices. A starter kit might create one Google device, one Facebook/Yelp/social device, and one menu/custom device. A multi-location bundle may create devices under several locations.
 
-- Store activation codes hashed.
-- Rate-limit activation attempts per device and IP.
-- Lock or slow down repeated failures.
-- Allow admin reset/reissue.
-- Never expose private activation codes in client-side code.
+## Redirect Resolution
 
-## Redirect Model
-
-Route:
+`GET /r/{deviceCode}` should resolve in this order:
 
-```text
-GET /r/{deviceCode}
-```
+1. Validate the public device code format.
+2. Find the device server-side.
+3. If the device is missing, show a clean not-found page.
+4. If the device is unactivated, send the customer to `/activate?device={deviceCode}`.
+5. If the device is paused, disabled, retired, or lost, show a support/unavailable page.
+6. If the service mode is `basic_redirect`, validate the destination URL, log a safe tap event, and redirect.
+7. If the service mode is `managed_redirect`, validate the managed destination URL, log a safe tap event, and redirect.
+8. If the product service mode is `hosted_landing_page`, render or redirect to the assigned Tap Rater hosted page.
+9. If the product service mode is `multi_location_platform`, resolve the assigned location/device/page configuration and then render the correct hosted page or redirect.
 
-Resolution:
+The current device runtime code still uses `premium_landing_page` for hosted device behavior. Product catalog service modes use `hosted_landing_page`; a later schema cleanup should align the device enum without breaking existing device records.
 
-1. Validate `deviceCode` format.
-2. Fetch device by `device_code`.
-3. If unactivated, render activation page.
-4. If `service_mode = basic_redirect`, redirect to active destination URL.
-5. If `service_mode = managed_redirect`, log minimal event if enabled, then redirect.
-6. If `service_mode = premium_landing_page`, render the hosted landing page.
-7. If paused/retired, show support or inactive-device page.
+## Dashboard Connections
 
-First implementation note:
+Customer dashboard views should be derived from the entity graph:
 
-- The Next.js route is `src/app/r/[deviceCode]/page.tsx`.
-- Supabase lookup happens server-side only.
-- If Supabase is not configured, `TR-DEMO-GOOGLE` is available as a local demo device and opens activation.
-- Direct redirects only allow `http` and `https` destinations.
-- `javascript:` and `data:` destinations are rejected.
-- Tap events are attempted safely and must not block redirect behavior.
-- IP addresses should be hashed before storing in `tap_events`.
-- Premium landing pages currently render a placeholder until the hosted page renderer is built.
+- customer -> businesses
+- business -> locations
+- location -> devices
+- device -> tap events
+- business/location -> landing pages
+- landing page -> feedback submissions
+- product -> quote/order/subscription context
 
-Performance requirements:
+The admin dashboard should be able to inspect the same graph globally for support, setup, device management, quote management, and abuse prevention.
 
-- Public redirects must be fast.
-- Avoid slow third-party API calls in the redirect path.
-- Cache safe device resolution data where possible.
-- Keep event logging non-blocking where possible.
+## Review Compliance
 
-## Customer Login Requirements
+Tap Rater must avoid review-gating language and flows. Hosted feedback can exist, but it must not imply unhappy customers are blocked from Google, Yelp, Facebook, TripAdvisor, or another public review platform. Use neutral language such as "tap or scan to share your experience" and "open your review, booking, social, feedback, or business link."
 
-### No Customer Login Required
+## Launch Boundaries
 
-These can work with admin-assisted setup or one-time activation:
+In scope now:
 
-- `google_review` in `basic_redirect`
-- `facebook_review` in `basic_redirect`
-- `yelp_profile` in `basic_redirect`
-- `appointment_booking` in `basic_redirect`
-- `social_follow` in `basic_redirect`
-- `wifi_menu` in `basic_redirect`
-- `custom_url` in `basic_redirect`
+- marketing site
+- expanded catalog
+- product model
+- device activation foundation
+- Supabase-backed admin/CMS foundation
+- basic redirect engine
+- basic tap analytics
 
-### Customer Login Recommended
+Deferred:
 
-These benefit from login but can start admin-managed:
-
-- `google_review` in `managed_redirect`
-- `facebook_review` in `managed_redirect`
-- `yelp_profile` in `managed_redirect`
-- `appointment_booking` in `managed_redirect`
-- `social_follow` in `managed_redirect`
-- `wifi_menu` in `managed_redirect`
-- `custom_url` in `managed_redirect`
-
-### Customer Login Required
-
-These require a portal for self-service, analytics, forms, or hosted pages:
-
-- `multi_platform_review`
-- `feedback_form`
-- `referral_form`
-- `business_card`
-- staff cards with analytics
-- multi-location dashboard
-- hosted landing pages
-- analytics dashboard
-
-## Amazon and FBA Model
-
-Tap Rater products sold through Amazon/FBA should be preloaded before shipment:
-
-- NFC chip points to `https://taprater.com/r/{deviceCode}`.
-- QR code points to the same permanent URL.
-- Device package includes private activation code.
-- Buyer activates by entering device code or scanning URL plus private activation code.
-- Basic direct redirect has no monthly fee.
-- Premium landing pages, analytics, staff tracking, and multi-location features can become subscriptions later.
-
-This model avoids needing to know the customer before Amazon ships the product.
-
-## Admin Backend Sections
-
-The internal admin should eventually include:
-
-- Dashboard: health, request counts, devices, activations, and pending setup.
-- Customers: customer accounts and support context.
-- Businesses: business profiles, locations, and review destinations.
-- Devices: device code, activation status, product type, service mode, destination, landing page, batch.
-- Activations: activation attempts, successful activations, failed attempts, abuse signals.
-- Landing pages: templates, page status, branding, content, publishing.
-- Tap events: high-level analytics, device activity, filtering by business/location/device.
-- Setup requests: form submissions and activation support queue.
-- Products: ecommerce products, pricing, SEO, stock, active/inactive state.
-- Orders later: order records after Stripe checkout is implemented.
-
-## Customer Portal Sections
-
-The customer portal should eventually include:
-
-- My Business: profile, logo, contact info, website, review profile links.
-- My Devices: device list, device status, product type, service mode, assigned destination.
-- Destinations: Google review links, Facebook, Yelp, booking, social, custom URLs.
-- Landing Pages: hosted page builder, templates, branding, status.
-- Analytics: taps, page views, form submissions, device performance, location/staff breakdown.
-- Support: setup help, link change requests, billing support later.
-
-## Build Phases
-
-### Phase 1: Basic Redirect and Activation
-
-Goal: make `/r/{deviceCode}` real.
-
-- Add device schema.
-- Add activation page.
-- Add activation code verification.
-- Add basic destination setup.
-- Support `basic_redirect`.
-- Keep customer login optional.
-- No Stripe.
-
-### Phase 2: Admin Device Manager
-
-Goal: allow Tap Rater staff to manage devices.
-
-- Device list and detail views.
-- Create/import devices by batch.
-- Assign product type and service mode.
-- View activation status.
-- Pause/retire devices.
-- Reset activation codes.
-
-### Phase 3: Customer Portal
-
-Goal: allow customers to manage their own business and devices.
-
-- Customer login.
-- Business profile.
-- Device list.
-- Destination editor.
-- Support requests.
-- Email verification.
-
-### Phase 4: Hosted Landing Page Templates
-
-Goal: support platform products.
-
-- Multi-platform review page template.
-- Feedback form page template.
-- Referral form template.
-- Digital business card template.
-- Branding controls.
-- Publish/unpublish status.
-
-### Phase 5: Analytics
-
-Goal: make premium products valuable.
-
-- Tap events.
-- Page views.
-- Form submissions.
-- Device-level reporting.
-- Location/staff reporting.
-- Admin analytics and customer analytics.
-
-### Phase 6: Stripe Later
-
-Goal: add paid checkout and subscriptions only after banking and Stripe setup are ready.
-
-- Stripe checkout.
-- Paid order records.
-- Webhooks.
-- Subscription plans for premium landing pages and analytics.
-- Tax/shipping integration.
-
-Stripe is intentionally deferred and should not block Phases 1-5 architecture.
-
-## Technical Risks and Decisions
-
-### Supabase Schema
-
-Decision: use Supabase as the first platform database because the current admin/CMS already uses Supabase.
-
-Risks:
-
-- Schema needs to separate ecommerce products from devices.
-- Public redirect path must not depend on service-role credentials in the browser.
-- RLS policies must be planned before customer portal launch.
-
-### Public Redirect Performance
-
-Decision: `/r/{deviceCode}` must stay lightweight.
-
-Risks:
-
-- Slow database reads can make scans feel broken.
-- Event logging should not delay redirects.
-- Landing page rendering should be cached or optimized.
-
-### Google Places API Key Security
-
-Decision: any Google Places lookup should happen server-side.
-
-Risks:
-
-- Browser-exposed keys can be abused.
-- API quotas and billing need controls.
-- Store only needed place metadata.
-
-### Email Verification
-
-Decision: customer portal should require verified email before sensitive device changes.
-
-Risks:
-
-- Unverified users could hijack device setup if activation code is leaked.
-- Account recovery needs a support process.
-
-### Activation-Code Abuse Prevention
-
-Decision: activation code attempts need throttling.
-
-Risks:
-
-- Device codes are public.
-- Attackers could brute force activation codes.
-- Repeated failed attempts should be logged and slowed down.
-
-### Review-Platform Compliance
-
-Decision: Tap Rater should help customers reach review pages without gating positive/negative reviews in a way that violates platform rules.
-
-Risks:
-
-- Review gating can violate Google and other platform policies.
-- Feedback forms should not mislead users or suppress legitimate reviews.
-- Customer copy should avoid incentives for reviews unless compliant with the platform.
-
-## Current Boundaries
-
-Already built:
-
-- Next.js storefront.
-- Static product fallback.
-- Admin login.
-- Admin product editor foundation.
-- Admin request inbox.
-- Supabase-backed CMS/product/request paths.
-- Cart persistence.
-
-Not implemented by this document:
-
-- Stripe checkout.
-- Payment processing.
-- Live order capture.
-- Device activation routes.
-- Customer portal.
-- Hosted landing page renderer.
-- Analytics pipeline.
+- live Stripe checkout
+- live subscriptions
+- production billing portal
+- tax/shipping automation
+- advanced landing page builder
+- advanced analytics attribution

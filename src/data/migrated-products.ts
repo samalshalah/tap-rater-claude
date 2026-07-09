@@ -1,3 +1,18 @@
+export type SupportedDestination =
+  | "google"
+  | "facebook"
+  | "yelp"
+  | "tripadvisor"
+  | "instagram"
+  | "tiktok"
+  | "booking"
+  | "website"
+  | "menu"
+  | "wifi"
+  | "feedback"
+  | "referral"
+  | "custom";
+
 export type MigratedProduct = {
   slug: string;
   title: string;
@@ -14,6 +29,7 @@ export type MigratedProduct = {
   requiresAccount: boolean;
   requiresSubscription: boolean;
   requiresLandingPage: boolean;
+  supportedDestinations: SupportedDestination[];
   activationType: ProductActivationType;
   includedServiceLabel: string;
   images: { src: string; alt: string }[];
@@ -33,12 +49,12 @@ export type ProductCheckoutMode = "buy_now" | "request_quote" | "subscription" |
 export type ProductActivationType = "free_basic_activation" | "managed_setup" | "premium_hosted_activation";
 
 export type CatalogCategorySlug =
-  | "google-review-stands"
-  | "review-plates"
-  | "business-bundles"
-  | "social-booking-stands"
-  | "feedback-referral-stands"
-  | "custom-uv-printed-stands";
+  | "google-review-products"
+  | "review-platform-products"
+  | "social-booking-products"
+  | "feedback-referral-products"
+  | "hosted-landing-page-products"
+  | "business-bundles";
 
 export type CatalogCategory = {
   slug: CatalogCategorySlug;
@@ -54,266 +70,614 @@ export type CatalogCategory = {
 
 export const catalogCategories: CatalogCategory[] = [
   {
-    slug: "google-review-stands",
-    title: "Google Review Stands",
-    eyebrow: "Best sellers",
-    description:
-      "Countertop NFC stands that open your Google review link after checkout, service, pickup, or a front-desk visit.",
-    seoTitle: "Google Review NFC Stand for Local Businesses | Tap Rater",
-    seoDescription:
-      "Shop a Google Review NFC Stand that lets customers tap or scan to open your Google review link from a counter, desk, or checkout area.",
-    buyerIntent: "For businesses that mainly want customers to open a Google review link from an in-person touchpoint.",
+    slug: "google-review-products",
+    title: "Google Review Products",
+    eyebrow: "Google-first",
+    description: "NFC stands, plates, cards, and managed employee prompts that open a Google review destination.",
+    seoTitle: "Google Review NFC Products | Tap Rater",
+    seoDescription: "Shop Google Review NFC stands, plates, cards, name tags, and starter kits for local businesses.",
+    buyerIntent: "For businesses that want a clear in-person prompt to open a Google review link.",
+    aliases: ["google-review-stands", "review-plates", "google-review-plates"],
     seoCopy:
-      "A Google Review NFC Stand gives customers a clear tap or scan action at the counter, front desk, pickup area, or service desk."
+      "Google Review NFC products help customers tap or scan a physical prompt and open the business Google review link without searching."
   },
   {
-    slug: "review-plates",
-    title: "Review Plates",
-    eyebrow: "Low profile",
-    description:
-      "Compact NFC review plates for front desks, tables, counters, and tight spaces where a stand is not the right fit.",
-    seoTitle: "NFC Review Plate for Counters and Tables | Tap Rater",
-    seoDescription:
-      "Buy an NFC Review Plate for counters, tables, reception desks, and checkout areas where customers can tap or scan to share their experience.",
-    buyerIntent: "For desks, tables, and compact counters where a flat plate looks cleaner.",
-    aliases: ["google-review-plates"],
+    slug: "review-platform-products",
+    title: "Review Platform Products",
+    eyebrow: "Review sites",
+    description: "Physical NFC products for Facebook, Yelp, TripAdvisor, and multi-platform review flows.",
+    seoTitle: "Review Platform NFC Products | Tap Rater",
+    seoDescription: "Shop Facebook, Yelp, TripAdvisor, and multi-platform review NFC products for local businesses.",
+    buyerIntent: "For businesses that need review prompts beyond Google.",
+    aliases: ["review-platform-stands"],
     seoCopy:
-      "An NFC Review Plate keeps the review prompt low-profile while still giving customers a simple way to open the right business link."
+      "Review platform products connect physical NFC prompts to public review profiles or hosted multi-platform pages."
+  },
+  {
+    slug: "social-booking-products",
+    title: "Social & Booking Products",
+    eyebrow: "Direct actions",
+    description: "NFC products for appointment booking, social follow pages, menus, Wi-Fi, websites, and direct links.",
+    seoTitle: "Social, Booking and Direct Link NFC Products | Tap Rater",
+    seoDescription: "Shop NFC stands for appointment booking, social follows, menus, Wi-Fi, websites, and custom direct links.",
+    buyerIntent: "For businesses that want customers to open a booking page, social profile, menu, Wi-Fi page, or custom URL.",
+    aliases: ["social-booking-stands", "custom-uv-printed-stands"],
+    seoCopy:
+      "Social and booking NFC products give customers a quick tap or scan path to the next action a business wants them to take."
+  },
+  {
+    slug: "feedback-referral-products",
+    title: "Feedback & Referral Products",
+    eyebrow: "Forms",
+    description: "Hosted feedback, referral, and rate-your-experience pages powered by Tap Rater forms.",
+    seoTitle: "Feedback and Referral NFC Products | Tap Rater",
+    seoDescription: "Shop hosted feedback, referral, and rate-your-experience Tap Rater products for local businesses.",
+    buyerIntent: "For businesses that need private forms, referral requests, and customer experience flows.",
+    aliases: ["feedback-referral-stands", "feedback-stands"],
+    seoCopy:
+      "Feedback and referral products collect customer input through Tap Rater hosted pages without blocking access to public review platforms."
+  },
+  {
+    slug: "hosted-landing-page-products",
+    title: "Hosted Landing Page Products",
+    eyebrow: "Platform",
+    description: "Hosted reputation pages, social hubs, review hubs, staff tracking pages, and multi-location dashboards.",
+    seoTitle: "Hosted Reputation Landing Pages | Tap Rater",
+    seoDescription: "Tap Rater hosted landing pages support review hubs, reputation pages, social hubs, staff tracking, and multi-location dashboards.",
+    buyerIntent: "For businesses that need account-based platform features, hosted pages, analytics, forms, and dashboards.",
+    seoCopy:
+      "Hosted landing page products require Tap Rater platform setup, a customer account, a business profile, and a hosted page or dashboard."
   },
   {
     slug: "business-bundles",
     title: "Business Bundles",
-    eyebrow: "Save with sets",
-    description:
-      "Multi-piece Tap Rater bundles for businesses with several counters, rooms, tables, or team members.",
-    seoTitle: "Business Bundles for NFC Review Stands | Tap Rater",
-    seoDescription:
-      "Shop Tap Rater business bundles with multiple NFC review stands and plates for several customer touchpoints.",
-    buyerIntent: "For multi-station businesses that need review prompts in several customer touchpoints.",
+    eyebrow: "Setup included",
+    description: "Bundles that combine physical NFC products with managed setup for business review programs.",
+    seoTitle: "Business Bundles and Review Starter Kits | Tap Rater",
+    seoDescription: "Shop Tap Rater business bundles with physical NFC products and managed setup for local business reputation programs.",
+    buyerIntent: "For businesses that want physical products plus Tap Rater setup help.",
     seoCopy:
-      "Business bundles help one location place the same clear tap or scan prompt at checkout, reception, service rooms, and pickup counters."
-  },
-  {
-    slug: "social-booking-stands",
-    title: "Social & Booking Stands",
-    eyebrow: "Links beyond reviews",
-    description:
-      "NFC stands for Facebook, Yelp, appointment booking, social follow, and other direct business links.",
-    seoTitle: "Appointment Booking NFC Stand and Social Link Stands | Tap Rater",
-    seoDescription:
-      "Shop an Appointment Booking NFC Stand, Facebook review stand, Yelp profile stand, or social link stand for direct customer actions.",
-    buyerIntent: "For businesses that want customers to open a booking, social, Facebook, Yelp, or profile link in one tap.",
-    aliases: ["review-platform-stands"],
-    seoCopy:
-      "An Appointment Booking NFC Stand can open your booking page directly, while social and profile stands help customers find the right destination without searching."
-  },
-  {
-    slug: "feedback-referral-stands",
-    title: "Feedback & Referral Stands",
-    eyebrow: "Hosted flows",
-    description:
-      "NFC stands that open feedback forms, referral forms, rate-your-experience pages, or hosted Tap Rater landing pages.",
-    seoTitle: "Feedback NFC Stand and Referral Stand for Customer Forms | Tap Rater",
-    seoDescription:
-      "Shop a Feedback NFC Stand or referral stand that opens a hosted Tap Rater form, feedback page, or custom customer flow.",
-    buyerIntent: "For businesses that want a feedback, referral, or hosted customer flow instead of one direct review platform.",
-    aliases: ["feedback-stands"],
-    seoCopy:
-      "A Feedback NFC Stand can open a hosted Tap Rater form where customers can share their experience without being pushed toward a specific rating."
-  },
-  {
-    slug: "custom-uv-printed-stands",
-    title: "Custom UV Printed Stands",
-    eyebrow: "Custom direct links",
-    description:
-      "Custom UV printed NFC stands for direct business links, branded prompts, menus, Wi-Fi, booking pages, and review destinations.",
-    seoTitle: "Custom Review Stand and UV Printed NFC Stands | Tap Rater",
-    seoDescription:
-      "Order a Custom Review Stand or UV printed NFC stand for a Google review link, booking page, menu, Wi-Fi link, social profile, or custom URL.",
-    buyerIntent: "For businesses that want custom printed wording, branding, or a direct link that does not fit a standard design.",
-    seoCopy:
-      "A Custom Review Stand can use your brand, wording, and destination while still keeping basic direct activation available without a monthly fee."
+      "Business bundles combine NFC hardware and managed setup so a business can launch several review touchpoints together."
   }
 ];
 
+const googleStandImage = { src: "/uploads/products/google-review-white-stand.jpg", alt: "Tap Rater NFC stand for Google reviews" };
+const googlePlateImage = { src: "/uploads/products/google-review-white-plate.jpg", alt: "Tap Rater NFC review plate for counters and tables" };
+const facebookImage = { src: "/uploads/products/facebook-review-stand.jpg", alt: "Tap Rater Facebook review NFC stand" };
+const yelpImage = { src: "/uploads/products/yelp-review-stand.jpg", alt: "Tap Rater Yelp review NFC stand" };
+const feedbackImage = { src: "/uploads/products/rate-your-experience-white-stand.jpg", alt: "Tap Rater hosted feedback NFC stand" };
+const bundleImage = { src: "/uploads/products/business-google-white-bundle.jpg", alt: "Tap Rater business review starter kit bundle" };
+const standsBundleImage = { src: "/uploads/products/business-google-white-stands-bundle.jpg", alt: "Tap Rater multi-stand business bundle" };
+
 export const migratedProducts: MigratedProduct[] = [
   {
-    slug: "google-review-white-stand",
-    title: "White Stand - Google Review",
-    sku: "TRATER01",
-    categorySlug: "google-review-stands",
+    slug: "google-review-nfc-stand",
+    title: "Google Review NFC Stand",
+    sku: "TR-GOOGLE-STAND",
+    categorySlug: "google-review-products",
     basePriceCents: 4900,
     stockStatus: "instock",
-    shortDescription: "NFC Google review stand for counters, checkout desks, salons, restaurants, clinics, and local service businesses.",
-    description: "A Tap Rater Google Review NFC stand helps customers open your Google review link with one tap. Place it near checkout, the front desk, or the service counter so customers can tap or scan before they leave.",
+    shortDescription: "Countertop NFC stand that opens a Google review link with one tap or scan.",
+    description:
+      "A Google Review NFC Stand gives customers a clear counter, front-desk, or checkout prompt that opens your Google review destination. Basic activation redirects directly to the URL you provide.",
     productType: "physical_redirect",
     serviceMode: "basic_redirect",
     checkoutMode: "buy_now",
     requiresAccount: false,
     requiresSubscription: false,
     requiresLandingPage: false,
+    supportedDestinations: ["google"],
     activationType: "free_basic_activation",
     includedServiceLabel: "Free basic activation",
-    images: [{ src: "/uploads/products/google-review-white-stand.jpg", alt: "White Tap Rater Google Review NFC stand for business counters" }],
+    images: [googleStandImage],
     variants: [
-      { id: "white", label: "White", sku: "TRATER01-W", stockStatus: "instock" },
-      { id: "black", label: "Black", sku: "TRATER01-B", stockStatus: "instock" }
+      { id: "white", label: "White", sku: "TR-GOOGLE-STAND-W", stockStatus: "instock" },
+      { id: "black", label: "Black", sku: "TR-GOOGLE-STAND-B", stockStatus: "instock" }
     ],
     isActive: true,
-    seoTitle: "Google Review NFC Stand for Businesses | Tap Rater",
-    seoDescription: "Buy a Google Review NFC stand that lets customers tap their phone to open your review link. Ideal for restaurants, salons, clinics, retail stores, and local businesses.",
-    searchKeywords: ["google review nfc stand", "nfc review stand", "review us on google sign", "google review tap card"]
+    seoTitle: "Google Review NFC Stand for Local Businesses | Tap Rater",
+    seoDescription: "Buy a Google Review NFC Stand that lets customers tap or scan to open your Google review link.",
+    searchKeywords: ["google review nfc stand", "nfc review stand", "google review stand"]
   },
   {
-    slug: "google-review-white-plate",
-    title: "White Plate - Google Review",
-    sku: "TRATER02",
-    categorySlug: "review-plates",
+    slug: "google-review-nfc-plate",
+    title: "Google Review NFC Plate",
+    sku: "TR-GOOGLE-PLATE",
+    categorySlug: "google-review-products",
     basePriceCents: 3900,
     stockStatus: "instock",
-    shortDescription: "Low-profile NFC Google review plate for desks, tables, counters, and checkout areas.",
-    description: "A Tap Rater Google Review NFC plate gives customers a clean, compact way to open your Google review link. It is built for counters, front desks, table service, and tight spaces where a stand is not the right fit.",
+    shortDescription: "Low-profile NFC plate for desks, tables, counters, and reception areas.",
+    description:
+      "A Google Review NFC Plate keeps the review prompt compact while still giving customers a simple way to open your Google review destination.",
     productType: "physical_redirect",
     serviceMode: "basic_redirect",
     checkoutMode: "buy_now",
     requiresAccount: false,
     requiresSubscription: false,
     requiresLandingPage: false,
+    supportedDestinations: ["google"],
     activationType: "free_basic_activation",
     includedServiceLabel: "Free basic activation",
-    images: [{ src: "/uploads/products/google-review-white-plate.jpg", alt: "White Tap Rater Google Review NFC plate for counters and tables" }],
+    images: [googlePlateImage],
     variants: [
-      { id: "white", label: "White", sku: "TRATER02-W", stockStatus: "instock" },
-      { id: "black", label: "Black", sku: "TRATER02-B", stockStatus: "instock" }
+      { id: "white", label: "White", sku: "TR-GOOGLE-PLATE-W", stockStatus: "instock" },
+      { id: "black", label: "Black", sku: "TR-GOOGLE-PLATE-B", stockStatus: "instock" }
     ],
     isActive: true,
     seoTitle: "Google Review NFC Plate for Counters and Tables | Tap Rater",
-    seoDescription: "Compact NFC Google review plate for businesses that want customers to tap and open a Google review link from a counter, table, or front desk.",
-    searchKeywords: ["google review nfc plate", "google review plate", "nfc review plate", "google review table sign"]
+    seoDescription: "Compact NFC Google review plate for counters, tables, front desks, and checkout areas.",
+    searchKeywords: ["google review nfc plate", "nfc review plate", "review plate"]
+  },
+  {
+    slug: "google-review-nfc-card",
+    title: "Google Review NFC Card",
+    sku: "TR-GOOGLE-CARD",
+    categorySlug: "google-review-products",
+    basePriceCents: 2900,
+    stockStatus: "instock",
+    shortDescription: "Portable NFC card for opening a Google review link during handoffs, events, or service visits.",
+    description:
+      "A Google Review NFC Card is a portable review prompt for staff, technicians, events, and customer handoffs. It opens one configured Google review destination.",
+    productType: "physical_redirect",
+    serviceMode: "basic_redirect",
+    checkoutMode: "buy_now",
+    requiresAccount: false,
+    requiresSubscription: false,
+    requiresLandingPage: false,
+    supportedDestinations: ["google"],
+    activationType: "free_basic_activation",
+    includedServiceLabel: "Free basic activation",
+    images: [googlePlateImage],
+    variants: [],
+    isActive: true,
+    seoTitle: "Google Review NFC Card | Tap Rater",
+    seoDescription: "Portable NFC card that opens a Google review link for service teams and local businesses.",
+    searchKeywords: ["google review nfc card", "review tap card", "nfc review card"]
+  },
+  {
+    slug: "employee-review-name-tag",
+    title: "Employee Review Name Tag",
+    sku: "TR-STAFF-TAG",
+    categorySlug: "google-review-products",
+    basePriceCents: 5900,
+    stockStatus: "instock",
+    shortDescription: "Managed employee NFC name tag for staff-specific review or feedback routing.",
+    description:
+      "Employee Review Name Tags help staff invite customers to open the correct review, feedback, or staff tracking destination. Tap Rater managed setup is included.",
+    productType: "physical_managed",
+    serviceMode: "managed_redirect",
+    checkoutMode: "request_quote",
+    requiresAccount: false,
+    requiresSubscription: false,
+    requiresLandingPage: false,
+    supportedDestinations: ["google", "feedback", "custom"],
+    activationType: "managed_setup",
+    includedServiceLabel: "Managed setup included",
+    images: [googleStandImage],
+    variants: [],
+    isActive: true,
+    seoTitle: "Employee Review Name Tag | Tap Rater",
+    seoDescription: "Managed NFC employee name tag for staff review, feedback, or custom destination routing.",
+    searchKeywords: ["employee review name tag", "staff nfc review tag", "nfc name tag"]
   },
   {
     slug: "facebook-review-stand",
-    title: "White Stand - Facebook Review",
-    sku: "TRATER05",
-    categorySlug: "social-booking-stands",
+    title: "Facebook Review Stand",
+    sku: "TR-FACEBOOK-STAND",
+    categorySlug: "review-platform-products",
     basePriceCents: 4900,
-    stockStatus: "outofstock",
-    shortDescription: "NFC Facebook review stand for businesses that collect recommendations and social proof on Facebook.",
-    description: "A Tap Rater Facebook Review NFC stand sends customers to your Facebook recommendation or review destination with one tap. Use it at your counter, reception desk, or checkout area.",
+    stockStatus: "instock",
+    shortDescription: "NFC stand that opens a Facebook review, recommendation, or business profile destination.",
+    description:
+      "A Facebook Review Stand gives customers a simple tap or scan prompt for your Facebook recommendation, review, or profile destination.",
     productType: "physical_redirect",
     serviceMode: "basic_redirect",
     checkoutMode: "buy_now",
     requiresAccount: false,
     requiresSubscription: false,
     requiresLandingPage: false,
+    supportedDestinations: ["facebook"],
     activationType: "free_basic_activation",
     includedServiceLabel: "Free basic activation",
-    images: [{ src: "/uploads/products/facebook-review-stand.jpg", alt: "White Tap Rater Facebook Review NFC stand" }],
+    images: [facebookImage],
     variants: [],
     isActive: true,
-    seoTitle: "Facebook Review NFC Stand for Businesses | Tap Rater",
-    seoDescription: "NFC Facebook review stand for local businesses that want customers to tap and open a Facebook recommendation or review link.",
-    searchKeywords: ["facebook review nfc stand", "facebook review stand", "nfc review sign"]
+    seoTitle: "Facebook Review NFC Stand | Tap Rater",
+    seoDescription: "NFC Facebook review stand for businesses that want customers to open a Facebook review or recommendation destination.",
+    searchKeywords: ["facebook review stand", "facebook nfc stand"]
   },
   {
     slug: "yelp-review-stand",
-    title: "White Stand - Yelp Review",
-    sku: "TRATER06",
-    categorySlug: "social-booking-stands",
+    title: "Yelp Review Stand",
+    sku: "TR-YELP-STAND",
+    categorySlug: "review-platform-products",
     basePriceCents: 4900,
-    stockStatus: "outofstock",
-    shortDescription: "NFC Yelp review stand for restaurants, salons, service businesses, and local storefronts.",
-    description: "A Tap Rater Yelp Review NFC stand helps customers open your Yelp review destination with one tap. It is useful for businesses where Yelp visibility helps customers choose where to go next.",
+    stockStatus: "instock",
+    shortDescription: "NFC stand that opens a Yelp business profile or review destination.",
+    description:
+      "A Yelp Review Stand helps customers open your Yelp destination from a counter, host stand, table, or service desk.",
     productType: "physical_redirect",
     serviceMode: "basic_redirect",
     checkoutMode: "buy_now",
     requiresAccount: false,
     requiresSubscription: false,
     requiresLandingPage: false,
+    supportedDestinations: ["yelp"],
     activationType: "free_basic_activation",
     includedServiceLabel: "Free basic activation",
-    images: [{ src: "/uploads/products/yelp-review-stand.jpg", alt: "White Tap Rater Yelp Review NFC stand for local businesses" }],
+    images: [yelpImage],
     variants: [],
     isActive: true,
-    seoTitle: "Yelp Review NFC Stand for Local Businesses | Tap Rater",
-    seoDescription: "NFC Yelp review stand that helps customers tap their phone and open your Yelp review link from the counter, table, or front desk.",
-    searchKeywords: ["yelp review nfc stand", "yelp review stand", "nfc review stand for restaurants"]
+    seoTitle: "Yelp Review NFC Stand | Tap Rater",
+    seoDescription: "NFC Yelp review stand for restaurants, salons, retail stores, and local service businesses.",
+    searchKeywords: ["yelp review stand", "yelp nfc stand"]
   },
   {
-    slug: "tap-rater-business-white-bundle",
-    title: "Business - Google White Bundle",
-    sku: "TRATER07",
+    slug: "tripadvisor-review-stand",
+    title: "TripAdvisor Review Stand",
+    sku: "TR-TRIPADVISOR-STAND",
+    categorySlug: "review-platform-products",
+    basePriceCents: 4900,
+    stockStatus: "instock",
+    shortDescription: "NFC stand for hotels, restaurants, attractions, and visitor-facing businesses.",
+    description:
+      "A TripAdvisor Review Stand opens your TripAdvisor destination for guests, diners, visitors, and travelers after an in-person experience.",
+    productType: "physical_redirect",
+    serviceMode: "basic_redirect",
+    checkoutMode: "buy_now",
+    requiresAccount: false,
+    requiresSubscription: false,
+    requiresLandingPage: false,
+    supportedDestinations: ["tripadvisor"],
+    activationType: "free_basic_activation",
+    includedServiceLabel: "Free basic activation",
+    images: [googleStandImage],
+    variants: [],
+    isActive: true,
+    seoTitle: "TripAdvisor Review NFC Stand | Tap Rater",
+    seoDescription: "NFC TripAdvisor review stand for hospitality, tourism, restaurant, and attraction businesses.",
+    searchKeywords: ["tripadvisor review stand", "tripadvisor nfc stand"]
+  },
+  {
+    slug: "appointment-booking-stand",
+    title: "Appointment Booking Stand",
+    sku: "TR-BOOKING-STAND",
+    categorySlug: "social-booking-products",
+    basePriceCents: 4900,
+    stockStatus: "instock",
+    shortDescription: "NFC stand that opens a booking page, appointment form, calendar, or scheduling URL.",
+    description:
+      "An Appointment Booking Stand opens your scheduling page in one tap or scan, making it useful for salons, clinics, consultants, and service businesses.",
+    productType: "physical_redirect",
+    serviceMode: "basic_redirect",
+    checkoutMode: "buy_now",
+    requiresAccount: false,
+    requiresSubscription: false,
+    requiresLandingPage: false,
+    supportedDestinations: ["booking", "website", "custom"],
+    activationType: "free_basic_activation",
+    includedServiceLabel: "Free basic activation",
+    images: [googleStandImage],
+    variants: [],
+    isActive: true,
+    seoTitle: "Appointment Booking NFC Stand | Tap Rater",
+    seoDescription: "NFC appointment booking stand that opens your booking, calendar, or scheduling page.",
+    searchKeywords: ["appointment booking nfc stand", "booking stand", "nfc booking sign"]
+  },
+  {
+    slug: "social-follow-nfc-stand",
+    title: "Social Follow NFC Stand",
+    sku: "TR-SOCIAL-STAND",
+    categorySlug: "social-booking-products",
+    basePriceCents: 4900,
+    stockStatus: "instock",
+    shortDescription: "NFC stand for Instagram, TikTok, Facebook, and social profile follow actions.",
+    description:
+      "A Social Follow NFC Stand gives customers a quick way to open your Instagram, TikTok, Facebook, or other social profile.",
+    productType: "physical_redirect",
+    serviceMode: "basic_redirect",
+    checkoutMode: "buy_now",
+    requiresAccount: false,
+    requiresSubscription: false,
+    requiresLandingPage: false,
+    supportedDestinations: ["instagram", "tiktok", "facebook", "custom"],
+    activationType: "free_basic_activation",
+    includedServiceLabel: "Free basic activation",
+    images: [facebookImage],
+    variants: [],
+    isActive: true,
+    seoTitle: "Social Follow NFC Stand | Tap Rater",
+    seoDescription: "NFC social follow stand for Instagram, TikTok, Facebook, and other social profiles.",
+    searchKeywords: ["social follow nfc stand", "instagram nfc stand", "tiktok nfc stand"]
+  },
+  {
+    slug: "menu-wifi-direct-link-stand",
+    title: "Menu / WiFi / Direct Link Stand",
+    sku: "TR-DIRECT-STAND",
+    categorySlug: "social-booking-products",
+    basePriceCents: 4900,
+    stockStatus: "instock",
+    shortDescription: "Custom NFC stand for menus, Wi-Fi pages, websites, forms, and direct business links.",
+    description:
+      "A Menu / WiFi / Direct Link Stand opens one configured destination such as a menu, Wi-Fi page, website, form, or custom URL.",
+    productType: "physical_redirect",
+    serviceMode: "basic_redirect",
+    checkoutMode: "buy_now",
+    requiresAccount: false,
+    requiresSubscription: false,
+    requiresLandingPage: false,
+    supportedDestinations: ["menu", "wifi", "website", "custom"],
+    activationType: "free_basic_activation",
+    includedServiceLabel: "Free basic activation",
+    images: [googleStandImage],
+    variants: [],
+    isActive: true,
+    seoTitle: "Menu, WiFi and Direct Link NFC Stand | Tap Rater",
+    seoDescription: "Custom NFC stand for menus, Wi-Fi pages, websites, forms, and direct links.",
+    searchKeywords: ["menu nfc stand", "wifi nfc stand", "direct link nfc stand"]
+  },
+  {
+    slug: "multi-platform-review-page",
+    title: "Multi-Platform Review Page",
+    sku: "TR-MULTI-REVIEW",
+    categorySlug: "hosted-landing-page-products",
+    basePriceCents: 0,
+    stockStatus: "instock",
+    shortDescription: "Hosted Tap Rater page with multiple public review destination buttons.",
+    description:
+      "A Multi-Platform Review Page gives a business one hosted Tap Rater URL with buttons for Google, Facebook, Yelp, TripAdvisor, or other approved destinations. It requires account and landing page setup.",
+    productType: "platform_landing_page",
+    serviceMode: "hosted_landing_page",
+    checkoutMode: "contact_sales",
+    requiresAccount: true,
+    requiresSubscription: true,
+    requiresLandingPage: true,
+    supportedDestinations: ["google", "facebook", "yelp", "tripadvisor", "custom"],
+    activationType: "premium_hosted_activation",
+    includedServiceLabel: "Premium landing page",
+    images: [feedbackImage],
+    variants: [],
+    isActive: true,
+    seoTitle: "Multi-Platform Review Page | Tap Rater",
+    seoDescription: "Hosted review landing page with buttons for Google, Facebook, Yelp, TripAdvisor, and custom destinations.",
+    searchKeywords: ["multi platform review page", "review landing page", "reputation landing page"]
+  },
+  {
+    slug: "reputation-hub-page",
+    title: "Reputation Hub Page",
+    sku: "TR-REPUTATION-HUB",
+    categorySlug: "hosted-landing-page-products",
+    basePriceCents: 0,
+    stockStatus: "instock",
+    shortDescription: "Hosted reputation page for reviews, business links, social profiles, and support actions.",
+    description:
+      "A Reputation Hub Page centralizes review links, social links, contact actions, and business destinations in one Tap Rater hosted page.",
+    productType: "platform_landing_page",
+    serviceMode: "hosted_landing_page",
+    checkoutMode: "contact_sales",
+    requiresAccount: true,
+    requiresSubscription: true,
+    requiresLandingPage: true,
+    supportedDestinations: ["google", "facebook", "yelp", "website", "instagram", "custom"],
+    activationType: "premium_hosted_activation",
+    includedServiceLabel: "Premium landing page",
+    images: [feedbackImage],
+    variants: [],
+    isActive: true,
+    seoTitle: "Reputation Hub Page | Tap Rater",
+    seoDescription: "Hosted reputation hub page for reviews, social profiles, business links, and local customer actions.",
+    searchKeywords: ["reputation hub page", "hosted review page", "business reputation page"]
+  },
+  {
+    slug: "rate-your-experience-page",
+    title: "Rate Your Experience Page",
+    sku: "TR-RATE-EXPERIENCE",
+    categorySlug: "feedback-referral-products",
+    basePriceCents: 0,
+    stockStatus: "instock",
+    shortDescription: "Hosted experience page for customer feedback and follow-up routing.",
+    description:
+      "A Rate Your Experience Page opens a hosted Tap Rater page where customers can share feedback or choose an approved business destination.",
+    productType: "platform_landing_page",
+    serviceMode: "hosted_landing_page",
+    checkoutMode: "request_quote",
+    requiresAccount: true,
+    requiresSubscription: true,
+    requiresLandingPage: true,
+    supportedDestinations: ["feedback", "google", "custom"],
+    activationType: "premium_hosted_activation",
+    includedServiceLabel: "Premium landing page",
+    images: [feedbackImage],
+    variants: [
+      { id: "white", label: "White stand", sku: "TR-RATE-EXPERIENCE-W", stockStatus: "instock" },
+      { id: "black", label: "Black stand", sku: "TR-RATE-EXPERIENCE-B", stockStatus: "instock" }
+    ],
+    isActive: true,
+    seoTitle: "Rate Your Experience Page | Tap Rater",
+    seoDescription: "Hosted Tap Rater customer experience page for feedback, review links, and custom routing.",
+    searchKeywords: ["rate your experience page", "feedback nfc stand", "customer experience page"]
+  },
+  {
+    slug: "private-feedback-page",
+    title: "Private Feedback Page",
+    sku: "TR-PRIVATE-FEEDBACK",
+    categorySlug: "feedback-referral-products",
+    basePriceCents: 0,
+    stockStatus: "instock",
+    shortDescription: "Hosted private feedback form for customers to send comments directly to the business.",
+    description:
+      "A Private Feedback Page collects customer comments through a Tap Rater hosted form. It is not a review-gating tool and does not block access to public review destinations.",
+    productType: "platform_landing_page",
+    serviceMode: "hosted_landing_page",
+    checkoutMode: "request_quote",
+    requiresAccount: true,
+    requiresSubscription: true,
+    requiresLandingPage: true,
+    supportedDestinations: ["feedback", "custom"],
+    activationType: "premium_hosted_activation",
+    includedServiceLabel: "Premium landing page",
+    images: [feedbackImage],
+    variants: [],
+    isActive: true,
+    seoTitle: "Private Feedback Page | Tap Rater",
+    seoDescription: "Hosted private feedback page for collecting customer comments through Tap Rater forms.",
+    searchKeywords: ["private feedback page", "customer feedback form", "nfc feedback page"]
+  },
+  {
+    slug: "referral-request-page",
+    title: "Referral Request Page",
+    sku: "TR-REFERRAL-PAGE",
+    categorySlug: "feedback-referral-products",
+    basePriceCents: 0,
+    stockStatus: "instock",
+    shortDescription: "Hosted referral request page for customers who want to share your business.",
+    description:
+      "A Referral Request Page lets customers open a hosted Tap Rater page for referral prompts, share links, and referral form submissions.",
+    productType: "platform_landing_page",
+    serviceMode: "hosted_landing_page",
+    checkoutMode: "request_quote",
+    requiresAccount: true,
+    requiresSubscription: true,
+    requiresLandingPage: true,
+    supportedDestinations: ["referral", "website", "custom"],
+    activationType: "premium_hosted_activation",
+    includedServiceLabel: "Premium landing page",
+    images: [feedbackImage],
+    variants: [],
+    isActive: true,
+    seoTitle: "Referral Request Page | Tap Rater",
+    seoDescription: "Hosted referral request page for local businesses using Tap Rater NFC products.",
+    searchKeywords: ["referral request page", "nfc referral stand", "referral form page"]
+  },
+  {
+    slug: "social-media-hub-page",
+    title: "Social Media Hub Page",
+    sku: "TR-SOCIAL-HUB",
+    categorySlug: "hosted-landing-page-products",
+    basePriceCents: 0,
+    stockStatus: "instock",
+    shortDescription: "Hosted social hub for Instagram, TikTok, Facebook, website, and custom links.",
+    description:
+      "A Social Media Hub Page gives customers one hosted Tap Rater page for social profiles, website links, booking links, and custom calls to action.",
+    productType: "platform_landing_page",
+    serviceMode: "hosted_landing_page",
+    checkoutMode: "contact_sales",
+    requiresAccount: true,
+    requiresSubscription: true,
+    requiresLandingPage: true,
+    supportedDestinations: ["instagram", "tiktok", "facebook", "website", "booking", "custom"],
+    activationType: "premium_hosted_activation",
+    includedServiceLabel: "Premium landing page",
+    images: [facebookImage],
+    variants: [],
+    isActive: true,
+    seoTitle: "Social Media Hub Page | Tap Rater",
+    seoDescription: "Hosted social media hub page for Instagram, TikTok, Facebook, booking links, websites, and custom actions.",
+    searchKeywords: ["social media hub page", "social links nfc page", "instagram tiktok nfc"]
+  },
+  {
+    slug: "review-feedback-combo-page",
+    title: "Review + Feedback Combo Page",
+    sku: "TR-REVIEW-FEEDBACK",
+    categorySlug: "hosted-landing-page-products",
+    basePriceCents: 0,
+    stockStatus: "instock",
+    shortDescription: "Hosted page that combines public review links and private feedback options.",
+    description:
+      "A Review + Feedback Combo Page can show public review buttons and a private feedback form without steering customers away from public review platforms based on sentiment.",
+    productType: "platform_landing_page",
+    serviceMode: "hosted_landing_page",
+    checkoutMode: "contact_sales",
+    requiresAccount: true,
+    requiresSubscription: true,
+    requiresLandingPage: true,
+    supportedDestinations: ["google", "facebook", "yelp", "feedback", "custom"],
+    activationType: "premium_hosted_activation",
+    includedServiceLabel: "Premium landing page",
+    images: [feedbackImage],
+    variants: [],
+    isActive: true,
+    seoTitle: "Review and Feedback Combo Page | Tap Rater",
+    seoDescription: "Hosted review and feedback combo page with public review links and private feedback options.",
+    searchKeywords: ["review feedback combo page", "review and feedback page", "hosted feedback page"]
+  },
+  {
+    slug: "staff-review-tracking-page",
+    title: "Staff Review Tracking Page",
+    sku: "TR-STAFF-TRACKING",
+    categorySlug: "hosted-landing-page-products",
+    basePriceCents: 0,
+    stockStatus: "instock",
+    shortDescription: "Hosted staff tracking page for employee cards, tags, and team-level reporting.",
+    description:
+      "A Staff Review Tracking Page connects staff NFC cards, tags, or stands to Tap Rater reporting so a business can understand tap activity by employee or team.",
+    productType: "platform_landing_page",
+    serviceMode: "hosted_landing_page",
+    checkoutMode: "contact_sales",
+    requiresAccount: true,
+    requiresSubscription: true,
+    requiresLandingPage: true,
+    supportedDestinations: ["google", "feedback", "custom"],
+    activationType: "premium_hosted_activation",
+    includedServiceLabel: "Premium landing page",
+    images: [googleStandImage],
+    variants: [],
+    isActive: true,
+    seoTitle: "Staff Review Tracking Page | Tap Rater",
+    seoDescription: "Hosted staff review tracking page for employee review cards, NFC tags, and team reporting.",
+    searchKeywords: ["staff review tracking", "employee review tracking", "staff nfc dashboard"]
+  },
+  {
+    slug: "multi-location-dashboard",
+    title: "Multi-Location Dashboard",
+    sku: "TR-MULTI-LOCATION",
+    categorySlug: "hosted-landing-page-products",
+    basePriceCents: 0,
+    stockStatus: "instock",
+    shortDescription: "Account-based dashboard for businesses with multiple locations, devices, and reputation pages.",
+    description:
+      "A Multi-Location Dashboard is for businesses that need location-level Tap Rater devices, hosted pages, analytics, destination management, and reporting.",
+    productType: "platform_landing_page",
+    serviceMode: "multi_location_platform",
+    checkoutMode: "contact_sales",
+    requiresAccount: true,
+    requiresSubscription: true,
+    requiresLandingPage: true,
+    supportedDestinations: ["google", "facebook", "yelp", "tripadvisor", "feedback", "referral", "custom"],
+    activationType: "premium_hosted_activation",
+    includedServiceLabel: "Premium landing page",
+    images: [standsBundleImage],
+    variants: [],
+    isActive: true,
+    seoTitle: "Multi-Location Reputation Dashboard | Tap Rater",
+    seoDescription: "Tap Rater multi-location dashboard for devices, hosted pages, analytics, and business reputation workflows.",
+    searchKeywords: ["multi location review dashboard", "reputation dashboard", "tap rater dashboard"]
+  },
+  {
+    slug: "business-review-starter-kit",
+    title: "Business Review Starter Kit",
+    sku: "TR-STARTER-KIT",
     categorySlug: "business-bundles",
     basePriceCents: 12700,
     salePriceCents: 10160,
     stockStatus: "instock",
-    shortDescription: "Google review NFC bundle for businesses that need multiple review touchpoints.",
-    description: "The Tap Rater Google White Bundle gives your business multiple NFC review touchpoints, making it easier to request reviews at the front desk, checkout counter, reception area, or table.",
+    shortDescription: "Bundle of physical review products with Tap Rater managed setup included.",
+    description:
+      "The Business Review Starter Kit combines NFC review hardware and managed setup so a local business can launch multiple review touchpoints together.",
     productType: "bundle",
     serviceMode: "managed_redirect",
-    checkoutMode: "buy_now",
+    checkoutMode: "request_quote",
     requiresAccount: false,
     requiresSubscription: false,
     requiresLandingPage: false,
+    supportedDestinations: ["google", "facebook", "yelp", "website", "custom"],
     activationType: "managed_setup",
     includedServiceLabel: "Managed setup included",
-    images: [{ src: "/uploads/products/business-google-white-bundle.jpg", alt: "Tap Rater Google Review NFC business bundle with stand and plates" }],
+    images: [bundleImage],
     variants: [],
     isActive: true,
-    seoTitle: "Google Review NFC Business Bundle | Tap Rater",
-    seoDescription: "Discounted Google Review NFC bundle for businesses that want multiple stands and plates for customer review touchpoints.",
-    searchKeywords: ["google review nfc bundle", "business review stand bundle", "google review display bundle"]
-  },
-  {
-    slug: "tap-rater-business-white-stands-bundle",
-    title: "Business - Google White Stands Bundle",
-    sku: "TRATER10",
-    categorySlug: "business-bundles",
-    basePriceCents: 14700,
-    salePriceCents: 11760,
-    stockStatus: "instock",
-    shortDescription: "Multi-stand Google review NFC bundle for businesses with several counters, rooms, or service points.",
-    description: "The Tap Rater Google White Stands Bundle is made for businesses that need several NFC Google review stands across a location or team. Place them where customers check in, pay, or finish service.",
-    productType: "bundle",
-    serviceMode: "managed_redirect",
-    checkoutMode: "buy_now",
-    requiresAccount: false,
-    requiresSubscription: false,
-    requiresLandingPage: false,
-    activationType: "managed_setup",
-    includedServiceLabel: "Managed setup included",
-    images: [{ src: "/uploads/products/business-google-white-stands-bundle.jpg", alt: "Tap Rater Google Review NFC white stands bundle for businesses" }],
-    variants: [],
-    isActive: true,
-    seoTitle: "Google Review NFC Stands Bundle | Tap Rater",
-    seoDescription: "Bundle of Google Review NFC stands for businesses that want more review touchpoints across checkout counters, rooms, or service desks.",
-    searchKeywords: ["google review stands bundle", "nfc review stands bundle", "review us on google stand bundle"]
-  },
-  {
-    slug: "tap-rater-white-stand-rate-your-experience",
-    title: "White Stand - Rate Your Experience",
-    sku: "TRATER12",
-    categorySlug: "feedback-referral-stands",
-    basePriceCents: 4900,
-    stockStatus: "instock",
-    shortDescription: "Feedback NFC stand for hosted feedback forms, custom customer flows, surveys, and rate-your-experience pages.",
-    description: "The Tap Rater Feedback NFC stand opens a hosted Tap Rater landing page, feedback form, survey, or verified customer flow. Use it when you need a flexible platform-powered experience instead of one direct review destination.",
-    productType: "platform_landing_page",
-    serviceMode: "hosted_landing_page",
-    checkoutMode: "subscription",
-    requiresAccount: true,
-    requiresSubscription: true,
-    requiresLandingPage: true,
-    activationType: "premium_hosted_activation",
-    includedServiceLabel: "Premium landing page",
-    images: [{ src: "/uploads/products/rate-your-experience-white-stand.jpg", alt: "Tap Rater Rate Your Experience NFC feedback stand" }],
-    variants: [
-      { id: "white", label: "White", sku: "TRATER12-W", stockStatus: "instock" },
-      { id: "black", label: "Black", sku: "TRATER12-B", stockStatus: "instock" }
-    ],
-    isActive: true,
-    seoTitle: "Feedback NFC Stand for Customer Experience Forms | Tap Rater",
-    seoDescription: "Feedback NFC Stand for hosted forms, customer surveys, and rate-your-experience pages. Customers tap or scan to share their experience.",
-    searchKeywords: ["feedback nfc stand", "nfc feedback stand", "rate your experience stand", "customer feedback nfc sign", "nfc survey stand"]
+    seoTitle: "Business Review Starter Kit | Tap Rater",
+    seoDescription: "Business review starter kit with physical NFC products and Tap Rater managed setup for local businesses.",
+    searchKeywords: ["business review starter kit", "nfc review bundle", "tap rater bundle"]
   }
 ];

@@ -139,9 +139,9 @@ export default async function ProductPage({ params }: ProductPageProps) {
               <div className="mt-6 flex flex-col gap-3 border-y border-line py-5 sm:flex-row sm:items-end sm:justify-between">
                 <div>
                   <p className="text-sm font-bold uppercase text-muted">Price</p>
-                  <p className="mt-1 text-4xl font-black text-brand">{formatPrice(getProductPriceCents(product))}</p>
+                  <p className="mt-1 text-4xl font-black text-brand">{getProductPriceLabel(product)}</p>
                 </div>
-                {product.salePriceCents ? (
+                {product.checkoutMode === "buy_now" && product.salePriceCents ? (
                   <p className="rounded-md bg-amber-50 px-4 py-3 text-sm font-bold text-ink">
                     Bundle savings applied
                   </p>
@@ -424,4 +424,20 @@ function getCheckoutAction(product: { checkoutMode: string }) {
     label: "Add to cart",
     supportingCopy: "Buy-now product"
   };
+}
+
+function getProductPriceLabel(product: { checkoutMode: string; salePriceCents?: number; basePriceCents: number }) {
+  if (product.checkoutMode === "request_quote") {
+    return "Request quote";
+  }
+
+  if (product.checkoutMode === "contact_sales") {
+    return "Contact sales";
+  }
+
+  if (product.checkoutMode === "subscription") {
+    return "Subscription setup";
+  }
+
+  return formatPrice(product.salePriceCents ?? product.basePriceCents);
 }

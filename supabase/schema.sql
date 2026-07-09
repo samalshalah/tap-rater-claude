@@ -195,6 +195,7 @@ create table if not exists products (
   requires_account boolean not null default false,
   requires_subscription boolean not null default false,
   requires_landing_page boolean not null default false,
+  supported_destinations text[] not null default array['custom']::text[],
   activation_type text not null default 'free_basic_activation' check (activation_type in ('free_basic_activation', 'managed_setup', 'premium_hosted_activation')),
   included_service_label text not null default 'Free basic activation',
   seo_title text,
@@ -210,6 +211,7 @@ alter table products add column if not exists checkout_mode text not null defaul
 alter table products add column if not exists requires_account boolean not null default false;
 alter table products add column if not exists requires_subscription boolean not null default false;
 alter table products add column if not exists requires_landing_page boolean not null default false;
+alter table products add column if not exists supported_destinations text[] not null default array['custom']::text[];
 alter table products add column if not exists activation_type text not null default 'free_basic_activation' check (activation_type in ('free_basic_activation', 'managed_setup', 'premium_hosted_activation'));
 alter table products add column if not exists included_service_label text not null default 'Free basic activation';
 
@@ -218,6 +220,24 @@ begin
   alter table products drop constraint if exists products_service_mode_check;
   update products set service_mode = 'hosted_landing_page' where service_mode = 'premium_landing_page';
   alter table products add constraint products_service_mode_check check (service_mode in ('basic_redirect', 'managed_redirect', 'hosted_landing_page', 'multi_location_platform'));
+  alter table products drop constraint if exists products_supported_destinations_check;
+  alter table products add constraint products_supported_destinations_check check (
+    supported_destinations <@ array[
+      'google',
+      'facebook',
+      'yelp',
+      'tripadvisor',
+      'instagram',
+      'tiktok',
+      'booking',
+      'website',
+      'menu',
+      'wifi',
+      'feedback',
+      'referral',
+      'custom'
+    ]::text[]
+  );
 end $$;
 
 update products

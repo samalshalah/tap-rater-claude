@@ -10,7 +10,7 @@ import {
 
 describe("product page content", () => {
   it("builds purchase highlights from the product", () => {
-    const product = getProductBySlug("google-review-white-stand");
+    const product = getProductBySlug("google-review-nfc-stand");
 
     expect(product).toBeDefined();
     expect(getProductPageHighlights(product!).map((highlight) => highlight.title)).toEqual([
@@ -22,36 +22,37 @@ describe("product page content", () => {
   });
 
   it("returns business use cases for local customer touchpoints", () => {
-    const product = getProductBySlug("google-review-white-stand");
+    const product = getProductBySlug("google-review-nfc-stand");
 
     expect(getProductPageUseCases(product!)).toHaveLength(4);
     expect(getProductPageUseCases(product!)[0].title).toBe("Restaurants and cafes");
   });
 
   it("marks the active product type in comparison rows", () => {
-    const stand = getProductBySlug("google-review-white-stand");
-    const bundle = getProductBySlug("tap-rater-business-white-bundle");
+    const stand = getProductBySlug("google-review-nfc-stand");
+    const bundle = getProductBySlug("business-review-starter-kit");
 
     expect(getProductComparisonRows(stand!).find((row) => row.label === "Stand")?.active).toBe(true);
     expect(getProductComparisonRows(bundle!).find((row) => row.label === "Bundle")?.active).toBe(true);
   });
 
   it("builds customer-facing service badges from product strategy metadata", () => {
-    const stand = getProductBySlug("google-review-white-stand");
-    const bundle = getProductBySlug("tap-rater-business-white-bundle");
-    const feedback = getProductBySlug("tap-rater-white-stand-rate-your-experience");
+    const stand = getProductBySlug("google-review-nfc-stand");
+    const bundle = getProductBySlug("business-review-starter-kit");
+    const feedback = getProductBySlug("rate-your-experience-page");
 
     expect(getProductServiceBadges(stand!)).toEqual(["No monthly fee required", "Free basic activation"]);
     expect(getProductServiceBadges(bundle!)).toContain("Managed setup included");
     expect(getProductServiceBadges(feedback!)).toEqual([
-      "Premium landing page",
-      "Subscription required for hosted features"
+      "Account required",
+      "Hosted landing page required",
+      "Subscription required"
     ]);
   });
 
   it("explains whether a product redirects directly or uses a hosted landing page", () => {
-    const stand = getProductBySlug("google-review-white-stand");
-    const feedback = getProductBySlug("tap-rater-white-stand-rate-your-experience");
+    const stand = getProductBySlug("google-review-nfc-stand");
+    const feedback = getProductBySlug("rate-your-experience-page");
 
     expect(getProductActivationCopy(stand!).body).toContain("redirects directly");
     expect(getProductActivationCopy(stand!).body).toContain("optional");

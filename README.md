@@ -163,6 +163,7 @@ Product records include ecommerce strategy fields:
 - `requires_account`
 - `requires_landing_page`
 - `requires_subscription`
+- `supported_destinations`: `google`, `facebook`, `yelp`, `tripadvisor`, `instagram`, `tiktok`, `booking`, `website`, `menu`, `wifi`, `feedback`, `referral`, and `custom`
 
 Only `checkout_mode = buy_now` products use the current one-time Stripe test checkout path. Quote, subscription, and contact-sales products route customers to a contact/setup flow until those workflows are built.
 

@@ -5,9 +5,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Shop NFC Review Stands, Plates, Bundles and Hosted Feedback Products",
+  title: "Shop Review NFC Products and Hosted Reputation Pages",
   description:
-    "Shop Tap Rater NFC review stands, review plates, business bundles, social and booking stands, feedback stands, and custom UV printed products.",
+    "Shop Tap Rater review NFC products, hosted reputation pages, feedback flows, social and booking products, and business bundles.",
   alternates: {
     canonical: "/shop"
   }
@@ -27,7 +27,7 @@ export default async function ShopPage() {
               Shop NFC review stands, plates, bundles, and platform-ready products
             </h1>
             <p className="mt-5 max-w-3xl text-lg leading-8 text-muted">
-              Choose a Tap Rater product for the destination your customers use most. Basic redirect products open your review, booking, social, or business link directly. Platform products use hosted landing pages for forms, multiple destinations, and future analytics.
+              Choose standalone NFC products, managed setup, hosted landing pages, feedback flows, social and booking products, or bundles. Basic redirect products open one destination. Platform products use hosted pages, accounts, forms, and dashboards.
             </p>
           </div>
           <div className="grid gap-3 rounded-md border border-line bg-white p-5">
@@ -50,10 +50,10 @@ export default async function ShopPage() {
             <h2 className="mt-2 text-3xl font-black text-ink">Find the right review product faster</h2>
           </div>
           <p className="max-w-xl text-sm leading-6 text-muted">
-            Categories are organized around buying intent: Google reviews, compact plates, bundles, social and booking links, hosted feedback flows, and custom UV printed stands.
+            Categories are organized around buying intent: Google review products, review platforms, social and booking links, feedback and referral flows, hosted landing pages, and bundles.
           </p>
         </div>
-        <div className="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-5">
+        <div className="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {categories.map((category) => (
             <Link key={category.slug} href={`/category/${category.slug}`} className="rounded-md border border-line bg-white p-5 transition hover:-translate-y-1 hover:shadow-lg">
               <p className="text-xs font-bold uppercase text-brand">{category.eyebrow}</p>

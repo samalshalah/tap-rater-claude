@@ -93,6 +93,26 @@ export const productContentSchema = z.object({
   requiresAccount: z.boolean().default(false),
   requiresSubscription: z.boolean().default(false),
   requiresLandingPage: z.boolean().default(false),
+  supportedDestinations: z
+    .array(
+      z.enum([
+        "google",
+        "facebook",
+        "yelp",
+        "tripadvisor",
+        "instagram",
+        "tiktok",
+        "booking",
+        "website",
+        "menu",
+        "wifi",
+        "feedback",
+        "referral",
+        "custom"
+      ])
+    )
+    .min(1)
+    .default(["custom"]),
   activationType: z.enum(["free_basic_activation", "managed_setup", "premium_hosted_activation"]).default("free_basic_activation"),
   includedServiceLabel: z.string().trim().min(2).max(120).default("Free basic activation"),
   seoTitle: z.string().trim().max(180).optional(),

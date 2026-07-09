@@ -19,11 +19,22 @@ export type ProductActivationCopy = {
 
 export function getProductServiceBadges(product: MigratedProduct): string[] {
   if (product.requiresLandingPage || product.serviceMode === "hosted_landing_page") {
-    return ["Premium landing page", "Subscription required for hosted features"];
+    const badges = new Set<string>();
+    if (product.requiresAccount) {
+      badges.add("Account required");
+    }
+    badges.add("Hosted landing page required");
+    if (product.requiresSubscription) {
+      badges.add("Subscription required");
+    }
+    return Array.from(badges);
   }
 
   const badges = new Set<string>();
   badges.add("No monthly fee required");
+  if (product.requiresAccount) {
+    badges.add("Account required");
+  }
 
   if (product.serviceMode === "managed_redirect") {
     badges.add("Managed setup included");
@@ -39,7 +50,7 @@ export function getProductActivationCopy(product: MigratedProduct): ProductActiv
     return {
       title: "Hosted platform experience",
       body:
-        "This product uses a hosted Tap Rater landing page for forms, multiple buttons, or platform-powered customer flows. Subscription is required for hosted features, while basic direct-link products remain available without a monthly fee."
+        "This product uses a hosted Tap Rater landing page for forms, multiple buttons, or platform-powered customer flows. Account setup is required. Subscription is required only where listed, while basic direct-link products remain available without a monthly fee."
     };
   }
 
@@ -124,25 +135,25 @@ export function getProductComparisonRows(product: MigratedProduct): ProductCompa
       label: "Bundle",
       bestFor: "Multiple rooms, counters, or teams",
       fit: "Best value for several touchpoints",
-      active: title.includes("bundle")
+      active: product.productType === "bundle" || title.includes("bundle") || title.includes("kit")
     },
     {
       label: "Social/Booking",
       bestFor: "Facebook, Yelp, booking pages, social profiles",
       fit: "Best for direct non-Google destinations",
-      active: product.categorySlug === "social-booking-stands"
+      active: product.categorySlug === "social-booking-products" || product.categorySlug === "review-platform-products"
     },
     {
       label: "Feedback/Referral",
       bestFor: "Hosted forms and platform-powered flows",
       fit: "Best when a landing page is needed",
-      active: product.categorySlug === "feedback-referral-stands"
+      active: product.categorySlug === "feedback-referral-products" || product.categorySlug === "hosted-landing-page-products"
     },
     {
       label: "Custom",
       bestFor: "Custom UV printing and direct custom URLs",
       fit: "Best for branded prompts",
-      active: product.categorySlug === "custom-uv-printed-stands"
+      active: product.supportedDestinations.includes("custom") && product.categorySlug === "social-booking-products"
     }
   ];
 }

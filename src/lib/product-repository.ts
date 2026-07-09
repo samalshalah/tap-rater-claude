@@ -93,6 +93,11 @@ export function normalizeStorefrontProductRow(row: unknown): MigratedProduct | n
     readBoolean(productRow.requires_subscription) ?? readBoolean(productRow.requiresSubscription) ?? staticProduct?.requiresSubscription;
   const requiresLandingPage =
     readBoolean(productRow.requires_landing_page) ?? readBoolean(productRow.requiresLandingPage) ?? staticProduct?.requiresLandingPage;
+  const supportedDestinations =
+    readSupportedDestinations(productRow.supported_destinations) ??
+    readSupportedDestinations(productRow.supportedDestinations) ??
+    staticProduct?.supportedDestinations ??
+    ["custom"];
   const activationType =
     readActivationType(productRow.activation_type) ?? readActivationType(productRow.activationType) ?? staticProduct?.activationType;
   const includedServiceLabel =
@@ -135,6 +140,7 @@ export function normalizeStorefrontProductRow(row: unknown): MigratedProduct | n
     requiresAccount,
     requiresSubscription,
     requiresLandingPage,
+    supportedDestinations,
     activationType,
     includedServiceLabel,
     images: readImages(productRow.images) ?? staticProduct?.images ?? [],
@@ -181,6 +187,33 @@ function readProductType(value: unknown): MigratedProduct["productType"] | undef
 
 function readCheckoutMode(value: unknown): MigratedProduct["checkoutMode"] | undefined {
   return value === "buy_now" || value === "request_quote" || value === "subscription" || value === "contact_sales" ? value : undefined;
+}
+
+function readSupportedDestinations(value: unknown): MigratedProduct["supportedDestinations"] | undefined {
+  const destinations: MigratedProduct["supportedDestinations"][number][] = [
+    "google",
+    "facebook",
+    "yelp",
+    "tripadvisor",
+    "instagram",
+    "tiktok",
+    "booking",
+    "website",
+    "menu",
+    "wifi",
+    "feedback",
+    "referral",
+    "custom"
+  ];
+
+  if (!Array.isArray(value)) {
+    return undefined;
+  }
+
+  const normalized = value.filter((item): item is MigratedProduct["supportedDestinations"][number] => {
+    return destinations.includes(item as MigratedProduct["supportedDestinations"][number]);
+  });
+  return normalized.length > 0 ? normalized : undefined;
 }
 
 function readActivationType(value: unknown): MigratedProduct["activationType"] | undefined {

@@ -8,6 +8,7 @@ export function ProductCard({ product }: { product: MigratedProduct }) {
   const image = product.images[0];
   const category = getCategoryBySlug(product.categorySlug);
   const serviceBadges = getProductServiceBadges(product);
+  const purchaseLabel = getPurchaseLabel(product);
 
   return (
     <Link href={`/product/${product.slug}`} className="group block rounded-md border border-line bg-white p-4 transition hover:-translate-y-1 hover:shadow-lg">
@@ -30,8 +31,24 @@ export function ProductCard({ product }: { product: MigratedProduct }) {
             </span>
           ))}
         </div>
-        <p className="mt-2 text-lg font-bold text-brand">{formatPrice(getProductPriceCents(product))}</p>
+        <p className="mt-2 text-lg font-bold text-brand">{purchaseLabel}</p>
       </div>
     </Link>
   );
+}
+
+function getPurchaseLabel(product: MigratedProduct) {
+  if (product.checkoutMode === "request_quote") {
+    return "Request quote";
+  }
+
+  if (product.checkoutMode === "contact_sales") {
+    return "Contact sales";
+  }
+
+  if (product.checkoutMode === "subscription") {
+    return "Subscription setup";
+  }
+
+  return formatPrice(getProductPriceCents(product));
 }

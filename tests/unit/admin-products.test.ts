@@ -9,7 +9,7 @@ describe("admin products", () => {
       slug: "",
       title: "",
       sku: "",
-      categorySlug: "google-review-stands",
+      categorySlug: "google-review-products",
       basePriceCents: 0,
       stockStatus: "instock",
       shortDescription: "",

@@ -118,6 +118,7 @@ describe("backend validators", () => {
       requiresAccount: true,
       requiresSubscription: true,
       requiresLandingPage: true,
+      supportedDestinations: ["google", "feedback", "custom"],
       activationType: "premium_hosted_activation",
       includedServiceLabel: "Premium landing page",
       isActive: true
@@ -127,5 +128,6 @@ describe("backend validators", () => {
     expect(product.serviceMode).toBe("hosted_landing_page");
     expect(product.checkoutMode).toBe("subscription");
     expect(product.requiresAccount).toBe(true);
+    expect(product.supportedDestinations).toEqual(["google", "feedback", "custom"]);
   });
 });

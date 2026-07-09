@@ -8,10 +8,10 @@ import {
 describe("product repository", () => {
   it("normalizes Supabase products into storefront product shape", () => {
     const product = normalizeStorefrontProductRow({
-      slug: "google-review-white-stand",
+      slug: "google-review-nfc-stand",
       title: "Supabase Google Stand",
       sku: "SUP-1",
-      category_slug: "google-review-stands",
+      category_slug: "google-review-products",
       base_price_cents: 5900,
       sale_price_cents: null,
       stock_status: "instock",
@@ -23,6 +23,7 @@ describe("product repository", () => {
       requires_account: false,
       requires_subscription: false,
       requires_landing_page: false,
+      supported_destinations: ["google", "custom"],
       activation_type: "managed_setup",
       included_service_label: "Managed setup included",
       seo_title: "Supabase SEO",
@@ -33,10 +34,10 @@ describe("product repository", () => {
     });
 
     expect(product).toMatchObject({
-      slug: "google-review-white-stand",
+      slug: "google-review-nfc-stand",
       title: "Supabase Google Stand",
       sku: "SUP-1",
-      categorySlug: "google-review-stands",
+      categorySlug: "google-review-products",
       basePriceCents: 5900,
       salePriceCents: undefined,
       stockStatus: "instock",
@@ -48,6 +49,7 @@ describe("product repository", () => {
       requiresAccount: false,
       requiresSubscription: false,
       requiresLandingPage: false,
+      supportedDestinations: ["google", "custom"],
       activationType: "managed_setup",
       includedServiceLabel: "Managed setup included",
       seoTitle: "Supabase SEO",
@@ -62,10 +64,10 @@ describe("product repository", () => {
   it("prefers Supabase rows when the products query succeeds", async () => {
     const products = await getStorefrontProductsFromClient(mockProductsClient([
       {
-        slug: "google-review-white-stand",
+        slug: "google-review-nfc-stand",
         title: "Supabase Google Stand",
         sku: "SUP-1",
-        category_slug: "google-review-stands",
+        category_slug: "google-review-products",
         base_price_cents: 5900,
         sale_price_cents: 4900,
         stock_status: "instock",
@@ -77,6 +79,7 @@ describe("product repository", () => {
         requires_account: false,
         requires_subscription: false,
         requires_landing_page: false,
+        supported_destinations: ["google"],
         activation_type: "free_basic_activation",
         included_service_label: "Free basic activation",
         is_active: true

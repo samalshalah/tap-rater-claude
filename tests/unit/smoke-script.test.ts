@@ -7,7 +7,7 @@ describe("smoke test script", () => {
 
     expect(checks.map((check) => check.path)).toEqual([
       "/",
-      "/product/google-review-white-stand",
+      "/product/google-review-nfc-stand",
       "/admin/login",
       "/activate",
       "/r/TR-DEMO-GOOGLE"

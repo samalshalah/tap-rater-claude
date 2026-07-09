@@ -3,40 +3,40 @@ import { calculateCartTotalCents, mergeCartItem, normalizeCartItems, parseStored
 
 describe("cart utilities", () => {
   it("merges matching products and counts only positive quantities", () => {
-    const items = mergeCartItem([{ productId: "google-review-white-stand", quantity: 1 }], {
-      productId: "google-review-white-stand",
+    const items = mergeCartItem([{ productId: "google-review-nfc-stand", quantity: 1 }], {
+      productId: "google-review-nfc-stand",
       quantity: 2
     });
 
-    expect(items).toEqual([{ productId: "google-review-white-stand", quantity: 3 }]);
+    expect(items).toEqual([{ productId: "google-review-nfc-stand", quantity: 3 }]);
   });
 
   it("prevents quantity updates from going below one", () => {
-    const items = updateCartQuantity([{ productId: "google-review-white-stand", quantity: 1 }], "google-review-white-stand", -4);
+    const items = updateCartQuantity([{ productId: "google-review-nfc-stand", quantity: 1 }], "google-review-nfc-stand", -4);
 
-    expect(items).toEqual([{ productId: "google-review-white-stand", quantity: 1 }]);
+    expect(items).toEqual([{ productId: "google-review-nfc-stand", quantity: 1 }]);
   });
 
   it("removes stale product ids and invalid quantities from stored carts", () => {
     const items = normalizeCartItems([
-      { productId: "google-review-white-stand", quantity: 2 },
+      { productId: "google-review-nfc-stand", quantity: 2 },
       { productId: "old-product", quantity: 4 },
-      { productId: "google-review-white-plate", quantity: 0 },
+      { productId: "google-review-nfc-plate", quantity: 0 },
       { productId: "", quantity: 3 }
     ]);
 
-    expect(items).toEqual([{ productId: "google-review-white-stand", quantity: 2 }]);
+    expect(items).toEqual([{ productId: "google-review-nfc-stand", quantity: 2 }]);
   });
 
   it("restores only valid items from localStorage JSON", () => {
     const items = parseStoredCart(
       JSON.stringify([
-        { productId: "google-review-white-stand", quantity: 1 },
+        { productId: "google-review-nfc-stand", quantity: 1 },
         { productId: "old-product", quantity: 3 }
       ])
     );
 
-    expect(items).toEqual([{ productId: "google-review-white-stand", quantity: 1 }]);
+    expect(items).toEqual([{ productId: "google-review-nfc-stand", quantity: 1 }]);
   });
 
   it("returns an empty cart when stored JSON is corrupted", () => {
@@ -45,8 +45,8 @@ describe("cart utilities", () => {
 
   it("calculates total using active catalog prices", () => {
     const total = calculateCartTotalCents([
-      { productId: "google-review-white-stand", quantity: 2 },
-      { productId: "tap-rater-business-white-bundle", quantity: 1 }
+      { productId: "google-review-nfc-stand", quantity: 2 },
+      { productId: "business-review-starter-kit", quantity: 1 }
     ]);
 
     expect(total).toBe(19960);

@@ -9,8 +9,7 @@ export function absoluteUrl(path: string) {
 
 export function productJsonLd(product: MigratedProduct) {
   const price = (getProductPriceCents(product) / 100).toFixed(2);
-
-  return {
+  const data: Record<string, unknown> = {
     "@context": "https://schema.org",
     "@type": "Product",
     name: product.seoTitle ?? product.title,
@@ -20,16 +19,21 @@ export function productJsonLd(product: MigratedProduct) {
       "@type": "Brand",
       name: "Tap Rater"
     },
-    image: product.images.map((image) => absoluteUrl(image.src)),
-    offers: {
+    image: product.images.map((image) => absoluteUrl(image.src))
+  };
+
+  if (product.checkoutMode === "buy_now") {
+    data.offers = {
       "@type": "Offer",
       url: absoluteUrl(`/product/${product.slug}`),
       priceCurrency: "USD",
       price,
       availability: product.stockStatus === "instock" ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
       itemCondition: "https://schema.org/NewCondition"
-    }
-  };
+    };
+  }
+
+  return data;
 }
 
 export function organizationJsonLd() {
