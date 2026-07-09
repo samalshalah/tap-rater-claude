@@ -76,6 +76,26 @@ create table if not exists product_variants (
   stock_status text not null check (stock_status in ('instock', 'outofstock'))
 );
 
+create table if not exists orders (
+  id uuid primary key default gen_random_uuid(),
+  stripe_checkout_session_id text not null unique,
+  stripe_payment_intent_id text,
+  status text not null default 'pending_payment' check (status in ('pending_payment', 'paid', 'failed', 'canceled')),
+  payment_status text,
+  email text,
+  customer_name text,
+  subtotal_cents integer not null default 0 check (subtotal_cents >= 0),
+  total_cents integer not null default 0 check (total_cents >= 0),
+  currency text not null default 'usd',
+  line_items_json jsonb not null default '[]'::jsonb,
+  customer_details_json jsonb,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+create index if not exists orders_status_idx on orders(status);
+create index if not exists orders_created_at_idx on orders(created_at desc);
+
 create table if not exists site_content (
   key text primary key,
   type text not null check (type in ('homepage', 'page', 'section', 'redirect', 'seo')),

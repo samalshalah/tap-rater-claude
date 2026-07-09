@@ -108,17 +108,27 @@ This key is public by design, so lock it down before using it outside local test
 
 The activation flow requests only `place_id`, `name`, and `formatted_address` from Places Autocomplete, restricted to US establishments.
 
-### Future Stripe Variables
+### Stripe Checkout Test Mode
 
-Stripe is final-stage work and is not required for the current build.
+Stripe Checkout is available for test mode only. The checkout API rejects live secret keys and requires a `sk_test_` key.
 
 ```env
-STRIPE_SECRET_KEY=
-STRIPE_WEBHOOK_SECRET=
-NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=
+STRIPE_SECRET_KEY=sk_test_...
+STRIPE_WEBHOOK_SECRET=whsec_...
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_...
 ```
 
-Do not add live payment processing until bank and Stripe setup are ready.
+For local webhook testing, use the Stripe CLI:
+
+```bash
+stripe listen --forward-to localhost:3000/api/webhooks/stripe
+```
+
+Then copy the `whsec_...` signing secret into `STRIPE_WEBHOOK_SECRET`.
+
+Use Stripe test cards only. The standard successful test card is `4242 4242 4242 4242` with any future expiration date, any three-digit CVC, and any ZIP/postal code.
+
+Do not enable live payment processing until the business bank account and live Stripe account are explicitly approved.
 
 ## Supabase Table Checklist
 
@@ -126,6 +136,7 @@ The admin and request workflows expect these tables when Supabase persistence is
 
 - `site_content`
 - `products`
+- `orders`
 - `media_assets`
 - `contact_requests`
 - `setup_requests`
@@ -244,19 +255,21 @@ No Stripe configuration is required for activation.
 - Run `npm run smoke` against the local production server or deployed URL.
 - Test public product pages and category pages.
 - Test cart persistence after refresh.
+- Test Stripe checkout with test cards only.
+- Test Stripe webhook order creation with the Stripe CLI.
 - Test customer forms: contact, setup, and change-link.
 - Test admin login at `/admin/login`.
 - Test admin product editing and requests inbox.
 - Confirm Supabase writes are working where persistence is expected.
-- Connect bank account and Stripe later during the final checkout stage.
+- Connect bank account and enable live Stripe only after explicit approval.
 
 ## Known Not Live Yet
 
-- Stripe checkout.
-- Paid orders.
-- Stripe webhooks.
+- Live Stripe payments.
+- Live paid orders.
+- Live Stripe webhooks.
 - Live tax calculation.
 - Live shipping calculation.
 - Subscription billing for premium hosted features.
 
-Until checkout is launched, the cart button remains a “Checkout coming soon” flow and no payment is processed.
+Stripe checkout is test-mode only until live payments are explicitly approved.

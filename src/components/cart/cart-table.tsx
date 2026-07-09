@@ -2,15 +2,43 @@
 
 import Link from "next/link";
 import { Minus, Plus, Trash2 } from "lucide-react";
+import { useState } from "react";
 import { useCart } from "@/components/cart/cart-provider";
 import { formatPrice } from "@/lib/products";
 import { calculateCartTotalCents, getCartRows } from "@/lib/cart";
 
 export function CartTable() {
   const { decreaseItem, increaseItem, items, removeItem } = useCart();
+  const [isCheckingOut, setIsCheckingOut] = useState(false);
+  const [checkoutError, setCheckoutError] = useState("");
 
   const rows = getCartRows(items);
   const total = calculateCartTotalCents(items);
+
+  async function startCheckout() {
+    setIsCheckingOut(true);
+    setCheckoutError("");
+
+    try {
+      const response = await fetch("/api/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ items })
+      });
+      const body = await response.json().catch(() => ({}));
+
+      if (!response.ok || typeof body.url !== "string") {
+        setCheckoutError(body.error ?? "Stripe test checkout is not available yet.");
+        return;
+      }
+
+      window.location.href = body.url;
+    } catch {
+      setCheckoutError("Stripe test checkout is not available yet.");
+    } finally {
+      setIsCheckingOut(false);
+    }
+  }
 
   if (rows.length === 0) {
     return (
@@ -75,11 +103,18 @@ export function CartTable() {
       </div>
       <button
         type="button"
-        disabled
-        className="cursor-not-allowed rounded-md bg-gray-200 px-5 py-3 text-sm font-bold text-muted"
+        disabled={isCheckingOut}
+        className="rounded-md bg-brand px-5 py-3 text-sm font-bold text-white disabled:cursor-not-allowed disabled:bg-gray-300"
+        onClick={startCheckout}
       >
-        Checkout coming soon
+        {isCheckingOut ? "Starting Stripe test checkout..." : "Checkout with Stripe test mode"}
       </button>
+      <p className="text-sm leading-6 text-muted">
+        Test mode only. Use Stripe test cards; live payments stay disabled until explicitly approved.
+      </p>
+      {checkoutError ? (
+        <p className="rounded-md border border-amber-200 bg-amber-50 p-3 text-sm font-semibold text-ink">{checkoutError}</p>
+      ) : null}
     </div>
   );
 }

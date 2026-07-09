@@ -192,3 +192,16 @@ export const adminConfigSchema = z.object({
 });
 
 export type AdminConfigInput = z.infer<typeof adminConfigSchema>;
+
+export const checkoutCartSchema = z.object({
+  items: z
+    .array(
+      z.object({
+        productId: z.string().trim().min(2).max(160),
+        quantity: z.number().int().min(1).max(99)
+      })
+    )
+    .max(50)
+});
+
+export type CheckoutCartInput = z.infer<typeof checkoutCartSchema>;

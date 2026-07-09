@@ -197,6 +197,33 @@ comment on table public.device_activation_attempts is 'Audit trail for device ac
 comment on column public.device_activation_attempts.success is 'True when activation code verification succeeds.';
 comment on column public.device_activation_attempts.reason is 'Short reason such as invalid_code, already_active, locked, or activated.';
 
+-- Orders are created by Stripe test checkout and marked paid by Stripe webhooks.
+create table if not exists public.orders (
+  id uuid primary key default gen_random_uuid(),
+  stripe_checkout_session_id text unique not null,
+  stripe_payment_intent_id text,
+  status text not null default 'pending_payment',
+  payment_status text,
+  email text,
+  customer_name text,
+  subtotal_cents integer not null default 0,
+  total_cents integer not null default 0,
+  currency text not null default 'usd',
+  line_items_json jsonb not null default '[]'::jsonb,
+  customer_details_json jsonb,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  constraint orders_status_check check (
+    status in ('pending_payment', 'paid', 'failed', 'canceled')
+  ),
+  constraint orders_subtotal_cents_check check (subtotal_cents >= 0),
+  constraint orders_total_cents_check check (total_cents >= 0)
+);
+
+comment on table public.orders is 'Stripe Checkout order records. Test checkout creates pending orders and webhooks mark them paid.';
+comment on column public.orders.stripe_checkout_session_id is 'Stripe Checkout Session ID used for idempotent webhook upserts.';
+comment on column public.orders.line_items_json is 'Cart line items captured before redirecting to Stripe Checkout.';
+
 -- Indexes for redirect lookup, admin filtering, and analytics queries.
 create index if not exists idx_devices_device_code on public.devices(device_code);
 create index if not exists idx_devices_business_id on public.devices(business_id);
@@ -211,6 +238,8 @@ create index if not exists idx_businesses_customer_id on public.businesses(custo
 create index if not exists idx_form_submissions_business_id on public.form_submissions(business_id);
 create index if not exists idx_device_activation_attempts_device_code on public.device_activation_attempts(device_code);
 create index if not exists idx_device_activation_attempts_created_at on public.device_activation_attempts(created_at);
+create index if not exists idx_orders_status on public.orders(status);
+create index if not exists idx_orders_created_at on public.orders(created_at desc);
 
 -- Demo devices. Activation hashes are placeholders for local/demo setup only.
 -- Replace with real hashed activation codes before manufacturing or production use.

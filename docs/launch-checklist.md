@@ -2,7 +2,7 @@
 
 Use this checklist before selling or shipping Tap Rater devices that point to `https://taprater.com/r/{deviceCode}`. It covers QA, security, packaging, and operational checks for the current platform stage.
 
-Stripe checkout, paid orders, webhooks, tax, and shipping calculation are intentionally not live yet.
+Stripe checkout is available for test mode only. Live payments, live paid orders, tax, and shipping calculation are intentionally not live yet.
 
 ## Environment Variables
 
@@ -17,6 +17,9 @@ Stripe checkout, paid orders, webhooks, tax, and shipping calculation are intent
 - [ ] `ORDER_NOTIFICATION_EMAIL` is set to the internal Tap Rater notification inbox.
 - [ ] `NEXT_PUBLIC_SITE_URL` is set to `https://taprater.com`.
 - [ ] `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` is set only after Google restrictions are configured.
+- [ ] `STRIPE_SECRET_KEY` is set only with a `sk_test_` value.
+- [ ] `STRIPE_WEBHOOK_SECRET` is set from the Stripe CLI or Stripe test webhook endpoint.
+- [ ] `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` is set only with a `pk_test_` value.
 - [ ] No production secret values are committed to the repository, screenshots, issue comments, or docs.
 
 ## Supabase Schema
@@ -172,8 +175,29 @@ Official references:
 - [ ] One-time products are labeled as no monthly fee required for basic activation.
 - [ ] Premium hosted products are labeled as subscription required for hosted features.
 - [ ] Cart persists after refresh.
-- [ ] Checkout button remains disabled or clearly labeled as coming soon.
-- [ ] No Stripe payment processing is exposed.
+- [ ] Checkout button clearly says Stripe test mode.
+- [ ] Checkout API rejects live Stripe secret keys.
+- [ ] Stripe test checkout redirects to Stripe-hosted Checkout when test env vars and Supabase are configured.
+- [ ] Stripe test checkout returns a friendly error if Stripe or Supabase is not configured.
+- [ ] No live Stripe payment processing is exposed.
+
+## Stripe Test Checkout QA
+
+- [ ] `STRIPE_SECRET_KEY` starts with `sk_test_`.
+- [ ] `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` starts with `pk_test_`.
+- [ ] `STRIPE_WEBHOOK_SECRET` starts with `whsec_`.
+- [ ] `npm run build` passes with Stripe test env vars.
+- [ ] Add a product to cart.
+- [ ] Click `Checkout with Stripe test mode`.
+- [ ] Confirm redirect to Stripe-hosted Checkout.
+- [ ] Complete payment with Stripe test card `4242 4242 4242 4242`.
+- [ ] Use any future expiration date, any three-digit CVC, and any ZIP/postal code.
+- [ ] Confirm `/checkout/success` loads after successful test payment.
+- [ ] Confirm `/checkout/cancel` loads if checkout is canceled.
+- [ ] Run `stripe listen --forward-to localhost:3000/api/webhooks/stripe` locally.
+- [ ] Confirm `checkout.session.completed` marks the order paid in Supabase.
+- [ ] Confirm `/admin/orders` shows the paid test order.
+- [ ] Do not enter real card details.
 
 ## Smoke Test
 
@@ -254,13 +278,13 @@ The smoke script checks:
 - [ ] Customer portal: README and this checklist.
 - [ ] Landing pages: `docs/landing-pages.md` and this checklist.
 - [ ] Analytics: platform architecture and this checklist.
-- [ ] Stripe deferred status: README and this checklist.
+- [ ] Stripe test-mode status: README and this checklist.
 
 ## Known Not Ready For Launch
 
-- [ ] Stripe checkout.
-- [ ] Paid order capture.
-- [ ] Stripe webhooks.
+- [ ] Live Stripe checkout.
+- [ ] Live paid order capture.
+- [ ] Live Stripe webhooks.
 - [ ] Live tax calculation.
 - [ ] Live shipping calculation.
 - [ ] Subscription billing for premium hosted features.
