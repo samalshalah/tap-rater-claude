@@ -23,7 +23,7 @@ export async function POST(request: Request) {
   }
 
   if (!hasSupabaseAdminConfig()) {
-    return NextResponse.json({ error: "Supabase order persistence is required before checkout can be used." }, { status: 503 });
+    return NextResponse.json({ error: "Database order persistence is required before checkout can be used." }, { status: 503 });
   }
 
   const products = await getStorefrontProducts();

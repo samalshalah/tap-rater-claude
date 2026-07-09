@@ -25,7 +25,7 @@ export default async function AdminProductsPage() {
       </div>
       {!canSave ? (
         <div className="mt-6 rounded-md border border-amber-200 bg-amber-50 p-4 text-sm font-semibold text-ink">
-          Supabase is not configured yet. Product edits cannot be saved.
+          Database persistence is not configured yet. Product edits cannot be saved.
         </div>
       ) : null}
       <div className="mt-8 grid gap-4 md:grid-cols-4">

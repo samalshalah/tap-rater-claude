@@ -30,7 +30,7 @@ export default async function AdminRequestsPage() {
 
         {!isConfigured ? (
           <div className="mt-6 rounded-md border border-amber-200 bg-amber-50 p-4 text-sm font-semibold text-ink">
-            Supabase is not configured yet. Add NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY to view saved requests.
+            Database persistence is not configured yet. Add DATABASE_URL for Neon, or Supabase server credentials, to view saved requests.
           </div>
         ) : null}
 

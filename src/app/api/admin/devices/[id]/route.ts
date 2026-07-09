@@ -21,7 +21,7 @@ export async function PATCH(request: Request, context: RouteContext) {
   }
 
   if (!isAdminDeviceStoreConfigured()) {
-    return NextResponse.json({ error: "Supabase is not configured yet. Devices cannot be saved." }, { status: 503 });
+    return NextResponse.json({ error: "Database persistence is not configured yet. Devices cannot be saved." }, { status: 503 });
   }
 
   try {

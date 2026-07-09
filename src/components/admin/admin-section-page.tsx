@@ -50,7 +50,7 @@ export function AdminSectionPage({
           <div className="rounded-md border border-line bg-white p-5 shadow-sm lg:col-span-2">
             <h2 className="text-xl font-black text-ink">Editable settings</h2>
             <p className="mt-2 text-sm leading-6 text-muted">
-              Save operational settings for this admin area. These records are stored in Supabase `site_content` when configured.
+              Save operational settings for this admin area. These records are stored in Postgres `site_content` when configured.
             </p>
             <div className="mt-5">
               <AdminConfigForm

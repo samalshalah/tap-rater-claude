@@ -2,7 +2,7 @@
 
 Tap Rater is both a storefront and a reputation platform. The public site sells NFC/QR products and explains the offer. The platform layer owns permanent device URLs, activation, customer accounts, businesses, locations, hosted pages, feedback, analytics, quotes, orders, and future subscriptions.
 
-This architecture keeps the current Next.js/Supabase foundation where it is useful and avoids live Stripe checkout until billing is explicitly approved.
+This architecture keeps the current Next.js/Postgres foundation where it is useful and avoids live Stripe checkout until billing is explicitly approved. Neon and Supabase are both supported Postgres providers.
 
 ## Public Surfaces
 
@@ -202,7 +202,7 @@ In scope now:
 - expanded catalog
 - product model
 - device activation foundation
-- Supabase-backed admin/CMS foundation
+- Postgres-backed admin/CMS foundation
 - basic redirect engine
 - basic tap analytics
 

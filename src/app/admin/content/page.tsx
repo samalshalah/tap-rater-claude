@@ -11,7 +11,7 @@ export default async function AdminContentPage() {
       <p className="text-sm font-semibold uppercase text-brand">Admin</p>
       <h1 className="mt-3 text-4xl font-black text-ink">Website content</h1>
       <p className="mt-4 max-w-3xl leading-7 text-muted">
-        Edit homepage copy, create CMS pages, and prepare SEO/content changes. Saved content uses Supabase when configured.
+        Edit homepage copy, create CMS pages, and prepare SEO/content changes. Saved content uses Postgres when configured.
       </p>
       <div className="mt-8 grid gap-4 md:grid-cols-3">
         <Link href="/admin/content/homepage" className="rounded-md border border-line bg-white p-5 shadow-sm">

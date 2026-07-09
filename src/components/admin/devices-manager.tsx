@@ -127,7 +127,7 @@ export function DevicesManager({ initialDevices, configured, siteUrl }: DevicesM
     <div className="mt-8 grid gap-6">
       {!configured ? (
         <div className="rounded-md border border-amber-200 bg-amber-50 p-4 text-sm font-semibold text-ink">
-          Supabase is not configured yet. Devices can be planned here, but records cannot be loaded or saved.
+          Database persistence is not configured yet. Devices can be planned here, but records cannot be loaded or saved.
         </div>
       ) : null}
 

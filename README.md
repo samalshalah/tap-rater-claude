@@ -1,14 +1,14 @@
 # Tap Rater
 
-Tap Rater is a Next.js ecommerce storefront for NFC review stands, review plates, and business bundles. The site is replacing the old WordPress/WooCommerce build with a faster storefront, a simple admin/CMS layer, Supabase-backed persistence, platform device activation, and Resend-powered request notifications.
+Tap Rater is a Next.js ecommerce storefront for NFC review stands, review plates, and business bundles. The site is replacing the old WordPress/WooCommerce build with a faster storefront, a simple admin/CMS layer, Postgres-backed persistence, platform device activation, and Resend-powered request notifications.
 
 Stripe checkout is available in test mode only until the business bank account and final live payment setup are explicitly approved.
 
 ## Stack
 
 - Next.js storefront for product pages, categories, cart, and SEO content.
-- Static `migratedProducts` catalog fallback so local preview and builds work without Supabase.
-- Supabase-backed admin/CMS for homepage content, product records, request inbox data, platform devices, activation, analytics, and ecommerce settings.
+- Static `migratedProducts` catalog fallback so local preview and builds work without database credentials.
+- Postgres-backed admin/CMS for homepage content, product records, request inbox data, platform devices, activation, analytics, and ecommerce settings. Supabase and Neon are supported.
 - Resend notifications for customer inquiry forms.
 - Stripe Checkout test mode foundation. Live payment processing is not enabled.
 
@@ -64,14 +64,24 @@ ADMIN_SESSION_TTL_HOURS=168
 
 `CUSTOMER_SESSION_SECRET` signs customer portal login links and account sessions. Use a separate long random value in production.
 
-### Required For Supabase Persistence
+### Required For Database Persistence
+
+Neon/Postgres deployment:
+
+```env
+DATABASE_URL=
+```
+
+`NEON_DATABASE_URL` is also accepted as an alternative variable name.
+
+Supabase deployment:
 
 ```env
 NEXT_PUBLIC_SUPABASE_URL=
 SUPABASE_SERVICE_ROLE_KEY=
 ```
 
-`SUPABASE_SERVICE_ROLE_KEY` must stay server-side only. Do not expose it in browser code.
+`DATABASE_URL`, `NEON_DATABASE_URL`, and `SUPABASE_SERVICE_ROLE_KEY` must stay server-side only. Do not expose them in browser code. If both Supabase and Neon variables are present, Supabase is used first.
 
 ### Required For Notifications
 
@@ -131,9 +141,9 @@ Use Stripe test cards only. The standard successful test card is `4242 4242 4242
 
 Do not enable live payment processing until the business bank account and live Stripe account are explicitly approved.
 
-## Supabase Table Checklist
+## Database Table Checklist
 
-Run `supabase/schema.sql` before testing activation, device redirects, hosted landing pages, analytics, or Stripe test orders. The app expects these platform tables when Supabase persistence is enabled:
+Run `supabase/schema.sql` before testing activation, device redirects, hosted landing pages, analytics, or Stripe test orders. The same SQL works in Supabase SQL editor or Neon SQL editor. The app expects these platform tables when database persistence is enabled:
 
 - `customers`
 - `businesses`
@@ -153,7 +163,7 @@ The same schema file also includes the storefront, admin, request, CMS, media, a
 - `setup_requests`
 - `change_link_requests`
 
-The storefront remains safe without Supabase because it falls back to the static migrated product catalog.
+The storefront remains safe without database credentials because it falls back to the static migrated product catalog.
 
 Product records include ecommerce strategy fields:
 
@@ -167,7 +177,7 @@ Product records include ecommerce strategy fields:
 
 Only `checkout_mode = buy_now` products use the current one-time Stripe test checkout path. Quote, subscription, and contact-sales products route customers to a contact/setup flow until those workflows are built.
 
-## Supabase Schema Setup
+## Database Schema Setup
 
 The canonical deployment schema is:
 
@@ -177,7 +187,7 @@ supabase/schema.sql
 
 To apply it:
 
-1. Open the Supabase project SQL editor.
+1. Open the Supabase SQL editor or Neon SQL editor.
 2. Review `supabase/schema.sql`.
 3. Run it against the target project.
 4. Run the local safety check:
@@ -186,7 +196,7 @@ To apply it:
 npm run check:platform-schema
 ```
 
-For local development or a non-production Supabase project, you may also run:
+For local development or a non-production database project, you may also run:
 
 ```text
 supabase/demo-seed.sql
@@ -275,7 +285,13 @@ Supported activation destination types:
 
 Destination URLs must use `http://` or `https://`. Unsafe schemes such as `javascript:` and `data:` are rejected.
 
-Activation requires the platform Supabase schema and server credentials:
+Activation requires the platform database schema and server credentials. For Neon, set:
+
+```env
+DATABASE_URL=
+```
+
+For Supabase, set:
 
 ```env
 NEXT_PUBLIC_SUPABASE_URL=
@@ -299,7 +315,7 @@ No Stripe configuration is required for activation.
 - Test customer forms: contact, setup, and change-link.
 - Test admin login at `/admin/login`.
 - Test admin product editing and requests inbox.
-- Confirm Supabase writes are working where persistence is expected.
+- Confirm database writes are working where persistence is expected.
 - Connect bank account and enable live Stripe only after explicit approval.
 
 Cloudflare Worker commands:
@@ -331,6 +347,7 @@ npx wrangler secret put ADMIN_EMAIL
 npx wrangler secret put ADMIN_PASSWORD
 npx wrangler secret put ADMIN_SESSION_SECRET
 npx wrangler secret put CUSTOMER_SESSION_SECRET
+npx wrangler secret put DATABASE_URL
 npx wrangler secret put NEXT_PUBLIC_SUPABASE_URL
 npx wrangler secret put SUPABASE_SERVICE_ROLE_KEY
 npx wrangler secret put RESEND_API_KEY

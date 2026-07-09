@@ -13,7 +13,7 @@ export default async function AdminHomepageEditorPage() {
       <p className="text-sm font-semibold uppercase text-brand">Admin</p>
       <h1 className="mt-3 text-4xl font-black text-ink">Homepage editor</h1>
       <p className="mt-4 leading-7 text-muted">
-        These fields control the homepage hero when Supabase is configured. Without Supabase, the form will show the fallback content and saving returns a configuration message.
+        These fields control the homepage hero when database persistence is configured. Without database credentials, the form will show the fallback content and saving returns a configuration message.
       </p>
       <div className="mt-8 rounded-md border border-line bg-white p-5 shadow-sm md:p-7">
         <HomepageEditor content={content} />

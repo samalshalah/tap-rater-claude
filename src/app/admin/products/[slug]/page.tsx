@@ -29,11 +29,11 @@ export default async function AdminProductEditorPage({ params }: AdminProductEdi
       <p className="text-sm font-semibold uppercase text-brand">Admin</p>
       <h1 className="mt-3 text-4xl font-black text-ink">{isCreate ? "Create product" : "Edit product"}</h1>
       <p className="mt-4 leading-7 text-muted">
-        Product records save to Supabase through a protected server-side API. The public storefront uses saved products when Supabase is configured and static products as fallback.
+        Product records save to Postgres through a protected server-side API. The public storefront uses saved products when database persistence is configured and static products as fallback.
       </p>
       {!canSave ? (
         <div className="mt-6 rounded-md border border-amber-200 bg-amber-50 p-4 text-sm font-semibold text-ink">
-          Supabase is not configured yet. Product edits cannot be saved.
+          Database persistence is not configured yet. Product edits cannot be saved.
         </div>
       ) : null}
       <div className="mt-8 rounded-md border border-line bg-white p-5 shadow-sm md:p-7">

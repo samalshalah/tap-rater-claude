@@ -8,12 +8,12 @@ The backend now also includes the first CMS foundation for editing homepage copy
 
 ## Services
 
-- Supabase Postgres stores contact, setup, change-link, and product records.
+- Postgres stores contact, setup, change-link, product, device, activation, landing page, and analytics records. Neon and Supabase are supported.
 - Resend can send request notifications when configured.
 - Next.js API routes validate and persist form submissions.
 - Admin access uses one signed HTTP-only cookie account from environment variables.
-- Admin CMS editors save homepage/page/product records to Supabase.
-- Admin ecommerce section settings save draft/published configuration records to Supabase.
+- Admin CMS editors save homepage/page/product records to Postgres.
+- Admin ecommerce section settings save draft/published configuration records to Postgres.
 
 ## Environment Variables
 
@@ -22,6 +22,7 @@ Set these locally in `.env.local` and in production:
 ```bash
 NEXT_PUBLIC_SUPABASE_URL=
 SUPABASE_SERVICE_ROLE_KEY=
+DATABASE_URL=
 RESEND_API_KEY=
 ORDER_NOTIFICATION_EMAIL=
 ADMIN_EMAIL=admin@taprater.com
@@ -29,11 +30,13 @@ ADMIN_PASSWORD=
 ADMIN_SESSION_SECRET=
 ```
 
+Use either `DATABASE_URL`/`NEON_DATABASE_URL` for Neon or `NEXT_PUBLIC_SUPABASE_URL` plus `SUPABASE_SERVICE_ROLE_KEY` for Supabase. Database secrets must stay server-side only.
+
 `ADMIN_SESSION_SECRET` should be a long random string.
 
 ## Database
 
-Run `supabase/schema.sql` in the Supabase SQL editor before using the forms in production.
+Run `supabase/schema.sql` in the Neon or Supabase SQL editor before using the forms in production.
 This creates request tables, product tables, `site_content`, and `media_assets`.
 
 ## Routes
@@ -70,7 +73,7 @@ The admin dashboard has a persistent sidebar with four groups:
 - Growth: Website, Media, SEO, Analytics.
 - System: Settings.
 
-Each operations/commerce/growth/system section includes an editable settings form. Those forms write `admin:<area>` records into `site_content` when Supabase is configured.
+Each operations/commerce/growth/system section includes an editable settings form. Those forms write `admin:<area>` records into `site_content` when database persistence is configured.
 
 ## CMS Editing
 
@@ -78,8 +81,8 @@ The homepage editor controls the homepage hero copy and buttons through the `sit
 
 The page editor writes generic page records into `site_content` using keys such as `page:about-us`.
 
-The product editor writes product records into the `products` table. The storefront still uses local migrated product data as fallback until Supabase is configured and seeded.
+The product editor writes product records into the `products` table. The storefront still uses local migrated product data as fallback until database persistence is configured and seeded.
 
-## Local Behavior Without Supabase
+## Local Behavior Without Database Persistence
 
-The frontend pages still render. Valid form submissions return `503` with `Request storage is not configured yet.` until Supabase credentials are added.
+The frontend pages still render. Valid form submissions return `503` with `Request storage is not configured yet.` until database credentials are added.

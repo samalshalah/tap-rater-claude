@@ -14,7 +14,7 @@ export async function POST(request: Request) {
   }
 
   if (!hasSupabaseAdminConfig()) {
-    return NextResponse.json({ error: "Supabase is not configured yet." }, { status: 503 });
+    return NextResponse.json({ error: "Database persistence is not configured yet." }, { status: 503 });
   }
 
   try {

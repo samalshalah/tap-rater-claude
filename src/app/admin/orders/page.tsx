@@ -25,7 +25,7 @@ export default async function AdminOrdersPage() {
 
         {!configured ? (
           <div className="mt-6 rounded-md border border-amber-200 bg-amber-50 p-4 text-sm font-semibold text-ink">
-            Supabase is not configured yet. Stripe checkout stays disabled until orders can be persisted.
+            Database persistence is not configured yet. Stripe checkout stays disabled until orders can be persisted.
           </div>
         ) : null}
 

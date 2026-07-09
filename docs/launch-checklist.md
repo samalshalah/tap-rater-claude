@@ -11,8 +11,8 @@ Stripe checkout is available for test mode only. Live payments, live paid orders
 - [ ] `ADMIN_SESSION_SECRET` is a long random value.
 - [ ] `ADMIN_SESSION_TTL_HOURS` is set if the default 7-day admin session is not desired.
 - [ ] `CUSTOMER_SESSION_SECRET` is set and is different from the admin password.
-- [ ] `NEXT_PUBLIC_SUPABASE_URL` points to the production Supabase project.
-- [ ] `SUPABASE_SERVICE_ROLE_KEY` is set server-side only.
+- [ ] `DATABASE_URL` or `NEON_DATABASE_URL` points to the production Neon/Postgres database, or Supabase server credentials are set.
+- [ ] `SUPABASE_SERVICE_ROLE_KEY`, when used, is set server-side only.
 - [ ] `RESEND_API_KEY` is set for customer/account emails and request notifications.
 - [ ] `ORDER_NOTIFICATION_EMAIL` is set to the internal Tap Rater notification inbox.
 - [ ] `NEXT_PUBLIC_SITE_URL` is set to `https://taprater.com`.
@@ -22,11 +22,11 @@ Stripe checkout is available for test mode only. Live payments, live paid orders
 - [ ] `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` is set only with a `pk_test_` value.
 - [ ] No production secret values are committed to the repository, screenshots, issue comments, or docs.
 
-## Supabase Schema
+## Database Schema
 
-- [ ] Run `supabase/schema.sql` in the production Supabase SQL editor before testing activation, redirects, hosted landing pages, analytics, or Stripe test orders.
+- [ ] Run `supabase/schema.sql` in the production Neon or Supabase SQL editor before testing activation, redirects, hosted landing pages, analytics, or Stripe test orders.
 - [ ] Run `npm run check:platform-schema` locally to confirm the deployable schema includes the required platform tables.
-- [ ] Run `supabase/demo-seed.sql` only in local development or a non-production Supabase project.
+- [ ] Run `supabase/demo-seed.sql` only in local development or a non-production database project.
 - [ ] Confirm these platform tables exist:
   - [ ] `customers`
   - [ ] `businesses`
@@ -128,8 +128,8 @@ Official references:
 - [ ] `appointment_booking` template renders.
 - [ ] `social_links` template renders.
 - [ ] `digital_business_card` template renders.
-- [ ] Form submissions save to `form_submissions` when Supabase is configured.
-- [ ] Missing Supabase or missing page shows a friendly not-found state.
+- [ ] Form submissions save to `form_submissions` when database persistence is configured.
+- [ ] Missing database configuration or missing page shows a friendly not-found state.
 - [ ] Landing page button click logging does not expose raw IP data.
 
 ## Analytics QA
@@ -180,8 +180,8 @@ Official references:
 - [ ] Cart persists after refresh.
 - [ ] Checkout button clearly says Stripe test mode.
 - [ ] Checkout API rejects live Stripe secret keys.
-- [ ] Stripe test checkout redirects to Stripe-hosted Checkout when test env vars and Supabase are configured.
-- [ ] Stripe test checkout returns a friendly error if Stripe or Supabase is not configured.
+- [ ] Stripe test checkout redirects to Stripe-hosted Checkout when test env vars and database persistence are configured.
+- [ ] Stripe test checkout returns a friendly error if Stripe or database persistence is not configured.
 - [ ] No live Stripe payment processing is exposed.
 
 ## Stripe Test Checkout QA
@@ -198,7 +198,7 @@ Official references:
 - [ ] Confirm `/checkout/success` loads after successful test payment.
 - [ ] Confirm `/checkout/cancel` loads if checkout is canceled.
 - [ ] Run `stripe listen --forward-to localhost:3000/api/webhooks/stripe` locally.
-- [ ] Confirm `checkout.session.completed` marks the order paid in Supabase.
+- [ ] Confirm `checkout.session.completed` marks the order paid in Postgres.
 - [ ] Confirm `/admin/orders` shows the paid test order.
 - [ ] Do not enter real card details.
 
@@ -233,7 +233,7 @@ The smoke script checks:
 - `/activate`
 - `/r/TR-DEMO-GOOGLE`
 
-`/r/TR-DEMO-GOOGLE` accepts either a rendered page or redirect status because demo behavior can differ between local fallback and configured Supabase environments.
+`/r/TR-DEMO-GOOGLE` accepts either a rendered page or redirect status because demo behavior can differ between local fallback and configured database environments.
 
 ## Amazon Packaging Instructions
 
@@ -264,7 +264,7 @@ The smoke script checks:
 - [ ] Set Google Maps quotas and billing alerts.
 - [ ] Rate limit activation attempts by device, email, and IP hash where practical.
 - [ ] Log activation failures without storing raw IP addresses.
-- [ ] Keep `SUPABASE_SERVICE_ROLE_KEY` server-side only.
+- [ ] Keep `DATABASE_URL`, `NEON_DATABASE_URL`, and `SUPABASE_SERVICE_ROLE_KEY` server-side only.
 - [ ] Keep admin and customer session secrets out of the browser.
 
 ## Feature Documentation Coverage
@@ -274,7 +274,7 @@ The smoke script checks:
 - [ ] Admin login/session security: README and tests.
 - [ ] Admin products: README, admin UI, and tests.
 - [ ] Admin requests: README and admin UI.
-- [ ] Supabase schema: README, `docs/supabase-schema.sql`, and `supabase/schema.sql`.
+- [ ] Database schema: README, `docs/supabase-schema.sql`, and `supabase/schema.sql`.
 - [ ] Device redirect route: README and platform architecture.
 - [ ] Activation flow: README and this checklist.
 - [ ] Google Places activation search: README and this checklist.

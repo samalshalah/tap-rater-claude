@@ -21,7 +21,7 @@ export default async function AdminAnalyticsPage() {
 
         {!configured ? (
           <div className="mt-6 rounded-md border border-amber-200 bg-amber-50 p-4 text-sm font-semibold text-ink">
-            Supabase is not configured yet. Analytics will appear after tap events and submissions can be read.
+            Database persistence is not configured yet. Analytics will appear after tap events and submissions can be read.
           </div>
         ) : null}
 

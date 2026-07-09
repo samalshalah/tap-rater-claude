@@ -94,7 +94,7 @@ export async function createPendingOrderForCheckout({
   currency: string;
 }) {
   if (!hasSupabaseAdminConfig()) {
-    return { ok: false, error: "Supabase is not configured. Checkout is disabled until order persistence is ready." };
+    return { ok: false, error: "Database persistence is not configured. Checkout is disabled until order persistence is ready." };
   }
 
   return createPendingOrderForCheckoutWithClient(getSupabaseAdmin() as OrdersDbClient, {
@@ -135,7 +135,7 @@ export async function createPendingOrderForCheckoutWithClient(
 
 export async function savePaidOrderFromCheckoutSession(session: StripeCheckoutSessionLike) {
   if (!hasSupabaseAdminConfig()) {
-    return { ok: false, error: "Supabase is not configured." };
+    return { ok: false, error: "Database persistence is not configured." };
   }
 
   return savePaidOrderFromCheckoutSessionWithClient(getSupabaseAdmin() as OrdersDbClient, session);
