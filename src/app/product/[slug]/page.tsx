@@ -6,7 +6,12 @@ import { AddToCartButton } from "@/components/cart/add-to-cart-button";
 import { migratedProducts } from "@/data/migrated-products";
 import { ProductCard } from "@/components/product/product-card";
 import { ProductGallery } from "@/components/product/product-gallery";
-import { formatPrice, getCategoryBySlug, getProductBySlug, getProductPriceCents, getRelatedProducts } from "@/lib/products";
+import {
+  getStorefrontProductBySlug,
+  getStorefrontProducts,
+  getStorefrontRelatedProducts
+} from "@/lib/product-repository";
+import { formatPrice, getCategoryBySlug, getProductPriceCents } from "@/lib/products";
 import { getProductComparisonRows, getProductPageHighlights, getProductPageUseCases, getReviewDestination } from "@/lib/product-page-content";
 import { absoluteUrl, faqJsonLd, JsonLd, productJsonLd } from "@/lib/seo";
 
@@ -16,7 +21,7 @@ type ProductPageProps = {
 
 export async function generateMetadata({ params }: ProductPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const product = getProductBySlug(slug);
+  const product = await getStorefrontProductBySlug(slug);
 
   if (!product) {
     return {
@@ -52,14 +57,15 @@ export function generateStaticParams() {
 
 export default async function ProductPage({ params }: ProductPageProps) {
   const { slug } = await params;
-  const product = getProductBySlug(slug);
+  const products = await getStorefrontProducts();
+  const product = products.find((item) => item.slug === slug && item.isActive);
 
   if (!product) {
     notFound();
   }
 
   const category = getCategoryBySlug(product.categorySlug);
-  const relatedProducts = getRelatedProducts(product);
+  const relatedProducts = getStorefrontRelatedProducts(product, products);
   const highlights = getProductPageHighlights(product);
   const useCases = getProductPageUseCases(product);
   const comparisonRows = getProductComparisonRows(product);

@@ -1,5 +1,6 @@
 import { ProductCard } from "@/components/product/product-card";
-import { getActiveProducts, getCatalogCategories, getProductsByCategory } from "@/lib/products";
+import { getStorefrontProducts } from "@/lib/product-repository";
+import { getCatalogCategories } from "@/lib/products";
 import type { Metadata } from "next";
 import Link from "next/link";
 
@@ -12,8 +13,8 @@ export const metadata: Metadata = {
   }
 };
 
-export default function ShopPage() {
-  const products = getActiveProducts();
+export default async function ShopPage() {
+  const products = await getStorefrontProducts();
   const categories = getCatalogCategories();
 
   return (
@@ -58,7 +59,9 @@ export default function ShopPage() {
               <p className="text-xs font-bold uppercase text-brand">{category.eyebrow}</p>
               <h3 className="mt-2 text-lg font-black text-ink">{category.title}</h3>
               <p className="mt-3 text-sm leading-6 text-muted">{category.buyerIntent}</p>
-              <p className="mt-4 text-sm font-bold text-ink">{getProductsByCategory(category.slug).length} products</p>
+              <p className="mt-4 text-sm font-bold text-ink">
+                {products.filter((product) => product.categorySlug === category.slug).length} products
+              </p>
             </Link>
           ))}
         </div>

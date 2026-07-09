@@ -3,7 +3,8 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { ProductCard } from "@/components/product/product-card";
 import { catalogCategories } from "@/data/migrated-products";
-import { getCategoryBySlug, getProductsByCategory } from "@/lib/products";
+import { getStorefrontProductsByCategory } from "@/lib/product-repository";
+import { getCategoryBySlug } from "@/lib/products";
 
 type CategoryPageProps = {
   params: Promise<{ slug: string }>;
@@ -45,7 +46,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
     notFound();
   }
 
-  const products = getProductsByCategory(category.slug);
+  const products = await getStorefrontProductsByCategory(category.slug);
 
   return (
     <>

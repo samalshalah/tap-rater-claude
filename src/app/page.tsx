@@ -3,7 +3,8 @@ import Image from "next/image";
 import type { Metadata } from "next";
 import { ProductCard } from "@/components/product/product-card";
 import { getHomepageContent } from "@/lib/cms-repository";
-import { formatPrice, getActiveProducts, getProductPriceCents } from "@/lib/products";
+import { getStorefrontProducts } from "@/lib/product-repository";
+import { formatPrice, getProductPriceCents } from "@/lib/products";
 import { faqJsonLd, JsonLd, organizationJsonLd, websiteJsonLd } from "@/lib/seo";
 
 export const metadata: Metadata = {
@@ -90,10 +91,10 @@ const useCases = [
 
 export default async function HomePage() {
   const homepage = await getHomepageContent();
-  const products = getActiveProducts();
+  const products = await getStorefrontProducts();
   const featured = products[0];
-  const plate = products.find((product) => product.slug.includes("plate")) ?? products[1];
-  const bundle = products.find((product) => product.slug.includes("bundle")) ?? products[4];
+  const plate = products.find((product) => product.slug.includes("plate")) ?? products[1] ?? featured;
+  const bundle = products.find((product) => product.slug.includes("bundle")) ?? products[4] ?? featured;
   const categories = [
     {
       title: "Review Stands",
