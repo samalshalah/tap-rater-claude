@@ -158,6 +158,12 @@ Platform schema tables:
 
 The demo activation hashes are placeholders only. Replace them with real hashed activation codes before manufacturing or production use.
 
+Landing page template JSON for premium hosted pages is documented in:
+
+```text
+docs/landing-pages.md
+```
+
 ## Device Activation
 
 Every Tap Rater NFC chip and QR code should point to the permanent route:

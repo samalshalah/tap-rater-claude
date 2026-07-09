@@ -60,6 +60,9 @@ create table if not exists public.landing_pages (
       'multi_platform_review',
       'feedback_form',
       'referral_form',
+      'appointment_booking',
+      'social_links',
+      'digital_business_card',
       'business_card',
       'wifi_menu',
       'custom_url'
