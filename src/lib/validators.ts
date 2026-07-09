@@ -65,3 +65,16 @@ export const productContentSchema = z.object({
 export type HomepageContentInput = z.infer<typeof homepageContentSchema>;
 export type PageContentInput = z.infer<typeof pageContentSchema>;
 export type ProductContentInput = z.infer<typeof productContentSchema>;
+
+export const adminConfigSchema = z.object({
+  area: z.string().trim().min(2).max(80).regex(/^[a-z0-9-]+$/),
+  title: z.string().trim().min(2).max(120),
+  status: z.enum(["draft", "published"]),
+  settings: z.object({
+    primary: z.string().trim().min(2).max(300),
+    secondary: z.string().trim().min(2).max(300),
+    notes: z.string().trim().max(2000).default("")
+  })
+});
+
+export type AdminConfigInput = z.infer<typeof adminConfigSchema>;

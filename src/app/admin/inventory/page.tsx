@@ -13,6 +13,15 @@ export default async function AdminInventoryPage() {
         description="Track stock by SKU, variant, and bundle. This becomes important before enabling checkout so orders cannot sell unavailable products."
         primaryItems={["SKU inventory levels", "Low-stock thresholds", "Variant-level stock", "Bundle stock rules", "Inventory activity log"]}
         nextItems={["Add inventory columns or inventory table.", "Validate cart quantities against stock.", "Add admin inventory adjustment form with notes."]}
+        config={{
+          area: "inventory",
+          primaryLabel: "Low-stock threshold",
+          secondaryLabel: "Inventory policy",
+          notesLabel: "Inventory notes",
+          primaryPlaceholder: "5 units",
+          secondaryPlaceholder: "Stop checkout when stock is out",
+          notesPlaceholder: "SKU rules, bundle stock logic, or supplier notes"
+        }}
       />
     </AdminShell>
   );

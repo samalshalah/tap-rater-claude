@@ -13,6 +13,15 @@ export default async function AdminCustomersPage() {
         description="View customer profiles, purchase history, setup requests, link-change requests, and support notes."
         primaryItems={["Customer list", "Contact details", "Order history", "Setup/link request history", "Internal admin notes"]}
         nextItems={["Add customers table and link requests/orders by email.", "Create customer detail page.", "Add GDPR/export/delete controls before production."]}
+        config={{
+          area: "customers",
+          primaryLabel: "Customer policy",
+          secondaryLabel: "Support priority rule",
+          notesLabel: "Customer notes",
+          primaryPlaceholder: "Create customer from paid orders and setup requests",
+          secondaryPlaceholder: "Prioritize paid customers and open setup requests",
+          notesPlaceholder: "Customer support workflow, tags, or privacy requirements"
+        }}
       />
     </AdminShell>
   );

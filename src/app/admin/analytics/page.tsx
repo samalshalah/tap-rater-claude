@@ -13,6 +13,15 @@ export default async function AdminAnalyticsPage() {
         description="Track revenue, product performance, conversion, traffic sources, review-platform interest, and setup request volume."
         primaryItems={["Revenue overview", "Product conversion", "Cart activity", "Request volume", "Traffic and SEO performance"]}
         nextItems={["Choose analytics provider.", "Add event tracking for product/cart/forms.", "Build dashboard once checkout and orders are live."]}
+        config={{
+          area: "analytics",
+          primaryLabel: "Analytics provider",
+          secondaryLabel: "Primary KPI",
+          notesLabel: "Analytics notes",
+          primaryPlaceholder: "Google Analytics 4",
+          secondaryPlaceholder: "Product page to cart conversion",
+          notesPlaceholder: "Events, dashboards, or reporting cadence"
+        }}
       />
     </AdminShell>
   );

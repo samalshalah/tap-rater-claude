@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { AdminConfigForm } from "@/components/admin/admin-config-form";
 
 type AdminSectionPageProps = {
   title: string;
@@ -8,6 +9,15 @@ type AdminSectionPageProps = {
   nextItems: string[];
   primaryHref?: string;
   primaryLabel?: string;
+  config?: {
+    area: string;
+    primaryLabel: string;
+    secondaryLabel: string;
+    notesLabel: string;
+    primaryPlaceholder: string;
+    secondaryPlaceholder: string;
+    notesPlaceholder: string;
+  };
 };
 
 export function AdminSectionPage({
@@ -17,7 +27,8 @@ export function AdminSectionPage({
   primaryItems,
   nextItems,
   primaryHref,
-  primaryLabel
+  primaryLabel,
+  config
 }: AdminSectionPageProps) {
   return (
     <section className="mx-auto max-w-7xl px-4 py-8 md:px-8 lg:py-12">
@@ -35,8 +46,28 @@ export function AdminSectionPage({
       </div>
 
       <div className="mt-8 grid gap-5 lg:grid-cols-[1.1fr_0.9fr]">
+        {config ? (
+          <div className="rounded-md border border-line bg-white p-5 shadow-sm lg:col-span-2">
+            <h2 className="text-xl font-black text-ink">Editable settings</h2>
+            <p className="mt-2 text-sm leading-6 text-muted">
+              Save operational settings for this admin area. These records are stored in Supabase `site_content` when configured.
+            </p>
+            <div className="mt-5">
+              <AdminConfigForm
+                area={config.area}
+                title={title}
+                primaryLabel={config.primaryLabel}
+                secondaryLabel={config.secondaryLabel}
+                notesLabel={config.notesLabel}
+                primaryPlaceholder={config.primaryPlaceholder}
+                secondaryPlaceholder={config.secondaryPlaceholder}
+                notesPlaceholder={config.notesPlaceholder}
+              />
+            </div>
+          </div>
+        ) : null}
         <div className="rounded-md border border-line bg-white p-5 shadow-sm">
-          <h2 className="text-xl font-black text-ink">Controls to build</h2>
+          <h2 className="text-xl font-black text-ink">Controls included</h2>
           <div className="mt-4 grid gap-3">
             {primaryItems.map((item) => (
               <div key={item} className="rounded-md border border-line bg-gray-50 p-4 text-sm font-semibold text-ink">

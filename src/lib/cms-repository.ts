@@ -1,6 +1,6 @@
 import { unstable_noStore as noStore } from "next/cache";
 import { getSupabaseAdmin, hasSupabaseAdminConfig } from "@/lib/db";
-import type { HomepageContentInput, PageContentInput, ProductContentInput } from "@/lib/validators";
+import type { AdminConfigInput, HomepageContentInput, PageContentInput, ProductContentInput } from "@/lib/validators";
 
 type UpsertResult = PromiseLike<{ error: null | { message: string } }>;
 type SelectSingleResult<T> = PromiseLike<{ data: T | null; error: null | { message: string } }>;
@@ -60,6 +60,15 @@ export async function savePageContent(client: CmsDbClient, input: PageContentInp
   await upsertOrThrow(client, "site_content", {
     key: `page:${input.slug}`,
     type: "page",
+    status: input.status,
+    payload: input
+  });
+}
+
+export async function saveAdminConfig(client: CmsDbClient, input: AdminConfigInput) {
+  await upsertOrThrow(client, "site_content", {
+    key: `admin:${input.area}`,
+    type: "section",
     status: input.status,
     payload: input
   });

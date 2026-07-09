@@ -13,6 +13,15 @@ export default async function AdminMediaPage() {
         description="Manage product photos, homepage hero assets, brand files, SEO images, and future uploaded media."
         primaryItems={["Media asset list", "Image alt text", "Product image assignment", "Homepage/banner image assignment", "Open Graph image assignment"]}
         nextItems={["Choose storage provider: Supabase Storage or Cloudflare R2.", "Add upload endpoint with file validation.", "Connect images to product and page editors."]}
+        config={{
+          area: "media",
+          primaryLabel: "Storage provider",
+          secondaryLabel: "Image quality rule",
+          notesLabel: "Media notes",
+          primaryPlaceholder: "Supabase Storage",
+          secondaryPlaceholder: "Use square product images with descriptive alt text",
+          notesPlaceholder: "Upload rules, naming conventions, or brand asset notes"
+        }}
       />
     </AdminShell>
   );

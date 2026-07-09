@@ -5,6 +5,7 @@ export async function POST(request: Request) {
   const body = await request.json().catch(() => null);
   const email = String(body?.email ?? "");
   const password = String(body?.password ?? "");
+  const isHttps = new URL(request.url).protocol === "https:";
 
   if (!process.env.ADMIN_EMAIL || !process.env.ADMIN_PASSWORD || !process.env.ADMIN_SESSION_SECRET) {
     return NextResponse.json({ error: "Admin login is not configured." }, { status: 503 });
@@ -18,7 +19,7 @@ export async function POST(request: Request) {
   response.cookies.set(adminCookieName, createAdminSessionValue(email), {
     httpOnly: true,
     sameSite: "lax",
-    secure: process.env.NODE_ENV === "production",
+    secure: isHttps,
     path: "/"
   });
   return response;

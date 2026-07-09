@@ -13,6 +13,7 @@ The backend now also includes the first CMS foundation for editing homepage copy
 - Next.js API routes validate and persist form submissions.
 - Admin access uses one signed HTTP-only cookie account from environment variables.
 - Admin CMS editors save homepage/page/product records to Supabase.
+- Admin ecommerce section settings save draft/published configuration records to Supabase.
 
 ## Environment Variables
 
@@ -40,6 +41,7 @@ This creates request tables, product tables, `site_content`, and `media_assets`.
 - `/api/forms/contact`
 - `/api/forms/setup`
 - `/api/forms/change-link`
+- `/api/admin/config`
 - `/admin/login`
 - `/admin`
 - `/admin/products`
@@ -68,7 +70,7 @@ The admin dashboard has a persistent sidebar with four groups:
 - Growth: Website, Media, SEO, Analytics.
 - System: Settings.
 
-Some sections are structural placeholders with implementation checklists. They define the professional ecommerce backend surface before each deeper CRUD workflow is built.
+Each operations/commerce/growth/system section includes an editable settings form. Those forms write `admin:<area>` records into `site_content` when Supabase is configured.
 
 ## CMS Editing
 

@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 import {
   getDefaultHomepageContent,
+  saveAdminConfig,
   saveHomepageContent,
   savePageContent,
   saveProductContent,
@@ -59,6 +60,37 @@ describe("cms repository", () => {
         seoDescription: "About Tap Rater NFC review products.",
         body: "Tap Rater helps businesses collect reviews.",
         status: "draft"
+      }
+    });
+  });
+
+  it("stores admin ecommerce configuration by area", async () => {
+    const db = createDbClient();
+
+    await saveAdminConfig(db.client, {
+      area: "shipping",
+      title: "Shipping",
+      status: "draft",
+      settings: {
+        primary: "US flat rate",
+        secondary: "Free shipping over $150",
+        notes: "Use manual rules before Stripe stage."
+      }
+    });
+
+    expect(db.upsert).toHaveBeenCalledWith({
+      key: "admin:shipping",
+      type: "section",
+      status: "draft",
+      payload: {
+        area: "shipping",
+        title: "Shipping",
+        status: "draft",
+        settings: {
+          primary: "US flat rate",
+          secondary: "Free shipping over $150",
+          notes: "Use manual rules before Stripe stage."
+        }
       }
     });
   });

@@ -13,6 +13,15 @@ export default async function AdminOrdersPage() {
         description="Manage paid orders, fulfillment, order notes, customer communication, and refund status after Stripe is connected in the final launch stage."
         primaryItems={["Order list and filters", "Order detail timeline", "Fulfillment status", "Customer notes", "Refund/payment state"]}
         nextItems={["Add Stripe checkout and webhook order creation.", "Store shipping address and order items.", "Add admin order status transitions and email notifications."]}
+        config={{
+          area: "orders",
+          primaryLabel: "Default order status",
+          secondaryLabel: "Fulfillment policy",
+          notesLabel: "Order notes",
+          primaryPlaceholder: "Pending payment until Stripe webhook confirms",
+          secondaryPlaceholder: "Fulfill after paid status",
+          notesPlaceholder: "Order workflow, notifications, or refund rules"
+        }}
       />
     </AdminShell>
   );
