@@ -1,14 +1,24 @@
 import { AccountShell } from "@/components/account/account-shell";
 import { ChangeRequestForm } from "@/components/account/change-request-form";
+import { getBusinessTapSummary, type BusinessTapSummary, type TapsByDay } from "@/lib/analytics";
 import { requireCustomer } from "@/lib/customer-auth";
 import { getCustomerPortal } from "@/lib/customer-portal";
 
 export default async function AccountDevicesPage() {
   const session = await requireCustomer();
   const portal = await getCustomerPortal(session.email);
+  const summaries = await Promise.all(portal.businesses.map((business) => getBusinessTapSummary(business.id)));
+  const analytics = buildCustomerAnalytics(summaries);
 
   return (
     <AccountShell>
+      <div className="mb-6 grid gap-4 md:grid-cols-4">
+        <SummaryCard label="Taps 7 days" value={analytics.tapsLast7Days} />
+        <SummaryCard label="Taps 30 days" value={analytics.tapsLast30Days} />
+        <SummaryCard label="Destination clicks" value={analytics.destinationClicks} />
+        <SummaryCard label="Submissions" value={analytics.submissions} />
+      </div>
+
       <div className="grid gap-6 lg:grid-cols-[1fr_360px]">
         <div className="overflow-x-auto rounded-md border border-line bg-white shadow-sm">
           <table className="w-full min-w-[860px] border-collapse text-left text-sm">
@@ -48,6 +58,18 @@ export default async function AccountDevicesPage() {
         </div>
 
         <div className="grid gap-4">
+          <div className="rounded-md border border-line bg-white p-4 shadow-sm">
+            <h2 className="font-black text-ink">Taps by day</h2>
+            <div className="mt-3 grid gap-2 text-sm">
+              {analytics.tapsByDay.map((day) => (
+                <div key={day.date} className="flex items-center justify-between border-b border-line py-2 last:border-b-0">
+                  <span className="font-semibold text-ink">{day.date}</span>
+                  <span className="text-muted">{day.count}</span>
+                </div>
+              ))}
+              {analytics.tapsByDay.length === 0 ? <p className="text-sm text-muted">No tap events yet.</p> : null}
+            </div>
+          </div>
           <ChangeRequestForm deviceCode={portal.devices[0]?.deviceCode} />
           <div className="rounded-md border border-line bg-white p-4 text-sm leading-6 text-muted shadow-sm">
             Direct destination editing is intentionally disabled for the first portal version. Support will verify change requests before updating
@@ -56,5 +78,33 @@ export default async function AccountDevicesPage() {
         </div>
       </div>
     </AccountShell>
+  );
+}
+
+function buildCustomerAnalytics(summaries: BusinessTapSummary[]) {
+  const dayCounts = new Map<string, number>();
+  for (const summary of summaries) {
+    for (const day of summary.tapsByDay) {
+      dayCounts.set(day.date, (dayCounts.get(day.date) ?? 0) + day.count);
+    }
+  }
+
+  return {
+    tapsLast7Days: summaries.reduce((sum, summary) => sum + summary.tapsLast7Days, 0),
+    tapsLast30Days: summaries.reduce((sum, summary) => sum + summary.tapsLast30Days, 0),
+    destinationClicks: summaries.reduce((sum, summary) => sum + summary.destinationClicks, 0),
+    submissions: summaries.reduce((sum, summary) => sum + summary.submissions, 0),
+    tapsByDay: Array.from(dayCounts.entries())
+      .map(([date, count]): TapsByDay => ({ date, count }))
+      .sort((a, b) => a.date.localeCompare(b.date))
+  };
+}
+
+function SummaryCard({ label, value }: { label: string; value: number }) {
+  return (
+    <div className="rounded-md border border-line bg-white p-4 shadow-sm">
+      <p className="text-xs font-black uppercase text-muted">{label}</p>
+      <p className="mt-2 text-2xl font-black text-ink">{value}</p>
+    </div>
   );
 }

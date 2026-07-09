@@ -63,6 +63,11 @@ function parseSignedValue(value: string | undefined, maxAgeMs: number, now: numb
     return null;
   }
 
+  const decodedValue = decodeCookieValue(value);
+  if (decodedValue && decodedValue !== value) {
+    return parseSignedValue(decodedValue, maxAgeMs, now);
+  }
+
   const separatorIndex = value.lastIndexOf(".");
   if (separatorIndex === -1) {
     return null;
@@ -115,4 +120,12 @@ function getCustomerSecret() {
 
 function normalizeEmail(email: string) {
   return email.trim().toLowerCase();
+}
+
+function decodeCookieValue(value: string) {
+  try {
+    return decodeURIComponent(value);
+  } catch {
+    return null;
+  }
 }

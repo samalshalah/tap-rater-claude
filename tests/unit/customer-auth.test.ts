@@ -24,6 +24,12 @@ describe("customer auth", () => {
     expect(parseCustomerSession(session)).toEqual({ email: "owner@example.com" });
   });
 
+  it("validates URL-encoded signed customer sessions from response cookies", () => {
+    const session = createCustomerSessionValue("owner@example.com");
+
+    expect(parseCustomerSession(encodeURIComponent(session))).toEqual({ email: "owner@example.com" });
+  });
+
   it("rejects expired customer sessions", () => {
     const session = createCustomerSessionValue("owner@example.com", Date.now() - 31 * 24 * 60 * 60 * 1000);
 
