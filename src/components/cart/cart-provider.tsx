@@ -1,15 +1,22 @@
 "use client";
 
-import { createContext, useContext, useMemo, useState } from "react";
+import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import {
+  cartStorageKey,
+  mergeCartItem,
+  parseStoredCart,
+  removeCartItem,
+  updateCartQuantity,
+  type CartItem
+} from "@/lib/cart";
 
-export type CartItem = {
-  productId: string;
-  quantity: number;
-};
+export type { CartItem } from "@/lib/cart";
 
 type CartContextValue = {
   items: CartItem[];
   addItem: (item: CartItem) => void;
+  decreaseItem: (productId: string) => void;
+  increaseItem: (productId: string) => void;
   removeItem: (productId: string) => void;
   count: number;
 };
@@ -18,23 +25,29 @@ const CartContext = createContext<CartContextValue | null>(null);
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);
+  const [isRestored, setIsRestored] = useState(false);
+
+  useEffect(() => {
+    setItems(parseStoredCart(window.localStorage.getItem(cartStorageKey)));
+    setIsRestored(true);
+  }, []);
+
+  useEffect(() => {
+    if (!isRestored) {
+      return;
+    }
+
+    window.localStorage.setItem(cartStorageKey, JSON.stringify(items));
+  }, [isRestored, items]);
 
   const value = useMemo<CartContextValue>(
     () => ({
       items,
       count: items.reduce((sum, item) => sum + item.quantity, 0),
-      addItem: (item) => {
-        setItems((current) => {
-          const existing = current.find((entry) => entry.productId === item.productId);
-          if (!existing) {
-            return [...current, item];
-          }
-          return current.map((entry) =>
-            entry.productId === item.productId ? { ...entry, quantity: entry.quantity + item.quantity } : entry
-          );
-        });
-      },
-      removeItem: (productId) => setItems((current) => current.filter((item) => item.productId !== productId))
+      addItem: (item) => setItems((current) => mergeCartItem(current, item)),
+      decreaseItem: (productId) => setItems((current) => updateCartQuantity(current, productId, -1)),
+      increaseItem: (productId) => setItems((current) => updateCartQuantity(current, productId, 1)),
+      removeItem: (productId) => setItems((current) => removeCartItem(current, productId))
     }),
     [items]
   );
