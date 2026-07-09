@@ -15,6 +15,7 @@ export const adminNavigationGroups: AdminNavigationGroup[] = [
     items: [
       { label: "Dashboard", href: "/admin", description: "Store overview and daily actions" },
       { label: "Requests", href: "/admin/requests", description: "Setup, contact, and link-change queue" },
+      { label: "Devices", href: "/admin/devices", description: "NFC/QR devices, activation codes, redirects, and tap counts" },
       { label: "Orders", href: "/admin/orders", description: "Order management when checkout is enabled" },
       { label: "Customers", href: "/admin/customers", description: "Customer profiles and history" }
     ]

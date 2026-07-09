@@ -96,6 +96,56 @@ export type HomepageContentInput = z.infer<typeof homepageContentSchema>;
 export type PageContentInput = z.infer<typeof pageContentSchema>;
 export type ProductContentInput = z.infer<typeof productContentSchema>;
 
+const deviceProductTypes = [
+  "google_review",
+  "facebook_review",
+  "yelp_profile",
+  "appointment_booking",
+  "social_follow",
+  "wifi_menu",
+  "multi_platform_review",
+  "feedback_form",
+  "referral_form",
+  "business_card",
+  "custom_url"
+] as const;
+
+const deviceServiceModes = ["basic_redirect", "managed_redirect", "premium_landing_page"] as const;
+const deviceStatuses = ["unactivated", "active", "paused", "lost", "retired"] as const;
+const deviceDestinationTypes = ["google_review", "facebook_review", "yelp_profile", "booking", "social", "menu", "wifi", "custom", "landing_page"] as const;
+
+export const adminDeviceCreateSchema = z.object({
+  productType: z.enum(deviceProductTypes),
+  serviceMode: z.enum(deviceServiceModes),
+  deviceCode: z.string().trim().max(80).regex(/^[A-Za-z0-9-]*$/).optional().default(""),
+  activationCode: z.string().trim().max(120).optional().default(""),
+  label: z.string().trim().max(160).optional().default("")
+});
+
+export const adminDeviceUpdateSchema = z.object({
+  status: z.enum(deviceStatuses),
+  destinationType: z.union([z.enum(deviceDestinationTypes), z.literal("")]).optional().default(""),
+  destinationUrl: z
+    .string()
+    .trim()
+    .max(500)
+    .optional()
+    .default("")
+    .refine((value) => {
+      if (!value) return true;
+      try {
+        const url = new URL(value);
+        return url.protocol === "http:" || url.protocol === "https:";
+      } catch {
+        return false;
+      }
+    }, "Destination URL must start with http or https."),
+  label: z.string().trim().max(160).optional().default("")
+});
+
+export type AdminDeviceCreateInput = z.infer<typeof adminDeviceCreateSchema>;
+export type AdminDeviceUpdateInput = z.infer<typeof adminDeviceUpdateSchema>;
+
 export const adminConfigSchema = z.object({
   area: z.string().trim().min(2).max(80).regex(/^[a-z0-9-]+$/),
   title: z.string().trim().min(2).max(120),
