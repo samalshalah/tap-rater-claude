@@ -29,6 +29,9 @@ npm run build
 npm test
 npm run smoke
 npm run check:platform-schema
+npm run cf:build
+npm run backend:build
+npm run backend:db-check
 ```
 
 Local dev usually runs at:
@@ -87,10 +90,14 @@ SUPABASE_SERVICE_ROLE_KEY=
 
 ```env
 RESEND_API_KEY=
+RESEND_FROM_EMAIL=
 ORDER_NOTIFICATION_EMAIL=
+ADMIN_NOTIFICATION_EMAIL=
 ```
 
 `ORDER_NOTIFICATION_EMAIL` is used as the internal destination for customer request notifications.
+`ADMIN_NOTIFICATION_EMAIL` is used by backend jobs and operational tests.
+`RESEND_FROM_EMAIL` should use a verified Resend sender, for example `Tap Rater <notifications@taprater.com>`.
 
 Customer portal login uses Resend magic links when `RESEND_API_KEY` is configured. If Resend is missing, production customer login is disabled with a friendly message. Local development may return a test login link only for `ADMIN_EMAIL`.
 
@@ -248,6 +255,56 @@ npm run start
 npm run smoke
 ```
 
+## Railway Backend Jobs
+
+The production website, admin, activation flow, and redirect engine stay on Cloudflare Workers/OpenNext.
+Railway is reserved for future backend jobs and operational tasks only.
+
+Backend package:
+
+```text
+apps/backend
+```
+
+Backend commands:
+
+```bash
+npm run backend:dev
+npm run backend:build
+npm run backend:start
+npm run backend:db-check
+npm run backend:email-test
+```
+
+Railway project target:
+
+```text
+tap-rater-backend
+```
+
+Railway environment variables:
+
+```text
+DATABASE_URL
+RESEND_API_KEY
+RESEND_FROM_EMAIL
+ORDER_NOTIFICATION_EMAIL
+ADMIN_NOTIFICATION_EMAIL
+CRON_SECRET
+NEXT_PUBLIC_SITE_URL
+NODE_ENV=production
+```
+
+Do not add live Stripe variables to Railway until live checkout is explicitly approved.
+
+More details:
+
+```text
+docs/backend.md
+docs/railway.md
+docs/resend.md
+```
+
 ## Device Activation
 
 Every Tap Rater NFC chip and QR code should point to the permanent route:
@@ -351,7 +408,9 @@ npx wrangler secret put DATABASE_URL
 npx wrangler secret put NEXT_PUBLIC_SUPABASE_URL
 npx wrangler secret put SUPABASE_SERVICE_ROLE_KEY
 npx wrangler secret put RESEND_API_KEY
+npx wrangler secret put RESEND_FROM_EMAIL
 npx wrangler secret put ORDER_NOTIFICATION_EMAIL
+npx wrangler secret put ADMIN_NOTIFICATION_EMAIL
 ```
 
 Stripe secrets should stay test-mode only until live checkout is explicitly approved.

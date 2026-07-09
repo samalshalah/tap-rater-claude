@@ -1,4 +1,4 @@
-import { getResend, hasResendConfig } from "@/lib/resend";
+import { buildEmailHtml, sendEmail } from "@/lib/email";
 
 type NotificationPayload = {
   subject: string;
@@ -6,34 +6,17 @@ type NotificationPayload = {
 };
 
 export async function sendRequestNotification(payload: NotificationPayload) {
-  if (!hasResendConfig()) {
-    return;
-  }
-
-  const resend = getResend();
   const to = process.env.ORDER_NOTIFICATION_EMAIL;
 
   if (!to) {
     return;
   }
 
-  const html = Object.entries(payload.rows)
-    .map(([label, value]) => `<p><strong>${escapeHtml(label)}:</strong> ${escapeHtml(value)}</p>`)
-    .join("");
-
-  await resend.emails.send({
-    from: "Tap Rater <notifications@taprater.com>",
+  await sendEmail({
     to,
     subject: payload.subject,
-    html
+    html: buildEmailHtml({
+      rows: payload.rows
+    })
   });
-}
-
-function escapeHtml(value: string) {
-  return value
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
 }

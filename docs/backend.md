@@ -1,88 +1,129 @@
 # Tap Rater Backend
 
-## Current Backend Scope
+Tap Rater uses two backend surfaces:
 
-This phase includes request storage, admin login, admin request views, and public forms.
-Stripe checkout and paid order storage are intentionally deferred to the final launch stage.
-The backend now also includes the first CMS foundation for editing homepage copy, page content records, and product records.
+- Cloudflare Workers/OpenNext runs the production website, API routes, admin, activation flow, redirect engine, and customer portal.
+- Railway is reserved for future background jobs and operational tasks that should not replace the Cloudflare frontend.
 
-## Services
+Live Stripe payments are intentionally disabled until final approval.
 
-- Postgres stores contact, setup, change-link, product, device, activation, landing page, and analytics records. Neon and Supabase are supported.
-- Resend can send request notifications when configured.
-- Next.js API routes validate and persist form submissions.
-- Admin access uses one signed HTTP-only cookie account from environment variables.
-- Admin CMS editors save homepage/page/product records to Postgres.
-- Admin ecommerce section settings save draft/published configuration records to Postgres.
+## Cloudflare App Backend
 
-## Environment Variables
+The Cloudflare Worker handles:
 
-Set these locally in `.env.local` and in production:
+- storefront API routes
+- admin login and admin APIs
+- product and CMS persistence
+- contact/setup/change-link requests
+- device activation
+- public redirect route `/r/{deviceCode}`
+- landing page form submissions
+- customer login/session APIs
 
-```bash
-NEXT_PUBLIC_SUPABASE_URL=
-SUPABASE_SERVICE_ROLE_KEY=
-DATABASE_URL=
-RESEND_API_KEY=
-ORDER_NOTIFICATION_EMAIL=
-ADMIN_EMAIL=admin@taprater.com
-ADMIN_PASSWORD=
-ADMIN_SESSION_SECRET=
+Required production secrets stay in Cloudflare Worker settings:
+
+```text
+ADMIN_EMAIL
+ADMIN_PASSWORD
+ADMIN_SESSION_SECRET
+CUSTOMER_SESSION_SECRET
+DATABASE_URL
+RESEND_API_KEY
+RESEND_FROM_EMAIL
+ORDER_NOTIFICATION_EMAIL
+ADMIN_NOTIFICATION_EMAIL
+NEXT_PUBLIC_SITE_URL
 ```
 
-Use either `DATABASE_URL`/`NEON_DATABASE_URL` for Neon or `NEXT_PUBLIC_SUPABASE_URL` plus `SUPABASE_SERVICE_ROLE_KEY` for Supabase. Database secrets must stay server-side only.
+Do not expose `DATABASE_URL` or `RESEND_API_KEY` to browser code.
 
-`ADMIN_SESSION_SECRET` should be a long random string.
+## Railway Backend
 
-## Database
+The Railway backend package lives in:
 
-Run `supabase/schema.sql` in the Neon or Supabase SQL editor before using the forms in production.
-This creates request tables, product tables, `site_content`, and `media_assets`.
+```text
+apps/backend
+```
 
-## Routes
+It is a small Node service for future background work:
 
-- `/api/forms/contact`
-- `/api/forms/setup`
-- `/api/forms/change-link`
-- `/api/admin/config`
-- `/admin/login`
-- `/admin`
-- `/admin/products`
-- `/admin/requests`
-- `/admin/content`
-- `/admin/content/homepage`
-- `/admin/content/pages`
-- `/admin/products/[slug]`
-- `/admin/categories`
-- `/admin/inventory`
-- `/admin/customers`
-- `/admin/media`
-- `/admin/discounts`
-- `/admin/shipping`
-- `/admin/taxes`
-- `/admin/seo`
-- `/admin/analytics`
-- `/admin/settings`
+- `GET /healthz`
+- `POST /jobs/daily-report`
+- `POST /jobs/review-monitoring`
+- `POST /jobs/billing-reminder`
 
-## Admin Control Menu
+Job routes require:
 
-The admin dashboard has a persistent sidebar with four groups:
+```text
+Authorization: Bearer {CRON_SECRET}
+```
 
-- Operations: Dashboard, Requests, Orders, Customers.
-- Commerce: Products, Categories, Inventory, Discounts, Shipping, Taxes.
-- Growth: Website, Media, SEO, Analytics.
-- System: Settings.
+The current job handlers are safe placeholders. They return skipped statuses until the business logic is built.
 
-Each operations/commerce/growth/system section includes an editable settings form. Those forms write `admin:<area>` records into `site_content` when database persistence is configured.
+## Commands
 
-## CMS Editing
+```bash
+npm run backend:dev
+npm run backend:build
+npm run backend:start
+npm run backend:db-check
+npm run backend:email-test
+```
 
-The homepage editor controls the homepage hero copy and buttons through the `site_content` record with key `homepage`.
+`backend:db-check` runs `select 1` against `DATABASE_URL`.
 
-The page editor writes generic page records into `site_content` using keys such as `page:about-us`.
+`backend:email-test` sends only when `RESEND_API_KEY` and either `EMAIL_TEST_TO` or `ADMIN_NOTIFICATION_EMAIL` are configured. If not configured, it exits with a skip message instead of failing.
 
-The product editor writes product records into the `products` table. The storefront still uses local migrated product data as fallback until database persistence is configured and seeded.
+## Local Environment
 
-## Local Behavior Without Database Persistence
+Use `apps/backend/.env.example` as the safe template. Do not commit real values.
 
-The frontend pages still render. Valid form submissions return `503` with `Request storage is not configured yet.` until database credentials are added.
+```text
+DATABASE_URL
+RESEND_API_KEY
+RESEND_FROM_EMAIL
+ORDER_NOTIFICATION_EMAIL
+ADMIN_NOTIFICATION_EMAIL
+CRON_SECRET
+NEXT_PUBLIC_SITE_URL
+NODE_ENV
+PORT
+```
+
+## Email Utility
+
+Shared website email helpers live in:
+
+```text
+src/lib/email.ts
+```
+
+Supported email types:
+
+- customer login magic link
+- quote request notification
+- quote request confirmation
+- feedback alert
+- link change request
+- scheduled report placeholder
+
+The helper escapes dynamic content before building HTML and returns a safe skipped result when `RESEND_API_KEY` is missing.
+
+## Verification
+
+Run:
+
+```bash
+npm run build
+npm test
+npm run cf:build
+npm run backend:build
+npm run backend:db-check
+```
+
+For production, verify:
+
+- Cloudflare Worker still serves `/`, `/shop`, `/activate`, `/admin/login`, and `/r/TR-DEMO-GOOGLE`.
+- Railway `/healthz` returns `{ "ok": true, "service": "tap-rater-backend" }`.
+- Railway can connect to Neon through `DATABASE_URL`.
+- Resend domain is verified before production emails are enabled.

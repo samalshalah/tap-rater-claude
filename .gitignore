@@ -3,6 +3,7 @@ node_modules/
 .next/
 .open-next/
 .wrangler/
+apps/backend/dist/
 .env
 .env.local
 .vercel/
