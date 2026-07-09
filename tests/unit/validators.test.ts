@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { changeLinkFormSchema, contactFormSchema, setupFormSchema } from "@/lib/validators";
+import { activationFormSchema, changeLinkFormSchema, contactFormSchema, setupFormSchema } from "@/lib/validators";
 
 describe("backend validators", () => {
   it("accepts a contact request", () => {
@@ -34,5 +34,33 @@ describe("backend validators", () => {
     });
 
     expect(form.tapraterId).toBe("TRATER01-W");
+  });
+
+  it("accepts a device activation request with a safe destination URL", () => {
+    const form = activationFormSchema.parse({
+      deviceCode: "tr123",
+      activationCode: "private-code",
+      email: "customer@example.com",
+      name: "Customer",
+      businessName: "Local Shop",
+      destinationType: "google_review_url",
+      destinationUrl: "https://g.page/r/local-shop"
+    });
+
+    expect(form.destinationType).toBe("google_review_url");
+  });
+
+  it("rejects unsafe activation destination URLs", () => {
+    expect(() =>
+      activationFormSchema.parse({
+        deviceCode: "TR123",
+        activationCode: "private-code",
+        email: "customer@example.com",
+        name: "Customer",
+        businessName: "Local Shop",
+        destinationType: "direct_url",
+        destinationUrl: "javascript:alert(1)"
+      })
+    ).toThrow();
   });
 });

@@ -22,9 +22,31 @@ export const changeLinkFormSchema = z.object({
   notes: z.string().trim().max(2000).default("")
 });
 
+export const activationFormSchema = z.object({
+  deviceCode: z.string().trim().min(3).max(80).regex(/^[A-Za-z0-9-]+$/),
+  activationCode: z.string().trim().min(4).max(120),
+  email: z.string().trim().email().max(180),
+  name: z.string().trim().min(2).max(120),
+  businessName: z.string().trim().min(2).max(160),
+  destinationType: z.enum(["google_review_url", "direct_url", "facebook_url", "yelp_url", "booking_url", "social_url"]),
+  destinationUrl: z
+    .string()
+    .trim()
+    .max(500)
+    .refine((value) => {
+      try {
+        const url = new URL(value);
+        return url.protocol === "http:" || url.protocol === "https:";
+      } catch {
+        return false;
+      }
+    }, "Destination URL must start with http or https.")
+});
+
 export type ContactFormInput = z.infer<typeof contactFormSchema>;
 export type SetupFormInput = z.infer<typeof setupFormSchema>;
 export type ChangeLinkFormInput = z.infer<typeof changeLinkFormSchema>;
+export type ActivationFormInput = z.infer<typeof activationFormSchema>;
 
 export const homepageContentSchema = z.object({
   eyebrow: z.string().trim().min(2).max(120),

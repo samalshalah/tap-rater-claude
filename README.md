@@ -136,6 +136,52 @@ Platform schema tables:
 
 The demo activation hashes are placeholders only. Replace them with real hashed activation codes before manufacturing or production use.
 
+## Device Activation
+
+Every Tap Rater NFC chip and QR code should point to the permanent route:
+
+```text
+https://taprater.com/r/{deviceCode}
+```
+
+If a device is still unactivated, the redirect route sends the customer to:
+
+```text
+/activate?device={deviceCode}
+```
+
+The activation form asks for:
+
+- device code
+- private activation code
+- customer email
+- customer name
+- business name
+- destination type
+- destination URL
+
+Activation writes server-side only through `POST /api/activate`. When activation succeeds, it creates or finds the customer, creates or finds the business, sets the device to `active`, saves `customer_id`, `business_id`, `destination_type`, `destination_url`, and `activated_at`, then future scans route through `/r/{deviceCode}`.
+
+Supported activation destination types:
+
+- `google_review_url`
+- `direct_url`
+- `facebook_url`
+- `yelp_url`
+- `booking_url`
+- `social_url`
+
+Destination URLs must use `http://` or `https://`. Unsafe schemes such as `javascript:` and `data:` are rejected.
+
+Activation requires the platform Supabase schema and server credentials:
+
+```env
+NEXT_PUBLIC_SUPABASE_URL=
+SUPABASE_SERVICE_ROLE_KEY=
+```
+
+No Stripe configuration is required for activation.
+
 ## Deployment Checklist
 
 - Set required environment variables in the deployment platform.
