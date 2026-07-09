@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { CircleUserRound, DollarSign, Globe2, Search, ShoppingBag } from "lucide-react";
 import { useCart } from "@/components/cart/cart-provider";
 
@@ -18,9 +19,15 @@ export function Header() {
     <header className="sticky top-0 z-30 bg-white/95 shadow-[0_10px_40px_rgba(17,24,39,0.06)] backdrop-blur">
       <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-10">
         <div className="grid min-h-20 grid-cols-[1fr_auto] items-center gap-4 lg:grid-cols-[220px_1fr_420px]">
-          <Link href="/" className="inline-flex items-center gap-2 text-2xl font-black text-ink">
-            <span className="grid h-10 w-10 place-items-center rounded-sm bg-ink text-lg text-white">T</span>
-            <span>Tap Rater<span className="text-brand">.</span></span>
+          <Link href="/" className="inline-flex items-center">
+            <Image
+              src="/uploads/brand/tap-rater-logo.png"
+              alt="Tap Rater"
+              width={156}
+              height={94}
+              priority
+              className="h-12 w-auto object-contain md:h-14"
+            />
           </Link>
           <nav className="hidden justify-center gap-10 text-sm font-black uppercase text-ink lg:flex">
             {navItems.map((item) => (

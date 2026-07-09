@@ -74,16 +74,17 @@ export default function HomePage() {
 
   return (
     <div>
-      <section className="mx-auto grid max-w-7xl gap-10 px-4 py-12 md:py-16 lg:grid-cols-[1fr_520px] lg:items-center">
-        <div className="relative">
-          <div className="absolute -left-12 top-44 hidden h-64 flex-col items-center gap-3 lg:flex">
+      <section className="relative overflow-hidden bg-white">
+        <div className="mx-auto grid min-h-[calc(100vh-80px)] max-w-[1440px] gap-8 px-4 py-12 sm:px-6 md:py-16 lg:grid-cols-[minmax(0,610px)_1fr] lg:items-center lg:px-10">
+        <div className="relative z-10">
+          <div className="absolute -left-16 top-44 hidden h-64 flex-col items-center gap-3 2xl:flex">
             <span className="h-20 w-px bg-ink" />
             <span className="rotate-180 text-xs font-black uppercase text-ink [writing-mode:vertical-rl]">Scroll to explore</span>
             <span className="h-20 w-px bg-ink" />
           </div>
-          <p className="text-sm font-semibold uppercase text-brand">Tap Rater NFC Products</p>
-          <h1 className="mt-3 text-4xl font-bold leading-tight text-ink md:text-6xl">Get more customer reviews with one tap.</h1>
-          <p className="mt-5 max-w-2xl text-lg leading-8 text-muted">
+          <p className="text-sm font-black uppercase text-brand">Tap Rater NFC Products</p>
+          <h1 className="mt-4 max-w-3xl text-5xl font-black leading-[1.06] text-ink md:text-7xl">Get more customer reviews with one tap.</h1>
+          <p className="mt-6 max-w-xl text-lg leading-8 text-muted md:text-xl">
             Tap Rater stands and plates help customers open your Google, Facebook, Yelp, or feedback link instantly.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
@@ -109,24 +110,35 @@ export default function HomePage() {
             </div>
           </div>
         </div>
-        <div className="relative overflow-hidden bg-gray-50 p-5 md:p-8">
-          <div className="absolute right-4 top-4 rounded-md bg-accent px-3 py-2 text-xs font-bold text-ink">
+        <div className="relative min-h-[480px] lg:min-h-[700px]">
+          <div className="absolute right-4 top-4 z-10 rounded-sm bg-accent px-4 py-3 text-xs font-black uppercase text-ink">
             Best seller
           </div>
-          <div className="absolute right-5 top-1/2 hidden -translate-y-1/2 items-center gap-4 lg:flex">
-            <span className="text-sm font-black text-ink">01</span>
+          <div className="absolute right-5 top-1/2 z-10 hidden -translate-y-1/2 items-center gap-4 lg:flex">
+            <span className="text-sm font-black text-ink">02</span>
             <span className="h-28 w-px bg-ink" />
             <span className="text-sm font-black text-muted">04</span>
           </div>
-          <div className="relative aspect-square">
-            <Image src={featured.images[0].src} alt={featured.images[0].alt} fill priority className="object-contain p-8" />
+          <div className="absolute left-0 top-8 h-[80%] w-[62%]">
+            <Image src={featured.images[0].src} alt={featured.images[0].alt} fill priority className="object-contain object-left" />
           </div>
-          <div className="rounded-md bg-white p-5 shadow-sm">
-            <p className="text-sm font-semibold text-brand">Featured Tap Rater</p>
-            <h2 className="mt-1 text-xl font-bold text-ink">{featured.title}</h2>
-            <p className="mt-2 text-sm text-muted">{featured.shortDescription}</p>
-            <p className="mt-3 text-2xl font-bold text-ink">{formatPrice(getProductPriceCents(featured))}</p>
+          <div className="absolute right-14 top-8 h-[30%] w-[42%] opacity-90">
+            <Image src={plate.images[0].src} alt={plate.images[0].alt} fill className="object-contain" />
           </div>
+          <div className="absolute bottom-12 right-8 h-[28%] w-[42%] opacity-90">
+            <Image src={plate.images[0].src} alt={plate.images[0].alt} fill className="object-contain" />
+          </div>
+          <div className="absolute bottom-0 left-8 right-8 z-10 border-l border-line bg-white/90 p-5 shadow-sm backdrop-blur sm:left-24 sm:right-20">
+            <p className="text-sm font-black uppercase text-brand">Featured Tap Rater</p>
+            <div className="mt-2 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+              <div>
+                <h2 className="text-xl font-black text-ink">{featured.title}</h2>
+                <p className="mt-1 text-sm text-muted">{featured.shortDescription}</p>
+              </div>
+              <p className="text-2xl font-black text-ink">{formatPrice(getProductPriceCents(featured))}</p>
+            </div>
+          </div>
+        </div>
         </div>
       </section>
 
