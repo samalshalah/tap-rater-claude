@@ -1,5 +1,13 @@
 import { describe, expect, it } from "vitest";
-import { activationFormSchema, changeLinkFormSchema, contactFormSchema, setupFormSchema } from "@/lib/validators";
+import {
+  accountChangeRequestSchema,
+  accountLoginRequestSchema,
+  accountLoginVerifySchema,
+  activationFormSchema,
+  changeLinkFormSchema,
+  contactFormSchema,
+  setupFormSchema
+} from "@/lib/validators";
 
 describe("backend validators", () => {
   it("accepts a contact request", () => {
@@ -79,5 +87,17 @@ describe("backend validators", () => {
         destinationUrl: "javascript:alert(1)"
       })
     ).toThrow();
+  });
+
+  it("accepts account login and change request payloads", () => {
+    expect(accountLoginRequestSchema.parse({ email: "owner@example.com" }).email).toBe("owner@example.com");
+    expect(accountLoginVerifySchema.parse({ token: "signed-token" }).token).toBe("signed-token");
+    expect(
+      accountChangeRequestSchema.parse({
+        tapraterId: "TR-TEST123",
+        newReviewUrl: "https://example.com/new-review",
+        notes: "Please update this device."
+      }).tapraterId
+    ).toBe("TR-TEST123");
   });
 });

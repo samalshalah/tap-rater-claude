@@ -146,6 +146,35 @@ export const adminDeviceUpdateSchema = z.object({
 export type AdminDeviceCreateInput = z.infer<typeof adminDeviceCreateSchema>;
 export type AdminDeviceUpdateInput = z.infer<typeof adminDeviceUpdateSchema>;
 
+export const accountLoginRequestSchema = z.object({
+  email: z.string().trim().email().max(180)
+});
+
+export const accountLoginVerifySchema = z.object({
+  token: z.string().trim().min(10).max(1000)
+});
+
+export const accountChangeRequestSchema = z.object({
+  tapraterId: z.string().trim().min(3).max(80),
+  newReviewUrl: z
+    .string()
+    .trim()
+    .max(500)
+    .refine((value) => {
+      try {
+        const url = new URL(value);
+        return url.protocol === "http:" || url.protocol === "https:";
+      } catch {
+        return false;
+      }
+    }, "New review URL must start with http or https."),
+  notes: z.string().trim().max(2000).default("")
+});
+
+export type AccountLoginRequestInput = z.infer<typeof accountLoginRequestSchema>;
+export type AccountLoginVerifyInput = z.infer<typeof accountLoginVerifySchema>;
+export type AccountChangeRequestInput = z.infer<typeof accountChangeRequestSchema>;
+
 export const adminConfigSchema = z.object({
   area: z.string().trim().min(2).max(80).regex(/^[a-z0-9-]+$/),
   title: z.string().trim().min(2).max(120),

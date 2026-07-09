@@ -45,6 +45,7 @@ Create `.env.local` for local development. Do not commit real secret values.
 ADMIN_EMAIL=
 ADMIN_PASSWORD=
 ADMIN_SESSION_SECRET=
+CUSTOMER_SESSION_SECRET=
 ```
 
 `ADMIN_SESSION_SECRET` should be a long random value. Optional admin session TTL:
@@ -52,6 +53,8 @@ ADMIN_SESSION_SECRET=
 ```env
 ADMIN_SESSION_TTL_HOURS=168
 ```
+
+`CUSTOMER_SESSION_SECRET` signs customer portal login links and account sessions. Use a separate long random value in production.
 
 ### Required For Supabase Persistence
 
@@ -70,6 +73,8 @@ ORDER_NOTIFICATION_EMAIL=
 ```
 
 `ORDER_NOTIFICATION_EMAIL` is used as the internal destination for customer request notifications.
+
+Customer portal login uses Resend magic links when `RESEND_API_KEY` is configured. If Resend is missing, production customer login is disabled with a friendly message. Local development may return a test login link only for `ADMIN_EMAIL`.
 
 ### Public URL
 

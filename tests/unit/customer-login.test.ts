@@ -1,0 +1,23 @@
+import { afterEach, describe, expect, it } from "vitest";
+import { createCustomerLoginUrl, isDevelopmentAdminLoginAllowed } from "@/lib/customer-login";
+
+describe("customer login helpers", () => {
+  afterEach(() => {
+    delete process.env.ADMIN_EMAIL;
+    delete process.env.NEXT_PUBLIC_SITE_URL;
+  });
+
+  it("creates account login verification URLs", () => {
+    process.env.NEXT_PUBLIC_SITE_URL = "https://taprater.com/";
+
+    expect(createCustomerLoginUrl("abc123")).toBe("https://taprater.com/account/login?token=abc123");
+  });
+
+  it("allows missing-email development bypass only for admin email outside production", () => {
+    process.env.ADMIN_EMAIL = "admin@taprater.com";
+
+    expect(isDevelopmentAdminLoginAllowed("admin@taprater.com", "development")).toBe(true);
+    expect(isDevelopmentAdminLoginAllowed("owner@example.com", "development")).toBe(false);
+    expect(isDevelopmentAdminLoginAllowed("admin@taprater.com", "production")).toBe(false);
+  });
+});

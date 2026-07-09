@@ -1,0 +1,81 @@
+import { describe, expect, it, vi } from "vitest";
+import { getCustomerPortalFromClient, type CustomerPortalDbClient } from "@/lib/customer-portal";
+
+describe("customer portal repository", () => {
+  it("loads businesses, devices, destinations, and tap counts for a customer email", async () => {
+    const db = createCustomerPortalDb({
+      customers: [{ id: "customer-1", email: "owner@example.com", name: "Owner" }],
+      businesses: [{ id: "business-1", customer_id: "customer-1", business_name: "Local Shop", google_review_url: "https://example.com/review" }],
+      devices: [
+        {
+          id: "device-1",
+          device_code: "TR-TEST123",
+          customer_id: "customer-1",
+          business_id: "business-1",
+          product_type: "google_review",
+          service_mode: "basic_redirect",
+          status: "active",
+          destination_type: "google_review",
+          destination_url: "https://example.com/review"
+        }
+      ],
+      tap_events: [{ device_id: "device-1" }, { device_id: "device-1" }]
+    });
+
+    const portal = await getCustomerPortalFromClient(db.client, "owner@example.com");
+
+    expect(portal.customer).toMatchObject({ id: "customer-1", email: "owner@example.com" });
+    expect(portal.businesses[0]).toMatchObject({ businessName: "Local Shop", googleReviewUrl: "https://example.com/review" });
+    expect(portal.devices[0]).toMatchObject({
+      deviceCode: "TR-TEST123",
+      status: "active",
+      destinationUrl: "https://example.com/review",
+      tapCount: 2
+    });
+  });
+
+  it("returns empty portal data when customer is not found", async () => {
+    const db = createCustomerPortalDb({ customers: [], businesses: [], devices: [], tap_events: [] });
+
+    const portal = await getCustomerPortalFromClient(db.client, "missing@example.com");
+
+    expect(portal.customer).toBeNull();
+    expect(portal.businesses).toEqual([]);
+    expect(portal.devices).toEqual([]);
+  });
+});
+
+type TableName = "customers" | "businesses" | "devices" | "tap_events";
+
+function createCustomerPortalDb(seed: Record<TableName, Array<Record<string, unknown>>>) {
+  const rows = {
+    customers: [...seed.customers],
+    businesses: [...seed.businesses],
+    devices: [...seed.devices],
+    tap_events: [...seed.tap_events]
+  };
+
+  const client = {
+    from(table: TableName) {
+      let filters: Array<{ column: string; value: unknown }> = [];
+      const matchRows = () => rows[table].filter((row) => filters.every((filter) => row[filter.column] === filter.value));
+
+      const builder = {
+        select: vi.fn(() => builder),
+        eq: vi.fn((column: string, value: unknown) => {
+          filters.push({ column, value });
+          return builder;
+        }),
+        maybeSingle: vi.fn(async () => ({ data: matchRows()[0] ?? null, error: null })),
+        order: vi.fn(async () => ({ data: matchRows(), error: null })),
+        then(resolve: (value: { data: Array<Record<string, unknown>>; error: null }) => void) {
+          resolve({ data: matchRows(), error: null });
+        }
+      };
+
+      return builder;
+    }
+  };
+
+  return { client: client as unknown as CustomerPortalDbClient };
+}
