@@ -1,7 +1,7 @@
 import { unstable_noStore as noStore } from "next/cache";
 import { migratedProducts, type MigratedProduct } from "@/data/migrated-products";
 import { getSupabaseAdmin, hasSupabaseAdminConfig } from "@/lib/db";
-import { getProductBySlug } from "@/lib/products";
+import { getCategoryBySlug, getProductBySlug } from "@/lib/products";
 
 type ProductQueryResult = PromiseLike<{ data: unknown[] | null; error: null | { message: string } }>;
 
@@ -41,8 +41,9 @@ export async function getStorefrontProductBySlug(slug: string): Promise<Migrated
 
 export async function getStorefrontProductsByCategory(slug: string): Promise<MigratedProduct[]> {
   const products = await getStorefrontProducts();
+  const categorySlug = getCategoryBySlug(slug)?.slug ?? slug;
 
-  return products.filter((product) => product.categorySlug === slug && product.isActive);
+  return products.filter((product) => product.categorySlug === categorySlug && product.isActive);
 }
 
 export function getStorefrontRelatedProducts(product: MigratedProduct, products: MigratedProduct[], limit = 3): MigratedProduct[] {
@@ -82,8 +83,31 @@ export function normalizeStorefrontProductRow(row: unknown): MigratedProduct | n
   const shortDescription =
     readString(productRow.short_description) ?? readString(productRow.shortDescription) ?? staticProduct?.shortDescription;
   const description = readString(productRow.description) ?? staticProduct?.description;
+  const serviceMode = readServiceMode(productRow.service_mode) ?? readServiceMode(productRow.serviceMode) ?? staticProduct?.serviceMode;
+  const requiresSubscription =
+    readBoolean(productRow.requires_subscription) ?? readBoolean(productRow.requiresSubscription) ?? staticProduct?.requiresSubscription;
+  const requiresLandingPage =
+    readBoolean(productRow.requires_landing_page) ?? readBoolean(productRow.requiresLandingPage) ?? staticProduct?.requiresLandingPage;
+  const activationType =
+    readActivationType(productRow.activation_type) ?? readActivationType(productRow.activationType) ?? staticProduct?.activationType;
+  const includedServiceLabel =
+    readString(productRow.included_service_label) ?? readString(productRow.includedServiceLabel) ?? staticProduct?.includedServiceLabel;
 
-  if (!slug || !title || !sku || !categorySlug || basePriceCents === undefined || !stockStatus || !shortDescription || !description) {
+  if (
+    !slug ||
+    !title ||
+    !sku ||
+    !categorySlug ||
+    basePriceCents === undefined ||
+    !stockStatus ||
+    !shortDescription ||
+    !description ||
+    !serviceMode ||
+    requiresSubscription === undefined ||
+    requiresLandingPage === undefined ||
+    !activationType ||
+    !includedServiceLabel
+  ) {
     return null;
   }
 
@@ -97,6 +121,11 @@ export function normalizeStorefrontProductRow(row: unknown): MigratedProduct | n
     stockStatus,
     shortDescription,
     description,
+    serviceMode,
+    requiresSubscription,
+    requiresLandingPage,
+    activationType,
+    includedServiceLabel,
     images: readImages(productRow.images) ?? staticProduct?.images ?? [],
     variants: readVariants(productRow.variants) ?? staticProduct?.variants ?? [],
     isActive: readBoolean(productRow.is_active) ?? readBoolean(productRow.isActive) ?? true,
@@ -121,6 +150,14 @@ function readBoolean(value: unknown) {
 
 function readStockStatus(value: unknown): MigratedProduct["stockStatus"] | undefined {
   return value === "instock" || value === "outofstock" ? value : undefined;
+}
+
+function readServiceMode(value: unknown): MigratedProduct["serviceMode"] | undefined {
+  return value === "basic_redirect" || value === "managed_redirect" || value === "premium_landing_page" ? value : undefined;
+}
+
+function readActivationType(value: unknown): MigratedProduct["activationType"] | undefined {
+  return value === "free_basic_activation" || value === "managed_setup" || value === "premium_hosted_activation" ? value : undefined;
 }
 
 function readStringArray(value: unknown) {

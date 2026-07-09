@@ -12,7 +12,14 @@ import {
   getStorefrontRelatedProducts
 } from "@/lib/product-repository";
 import { formatPrice, getCategoryBySlug, getProductPriceCents } from "@/lib/products";
-import { getProductComparisonRows, getProductPageHighlights, getProductPageUseCases, getReviewDestination } from "@/lib/product-page-content";
+import {
+  getProductActivationCopy,
+  getProductComparisonRows,
+  getProductPageHighlights,
+  getProductPageUseCases,
+  getProductServiceBadges,
+  getReviewDestination
+} from "@/lib/product-page-content";
 import { absoluteUrl, faqJsonLd, JsonLd, productJsonLd } from "@/lib/seo";
 
 type ProductPageProps = {
@@ -70,21 +77,24 @@ export default async function ProductPage({ params }: ProductPageProps) {
   const useCases = getProductPageUseCases(product);
   const comparisonRows = getProductComparisonRows(product);
   const destination = getReviewDestination(product);
+  const serviceBadges = getProductServiceBadges(product);
+  const activationCopy = getProductActivationCopy(product);
   const productFaqs = [
     {
       question: `How does ${product.title} work?`,
       answer:
-        "Customers tap their NFC-enabled phone on the Tap Rater product. The phone opens the review, feedback, or survey link configured for your business."
+        "Customers tap their NFC-enabled phone or scan the QR code on the Tap Rater product. The phone opens the review, feedback, booking, social, or survey destination configured for your business."
     },
     {
-      question: "Can this product open a Google review link?",
-      answer:
-        "Yes. Tap Rater products can be configured for Google review links, Facebook review links, Yelp links, or a custom customer feedback page."
+      question: "Does this product require a monthly fee?",
+      answer: product.requiresSubscription
+        ? "Hosted landing pages and platform-powered forms require a subscription for hosted features. Basic direct-link products remain available without a monthly fee."
+        : "No monthly fee is required for basic activation. Optional premium dashboard and hosted landing page features can be added later when needed."
     },
     {
       question: "Where should I place an NFC review stand?",
       answer:
-        "Place it where customers finish a positive interaction: checkout counters, front desks, reception areas, pickup counters, service desks, tables, or point-of-sale areas."
+        "Place it where customers naturally pause: checkout counters, front desks, reception areas, pickup counters, service desks, tables, or point-of-sale areas."
     }
   ];
 
@@ -113,6 +123,13 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 </span>
                 <span className="rounded-full bg-gray-100 px-3 py-1 text-xs font-black uppercase text-muted">{destination}</span>
                 <span className="rounded-full bg-gray-100 px-3 py-1 text-xs font-black uppercase text-muted">SKU {product.sku}</span>
+              </div>
+              <div className="mt-4 flex flex-wrap gap-2">
+                {serviceBadges.map((badge) => (
+                  <span key={badge} className="rounded-full bg-teal-50 px-3 py-1 text-xs font-black uppercase text-brand">
+                    {badge}
+                  </span>
+                ))}
               </div>
 
               <h1 className="mt-5 text-4xl font-black leading-tight text-ink md:text-5xl">{product.seoTitle?.replace(" | Tap Rater", "") ?? product.title}</h1>
@@ -152,7 +169,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
             <div className="mt-5 grid gap-3 rounded-md border border-line bg-gray-50 p-5 text-sm text-muted md:grid-cols-2">
               <p><strong className="text-ink">Best for:</strong> restaurants, salons, clinics, retail stores, service counters, and customer-facing teams.</p>
-              <p><strong className="text-ink">Review destinations:</strong> Google reviews, Facebook reviews, Yelp reviews, surveys, and custom feedback links.</p>
+              <p><strong className="text-ink">Service model:</strong> {product.includedServiceLabel}. {product.requiresLandingPage ? "Hosted landing page required for this product." : "Basic activation redirects directly to your selected link."}</p>
             </div>
           </div>
         </div>
@@ -181,16 +198,16 @@ export default async function ProductPage({ params }: ProductPageProps) {
           <div className="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:items-start">
             <div>
               <p className="text-sm font-semibold uppercase text-brand">What you get</p>
-              <h2 className="mt-3 text-3xl font-black text-ink">A physical review prompt customers understand quickly.</h2>
+              <h2 className="mt-3 text-3xl font-black text-ink">A physical tap or scan prompt customers understand quickly.</h2>
               <p className="mt-4 leading-7 text-muted">
-                The product gives your staff a consistent way to ask for reviews in person. Customers see the prompt, tap their phone, and land on the review or feedback destination you choose.
+                The product gives your staff a consistent in-person prompt. Customers see the display, tap or scan, and land on the review, booking, social, feedback, or hosted destination you choose.
               </p>
             </div>
             <div className="grid gap-3">
               {[
                 "NFC-enabled Tap Rater display for your counter, desk, table, or service point.",
-                "Support for Google, Facebook, Yelp, survey pages, and custom feedback URLs.",
-                "Clear tap-to-review wording that works without asking customers to search online.",
+                "Support for Google, Facebook, Yelp, booking pages, survey pages, and custom feedback URLs.",
+                "Clear tap or scan wording that works without asking customers to search online.",
                 "A product type that fits your business setup: stand, plate, bundle, or feedback display."
               ].map((item) => (
                 <div key={item} className="flex gap-3 rounded-md border border-line bg-gray-50 p-4">
@@ -198,6 +215,30 @@ export default async function ProductPage({ params }: ProductPageProps) {
                   <p className="text-sm leading-6 text-muted">{item}</p>
                 </div>
               ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="border-b border-line bg-gray-50">
+        <div className="mx-auto grid max-w-7xl gap-8 px-4 py-12 lg:grid-cols-[0.85fr_1.15fr] lg:items-start">
+          <div>
+            <p className="text-sm font-semibold uppercase text-brand">Activation and service</p>
+            <h2 className="mt-3 text-3xl font-black text-ink">{activationCopy.title}</h2>
+            <p className="mt-4 leading-7 text-muted">{activationCopy.body}</p>
+          </div>
+          <div className="grid gap-3">
+            <div className="rounded-md border border-line bg-white p-5">
+              <h3 className="font-black text-ink">One-time product clarity</h3>
+              <p className="mt-2 text-sm leading-6 text-muted">
+                Basic and managed redirect products point to your permanent Tap Rater URL, then redirect directly to the business link configured during activation.
+              </p>
+            </div>
+            <div className="rounded-md border border-line bg-white p-5">
+              <h3 className="font-black text-ink">Platform products</h3>
+              <p className="mt-2 text-sm leading-6 text-muted">
+                Premium landing page products use hosted Tap Rater pages for forms, multiple destinations, and future dashboard features.
+              </p>
             </div>
           </div>
         </div>
@@ -247,9 +288,9 @@ export default async function ProductPage({ params }: ProductPageProps) {
         <div className="mx-auto max-w-7xl px-4 py-12">
           <div className="max-w-3xl">
             <p className="text-sm font-semibold uppercase text-brand">How to use it</p>
-            <h2 className="mt-3 text-3xl font-bold text-ink">Make review requests easier at the point of service.</h2>
+            <h2 className="mt-3 text-3xl font-bold text-ink">Make review and feedback requests easier at the point of service.</h2>
             <p className="mt-4 leading-7 text-muted">
-              Customers are most likely to leave a helpful review when the experience is still fresh. A Tap Rater NFC review stand or plate gives them a simple physical reminder and removes the friction of searching for your business profile.
+              A Tap Rater NFC review stand or plate gives customers a simple physical prompt and removes the friction of searching for your business profile, booking page, social link, or feedback form.
             </p>
           </div>
           <div className="mt-8 grid gap-4 md:grid-cols-3">
@@ -264,7 +305,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
               },
               {
                 title: "Ask at the right moment",
-                body: "Invite satisfied customers to tap before they leave, when the service experience is still fresh."
+                body: "Invite customers to tap or scan before they leave, while the service experience is still fresh."
               }
             ].map((step) => (
               <article key={step.title} className="rounded-md border border-line bg-white p-5">
@@ -273,6 +314,30 @@ export default async function ProductPage({ params }: ProductPageProps) {
               </article>
             ))}
           </div>
+        </div>
+      </section>
+
+      <section className="border-b border-line bg-white">
+        <div className="mx-auto grid max-w-7xl gap-6 px-4 py-12 md:grid-cols-3">
+          {[
+            {
+              title: "Amazon-ready basic activation",
+              body: "No monthly fee required for basic activation on direct redirect products."
+            },
+            {
+              title: "Permanent Tap Rater URL",
+              body: "NFC chips and QR codes can point to a permanent Tap Rater URL so destinations can be managed later."
+            },
+            {
+              title: "Optional premium dashboard available",
+              body: "Hosted landing pages, analytics, and dashboard features can be added later for platform products."
+            }
+          ].map((item) => (
+            <article key={item.title} className="rounded-md border border-line bg-gray-50 p-5">
+              <h2 className="font-black text-ink">{item.title}</h2>
+              <p className="mt-2 text-sm leading-6 text-muted">{item.body}</p>
+            </article>
+          ))}
         </div>
       </section>
 

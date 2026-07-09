@@ -35,7 +35,7 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
 }
 
 export function generateStaticParams() {
-  return catalogCategories.map((category) => ({ slug: category.slug }));
+  return catalogCategories.flatMap((category) => [category.slug, ...(category.aliases ?? [])].map((slug) => ({ slug })));
 }
 
 export default async function CategoryPage({ params }: CategoryPageProps) {
@@ -62,6 +62,10 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
             <p className="text-sm font-bold uppercase text-ink">Best for</p>
             <p className="text-sm leading-6 text-muted">{category.buyerIntent}</p>
           </div>
+          <div className="mt-4 grid gap-3 rounded-md border border-line bg-white p-5 md:grid-cols-[0.7fr_1.3fr]">
+            <p className="text-sm font-bold uppercase text-ink">Service expectation</p>
+            <p className="text-sm leading-6 text-muted">{category.seoCopy}</p>
+          </div>
         </div>
       </section>
 
@@ -72,7 +76,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
             <h2 className="mt-2 text-3xl font-black text-ink">Shop {category.title.toLowerCase()}</h2>
           </div>
           <p className="max-w-xl text-sm leading-6 text-muted">
-            These products are selected for the same customer action: tap the Tap Rater display, open the right destination, and make leaving a review easier.
+            These products are selected for the same customer action: tap or scan the Tap Rater display, open the right destination, and make reviews, booking, feedback, or social actions easier.
           </p>
         </div>
         <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">

@@ -108,6 +108,11 @@ describe("cms repository", () => {
       stockStatus: "instock",
       shortDescription: "Short product text",
       description: "Long product text",
+      serviceMode: "basic_redirect",
+      requiresSubscription: false,
+      requiresLandingPage: false,
+      activationType: "free_basic_activation",
+      includedServiceLabel: "Free basic activation",
       seoTitle: "SEO title",
       seoDescription: "SEO description",
       isActive: true
@@ -124,6 +129,11 @@ describe("cms repository", () => {
       stock_status: "instock",
       short_description: "Short product text",
       description: "Long product text",
+      service_mode: "basic_redirect",
+      requires_subscription: false,
+      requires_landing_page: false,
+      activation_type: "free_basic_activation",
+      included_service_label: "Free basic activation",
       seo_title: "SEO title",
       seo_description: "SEO description",
       is_active: true

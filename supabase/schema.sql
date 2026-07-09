@@ -42,12 +42,23 @@ create table if not exists products (
   stock_status text not null check (stock_status in ('instock', 'outofstock')),
   short_description text not null default '',
   description text not null default '',
+  service_mode text not null default 'basic_redirect' check (service_mode in ('basic_redirect', 'managed_redirect', 'premium_landing_page')),
+  requires_subscription boolean not null default false,
+  requires_landing_page boolean not null default false,
+  activation_type text not null default 'free_basic_activation' check (activation_type in ('free_basic_activation', 'managed_setup', 'premium_hosted_activation')),
+  included_service_label text not null default 'Free basic activation',
   seo_title text,
   seo_description text,
   is_active boolean not null default true,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
+
+alter table products add column if not exists service_mode text not null default 'basic_redirect' check (service_mode in ('basic_redirect', 'managed_redirect', 'premium_landing_page'));
+alter table products add column if not exists requires_subscription boolean not null default false;
+alter table products add column if not exists requires_landing_page boolean not null default false;
+alter table products add column if not exists activation_type text not null default 'free_basic_activation' check (activation_type in ('free_basic_activation', 'managed_setup', 'premium_hosted_activation'));
+alter table products add column if not exists included_service_label text not null default 'Free basic activation';
 
 create table if not exists product_images (
   id uuid primary key default gen_random_uuid(),

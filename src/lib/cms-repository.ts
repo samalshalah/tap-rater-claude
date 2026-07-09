@@ -19,7 +19,7 @@ export type CmsDbClient = {
 export function getDefaultHomepageContent(): HomepageContentInput {
   return {
     eyebrow: "Google Review NFC Stands",
-    heroTitle: "Get more Google reviews with one tap.",
+    heroTitle: "Make Google reviews easier with one tap.",
     heroDescription:
       "Tap Rater NFC review stands and plates help customers open your Google review, Facebook review, Yelp review, or feedback link instantly.",
     primaryButtonLabel: "Shop products",
@@ -85,6 +85,11 @@ export async function saveProductContent(client: CmsDbClient, input: ProductCont
     stock_status: input.stockStatus,
     short_description: input.shortDescription,
     description: input.description,
+    service_mode: input.serviceMode,
+    requires_subscription: input.requiresSubscription,
+    requires_landing_page: input.requiresLandingPage,
+    activation_type: input.activationType,
+    included_service_label: input.includedServiceLabel,
     seo_title: input.seoTitle ?? null,
     seo_description: input.seoDescription ?? null,
     is_active: input.isActive

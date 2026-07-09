@@ -14,6 +14,11 @@ describe("admin products", () => {
       stockStatus: "instock",
       shortDescription: "",
       description: "",
+      serviceMode: "basic_redirect",
+      requiresSubscription: false,
+      requiresLandingPage: false,
+      activationType: "free_basic_activation",
+      includedServiceLabel: "Free basic activation",
       images: [],
       variants: [],
       isActive: false

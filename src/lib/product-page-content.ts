@@ -6,11 +6,57 @@ export type ProductPageContentItem = {
 };
 
 export type ProductComparisonRow = {
-  label: "Stand" | "Plate" | "Bundle" | "Feedback";
+  label: "Stand" | "Plate" | "Bundle" | "Social/Booking" | "Feedback/Referral" | "Custom";
   bestFor: string;
   fit: string;
   active: boolean;
 };
+
+export type ProductActivationCopy = {
+  title: string;
+  body: string;
+};
+
+export function getProductServiceBadges(product: MigratedProduct): string[] {
+  if (product.serviceMode === "premium_landing_page") {
+    return ["Premium landing page", "Subscription required for hosted features"];
+  }
+
+  const badges = new Set<string>();
+  badges.add("No monthly fee required");
+
+  if (product.serviceMode === "managed_redirect") {
+    badges.add("Managed setup included");
+  } else {
+    badges.add("Free basic activation");
+  }
+
+  return Array.from(badges);
+}
+
+export function getProductActivationCopy(product: MigratedProduct): ProductActivationCopy {
+  if (product.requiresLandingPage || product.serviceMode === "premium_landing_page") {
+    return {
+      title: "Hosted platform experience",
+      body:
+        "This product uses a hosted Tap Rater landing page for forms, multiple buttons, or platform-powered customer flows. Subscription is required for hosted features, while basic direct-link products remain available without a monthly fee."
+    };
+  }
+
+  if (product.serviceMode === "managed_redirect") {
+    return {
+      title: "Managed direct redirect",
+      body:
+        "This one-time product redirects directly to the destination you choose after Tap Rater setup. No monthly fee is required for the basic redirect, and premium dashboard features are optional later."
+    };
+  }
+
+  return {
+    title: "Free basic activation",
+    body:
+      "This one-time product redirects directly to your review, booking, social, or business link after basic activation. No monthly fee is required, and premium features are optional later."
+  };
+}
 
 export function getProductPageHighlights(product: MigratedProduct): ProductPageContentItem[] {
   const destination = getReviewDestination(product);
@@ -18,11 +64,13 @@ export function getProductPageHighlights(product: MigratedProduct): ProductPageC
   return [
     {
       title: "Tap-to-review flow",
-      body: `Customers tap their phone and open your ${destination} destination without searching.`
+      body: `Customers tap or scan and open your ${destination} destination without searching.`
     },
     {
-      title: "Configured for your link",
-      body: "Use your business review page, recommendation page, survey, or custom feedback URL."
+      title: product.requiresLandingPage ? "Hosted landing page" : "Configured for your link",
+      body: product.requiresLandingPage
+        ? "Use a hosted Tap Rater page for feedback forms, multiple buttons, or future analytics."
+        : "Use your business review page, recommendation page, booking page, survey, or custom feedback URL."
     },
     {
       title: "Counter-ready display",
@@ -30,7 +78,7 @@ export function getProductPageHighlights(product: MigratedProduct): ProductPageC
     },
     {
       title: "Simple customer prompt",
-      body: "A clear physical reminder helps staff ask for reviews at the right customer moment."
+      body: "A clear physical prompt helps staff invite customers to share their experience at the right moment."
     }
   ];
 }
@@ -43,11 +91,11 @@ export function getProductPageUseCases(_product: MigratedProduct): ProductPageCo
     },
     {
       title: "Salons and clinics",
-      body: "Ask after a completed appointment while the customer experience is still fresh."
+      body: "Offer the tap or scan prompt after a completed appointment while the visit is still fresh."
     },
     {
       title: "Retail stores",
-      body: "Use it beside checkout or customer service where satisfied buyers already pause."
+      body: "Use it beside checkout or customer service where buyers already pause."
     },
     {
       title: "Local services",
@@ -79,10 +127,22 @@ export function getProductComparisonRows(product: MigratedProduct): ProductCompa
       active: title.includes("bundle")
     },
     {
-      label: "Feedback",
-      bestFor: "Surveys and custom feedback flows",
-      fit: "Most flexible destination",
-      active: title.includes("experience") || product.categorySlug === "feedback-stands"
+      label: "Social/Booking",
+      bestFor: "Facebook, Yelp, booking pages, social profiles",
+      fit: "Best for direct non-Google destinations",
+      active: product.categorySlug === "social-booking-stands"
+    },
+    {
+      label: "Feedback/Referral",
+      bestFor: "Hosted forms and platform-powered flows",
+      fit: "Best when a landing page is needed",
+      active: product.categorySlug === "feedback-referral-stands"
+    },
+    {
+      label: "Custom",
+      bestFor: "Custom UV printing and direct custom URLs",
+      fit: "Best for branded prompts",
+      active: product.categorySlug === "custom-uv-printed-stands"
     }
   ];
 }

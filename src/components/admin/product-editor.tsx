@@ -40,6 +40,11 @@ export function ProductEditor({ product, categories, mode }: ProductEditorProps)
           stockStatus: form.get("stockStatus"),
           shortDescription: form.get("shortDescription"),
           description: form.get("description"),
+          serviceMode: form.get("serviceMode"),
+          requiresSubscription: form.get("requiresSubscription") === "true",
+          requiresLandingPage: form.get("requiresLandingPage") === "true",
+          activationType: form.get("activationType"),
+          includedServiceLabel: form.get("includedServiceLabel"),
           seoTitle: form.get("seoTitle"),
           seoDescription: form.get("seoDescription"),
           isActive: form.get("isActive") === "true"
@@ -125,6 +130,59 @@ export function ProductEditor({ product, categories, mode }: ProductEditorProps)
           </div>
           <Textarea name="shortDescription" label="Short description" defaultValue={product.shortDescription} />
           <Textarea name="description" label="Full description" defaultValue={product.description} tall />
+        </section>
+
+        <section className="grid gap-4 rounded-md border border-line bg-gray-50 p-4">
+          <div>
+            <h2 className="text-lg font-black text-ink">Service strategy</h2>
+            <p className="mt-1 text-sm text-muted">Controls storefront badges and the activation expectations shown to customers.</p>
+          </div>
+          <div className="grid gap-4 md:grid-cols-2">
+            <label className="grid gap-2 text-sm font-bold text-ink">
+              Service mode
+              <select className="rounded-md border border-line bg-white px-4 py-3 font-normal" name="serviceMode" defaultValue={product.serviceMode}>
+                <option value="basic_redirect">Basic redirect</option>
+                <option value="managed_redirect">Managed redirect</option>
+                <option value="premium_landing_page">Premium landing page</option>
+              </select>
+            </label>
+            <label className="grid gap-2 text-sm font-bold text-ink">
+              Activation type
+              <select className="rounded-md border border-line bg-white px-4 py-3 font-normal" name="activationType" defaultValue={product.activationType}>
+                <option value="free_basic_activation">Free basic activation</option>
+                <option value="managed_setup">Managed setup</option>
+                <option value="premium_hosted_activation">Premium hosted activation</option>
+              </select>
+            </label>
+            <label className="grid gap-2 text-sm font-bold text-ink">
+              Subscription requirement
+              <select
+                className="rounded-md border border-line bg-white px-4 py-3 font-normal"
+                name="requiresSubscription"
+                defaultValue={product.requiresSubscription ? "true" : "false"}
+              >
+                <option value="false">No subscription required</option>
+                <option value="true">Subscription required for hosted features</option>
+              </select>
+            </label>
+            <label className="grid gap-2 text-sm font-bold text-ink">
+              Landing page requirement
+              <select
+                className="rounded-md border border-line bg-white px-4 py-3 font-normal"
+                name="requiresLandingPage"
+                defaultValue={product.requiresLandingPage ? "true" : "false"}
+              >
+                <option value="false">Direct link redirect</option>
+                <option value="true">Hosted landing page required</option>
+              </select>
+            </label>
+            <Input
+              name="includedServiceLabel"
+              label="Included service label"
+              defaultValue={product.includedServiceLabel}
+              placeholder="Free basic activation"
+            />
+          </div>
         </section>
 
         <section className="grid gap-4 rounded-md border border-line bg-gray-50 p-4">

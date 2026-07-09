@@ -5,9 +5,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Shop NFC Review Stands and Google Review Plates",
+  title: "Shop NFC Review Stands, Plates, Bundles and Hosted Feedback Products",
   description:
-    "Shop Tap Rater NFC review stands, Google review plates, Facebook review stands, Yelp review stands, feedback stands, and business bundles.",
+    "Shop Tap Rater NFC review stands, review plates, business bundles, social and booking stands, feedback stands, and custom UV printed products.",
   alternates: {
     canonical: "/shop"
   }
@@ -24,16 +24,16 @@ export default async function ShopPage() {
           <div>
             <p className="text-sm font-semibold uppercase text-brand">Tap Rater shop</p>
             <h1 className="mt-3 max-w-4xl text-4xl font-black leading-tight text-ink md:text-5xl">
-              Shop NFC review stands, plates, and business bundles
+              Shop NFC review stands, plates, bundles, and platform-ready products
             </h1>
             <p className="mt-5 max-w-3xl text-lg leading-8 text-muted">
-              Choose a Tap Rater product for the review destination your customers use most. Every stand and plate is built for a clear tap-to-review moment at checkout, reception, table service, pickup, or the service counter.
+              Choose a Tap Rater product for the destination your customers use most. Basic redirect products open your review, booking, social, or business link directly. Platform products use hosted landing pages for forms, multiple destinations, and future analytics.
             </p>
           </div>
           <div className="grid gap-3 rounded-md border border-line bg-white p-5">
             <p className="text-sm font-bold uppercase text-ink">Popular searches</p>
             <div className="flex flex-wrap gap-2">
-              {["Google review stand", "NFC review plate", "Facebook review stand", "Yelp review stand", "business bundle"].map((term) => (
+              {["Google Review NFC Stand", "NFC Review Plate", "Custom Review Stand", "Appointment Booking NFC Stand", "Feedback NFC Stand"].map((term) => (
                 <span key={term} className="rounded-full border border-line px-3 py-2 text-sm text-muted">
                   {term}
                 </span>
@@ -50,7 +50,7 @@ export default async function ShopPage() {
             <h2 className="mt-2 text-3xl font-black text-ink">Find the right review product faster</h2>
           </div>
           <p className="max-w-xl text-sm leading-6 text-muted">
-            Categories are organized around buying intent: Google reviews, compact plates, platform-specific stands, bundles, and flexible feedback links.
+            Categories are organized around buying intent: Google reviews, compact plates, bundles, social and booking links, hosted feedback flows, and custom UV printed stands.
           </p>
         </div>
         <div className="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-5">
@@ -64,6 +64,32 @@ export default async function ShopPage() {
               </p>
             </Link>
           ))}
+        </div>
+      </section>
+
+      <section className="border-t border-line bg-gray-50">
+        <div className="mx-auto grid max-w-7xl gap-4 px-4 py-12 md:grid-cols-3">
+          <article className="rounded-md border border-line bg-white p-5">
+            <p className="text-xs font-black uppercase text-brand">Amazon-ready</p>
+            <h2 className="mt-2 text-xl font-black text-ink">No monthly fee required for basic activation</h2>
+            <p className="mt-3 text-sm leading-6 text-muted">
+              Basic redirect products can open a permanent Tap Rater URL and forward directly to your selected review, booking, social, or custom link.
+            </p>
+          </article>
+          <article className="rounded-md border border-line bg-white p-5">
+            <p className="text-xs font-black uppercase text-brand">Platform optional</p>
+            <h2 className="mt-2 text-xl font-black text-ink">Optional premium dashboard available</h2>
+            <p className="mt-3 text-sm leading-6 text-muted">
+              Hosted landing pages, analytics, and dashboard features are optional for products that need platform-powered flows.
+            </p>
+          </article>
+          <article className="rounded-md border border-line bg-white p-5">
+            <p className="text-xs font-black uppercase text-brand">Compliant prompts</p>
+            <h2 className="mt-2 text-xl font-black text-ink">Tap or scan to share your experience</h2>
+            <p className="mt-3 text-sm leading-6 text-muted">
+              Tap Rater copy focuses on making links easier to open without making rating guarantees or filtering who can respond.
+            </p>
+          </article>
         </div>
       </section>
 

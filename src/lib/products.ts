@@ -19,11 +19,14 @@ export function getCatalogCategories(): CatalogCategory[] {
 }
 
 export function getCategoryBySlug(slug: string): CatalogCategory | undefined {
-  return catalogCategories.find((category) => category.slug === slug);
+  return catalogCategories.find((category) => category.slug === slug || category.aliases?.includes(slug));
 }
 
 export function getProductsByCategory(slug: CatalogCategorySlug | string): MigratedProduct[] {
-  return getActiveProducts().filter((product) => product.categorySlug === slug);
+  const category = getCategoryBySlug(slug);
+  const categorySlug = category?.slug ?? slug;
+
+  return getActiveProducts().filter((product) => product.categorySlug === categorySlug);
 }
 
 export function getRelatedProducts(product: MigratedProduct, limit = 3): MigratedProduct[] {

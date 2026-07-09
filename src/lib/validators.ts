@@ -87,6 +87,11 @@ export const productContentSchema = z.object({
   stockStatus: z.enum(["instock", "outofstock"]),
   shortDescription: z.string().trim().min(5).max(500),
   description: z.string().trim().min(10).max(4000),
+  serviceMode: z.enum(["basic_redirect", "managed_redirect", "premium_landing_page"]).default("basic_redirect"),
+  requiresSubscription: z.boolean().default(false),
+  requiresLandingPage: z.boolean().default(false),
+  activationType: z.enum(["free_basic_activation", "managed_setup", "premium_hosted_activation"]).default("free_basic_activation"),
+  includedServiceLabel: z.string().trim().min(2).max(120).default("Free basic activation"),
   seoTitle: z.string().trim().max(180).optional(),
   seoDescription: z.string().trim().max(320).optional(),
   isActive: z.boolean()
