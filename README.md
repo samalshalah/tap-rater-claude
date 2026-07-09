@@ -286,8 +286,10 @@ No Stripe configuration is required for activation.
 
 ## Deployment Checklist
 
+- For Cloudflare, deploy this app as a Worker with OpenNext. Do not use the older Pages command `@cloudflare/next-on-pages`; Tap Rater has SSR pages, API routes, admin auth, activation, and redirect logic that should run through OpenNext on Workers.
 - Set required environment variables in the deployment platform.
 - Run `npm run build`.
+- Run `npm run cf:build` for the Cloudflare Worker bundle.
 - Run `npm test`.
 - Run `npm run smoke` against the local production server or deployed URL.
 - Test public product pages and category pages.
@@ -299,6 +301,28 @@ No Stripe configuration is required for activation.
 - Test admin product editing and requests inbox.
 - Confirm Supabase writes are working where persistence is expected.
 - Connect bank account and enable live Stripe only after explicit approval.
+
+Cloudflare Worker commands:
+
+```bash
+npm run cf:build
+npm run deploy
+```
+
+Set production secrets in Cloudflare Workers, not in Git:
+
+```bash
+npx wrangler secret put ADMIN_EMAIL
+npx wrangler secret put ADMIN_PASSWORD
+npx wrangler secret put ADMIN_SESSION_SECRET
+npx wrangler secret put CUSTOMER_SESSION_SECRET
+npx wrangler secret put NEXT_PUBLIC_SUPABASE_URL
+npx wrangler secret put SUPABASE_SERVICE_ROLE_KEY
+npx wrangler secret put RESEND_API_KEY
+npx wrangler secret put ORDER_NOTIFICATION_EMAIL
+```
+
+Stripe secrets should stay test-mode only until live checkout is explicitly approved.
 
 ## Known Not Live Yet
 
