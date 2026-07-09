@@ -306,6 +306,17 @@ Resolution:
 6. If `service_mode = premium_landing_page`, render the hosted landing page.
 7. If paused/retired, show support or inactive-device page.
 
+First implementation note:
+
+- The Next.js route is `src/app/r/[deviceCode]/page.tsx`.
+- Supabase lookup happens server-side only.
+- If Supabase is not configured, `TR-DEMO-GOOGLE` is available as a local demo device and opens activation.
+- Direct redirects only allow `http` and `https` destinations.
+- `javascript:` and `data:` destinations are rejected.
+- Tap events are attempted safely and must not block redirect behavior.
+- IP addresses should be hashed before storing in `tap_events`.
+- Premium landing pages currently render a placeholder until the hosted page renderer is built.
+
 Performance requirements:
 
 - Public redirects must be fast.
