@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import type { Metadata } from "next";
 import { ProductCard } from "@/components/product/product-card";
+import { getHomepageContent } from "@/lib/cms-repository";
 import { formatPrice, getActiveProducts, getProductPriceCents } from "@/lib/products";
 import { faqJsonLd, JsonLd, organizationJsonLd, websiteJsonLd } from "@/lib/seo";
 
@@ -87,7 +88,8 @@ const useCases = [
   }
 ];
 
-export default function HomePage() {
+export default async function HomePage() {
+  const homepage = await getHomepageContent();
   const products = getActiveProducts();
   const featured = products[0];
   const plate = products.find((product) => product.slug.includes("plate")) ?? products[1];
@@ -129,17 +131,17 @@ export default function HomePage() {
             <span className="rotate-180 text-xs font-black uppercase text-ink [writing-mode:vertical-rl]">Scroll to explore</span>
             <span className="h-20 w-px bg-ink" />
           </div>
-          <p className="text-sm font-black uppercase text-brand">Google Review NFC Stands</p>
-          <h1 className="mt-4 max-w-3xl text-5xl font-black leading-[1.06] text-ink md:text-7xl">Get more Google reviews with one tap.</h1>
+          <p className="text-sm font-black uppercase text-brand">{homepage.eyebrow}</p>
+          <h1 className="mt-4 max-w-3xl text-5xl font-black leading-[1.06] text-ink md:text-7xl">{homepage.heroTitle}</h1>
           <p className="mt-6 max-w-xl text-lg leading-8 text-muted md:text-xl">
-            Tap Rater NFC review stands and plates help customers open your Google review, Facebook review, Yelp review, or feedback link instantly.
+            {homepage.heroDescription}
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
-            <Link href="/shop" className="rounded-md bg-brand px-5 py-3 text-sm font-bold text-white">
-              Shop products
+            <Link href={homepage.primaryButtonHref} className="rounded-md bg-brand px-5 py-3 text-sm font-bold text-white">
+              {homepage.primaryButtonLabel}
             </Link>
-            <Link href="/setup-new-taprater" className="rounded-md border border-line px-5 py-3 text-sm font-bold text-ink">
-              Setup TapRater
+            <Link href={homepage.secondaryButtonHref} className="rounded-md border border-line px-5 py-3 text-sm font-bold text-ink">
+              {homepage.secondaryButtonLabel}
             </Link>
           </div>
           <div className="mt-8 grid max-w-xl grid-cols-3 gap-3 text-center text-sm">
@@ -159,7 +161,7 @@ export default function HomePage() {
         </div>
         <div className="relative min-h-[480px] lg:min-h-[700px]">
           <div className="absolute right-4 top-4 z-10 rounded-sm bg-accent px-4 py-3 text-xs font-black uppercase text-ink">
-            Best seller
+            {homepage.featuredBadge}
           </div>
           <div className="absolute right-5 top-1/2 z-10 hidden -translate-y-1/2 items-center gap-4 lg:flex">
             <span className="text-sm font-black text-ink">02</span>
@@ -176,7 +178,7 @@ export default function HomePage() {
             <Image src={plate.images[0].src} alt={plate.images[0].alt} fill className="object-contain" />
           </div>
           <div className="absolute bottom-0 left-8 right-8 z-10 border-l border-line bg-white/90 p-5 shadow-sm backdrop-blur sm:left-24 sm:right-20">
-            <p className="text-sm font-black uppercase text-brand">Featured Google Review Stand</p>
+            <p className="text-sm font-black uppercase text-brand">{homepage.featuredLabel}</p>
             <div className="mt-2 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
               <div>
                 <h2 className="text-xl font-black text-ink">{featured.title}</h2>

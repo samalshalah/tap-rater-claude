@@ -4,6 +4,7 @@
 
 This phase includes request storage, admin login, admin request views, and public forms.
 Stripe checkout and paid order storage are intentionally deferred to the final launch stage.
+The backend now also includes the first CMS foundation for editing homepage copy, page content records, and product records.
 
 ## Services
 
@@ -11,6 +12,7 @@ Stripe checkout and paid order storage are intentionally deferred to the final l
 - Resend can send request notifications when configured.
 - Next.js API routes validate and persist form submissions.
 - Admin access uses one signed HTTP-only cookie account from environment variables.
+- Admin CMS editors save homepage/page/product records to Supabase.
 
 ## Environment Variables
 
@@ -31,6 +33,7 @@ ADMIN_SESSION_SECRET=
 ## Database
 
 Run `supabase/schema.sql` in the Supabase SQL editor before using the forms in production.
+This creates request tables, product tables, `site_content`, and `media_assets`.
 
 ## Routes
 
@@ -41,6 +44,18 @@ Run `supabase/schema.sql` in the Supabase SQL editor before using the forms in p
 - `/admin`
 - `/admin/products`
 - `/admin/requests`
+- `/admin/content`
+- `/admin/content/homepage`
+- `/admin/content/pages`
+- `/admin/products/[slug]`
+
+## CMS Editing
+
+The homepage editor controls the homepage hero copy and buttons through the `site_content` record with key `homepage`.
+
+The page editor writes generic page records into `site_content` using keys such as `page:about-us`.
+
+The product editor writes product records into the `products` table. The storefront still uses local migrated product data as fallback until Supabase is configured and seeded.
 
 ## Local Behavior Without Supabase
 

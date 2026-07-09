@@ -1,6 +1,7 @@
 import { createHmac, timingSafeEqual } from "node:crypto";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { NextResponse } from "next/server";
 
 export const adminCookieName = "taprater_admin";
 
@@ -51,4 +52,15 @@ export async function requireAdmin() {
   if (!isValidAdminSession(session)) {
     redirect("/admin/login");
   }
+}
+
+export async function requireAdminApi() {
+  const cookieStore = await cookies();
+  const session = cookieStore.get(adminCookieName)?.value;
+
+  if (!isValidAdminSession(session)) {
+    return NextResponse.json({ error: "Admin authentication required." }, { status: 401 });
+  }
+
+  return null;
 }

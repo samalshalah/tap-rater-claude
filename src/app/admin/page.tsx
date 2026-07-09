@@ -9,6 +9,7 @@ export default async function AdminPage() {
       <p className="text-sm font-semibold uppercase text-brand">Admin</p>
       <h1 className="mt-3 text-4xl font-black text-ink">Tap Rater backend</h1>
       <div className="mt-8 grid gap-4 md:grid-cols-3">
+        <Link className="rounded-md border border-line bg-white p-5 font-bold text-ink shadow-sm" href="/admin/content">Website content</Link>
         <Link className="rounded-md border border-line bg-white p-5 font-bold text-ink shadow-sm" href="/admin/products">Products</Link>
         <Link className="rounded-md border border-line bg-white p-5 font-bold text-ink shadow-sm" href="/admin/requests">Requests</Link>
         <Link className="rounded-md border border-line bg-white p-5 font-bold text-ink shadow-sm" href="/admin/orders">Orders later</Link>

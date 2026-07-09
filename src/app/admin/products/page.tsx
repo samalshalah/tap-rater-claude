@@ -1,5 +1,6 @@
 import { requireAdmin } from "@/lib/admin-auth";
 import { formatPrice, getActiveProducts, getCategoryBySlug, getProductPriceCents } from "@/lib/products";
+import Link from "next/link";
 
 export default async function AdminProductsPage() {
   await requireAdmin();
@@ -8,7 +9,10 @@ export default async function AdminProductsPage() {
   return (
     <section className="mx-auto max-w-7xl px-4 py-12">
       <p className="text-sm font-semibold uppercase text-brand">Admin</p>
-      <h1 className="mt-3 text-4xl font-black text-ink">Products</h1>
+      <div className="mt-3 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+        <h1 className="text-4xl font-black text-ink">Products</h1>
+        <p className="text-sm leading-6 text-muted">Edit buttons save product records to Supabase when configured.</p>
+      </div>
       <div className="mt-8 overflow-x-auto rounded-md border border-line bg-white">
         <table className="w-full min-w-[760px] border-collapse text-left text-sm">
           <thead>
@@ -18,6 +22,7 @@ export default async function AdminProductsPage() {
               <th className="p-4">Category</th>
               <th className="p-4">Price</th>
               <th className="p-4">Stock</th>
+              <th className="p-4">Edit</th>
             </tr>
           </thead>
           <tbody>
@@ -28,6 +33,9 @@ export default async function AdminProductsPage() {
                 <td className="p-4 text-muted">{getCategoryBySlug(product.categorySlug)?.title ?? product.categorySlug}</td>
                 <td className="p-4 text-muted">{formatPrice(getProductPriceCents(product))}</td>
                 <td className="p-4 text-muted">{product.stockStatus}</td>
+                <td className="p-4">
+                  <Link className="font-bold text-brand" href={`/admin/products/${product.slug}`}>Edit</Link>
+                </td>
               </tr>
             ))}
           </tbody>
