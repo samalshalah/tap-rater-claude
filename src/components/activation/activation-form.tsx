@@ -1,9 +1,11 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import { GoogleBusinessSearch, type GoogleBusinessSelection } from "@/components/activation/google-business-search";
 
 type ActivationFormProps = {
   initialDeviceCode?: string;
+  googleMapsApiKey?: string;
 };
 
 type FormState = {
@@ -14,6 +16,9 @@ type FormState = {
   businessName: string;
   destinationType: string;
   destinationUrl: string;
+  googlePlaceId: string;
+  googlePlaceName: string;
+  googleFormattedAddress: string;
 };
 
 const destinationOptions = [
@@ -25,7 +30,7 @@ const destinationOptions = [
   { value: "social_url", label: "Social profile link" }
 ];
 
-export function ActivationForm({ initialDeviceCode = "" }: ActivationFormProps) {
+export function ActivationForm({ initialDeviceCode = "", googleMapsApiKey }: ActivationFormProps) {
   const [form, setForm] = useState<FormState>({
     deviceCode: initialDeviceCode,
     activationCode: "",
@@ -33,7 +38,10 @@ export function ActivationForm({ initialDeviceCode = "" }: ActivationFormProps) 
     name: "",
     businessName: "",
     destinationType: "google_review_url",
-    destinationUrl: ""
+    destinationUrl: "",
+    googlePlaceId: "",
+    googlePlaceName: "",
+    googleFormattedAddress: ""
   });
   const [status, setStatus] = useState<"idle" | "saving" | "success" | "error">("idle");
   const [message, setMessage] = useState("");
@@ -65,6 +73,17 @@ export function ActivationForm({ initialDeviceCode = "" }: ActivationFormProps) 
 
   function updateField(field: keyof FormState, value: string) {
     setForm((current) => ({ ...current, [field]: value }));
+  }
+
+  function useGoogleBusiness(place: GoogleBusinessSelection) {
+    setForm((current) => ({
+      ...current,
+      businessName: current.businessName.trim() ? current.businessName : place.name,
+      destinationUrl: place.reviewUrl,
+      googlePlaceId: place.placeId,
+      googlePlaceName: place.name,
+      googleFormattedAddress: place.formattedAddress
+    }));
   }
 
   return (
@@ -134,7 +153,16 @@ export function ActivationForm({ initialDeviceCode = "" }: ActivationFormProps) 
           Destination type
           <select
             value={form.destinationType}
-            onChange={(event) => updateField("destinationType", event.target.value)}
+            onChange={(event) => {
+              const destinationType = event.target.value;
+              setForm((current) => ({
+                ...current,
+                destinationType,
+                googlePlaceId: destinationType === "google_review_url" ? current.googlePlaceId : "",
+                googlePlaceName: destinationType === "google_review_url" ? current.googlePlaceName : "",
+                googleFormattedAddress: destinationType === "google_review_url" ? current.googleFormattedAddress : ""
+              }));
+            }}
             className="rounded-md border border-line px-4 py-3 text-sm font-medium outline-none focus:border-brand"
           >
             {destinationOptions.map((option) => (
@@ -150,13 +178,33 @@ export function ActivationForm({ initialDeviceCode = "" }: ActivationFormProps) 
             required
             type="url"
             value={form.destinationUrl}
-            onChange={(event) => updateField("destinationUrl", event.target.value)}
+            onChange={(event) =>
+              setForm((current) => ({
+                ...current,
+                destinationUrl: event.target.value,
+                googlePlaceId: "",
+                googlePlaceName: "",
+                googleFormattedAddress: ""
+              }))
+            }
             className="rounded-md border border-line px-4 py-3 text-sm font-medium outline-none focus:border-brand"
             placeholder="https://"
             inputMode="url"
           />
         </label>
       </div>
+
+      {form.destinationType === "google_review_url" ? (
+        <GoogleBusinessSearch apiKey={googleMapsApiKey} onConfirm={useGoogleBusiness} />
+      ) : null}
+
+      {form.googlePlaceId ? (
+        <div className="rounded-md border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-800">
+          <p className="font-bold">Google Business Profile selected</p>
+          <p>{form.googlePlaceName}</p>
+          {form.googleFormattedAddress ? <p>{form.googleFormattedAddress}</p> : null}
+        </div>
+      ) : null}
 
       {message ? (
         <div

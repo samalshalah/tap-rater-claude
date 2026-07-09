@@ -1,5 +1,6 @@
 import { createHash, timingSafeEqual } from "node:crypto";
 import { getSupabaseAdmin, hasSupabaseAdminConfig } from "@/lib/db";
+export { generateGoogleReviewUrl } from "@/lib/google-review";
 
 export type ActivationDestinationType =
   | "google_review_url"
@@ -19,6 +20,9 @@ export type ActivationInput = {
   businessName: string;
   destinationType: ActivationDestinationType;
   destinationUrl: string;
+  googlePlaceId?: string;
+  googlePlaceName?: string;
+  googleFormattedAddress?: string;
 };
 
 export type ActivationContext = {
@@ -134,11 +138,16 @@ export async function activateDeviceWithClient(
   const deviceCode = normalizeDeviceCode(input.deviceCode);
   const email = input.email.trim().toLowerCase();
   const name = input.name.trim();
-  const businessName = input.businessName.trim();
+  const businessName = input.businessName.trim() || input.googlePlaceName?.trim() || "";
   const destinationUrl = input.destinationUrl.trim();
 
   if (!deviceCode) {
     return failure("invalid_device_code", "Please enter a valid Tap Rater device code.");
+  }
+
+  if (!businessName) {
+    await logActivationAttempt(client, { deviceCode, email, ipHash: context.ipHash, success: false, reason: "missing_business_name" });
+    return failure("invalid_device", "Please enter or select a business name.");
   }
 
   if (!validateActivationDestinationUrl(destinationUrl)) {
@@ -170,7 +179,11 @@ export async function activateDeviceWithClient(
   }
 
   const customer = await createOrFindCustomerByEmail(client, email, name);
-  const business = await createOrFindBusiness(client, customer.id, businessName, input.destinationType, destinationUrl);
+  const business = await createOrFindBusiness(client, customer.id, businessName, input.destinationType, destinationUrl, {
+    googlePlaceId: input.googlePlaceId,
+    googlePlaceName: input.googlePlaceName,
+    googleFormattedAddress: input.googleFormattedAddress
+  });
   const platformDestinationType = normalizeDestinationType(input.destinationType);
 
   const { error: deviceUpdateError } = await client
@@ -222,7 +235,8 @@ export async function createOrFindBusiness(
   customerId: string,
   businessName: string,
   destinationType: ActivationDestinationType,
-  destinationUrl: string
+  destinationUrl: string,
+  googlePlace?: { googlePlaceId?: string; googlePlaceName?: string; googleFormattedAddress?: string }
 ): Promise<BusinessRow> {
   const { data: existing } = await client
     .from("businesses")
@@ -231,11 +245,17 @@ export async function createOrFindBusiness(
     .eq("business_name", businessName)
     .maybeSingle();
   const destinationColumn = businessDestinationColumn(destinationType);
+  const googleFields =
+    destinationType === "google_review_url" && googlePlace?.googlePlaceId
+      ? {
+          google_place_id: googlePlace.googlePlaceId.trim()
+        }
+      : {};
 
   if (existing?.id) {
     const { error } = await client
       .from("businesses")
-      .update({ [destinationColumn]: destinationUrl, status: "active", updated_at: new Date().toISOString() })
+      .update({ [destinationColumn]: destinationUrl, ...googleFields, status: "active", updated_at: new Date().toISOString() })
       .eq("id", existing.id);
     if (error) {
       throw new Error("Business could not be updated.");
@@ -249,6 +269,7 @@ export async function createOrFindBusiness(
       customer_id: customerId,
       business_name: businessName,
       [destinationColumn]: destinationUrl,
+      ...googleFields,
       status: "active"
     })
     .select("*")

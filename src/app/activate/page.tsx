@@ -15,6 +15,7 @@ type ActivatePageProps = {
 export default async function ActivatePage({ searchParams }: ActivatePageProps) {
   const params = await searchParams;
   const deviceCode = typeof params?.device === "string" ? params.device : "";
+  const googleMapsApiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
 
   return (
     <main className="bg-soft">
@@ -46,7 +47,7 @@ export default async function ActivatePage({ searchParams }: ActivatePageProps) 
           </div>
         </div>
 
-        <ActivationForm initialDeviceCode={deviceCode} />
+        <ActivationForm initialDeviceCode={deviceCode} googleMapsApiKey={googleMapsApiKey} />
       </section>
     </main>
   );

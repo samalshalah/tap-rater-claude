@@ -79,6 +79,23 @@ NEXT_PUBLIC_SITE_URL=
 
 Use the production domain for deployment, for example `https://taprater.com`.
 
+### Google Business Search
+
+Google Business Profile search on `/activate` uses a browser-visible Google Maps JavaScript API key:
+
+```env
+NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=
+```
+
+This key is public by design, so lock it down before using it outside local testing:
+
+- Restrict the key to the Tap Rater domains that can load activation, such as `https://taprater.com/*` and the approved preview domains.
+- Restrict the key to only the needed Google Maps Platform APIs, currently Maps JavaScript API and Places API.
+- Set daily quota and billing alerts for Places Autocomplete usage.
+- Rotate any old key that was exposed without domain, API, or quota restrictions.
+
+The activation flow requests only `place_id`, `name`, and `formatted_address` from Places Autocomplete, restricted to US establishments.
+
 ### Future Stripe Variables
 
 Stripe is final-stage work and is not required for the current build.

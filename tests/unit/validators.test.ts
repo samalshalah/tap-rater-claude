@@ -50,6 +50,23 @@ describe("backend validators", () => {
     expect(form.destinationType).toBe("google_review_url");
   });
 
+  it("accepts selected Google place metadata on activation", () => {
+    const form = activationFormSchema.parse({
+      deviceCode: "TR123",
+      activationCode: "private-code",
+      email: "customer@example.com",
+      name: "Customer",
+      businessName: "",
+      destinationType: "google_review_url",
+      destinationUrl: "https://search.google.com/local/writereview?placeid=ChIJLocalShop",
+      googlePlaceId: "ChIJLocalShop",
+      googlePlaceName: "Local Shop",
+      googleFormattedAddress: "123 Main St, Phoenix, AZ"
+    });
+
+    expect(form.googlePlaceId).toBe("ChIJLocalShop");
+  });
+
   it("rejects unsafe activation destination URLs", () => {
     expect(() =>
       activationFormSchema.parse({

@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 import {
   activateDeviceWithClient,
+  generateGoogleReviewUrl,
   hashActivationCode,
   normalizeDeviceCode,
   normalizeDestinationType,
@@ -30,6 +31,10 @@ describe("device activation", () => {
     expect(validateActivationDestinationUrl("javascript:alert(1)")).toBe(false);
     expect(validateActivationDestinationUrl("data:text/html,test")).toBe(false);
     expect(validateActivationDestinationUrl("not-a-url")).toBe(false);
+  });
+
+  it("generates Google review links from place IDs", () => {
+    expect(generateGoogleReviewUrl("ChIJ-test place")).toBe("https://search.google.com/local/writereview?placeid=ChIJ-test%20place");
   });
 
   it("maps activation destination types to platform destination types", () => {
@@ -80,6 +85,38 @@ describe("device activation", () => {
       email: "owner@example.com",
       success: true,
       reason: "activated"
+    });
+  });
+
+  it("saves selected Google place data and uses the place name when business name is blank", async () => {
+    const db = createActivationDb({
+      devices: [
+        {
+          id: "device-1",
+          device_code: "TR123",
+          activation_code_hash: hashActivationCode("PRIVATE-1"),
+          status: "unactivated"
+        }
+      ]
+    });
+
+    await activateDeviceWithClient(db.client, {
+      deviceCode: "TR123",
+      activationCode: "PRIVATE-1",
+      email: "owner@example.com",
+      name: "Owner Name",
+      businessName: "",
+      destinationType: "google_review_url",
+      destinationUrl: generateGoogleReviewUrl("ChIJLocalShop"),
+      googlePlaceId: "ChIJLocalShop",
+      googlePlaceName: "Local Shop From Google",
+      googleFormattedAddress: "123 Main St, Phoenix, AZ"
+    });
+
+    expect(db.inserted.businesses[0]).toMatchObject({
+      business_name: "Local Shop From Google",
+      google_place_id: "ChIJLocalShop",
+      google_review_url: "https://search.google.com/local/writereview?placeid=ChIJLocalShop"
     });
   });
 
