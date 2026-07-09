@@ -75,7 +75,12 @@ export default function HomePage() {
   return (
     <div>
       <section className="mx-auto grid max-w-7xl gap-10 px-4 py-12 md:py-16 lg:grid-cols-[1fr_520px] lg:items-center">
-        <div>
+        <div className="relative">
+          <div className="absolute -left-12 top-44 hidden h-64 flex-col items-center gap-3 lg:flex">
+            <span className="h-20 w-px bg-ink" />
+            <span className="rotate-180 text-xs font-black uppercase text-ink [writing-mode:vertical-rl]">Scroll to explore</span>
+            <span className="h-20 w-px bg-ink" />
+          </div>
           <p className="text-sm font-semibold uppercase text-brand">Tap Rater NFC Products</p>
           <h1 className="mt-3 text-4xl font-bold leading-tight text-ink md:text-6xl">Get more customer reviews with one tap.</h1>
           <p className="mt-5 max-w-2xl text-lg leading-8 text-muted">
@@ -104,9 +109,14 @@ export default function HomePage() {
             </div>
           </div>
         </div>
-        <div className="relative overflow-hidden rounded-md bg-gray-50 p-5 md:p-8">
+        <div className="relative overflow-hidden bg-gray-50 p-5 md:p-8">
           <div className="absolute right-4 top-4 rounded-md bg-accent px-3 py-2 text-xs font-bold text-ink">
             Best seller
+          </div>
+          <div className="absolute right-5 top-1/2 hidden -translate-y-1/2 items-center gap-4 lg:flex">
+            <span className="text-sm font-black text-ink">01</span>
+            <span className="h-28 w-px bg-ink" />
+            <span className="text-sm font-black text-muted">04</span>
           </div>
           <div className="relative aspect-square">
             <Image src={featured.images[0].src} alt={featured.images[0].alt} fill priority className="object-contain p-8" />
@@ -121,18 +131,25 @@ export default function HomePage() {
       </section>
 
       <section className="border-y border-line bg-white">
-        <div className="mx-auto grid max-w-7xl gap-4 px-4 py-8 md:grid-cols-3">
+        <div className="mx-auto max-w-7xl px-4 py-14">
+          <div className="mb-8 text-center">
+            <p className="text-sm font-black uppercase text-brand">Product Categories</p>
+            <h2 className="mt-3 text-3xl font-black text-ink">Shop by Tap Rater type</h2>
+            <p className="mx-auto mt-3 max-w-xl text-muted">Choose the countertop format that matches where your customers are most likely to leave a review.</p>
+          </div>
+          <div className="grid gap-5 md:grid-cols-3">
           {categories.map((category) => (
-            <Link key={category.title} href={category.href} className="grid grid-cols-[96px_1fr] items-center gap-4 rounded-md border border-line p-4 transition hover:border-brand hover:shadow-md">
-              <div className="relative aspect-square rounded-md bg-gray-50">
-                <Image src={category.image} alt={category.alt} fill className="object-contain p-2" />
+            <Link key={category.title} href={category.href} className="group block border border-line bg-white p-5 transition hover:-translate-y-1 hover:shadow-xl">
+              <div className="relative aspect-[4/3] bg-gray-50">
+                <Image src={category.image} alt={category.alt} fill className="object-contain p-5 transition group-hover:scale-105" />
               </div>
-              <div>
+              <div className="mt-5">
                 <h2 className="font-bold text-ink">{category.title}</h2>
                 <p className="mt-1 text-sm leading-6 text-muted">{category.copy}</p>
               </div>
             </Link>
           ))}
+          </div>
         </div>
       </section>
 
