@@ -309,6 +309,21 @@ npm run cf:build
 npm run deploy
 ```
 
+GitHub-to-Cloudflare deployment is configured in:
+
+```text
+.github/workflows/deploy-cloudflare-worker.yml
+```
+
+It runs on every push to `nextjs-commerce` and can also be started manually from GitHub Actions. Add these GitHub repository secrets before relying on automatic deploys:
+
+```text
+CLOUDFLARE_ACCOUNT_ID
+CLOUDFLARE_API_TOKEN
+```
+
+The API token should be scoped to deploy the `tap-rater-app` Worker. Do not use the normal Cloudflare password or commit token values to the repo.
+
 Set production secrets in Cloudflare Workers, not in Git:
 
 ```bash
