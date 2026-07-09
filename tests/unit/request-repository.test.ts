@@ -1,5 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 import {
+  getAdminRequestsFromClient,
   saveChangeLinkRequest,
   saveContactRequest,
   saveSetupRequest,
@@ -70,5 +71,67 @@ describe("request repository", () => {
       new_review_url: "https://example.com/new-review",
       notes: "Use this new link."
     });
+  });
+
+  it("loads all admin request tables newest first", async () => {
+    const tables: Record<string, unknown[]> = {
+      contact_requests: [
+        {
+          id: "contact-1",
+          name: "Contact Customer",
+          email: "contact@example.com",
+          message: "I need help.",
+          status: "new",
+          created_at: "2026-07-09T12:00:00.000Z"
+        }
+      ],
+      setup_requests: [
+        {
+          id: "setup-1",
+          name: "Setup Customer",
+          email: "setup@example.com",
+          business_name: "Local Shop",
+          review_url: "https://example.com/review",
+          notes: "Need setup.",
+          created_at: "2026-07-09T11:00:00.000Z"
+        }
+      ],
+      change_link_requests: [
+        {
+          id: "change-1",
+          name: "Change Customer",
+          email: "change@example.com",
+          taprater_id: "TRATER01-W",
+          new_review_url: "https://example.com/new",
+          notes: "Change link.",
+          status: "open",
+          created_at: "2026-07-09T10:00:00.000Z"
+        }
+      ]
+    };
+    const order = vi.fn((column: string, options: { ascending: boolean }) => {
+      expect(column).toBe("created_at");
+      expect(options).toEqual({ ascending: false });
+      return Promise.resolve({ data: tables[currentTable], error: null });
+    });
+    let currentTable = "";
+    const client = {
+      from(table: string) {
+        currentTable = table;
+        return {
+          select(columns?: string) {
+            expect(columns).toBe("*");
+            return { order };
+          }
+        };
+      }
+    };
+
+    const requests = await getAdminRequestsFromClient(client);
+
+    expect(requests.contacts[0]).toMatchObject({ name: "Contact Customer", status: "new" });
+    expect(requests.setups[0]).toMatchObject({ businessName: "Local Shop", reviewUrl: "https://example.com/review" });
+    expect(requests.linkChanges[0]).toMatchObject({ tapraterId: "TRATER01-W", status: "open" });
+    expect(order).toHaveBeenCalledTimes(3);
   });
 });
