@@ -1,7 +1,24 @@
 import Link from "next/link";
 import Image from "next/image";
+import type { Metadata } from "next";
 import { ProductCard } from "@/components/product/product-card";
 import { formatPrice, getActiveProducts, getProductPriceCents } from "@/lib/products";
+import { faqJsonLd, JsonLd, organizationJsonLd, websiteJsonLd } from "@/lib/seo";
+
+export const metadata: Metadata = {
+  title: "Google Review NFC Stands, Plates and Tap Cards",
+  description:
+    "Shop Tap Rater NFC review stands and plates for Google reviews, Facebook reviews, Yelp reviews, customer feedback, and local business reputation growth.",
+  alternates: {
+    canonical: "/"
+  },
+  openGraph: {
+    title: "Google Review NFC Stands and Plates | Tap Rater",
+    description:
+      "Help customers tap their phone to open your review link. Built for restaurants, salons, clinics, retail stores, and local service businesses.",
+    url: "/"
+  }
+};
 
 const platformBlocks = [
   {
@@ -22,24 +39,51 @@ const platformBlocks = [
 ];
 
 const benefits = [
-  "No app required for customers",
-  "Works on modern NFC-enabled phones",
-  "Reusable hardware with changeable links",
-  "Good fit for counters, checkout desks, salons, clinics, and restaurants"
+  "Reduce friction when asking customers for a Google review",
+  "No app required for customers on modern NFC-enabled phones",
+  "Reusable hardware with changeable review links",
+  "Good fit for counters, checkout desks, salons, clinics, restaurants, cafes, and repair shops"
 ];
 
 const faqs = [
   {
+    question: "What is an NFC review stand?",
+    answer:
+      "An NFC review stand is a countertop display with an NFC chip inside. Customers tap their phone on the stand and it opens your Google review, Facebook review, Yelp review, survey, or feedback link."
+  },
+  {
     question: "Can Tap Rater open my Google review link?",
-    answer: "Yes. During setup, you provide the review link you want customers to open."
+    answer:
+      "Yes. Tap Rater can be configured to open your Google review link so customers can leave a review from the counter, reception desk, table, checkout area, or service desk."
   },
   {
-    question: "Can I change the link later?",
-    answer: "Yes. Use the Change TapRater Link request page when your destination needs to be updated."
+    question: "Can I change the review link later?",
+    answer:
+      "Yes. Tap Rater products are designed for reusable review links. If your Google, Facebook, Yelp, or custom feedback destination changes, you can request a link update."
   },
   {
-    question: "Do customers need to install anything?",
-    answer: "No. Customers tap with their phone and open the link in the browser."
+    question: "Do customers need to install an app?",
+    answer:
+      "No. Customers do not need a special app. Modern NFC-enabled phones can open the review link in the browser after a tap."
+  }
+];
+
+const useCases = [
+  {
+    title: "Restaurants and cafes",
+    copy: "Place a Google review NFC stand at checkout, the host stand, or the pickup counter so guests can review while the experience is fresh."
+  },
+  {
+    title: "Salons, spas, and clinics",
+    copy: "Use a review stand at reception to help satisfied clients quickly open your review link after an appointment."
+  },
+  {
+    title: "Retail and repair shops",
+    copy: "Make it easy for customers to leave a review after a purchase, repair pickup, consultation, or support visit."
+  },
+  {
+    title: "Local service businesses",
+    copy: "Use Tap Rater as a portable review request tool for offices, service desks, counters, events, and customer-facing teams."
   }
 ];
 
@@ -74,6 +118,9 @@ export default function HomePage() {
 
   return (
     <div>
+      <JsonLd data={organizationJsonLd()} />
+      <JsonLd data={websiteJsonLd()} />
+      <JsonLd data={faqJsonLd(faqs)} />
       <section className="relative overflow-hidden bg-white">
         <div className="mx-auto grid min-h-[calc(100vh-80px)] max-w-[1440px] gap-8 px-4 py-12 sm:px-6 md:py-16 lg:grid-cols-[minmax(0,610px)_1fr] lg:items-center lg:px-10">
         <div className="relative z-10">
@@ -82,10 +129,10 @@ export default function HomePage() {
             <span className="rotate-180 text-xs font-black uppercase text-ink [writing-mode:vertical-rl]">Scroll to explore</span>
             <span className="h-20 w-px bg-ink" />
           </div>
-          <p className="text-sm font-black uppercase text-brand">Tap Rater NFC Products</p>
-          <h1 className="mt-4 max-w-3xl text-5xl font-black leading-[1.06] text-ink md:text-7xl">Get more customer reviews with one tap.</h1>
+          <p className="text-sm font-black uppercase text-brand">Google Review NFC Stands</p>
+          <h1 className="mt-4 max-w-3xl text-5xl font-black leading-[1.06] text-ink md:text-7xl">Get more Google reviews with one tap.</h1>
           <p className="mt-6 max-w-xl text-lg leading-8 text-muted md:text-xl">
-            Tap Rater stands and plates help customers open your Google, Facebook, Yelp, or feedback link instantly.
+            Tap Rater NFC review stands and plates help customers open your Google review, Facebook review, Yelp review, or feedback link instantly.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Link href="/shop" className="rounded-md bg-brand px-5 py-3 text-sm font-bold text-white">
@@ -129,7 +176,7 @@ export default function HomePage() {
             <Image src={plate.images[0].src} alt={plate.images[0].alt} fill className="object-contain" />
           </div>
           <div className="absolute bottom-0 left-8 right-8 z-10 border-l border-line bg-white/90 p-5 shadow-sm backdrop-blur sm:left-24 sm:right-20">
-            <p className="text-sm font-black uppercase text-brand">Featured Tap Rater</p>
+            <p className="text-sm font-black uppercase text-brand">Featured Google Review Stand</p>
             <div className="mt-2 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
               <div>
                 <h2 className="text-xl font-black text-ink">{featured.title}</h2>
@@ -147,7 +194,7 @@ export default function HomePage() {
           <div className="mb-8 text-center">
             <p className="text-sm font-black uppercase text-brand">Product Categories</p>
             <h2 className="mt-3 text-3xl font-black text-ink">Shop by Tap Rater type</h2>
-            <p className="mx-auto mt-3 max-w-xl text-muted">Choose the countertop format that matches where your customers are most likely to leave a review.</p>
+            <p className="mx-auto mt-3 max-w-xl text-muted">Choose the Google review stand, NFC review plate, or business bundle that matches where your customers are most likely to leave a review.</p>
           </div>
           <div className="grid gap-5 md:grid-cols-3">
           {categories.map((category) => (
@@ -168,13 +215,13 @@ export default function HomePage() {
       <section className="mx-auto grid max-w-7xl gap-10 px-4 py-14 lg:grid-cols-[360px_1fr]">
         <div>
           <p className="text-sm font-semibold uppercase text-brand">How Tap Rater works</p>
-          <h2 className="mt-3 text-3xl font-bold text-ink">A simpler review request at the exact right moment.</h2>
+          <h2 className="mt-3 text-3xl font-bold text-ink">A simpler Google review request at the exact right moment.</h2>
         </div>
         <div className="grid gap-4 md:grid-cols-3">
           {[
-            ["1", "Choose the product", "Pick the stand, plate, or bundle that fits your customer flow."],
-            ["2", "Send your review link", "Use setup to connect your Google, Facebook, Yelp, or custom destination."],
-            ["3", "Customers tap and review", "Place Tap Rater where customers already check out or interact with staff."]
+            ["1", "Choose the NFC review product", "Pick the stand, plate, or bundle that fits your customer flow."],
+            ["2", "Send your review link", "Use setup to connect your Google review link, Facebook review link, Yelp link, or custom feedback page."],
+            ["3", "Customers tap and review", "Place Tap Rater where customers already check out, finish service, or interact with staff."]
           ].map(([step, title, copy]) => (
             <article key={step} className="rounded-md border border-line p-5">
               <span className="grid h-9 w-9 place-items-center rounded-md bg-brand text-sm font-bold text-white">{step}</span>
@@ -210,6 +257,26 @@ export default function HomePage() {
         </div>
       </section>
 
+      <section className="bg-white">
+        <div className="mx-auto max-w-7xl px-4 py-14">
+          <div className="max-w-3xl">
+            <p className="text-sm font-semibold uppercase text-brand">Who uses Tap Rater?</p>
+            <h2 className="mt-3 text-3xl font-bold text-ink">NFC review stands for local businesses that depend on trust.</h2>
+            <p className="mt-4 text-muted">
+              Customers searching for your business often compare Google reviews, Yelp reviews, and social proof before they call, book, or visit. Tap Rater helps make review collection part of the customer experience instead of a follow-up chore.
+            </p>
+          </div>
+          <div className="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+            {useCases.map((useCase) => (
+              <article key={useCase.title} className="border border-line p-5">
+                <h3 className="font-bold text-ink">{useCase.title}</h3>
+                <p className="mt-2 text-sm leading-6 text-muted">{useCase.copy}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
       <section className="bg-gray-50">
         <div className="mx-auto max-w-7xl px-4 py-12">
           <h2 className="text-2xl font-bold text-ink">Popular products</h2>
@@ -223,8 +290,8 @@ export default function HomePage() {
 
       <section className="mx-auto grid max-w-7xl gap-8 px-4 py-14 lg:grid-cols-[1fr_420px] lg:items-center">
         <div className="rounded-md bg-ink p-8 text-white">
-          <p className="text-sm font-semibold uppercase text-accent">Bundle highlight</p>
-          <h2 className="mt-3 text-3xl font-bold">{bundle.title}</h2>
+          <p className="text-sm font-semibold uppercase text-accent">Google review bundle</p>
+          <h2 className="mt-3 text-3xl font-bold">Google Review NFC Bundle for More Customer Touchpoints</h2>
           <p className="mt-4 leading-7 text-gray-300">{bundle.description}</p>
           <div className="mt-6 flex items-center gap-4">
             <p className="text-3xl font-bold">{formatPrice(getProductPriceCents(bundle))}</p>

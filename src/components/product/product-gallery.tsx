@@ -6,7 +6,7 @@ export function ProductGallery({ product }: { product: MigratedProduct }) {
 
   return (
     <div className="relative aspect-square rounded-md border border-line bg-gray-50">
-      <Image src={image.src} alt={image.alt} fill priority className="object-contain p-8" />
+      <Image src={image.src} alt={image.alt} fill priority unoptimized className="object-contain p-8" />
     </div>
   );
 }
