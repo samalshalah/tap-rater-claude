@@ -50,39 +50,34 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
 
   return (
     <>
-      <section className="border-b border-line bg-gray-50">
-        <div className="mx-auto max-w-7xl px-4 py-12">
-          <Link href="/shop" className="text-sm font-bold text-brand">
-            Shop all products
+      <section className="border-b border-line bg-white py-16 sm:py-20">
+        <div className="mx-auto max-w-[1100px] px-6">
+          <Link href="/shop" className="text-[13px] font-medium text-brand hover:text-brand-dark">
+            &lsaquo; Shop all products
           </Link>
-          <p className="mt-6 text-sm font-semibold uppercase text-brand">{category.eyebrow}</p>
-          <h1 className="mt-3 max-w-4xl text-4xl font-black leading-tight text-ink md:text-5xl">{category.title}</h1>
-          <p className="mt-5 max-w-3xl text-lg leading-8 text-muted">{category.description}</p>
-          <div className="mt-6 grid gap-3 rounded-md border border-line bg-white p-5 md:grid-cols-[0.7fr_1.3fr]">
-            <p className="text-sm font-bold uppercase text-ink">Best for</p>
-            <p className="text-sm leading-6 text-muted">{category.buyerIntent}</p>
-          </div>
-          <div className="mt-4 grid gap-3 rounded-md border border-line bg-white p-5 md:grid-cols-[0.7fr_1.3fr]">
-            <p className="text-sm font-bold uppercase text-ink">Service expectation</p>
-            <p className="text-sm leading-6 text-muted">{category.seoCopy}</p>
+          <h1 className="mt-6 max-w-2xl text-[34px] font-semibold tracking-tightest text-ink sm:text-[44px]">{category.title}</h1>
+          <p className="mt-4 max-w-2xl text-[15px] leading-6 text-muted">{category.description}</p>
+          <div className="mt-8 grid gap-3 sm:grid-cols-2">
+            <div className="rounded-2xl bg-surface p-5">
+              <p className="text-[12px] font-medium uppercase tracking-[0.06em] text-muted">Best for</p>
+              <p className="mt-2 text-[14px] leading-5 text-ink">{category.buyerIntent}</p>
+            </div>
+            <div className="rounded-2xl bg-surface p-5">
+              <p className="text-[12px] font-medium uppercase tracking-[0.06em] text-muted">Service expectation</p>
+              <p className="mt-2 text-[14px] leading-5 text-ink">{category.seoCopy}</p>
+            </div>
           </div>
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-4 py-12">
-        <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
-          <div>
-            <p className="text-sm font-semibold uppercase text-brand">{products.length} products</p>
-            <h2 className="mt-2 text-3xl font-black text-ink">Shop {category.title.toLowerCase()}</h2>
+      <section className="bg-white py-16 sm:py-20">
+        <div className="mx-auto max-w-[1100px] px-6">
+          <p className="text-[13px] text-muted">{products.length} products</p>
+          <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {products.map((product) => (
+              <ProductCard key={product.slug} product={product} />
+            ))}
           </div>
-          <p className="max-w-xl text-sm leading-6 text-muted">
-            These products are selected for the same customer action first. Choose the stand format for a more visible tabletop display, or the plate format for counters, desks, tables, and reception areas.
-          </p>
-        </div>
-        <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {products.map((product) => (
-            <ProductCard key={product.slug} product={product} />
-          ))}
         </div>
       </section>
     </>

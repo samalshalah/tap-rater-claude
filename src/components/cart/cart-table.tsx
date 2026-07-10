@@ -42,9 +42,9 @@ export function CartTable() {
 
   if (rows.length === 0) {
     return (
-      <div className="rounded-md border border-line p-8 text-center">
-        <p className="text-muted">Your cart is empty.</p>
-        <Link href="/shop" className="mt-5 inline-block rounded-md bg-brand px-5 py-3 text-sm font-bold text-white">
+      <div className="rounded-2xl bg-surface p-10 text-center">
+        <p className="text-[15px] text-muted">Your cart is empty.</p>
+        <Link href="/shop" className="mt-5 inline-flex rounded-full bg-ink px-6 py-3 text-[14px] font-medium text-white transition hover:bg-brand">
           Shop products
         </Link>
       </div>
@@ -54,66 +54,66 @@ export function CartTable() {
   return (
     <div className="grid gap-5">
       {rows.map((row) => (
-        <div key={row.product.slug} className="grid gap-4 border-b border-line py-4 md:grid-cols-[1fr_auto_auto] md:items-center">
+        <div key={row.product.slug} className="grid gap-4 border-b border-line py-5 md:grid-cols-[1fr_auto_auto] md:items-center">
           <div>
-            <p className="font-semibold text-ink">{row.product.title}</p>
-            <p className="text-sm text-muted">{formatPrice(row.unitPriceCents)} each</p>
+            <p className="text-[15px] font-medium text-ink">{row.product.title}</p>
+            <p className="text-[13px] text-muted">{formatPrice(row.unitPriceCents)} each</p>
           </div>
-          <div className="flex h-11 w-fit items-center overflow-hidden rounded-md border border-line">
+          <div className="flex h-10 w-fit items-center overflow-hidden rounded-full border border-line">
             <button
               type="button"
               aria-label={`Decrease ${row.product.title} quantity`}
-              className="grid h-11 w-11 place-items-center text-ink hover:bg-gray-50 disabled:cursor-not-allowed disabled:text-muted"
+              className="grid h-10 w-10 place-items-center text-ink transition hover:bg-surface disabled:cursor-not-allowed disabled:text-muted"
               disabled={row.item.quantity <= 1}
               onClick={() => decreaseItem(row.product.slug)}
             >
-              <Minus size={16} />
+              <Minus size={14} />
             </button>
-            <span className="grid h-11 min-w-12 place-items-center border-x border-line px-3 text-sm font-black text-ink">
+            <span className="grid h-10 min-w-10 place-items-center text-[13px] font-medium text-ink">
               {row.item.quantity}
             </span>
             <button
               type="button"
               aria-label={`Increase ${row.product.title} quantity`}
-              className="grid h-11 w-11 place-items-center text-ink hover:bg-gray-50"
+              className="grid h-10 w-10 place-items-center text-ink transition hover:bg-surface"
               onClick={() => increaseItem(row.product.slug)}
             >
-              <Plus size={16} />
+              <Plus size={14} />
             </button>
           </div>
-          <div className="flex items-center justify-between gap-4 md:min-w-44 md:justify-end">
+          <div className="flex items-center justify-between gap-4 md:min-w-40 md:justify-end">
             <div className="text-right">
-              <p className="text-xs font-bold uppercase text-muted">Subtotal</p>
-              <p className="font-black text-ink">{formatPrice(row.lineSubtotalCents)}</p>
+              <p className="text-[12px] text-muted">Subtotal</p>
+              <p className="text-[15px] font-medium text-ink">{formatPrice(row.lineSubtotalCents)}</p>
             </div>
             <button
               type="button"
               aria-label={`Remove ${row.product.title}`}
-              className="grid h-10 w-10 place-items-center rounded-md border border-line text-brand hover:bg-gray-50"
+              className="grid h-9 w-9 place-items-center rounded-full text-muted transition hover:bg-surface hover:text-ink"
               onClick={() => removeItem(row.product.slug)}
             >
-              <Trash2 size={17} />
+              <Trash2 size={16} />
             </button>
           </div>
         </div>
       ))}
-      <div className="flex items-center justify-between text-xl font-bold">
+      <div className="flex items-center justify-between pt-2 text-[17px] font-medium text-ink">
         <span>Total</span>
         <span>{formatPrice(total)}</span>
       </div>
       <button
         type="button"
         disabled={isCheckingOut}
-        className="rounded-md bg-brand px-5 py-3 text-sm font-bold text-white disabled:cursor-not-allowed disabled:bg-gray-300"
+        className="rounded-full bg-ink px-6 py-3.5 text-[15px] font-medium text-white transition hover:bg-brand disabled:cursor-not-allowed disabled:bg-line"
         onClick={startCheckout}
       >
         {isCheckingOut ? "Starting Stripe test checkout..." : "Checkout with Stripe test mode"}
       </button>
-      <p className="text-sm leading-6 text-muted">
+      <p className="text-[13px] leading-5 text-muted">
         Test mode only. Use Stripe test cards; live payments stay disabled until explicitly approved.
       </p>
       {checkoutError ? (
-        <p className="rounded-md border border-amber-200 bg-amber-50 p-3 text-sm font-semibold text-ink">{checkoutError}</p>
+        <p className="rounded-xl bg-amber-50 p-3 text-[13px] font-medium text-ink">{checkoutError}</p>
       ) : null}
     </div>
   );

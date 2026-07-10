@@ -103,320 +103,256 @@ export default async function ProductPage({ params }: ProductPageProps) {
     <>
       <JsonLd data={productJsonLd(product)} />
       <JsonLd data={faqJsonLd(productFaqs)} />
+
       <section className="border-b border-line bg-white">
-        <div className="mx-auto grid max-w-7xl gap-10 px-4 py-10 lg:grid-cols-[0.95fr_1.05fr] lg:py-14">
+        <div className="mx-auto grid max-w-[1100px] gap-10 px-6 py-12 lg:grid-cols-[0.95fr_1.05fr] lg:py-16">
           <ProductGallery product={product} />
           <div>
-            <div className="flex flex-wrap items-center gap-2 text-sm font-semibold">
-              <Link href="/shop" className="text-brand">Shop</Link>
+            <div className="flex flex-wrap items-center gap-2 text-[13px] text-muted">
+              <Link href="/shop" className="text-brand hover:text-brand-dark">Shop</Link>
               {category ? (
                 <>
-                  <span className="text-muted">/</span>
-                  <Link href={`/category/${category.slug}`} className="text-brand">{category.title}</Link>
+                  <span>/</span>
+                  <Link href={`/category/${category.slug}`} className="text-brand hover:text-brand-dark">{category.title}</Link>
                 </>
               ) : null}
             </div>
 
-            <div className="mt-6 rounded-md border border-line bg-white p-5 shadow-sm md:p-7">
-              <div className="flex flex-wrap items-center gap-2">
-                <span className={product.stockStatus === "instock" ? "rounded-full bg-teal-50 px-3 py-1 text-xs font-black uppercase text-brand" : "rounded-full bg-gray-100 px-3 py-1 text-xs font-black uppercase text-muted"}>
-                  {product.stockStatus === "instock" ? "In stock" : "Out of stock"}
-                </span>
-                <span className="rounded-full bg-gray-100 px-3 py-1 text-xs font-black uppercase text-muted">{destination}</span>
-                <span className="rounded-full bg-gray-100 px-3 py-1 text-xs font-black uppercase text-muted">SKU {product.sku}</span>
-              </div>
-              <div className="mt-4 flex flex-wrap gap-2">
-                {serviceBadges.map((badge) => (
-                  <span key={badge} className="rounded-full bg-teal-50 px-3 py-1 text-xs font-black uppercase text-brand">
-                    {badge}
-                  </span>
-                ))}
-              </div>
+            <div className="mt-4 flex flex-wrap items-center gap-2">
+              <span className={product.stockStatus === "instock" ? "rounded-full bg-brand/10 px-3 py-1 text-[11px] font-medium uppercase tracking-wide text-brand" : "rounded-full bg-surface px-3 py-1 text-[11px] font-medium uppercase tracking-wide text-muted"}>
+                {product.stockStatus === "instock" ? "In stock" : "Out of stock"}
+              </span>
+              <span className="rounded-full bg-surface px-3 py-1 text-[11px] font-medium uppercase tracking-wide text-muted">{destination}</span>
+            </div>
 
-              <h1 className="mt-5 text-4xl font-black leading-tight text-ink md:text-5xl">{product.seoTitle?.replace(" | Tap Rater", "") ?? product.title}</h1>
-              <p className="mt-5 text-lg leading-8 text-muted">{product.description}</p>
-              {product.displayText ? (
-                <div className="mt-5 rounded-md border border-line bg-gray-50 p-4">
-                  <p className="text-xs font-black uppercase text-muted">Main display text</p>
-                  <p className="mt-1 text-xl font-black text-ink">{product.displayText}</p>
+            <h1 className="mt-4 text-[32px] font-semibold leading-[1.1] tracking-tightest text-ink sm:text-[40px]">
+              {product.seoTitle?.replace(" | Tap Rater", "") ?? product.title}
+            </h1>
+            <p className="mt-4 text-[16px] leading-7 text-muted">{product.description}</p>
+
+            {product.displayText ? (
+              <div className="mt-5 rounded-2xl bg-surface p-4">
+                <p className="text-[11px] font-medium uppercase tracking-wide text-muted">Main display text</p>
+                <p className="mt-1 text-[17px] font-medium text-ink">{product.displayText}</p>
+              </div>
+            ) : null}
+
+            <div className="mt-6 flex items-end justify-between border-y border-line py-5">
+              <div>
+                <p className="text-[12px] text-muted">Price</p>
+                <p className="mt-1 text-[30px] font-semibold text-ink">{getProductPriceLabel(product)}</p>
+              </div>
+            </div>
+
+            {product.variants.length > 0 ? (
+              <div className="mt-6">
+                <p className="text-[13px] font-medium text-ink">Available colors</p>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  {product.variants.map((variant) => (
+                    <span key={variant.id} className="rounded-full bg-surface px-4 py-2 text-[13px] font-medium text-ink">
+                      {variant.label}
+                    </span>
+                  ))}
                 </div>
-              ) : null}
-
-              <div className="mt-6 flex flex-col gap-3 border-y border-line py-5 sm:flex-row sm:items-end sm:justify-between">
-                <div>
-                  <p className="text-sm font-bold uppercase text-muted">Price</p>
-                  <p className="mt-1 text-4xl font-black text-brand">{getProductPriceLabel(product)}</p>
-                </div>
-                {product.checkoutMode === "buy_now" && product.salePriceCents ? (
-                  <p className="rounded-md bg-amber-50 px-4 py-3 text-sm font-bold text-ink">
-                    Bundle savings applied
-                  </p>
-                ) : null}
               </div>
+            ) : null}
 
-              {product.variants.length > 0 ? (
-                <div className="mt-6">
-                  <p className="text-sm font-bold text-ink">Available colors</p>
-                  <div className="mt-3 flex flex-wrap gap-2">
-                    {product.variants.map((variant) => (
-                      <span key={variant.id} className="rounded-md border border-line bg-gray-50 px-4 py-3 text-sm font-bold text-ink">
-                        {variant.label}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              ) : null}
+            <Link
+              href={checkoutAction.href}
+              className="mt-7 inline-flex w-full items-center justify-center rounded-full bg-ink px-6 py-3.5 text-[15px] font-medium text-white transition hover:bg-brand"
+            >
+              {checkoutAction.label}
+            </Link>
+            <p className="mt-2 text-[12px] text-muted">{checkoutAction.supportingCopy}</p>
 
-              <Link
-                href={checkoutAction.href}
-                className="mt-6 inline-flex w-full items-center justify-center rounded-md bg-brand px-5 py-3 text-sm font-bold text-white transition hover:bg-ink"
-              >
-                {checkoutAction.label}
-              </Link>
-              <p className="mt-2 text-xs font-bold uppercase text-muted">{checkoutAction.supportingCopy}</p>
-              <div className="mt-4 grid gap-2 text-sm text-muted sm:grid-cols-2">
-                <p className="flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-brand" /> No monthly fee required for basic activation.</p>
-                <p className="flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-brand" /> Connects to one destination URL.</p>
-                <p className="flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-brand" /> Tap or scan ready.</p>
-                <p className="flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-brand" /> Stripe remains test-mode only</p>
-              </div>
+            <div className="mt-5 grid gap-2.5 text-[13px] text-muted sm:grid-cols-2">
+              <p className="flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-brand" strokeWidth={1.5} /> No monthly fee for basic activation</p>
+              <p className="flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-brand" strokeWidth={1.5} /> Connects to one destination URL</p>
+              <p className="flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-brand" strokeWidth={1.5} /> Tap or scan ready</p>
+              <p className="flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-brand" strokeWidth={1.5} /> Stripe stays in test mode</p>
             </div>
 
             {designOptions.length > 0 ? (
-              <section className="mt-5 rounded-md border border-line bg-white p-5 shadow-sm md:p-7">
-                <p className="text-sm font-semibold uppercase text-brand">Design options</p>
-                <h2 className="mt-2 text-2xl font-black text-ink">Choose your design option</h2>
-                <p className="mt-3 text-sm leading-6 text-muted">
-                  Available as standard design, with your logo, or with a custom layout. Logo and custom design details are collected after request.
-                </p>
-                <div className="mt-5 grid gap-3">
+              <div className="mt-8">
+                <p className="text-[13px] font-medium text-ink">Choose a design option</p>
+                <div className="mt-4 grid gap-3">
                   {designOptions.map((option) => (
-                    <article key={option.id} className="rounded-md border border-line bg-gray-50 p-4">
-                      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-                        <div>
-                          <h3 className="font-black text-ink">{option.title}</h3>
-                          <p className="mt-2 text-sm leading-6 text-muted">{option.body}</p>
-                          <p className="mt-2 text-xs font-bold uppercase text-muted">{option.bestFor}</p>
-                        </div>
-                        <Link
-                          href={option.href}
-                          className="inline-flex shrink-0 items-center justify-center rounded-md border border-line bg-white px-4 py-2 text-sm font-bold text-ink transition hover:border-brand hover:text-brand"
-                        >
-                          {option.cta}
-                        </Link>
+                    <div key={option.id} className="flex flex-col gap-3 rounded-2xl bg-surface p-4 sm:flex-row sm:items-center sm:justify-between">
+                      <div>
+                        <p className="text-[14px] font-medium text-ink">{option.title}</p>
+                        <p className="mt-1 text-[13px] leading-5 text-muted">{option.body}</p>
                       </div>
-                    </article>
+                      <Link
+                        href={option.href}
+                        className="inline-flex shrink-0 items-center justify-center rounded-full border border-line bg-white px-4 py-2 text-[13px] font-medium text-ink transition hover:border-ink"
+                      >
+                        {option.cta}
+                      </Link>
+                    </div>
                   ))}
                 </div>
-              </section>
+              </div>
             ) : null}
-
-            <div className="mt-5 grid gap-3 rounded-md border border-line bg-gray-50 p-5 text-sm text-muted md:grid-cols-2">
-              <p><strong className="text-ink">Best for:</strong> restaurants, salons, clinics, retail stores, service counters, and customer-facing teams.</p>
-              <p><strong className="text-ink">Service model:</strong> {product.includedServiceLabel}. {product.requiresLandingPage ? "Hosted landing page required for this product." : "Basic activation redirects directly to your selected link."}</p>
-            </div>
           </div>
         </div>
       </section>
 
-      <section className="border-b border-line bg-gray-50">
-        <div className="mx-auto max-w-7xl px-4 py-12">
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      <section className="border-b border-line bg-surface py-16">
+        <div className="mx-auto max-w-[1100px] px-6">
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
             {highlights.map((highlight, index) => {
               const Icon = [Smartphone, Link2, Store, MessageSquareText][index] ?? CheckCircle2;
-
               return (
-                <article key={highlight.title} className="rounded-md border border-line bg-white p-5">
-                  <Icon className="h-6 w-6 text-brand" />
-                  <h2 className="mt-4 text-lg font-black text-ink">{highlight.title}</h2>
-                  <p className="mt-2 text-sm leading-6 text-muted">{highlight.body}</p>
-                </article>
+                <div key={highlight.title} className="rounded-2xl bg-white p-6">
+                  <Icon className="h-5 w-5 text-brand" strokeWidth={1.5} />
+                  <p className="mt-4 text-[15px] font-medium text-ink">{highlight.title}</p>
+                  <p className="mt-2 text-[13px] leading-5 text-muted">{highlight.body}</p>
+                </div>
               );
             })}
           </div>
         </div>
       </section>
 
-      <section className="border-b border-line bg-white">
-        <div className="mx-auto max-w-7xl px-4 py-12">
-          <div className="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:items-start">
-            <div>
-              <p className="text-sm font-semibold uppercase text-brand">What you get</p>
-              <h2 className="mt-3 text-3xl font-black text-ink">A physical tap or scan prompt customers understand quickly.</h2>
-              <p className="mt-4 leading-7 text-muted">
-                The product gives your staff a consistent in-person prompt. Customers see the display, tap or scan, and land on the review, booking, social, feedback, or hosted destination you choose.
-              </p>
-            </div>
-            <div className="grid gap-3">
-              {[
-                "NFC-enabled Tap Rater display for your counter, desk, table, or service point.",
-                "Support for Google, Facebook, Yelp, TripAdvisor, social profiles, booking pages, menu links, and feedback URLs.",
-                "Clear tap or scan wording that works without asking customers to search online.",
-                "A Phase 1 product format that fits your business setup: tabletop stand or low-profile plate."
-              ].map((item) => (
-                <div key={item} className="flex gap-3 rounded-md border border-line bg-gray-50 p-4">
-                  <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-brand" />
-                  <p className="text-sm leading-6 text-muted">{item}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="border-b border-line bg-gray-50">
-        <div className="mx-auto grid max-w-7xl gap-8 px-4 py-12 lg:grid-cols-[0.85fr_1.15fr] lg:items-start">
+      <section className="border-b border-line bg-white py-16">
+        <div className="mx-auto grid max-w-[1100px] gap-10 px-6 lg:grid-cols-[0.8fr_1.2fr] lg:items-start">
           <div>
-            <p className="text-sm font-semibold uppercase text-brand">Activation and service</p>
-            <h2 className="mt-3 text-3xl font-black text-ink">{activationCopy.title}</h2>
-            <p className="mt-4 leading-7 text-muted">{activationCopy.body}</p>
+            <p className="text-[13px] font-medium uppercase tracking-[0.06em] text-muted">What you get</p>
+            <h2 className="mt-3 text-[26px] font-semibold tracking-tightest text-ink">A prompt customers understand instantly.</h2>
           </div>
           <div className="grid gap-3">
-            <div className="rounded-md border border-line bg-white p-5">
-              <h3 className="font-black text-ink">One-time product clarity</h3>
-              <p className="mt-2 text-sm leading-6 text-muted">
-                No monthly fee required for basic activation. Connects to one destination URL. Tap or scan ready.
-              </p>
-            </div>
-            <div className="rounded-md border border-line bg-white p-5">
-              <h3 className="font-black text-ink">Platform products</h3>
-              <p className="mt-2 text-sm leading-6 text-muted">
-                Premium landing page products use hosted Tap Rater pages for forms, multiple destinations, and future dashboard features.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="border-b border-line bg-gray-50">
-        <div className="mx-auto max-w-7xl px-4 py-12">
-          <div className="max-w-3xl">
-            <p className="text-sm font-semibold uppercase text-brand">Business use cases</p>
-            <h2 className="mt-3 text-3xl font-black text-ink">Built for high-intent customer moments.</h2>
-          </div>
-          <div className="mt-8 grid gap-4 md:grid-cols-3">
-            {useCases.map((useCase) => (
-              <article key={useCase.title} className="rounded-md border border-line bg-white p-5">
-                <h3 className="font-bold text-ink">{useCase.title}</h3>
-                <p className="mt-2 text-sm leading-6 text-muted">{useCase.body}</p>
-              </article>
+            {[
+              "NFC-enabled display for your counter, desk, table, or service point.",
+              "Support for Google, Facebook, Yelp, TripAdvisor, social, booking, menu, and feedback links.",
+              "Clear tap or scan wording — no app, no searching.",
+              "Available as a tabletop stand or a low-profile plate."
+            ].map((item) => (
+              <div key={item} className="flex gap-3 rounded-2xl bg-surface p-4">
+                <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-brand" strokeWidth={1.5} />
+                <p className="text-[14px] leading-6 text-muted">{item}</p>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="border-b border-line bg-white">
-        <div className="mx-auto max-w-7xl px-4 py-12">
-          <div className="grid gap-8 lg:grid-cols-[0.85fr_1.15fr] lg:items-start">
-            <div>
-              <p className="text-sm font-semibold uppercase text-brand">Compare product type</p>
-              <h2 className="mt-3 text-3xl font-black text-ink">Make sure this is the right Tap Rater format.</h2>
-              <p className="mt-4 leading-7 text-muted">
-                Different businesses need different review prompts. This page highlights the format you are viewing and shows when another Tap Rater option may fit better.
+      <section className="border-b border-line bg-surface py-16">
+        <div className="mx-auto grid max-w-[1100px] gap-10 px-6 lg:grid-cols-[0.85fr_1.15fr] lg:items-start">
+          <div>
+            <p className="text-[13px] font-medium uppercase tracking-[0.06em] text-muted">Activation and service</p>
+            <h2 className="mt-3 text-[26px] font-semibold tracking-tightest text-ink">{activationCopy.title}</h2>
+            <p className="mt-4 text-[14px] leading-6 text-muted">{activationCopy.body}</p>
+          </div>
+          <div className="grid gap-3">
+            <div className="rounded-2xl bg-white p-5">
+              <p className="text-[14px] font-medium text-ink">One-time product clarity</p>
+              <p className="mt-2 text-[13px] leading-5 text-muted">
+                No monthly fee for basic activation. Connects to one destination URL. Tap or scan ready.
               </p>
             </div>
-            <div className="overflow-hidden rounded-md border border-line">
-              {comparisonRows.map((row) => (
-                <div key={row.label} className={row.active ? "grid gap-3 bg-teal-50 p-4 md:grid-cols-3" : "grid gap-3 border-t border-line bg-white p-4 md:grid-cols-3"}>
-                  <p className="font-black text-ink">{row.label}{row.active ? " - this product" : ""}</p>
-                  <p className="text-sm leading-6 text-muted">{row.bestFor}</p>
-                  <p className="text-sm font-semibold text-ink">{row.fit}</p>
-                </div>
-              ))}
+            <div className="rounded-2xl bg-white p-5">
+              <p className="text-[14px] font-medium text-ink">Platform products</p>
+              <p className="mt-2 text-[13px] leading-5 text-muted">
+                Premium landing pages, forms, and dashboard features for products that need more than one destination.
+              </p>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="border-b border-line bg-gray-50">
-        <div className="mx-auto max-w-7xl px-4 py-12">
-          <div className="max-w-3xl">
-            <p className="text-sm font-semibold uppercase text-brand">How to use it</p>
-            <h2 className="mt-3 text-3xl font-bold text-ink">Make review and feedback requests easier at the point of service.</h2>
-            <p className="mt-4 leading-7 text-muted">
-              A Tap Rater NFC review stand or plate gives customers a simple physical prompt and removes the friction of searching for your business profile, booking page, social link, or feedback form.
+      <section className="border-b border-line bg-white py-16">
+        <div className="mx-auto max-w-[1100px] px-6">
+          <p className="text-[13px] font-medium uppercase tracking-[0.06em] text-muted">Business use cases</p>
+          <h2 className="mt-3 text-[26px] font-semibold tracking-tightest text-ink">Built for high-intent moments.</h2>
+          <div className="mt-8 grid gap-3 md:grid-cols-3">
+            {useCases.map((useCase) => (
+              <div key={useCase.title} className="rounded-2xl bg-surface p-5">
+                <p className="text-[14px] font-medium text-ink">{useCase.title}</p>
+                <p className="mt-2 text-[13px] leading-5 text-muted">{useCase.body}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="border-b border-line bg-surface py-16">
+        <div className="mx-auto grid max-w-[1100px] gap-8 px-6 lg:grid-cols-[0.85fr_1.15fr] lg:items-start">
+          <div>
+            <p className="text-[13px] font-medium uppercase tracking-[0.06em] text-muted">Compare product type</p>
+            <h2 className="mt-3 text-[26px] font-semibold tracking-tightest text-ink">Make sure this is the right format.</h2>
+            <p className="mt-4 text-[14px] leading-6 text-muted">
+              This page highlights the format you're viewing and where another Tap Rater option may fit better.
             </p>
           </div>
-          <div className="mt-8 grid gap-4 md:grid-cols-3">
+          <div className="overflow-hidden rounded-2xl bg-white">
+            {comparisonRows.map((row) => (
+              <div key={row.label} className={row.active ? "grid gap-2 bg-brand/[0.06] p-4 md:grid-cols-3" : "grid gap-2 border-t border-line p-4 md:grid-cols-3"}>
+                <p className="text-[14px] font-medium text-ink">{row.label}{row.active ? " — this product" : ""}</p>
+                <p className="text-[13px] leading-5 text-muted">{row.bestFor}</p>
+                <p className="text-[13px] font-medium text-ink">{row.fit}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="border-b border-line bg-white py-16">
+        <div className="mx-auto max-w-[1100px] px-6">
+          <p className="text-[13px] font-medium uppercase tracking-[0.06em] text-muted">How to use it</p>
+          <h2 className="mt-3 max-w-2xl text-[26px] font-semibold tracking-tightest text-ink">
+            Make review and feedback requests easier at the point of service.
+          </h2>
+          <div className="mt-8 grid gap-3 md:grid-cols-3">
             {[
               {
                 title: "Choose your review link",
-                body: "Use your Google review link, Facebook recommendation page, Yelp listing, survey, or custom feedback URL."
+                body: "Google, Facebook, Yelp, a survey, or a custom feedback URL."
               },
               {
                 title: "Place it where customers finish",
-                body: "Put the stand or plate near checkout, pickup, reception, tables, treatment rooms, or service desks."
+                body: "Checkout, pickup, reception, tables, or treatment rooms."
               },
               {
                 title: "Ask at the right moment",
-                body: "Invite customers to tap or scan before they leave, while the service experience is still fresh."
+                body: "Invite a tap or scan while the experience is still fresh."
               }
             ].map((step) => (
-              <article key={step.title} className="rounded-md border border-line bg-white p-5">
-                <h3 className="font-bold text-ink">{step.title}</h3>
-                <p className="mt-2 text-sm leading-6 text-muted">{step.body}</p>
-              </article>
+              <div key={step.title} className="rounded-2xl bg-surface p-5">
+                <p className="text-[14px] font-medium text-ink">{step.title}</p>
+                <p className="mt-2 text-[13px] leading-5 text-muted">{step.body}</p>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="border-b border-line bg-white">
-        <div className="mx-auto grid max-w-7xl gap-6 px-4 py-12 md:grid-cols-3">
-          {[
-            {
-              title: "Amazon-ready basic activation",
-              body: "No monthly fee required for basic activation on direct redirect products."
-            },
-            {
-              title: "Permanent Tap Rater URL",
-              body: "NFC chips and QR codes can point to a permanent Tap Rater URL so destinations can be managed later."
-            },
-            {
-              title: "Optional premium dashboard available",
-              body: "Hosted landing pages, analytics, and dashboard features can be added later for platform products."
-            }
-          ].map((item) => (
-            <article key={item.title} className="rounded-md border border-line bg-gray-50 p-5">
-              <h2 className="font-black text-ink">{item.title}</h2>
-              <p className="mt-2 text-sm leading-6 text-muted">{item.body}</p>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <section className="border-t border-line bg-white">
-        <div className="mx-auto max-w-7xl px-4 py-12">
-          <div className="max-w-3xl">
-            <p className="text-sm font-semibold uppercase text-brand">Product questions</p>
-            <h2 className="mt-3 text-3xl font-bold text-ink">Answers before you buy.</h2>
-          </div>
-          <div className="mt-8 grid gap-4 md:grid-cols-3">
+      <section className="border-b border-line bg-white py-16">
+        <div className="mx-auto max-w-[1100px] px-6">
+          <p className="text-[13px] font-medium uppercase tracking-[0.06em] text-muted">Product questions</p>
+          <h2 className="mt-3 text-[26px] font-semibold tracking-tightest text-ink">Answers before you buy.</h2>
+          <div className="mt-8 grid gap-3 md:grid-cols-3">
             {productFaqs.map((faq) => (
-              <article key={faq.question} className="rounded-md border border-line bg-white p-5">
-                <h3 className="font-bold text-ink">{faq.question}</h3>
-                <p className="mt-2 text-sm leading-6 text-muted">{faq.answer}</p>
-              </article>
+              <div key={faq.question} className="rounded-2xl bg-surface p-5">
+                <p className="text-[14px] font-medium text-ink">{faq.question}</p>
+                <p className="mt-2 text-[13px] leading-5 text-muted">{faq.answer}</p>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
       {relatedProducts.length > 0 ? (
-        <section className="border-t border-line bg-gray-50">
-          <div className="mx-auto max-w-7xl px-4 py-12">
-            <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
-              <div>
-                <p className="text-sm font-semibold uppercase text-brand">Compare options</p>
-                <h2 className="mt-2 text-3xl font-black text-ink">Related Tap Rater products</h2>
-              </div>
+        <section className="bg-surface py-16">
+          <div className="mx-auto max-w-[1100px] px-6">
+            <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+              <h2 className="text-[26px] font-semibold tracking-tightest text-ink">Related products</h2>
               {category ? (
-                <Link href={`/category/${category.slug}`} className="text-sm font-bold text-brand">
-                  View {category.title}
+                <Link href={`/category/${category.slug}`} className="text-[13px] font-medium text-brand hover:text-brand-dark">
+                  View {category.title} &rsaquo;
                 </Link>
               ) : null}
             </div>
-            <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {relatedProducts.map((relatedProduct) => (
                 <ProductCard key={relatedProduct.slug} product={relatedProduct} />
               ))}
@@ -464,24 +400,24 @@ function getDesignOptions(product: Pick<MigratedProduct, "slug" | "customization
   const allOptions = [
     {
       id: "standard_design" as const,
-      title: "A. Standard Design",
-      body: "Uses the Tap Rater template and is the fastest setup for simple review, social, appointment, menu, or feedback use.",
+      title: "Standard design",
+      body: "Uses the Tap Rater template and is the fastest setup.",
       bestFor: "Best for fast setup",
       href: `/setup-new-taprater?product=${product.slug}&design=standard`,
       cta: "Request setup"
     },
     {
       id: "add_logo" as const,
-      title: "B. Add Your Logo",
-      body: "Add your business logo to the Tap Rater design for branded counters, reception areas, restaurants, salons, clinics, and hotels.",
+      title: "Add your logo",
+      body: "Add your business logo to the Tap Rater design.",
       bestFor: "Logo setup required after request",
       href: `/setup-new-taprater?product=${product.slug}&design=logo`,
       cta: "Request logo setup"
     },
     {
       id: "custom_design" as const,
-      title: "C. Custom Design",
-      body: "Custom colors, layout, wording, and logo placement for multi-location businesses or brand-specific displays.",
+      title: "Custom design",
+      body: "Custom colors, layout, wording, and logo placement.",
       bestFor: "Requires design approval before production",
       href: `/contact-us?product=${product.slug}&design=custom`,
       cta: "Request custom design"

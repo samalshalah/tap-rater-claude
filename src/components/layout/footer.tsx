@@ -1,39 +1,52 @@
 import Link from "next/link";
 
+const columns = [
+  {
+    title: "Shop",
+    links: [
+      { href: "/shop", label: "All products" },
+      { href: "/category/reviews", label: "Review stands" },
+      { href: "/category/social-media", label: "Social media" },
+      { href: "/category/appointments", label: "Appointments" },
+      { href: "/category/menu", label: "Menu" }
+    ]
+  },
+  {
+    title: "Support",
+    links: [
+      { href: "/setup-new-taprater", label: "Setup a new Tap Rater" },
+      { href: "/change-taprater-link", label: "Change your link" },
+      { href: "/faqs", label: "FAQs" },
+      { href: "/contact-us", label: "Contact us" }
+    ]
+  }
+];
+
 export function Footer() {
   return (
-    <footer className="border-t border-line bg-ink text-white">
-      <div className="mx-auto grid max-w-7xl gap-8 px-4 py-12 md:grid-cols-[1.4fr_1fr_1fr_1fr]">
+    <footer className="border-t border-line bg-surface">
+      <div className="mx-auto grid max-w-[1200px] gap-10 px-5 py-14 sm:px-8 md:grid-cols-[1.3fr_1fr_1fr]">
         <div>
-          <p className="text-xl font-bold">Tap Rater</p>
-          <p className="mt-3 max-w-sm text-sm leading-6 text-gray-300">
-            NFC review products and hosted reputation pages for local businesses.
+          <p className="text-[15px] font-semibold text-ink">Tap Rater</p>
+          <p className="mt-3 max-w-xs text-[13px] leading-6 text-muted">
+            NFC review stands and plates that help local businesses collect reviews, share menus, and stay connected with customers.
           </p>
-          <p className="mt-5 text-sm font-semibold text-accent">Built for Google, Facebook, Yelp, feedback, referrals, and custom business links.</p>
         </div>
-        <div className="grid content-start gap-2 text-sm text-gray-300">
-          <p className="mb-2 font-bold text-white">Shop</p>
-          <Link href="/shop">All products</Link>
-          <Link href="/product/google-review-stand">Google stands</Link>
-          <Link href="/product/google-review-plate">Review plates</Link>
-          <Link href="/category/social-media">Social media</Link>
-        </div>
-        <div className="grid content-start gap-2 text-sm text-gray-300">
-          <p className="mb-2 font-bold text-white">Support</p>
-          <Link href="/review-links-generator">Review Links Generator</Link>
-          <Link href="/setup-new-taprater">Setup New TapRater</Link>
-          <Link href="/change-taprater-link">Change TapRater Link</Link>
-        </div>
-        <div className="grid content-start gap-2 text-sm text-gray-300">
-          <p className="mb-2 font-bold text-white">Company</p>
-          <Link href="/about-us">About Us</Link>
-          <Link href="/faqs">FAQs</Link>
-          <Link href="/contact-us">Contact</Link>
-          <Link href="/privacy-policy">Privacy Policy</Link>
-        </div>
+        {columns.map((column) => (
+          <div key={column.title}>
+            <p className="text-[13px] font-semibold text-ink">{column.title}</p>
+            <div className="mt-3 grid gap-2.5">
+              {column.links.map((link) => (
+                <Link key={link.href} href={link.href} className="text-[13px] text-muted transition hover:text-ink">
+                  {link.label}
+                </Link>
+              ))}
+            </div>
+          </div>
+        ))}
       </div>
-      <div className="border-t border-white/10 px-4 py-5 text-center text-xs text-gray-400">
-        © 2026 Tap Rater. All rights reserved.
+      <div className="border-t border-line px-5 py-5 sm:px-8">
+        <p className="mx-auto max-w-[1200px] text-[12px] text-muted">© 2026 Tap Rater. All rights reserved.</p>
       </div>
     </footer>
   );
