@@ -36,6 +36,51 @@ Required Worker secret names:
 
 Secret values must not be committed or printed in logs.
 
+## Runtime Variable Inventory
+
+Required for the current Worker runtime:
+
+| Variable | Type | Required for | Current status |
+| --- | --- | --- | --- |
+| `NEXT_PUBLIC_SITE_URL` | Public variable | Absolute URLs, SEO metadata, customer login links | Present in both Wrangler configs. Use the active Worker URL before custom domain cutover. |
+| `DATABASE_URL` | Secret | Neon persistence for products, requests, devices, activations, tap events, orders | Present on both Workers. |
+| `ADMIN_EMAIL` | Secret | Admin login | Present on both Workers. |
+| `ADMIN_PASSWORD` | Secret | Admin login | Present on both Workers. |
+| `ADMIN_SESSION_SECRET` | Secret | Signed admin session cookie | Present on both Workers. |
+| `CUSTOMER_SESSION_SECRET` | Secret | Signed customer session cookie and login links | Present on both Workers. |
+| `ORDER_NOTIFICATION_EMAIL` | Secret | Contact/setup/link-change notification recipient | Present on both Workers. |
+| `RESEND_API_KEY` | Secret | Email sending through Resend | Present on both Workers. |
+| `RESEND_FROM_EMAIL` | Secret | Verified sender address for Resend | Present on both Workers. Resend currently shows `taprater.com` as not started, so live sending may fail until DNS verification is finished. |
+
+Optional or feature-specific variables:
+
+| Variable | Type | Used for | Cutover note |
+| --- | --- | --- | --- |
+| `ADMIN_NOTIFICATION_EMAIL` | Secret | Backend email test recipient | Present on both Workers, but not required for the main Next.js Worker runtime. |
+| `NEON_DATABASE_URL` | Secret | Alternative alias for `DATABASE_URL` in the adapter | Not needed if `DATABASE_URL` is set. |
+| `NEXT_PUBLIC_SUPABASE_URL` | Public/server variable | Alternative Supabase persistence mode | Not needed for the Neon deployment. |
+| `SUPABASE_SERVICE_ROLE_KEY` | Secret | Alternative Supabase persistence mode | Not needed for the Neon deployment. |
+| `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` | Public variable | Google Places search in activation | Optional; manual URL entry works without it. |
+| `ADMIN_SESSION_TTL_HOURS` | Variable | Override admin session expiry | Optional; defaults to 7 days. |
+| `STRIPE_SECRET_KEY` | Secret | Stripe test checkout only | Optional and intentionally deferred. Do not add live Stripe keys. |
+| `STRIPE_WEBHOOK_SECRET` | Secret | Stripe test webhook only | Optional and intentionally deferred. Do not add live Stripe keys. |
+| `CRON_SECRET` | Secret | Separate backend job service | Not required for the Cloudflare Worker storefront. |
+
+Current Worker variable comparison:
+
+| Variable | `tap-rater-app` | `tap-rater-app-git` | Source for value | Action |
+| --- | --- | --- | --- | --- |
+| `NEXT_PUBLIC_SITE_URL` | Yes | Yes | Wrangler config | Set to Worker URL on test Worker; switch to `https://taprater.com` at custom-domain cutover. |
+| `DATABASE_URL` | Yes | Yes | Neon dashboard or secure deployment vault | Done. |
+| `ADMIN_EMAIL` | Yes | Yes | Local secure env / owner setting | Done. |
+| `ADMIN_PASSWORD` | Yes | Yes | Local secure env / owner setting | Done. |
+| `ADMIN_SESSION_SECRET` | Yes | Yes | Local secure env / generated secret | Done. |
+| `CUSTOMER_SESSION_SECRET` | Yes | Yes | Generated secret | Done. |
+| `ORDER_NOTIFICATION_EMAIL` | Yes | Yes | Admin/owner recipient | Done. |
+| `ADMIN_NOTIFICATION_EMAIL` | Yes | Yes | Admin/owner recipient | Done. |
+| `RESEND_API_KEY` | Yes | Yes | Resend dashboard | Done with a dedicated sending-only key for `tap-rater-app-git`. |
+| `RESEND_FROM_EMAIL` | Yes | Yes | Verified Resend sender/domain | Done, but Resend domain verification for `taprater.com` is still required before relying on live email delivery. |
+
 ## Git-Linked Worker Build
 
 Cloudflare Workers Builds was connected to GitHub with:
@@ -48,14 +93,17 @@ Cloudflare Workers Builds was connected to GitHub with:
 - Wrangler config for this test Worker: `wrangler.cloudflare-git.jsonc`
 - Build command: `npm ci && npm test && npm run cf:build`
 - Deploy command: `npx wrangler deploy -c wrangler.cloudflare-git.jsonc`
+- Temporary public URL variable: `NEXT_PUBLIC_SITE_URL=https://tap-rater-app-git.sam-alshalah1.workers.dev`
 
 Important: Cloudflare Workers Builds deploys `tap-rater-app-git`. It does not inherit secrets from `tap-rater-app`.
 
-Current blocker before cutover:
+Current verification gate before cutover:
 
-- `tap-rater-app-git` has no Worker secrets.
-- Only the public `NEXT_PUBLIC_SITE_URL` variable is present through `wrangler.jsonc`.
-- Public/static smoke routes pass, but admin, Neon persistence, customer sessions, and Resend notifications are not production-ready on `tap-rater-app-git`.
+- `tap-rater-app-git` now has the required Worker secret names configured.
+- Public/static smoke routes and admin auth must be re-tested after the next Git-linked deployment.
+- Neon persistence must be verified after deployment by exercising a safe DB-backed read/write path.
+- Resend is configured, but `taprater.com` is not verified in Resend yet, so email delivery is not production-ready until DNS verification is finished.
+- Change `NEXT_PUBLIC_SITE_URL` back to `https://taprater.com` only when the custom domain is attached to the final Worker.
 
 ## Current GitHub Actions Fallback
 
@@ -110,7 +158,7 @@ Check these paths before any cutover:
 Do not cut over to `tap-rater-app-git` until:
 
 1. All required Worker secrets are added to `tap-rater-app-git`.
-2. `NEXT_PUBLIC_SITE_URL` remains `https://taprater.com`.
+2. `NEXT_PUBLIC_SITE_URL` is set to the active public URL for the Worker being verified.
 3. Admin login works.
 4. Neon-backed product/device/activation flows work.
 5. Resend notifications are tested or explicitly deferred.
