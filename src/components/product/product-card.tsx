@@ -21,10 +21,13 @@ export function ProductCard({ product }: { product: MigratedProduct }) {
           className="object-contain transition duration-300 group-hover:scale-[1.03]"
         />
       </div>
-      <div className="mt-5">
+      <div className="mt-5 text-center">
         <p className="text-[12px] font-medium uppercase tracking-[0.06em] text-muted">{formatLabel}</p>
-        <h2 className="mt-1 text-[15px] font-medium text-ink">{product.title}</h2>
-        <p className="mt-2 text-[15px] text-muted">{purchaseLabel}</p>
+        <h2 className="mt-1 text-[17px] font-semibold text-ink">{product.title}</h2>
+        <p className="mx-auto mt-1.5 max-w-[220px] text-[13px] leading-5 text-muted">{product.shortDescription}</p>
+        <p className="mt-3 text-[14px] text-muted">
+          {purchaseLabel.startsWith("$") ? `From ${purchaseLabel}` : purchaseLabel}
+        </p>
       </div>
     </Link>
   );
