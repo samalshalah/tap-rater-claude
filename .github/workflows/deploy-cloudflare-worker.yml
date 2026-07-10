@@ -62,7 +62,7 @@ jobs:
         run: npx wrangler whoami
 
       - name: Deploy to Cloudflare Workers
-        run: npx wrangler deploy --message "GitHub Actions ${GITHUB_SHA}"
+        run: npx wrangler deploy
 
       - name: Show latest Cloudflare deployments
         run: npx wrangler deployments list --name tap-rater-app
