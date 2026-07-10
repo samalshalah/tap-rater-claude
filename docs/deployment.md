@@ -2,16 +2,16 @@
 
 Tap Rater currently has two Cloudflare Worker deployments:
 
-- Production-safe Worker: `tap-rater-app`
-- Git-linked test Worker: `tap-rater-app-git`
+- Manual rollback Worker: `tap-rater-app`
+- Git-linked Worker: `tap-rater-app-git`
 
-Do not delete or retire `tap-rater-app` until `tap-rater-app-git` has the same required secrets, passes admin/platform smoke tests, and is approved for cutover.
+Do not delete or retire `tap-rater-app` until `tap-rater-app-git` is approved for final custom-domain cutover.
 
-## Production Worker
+## Manual Rollback Worker
 
 - Worker name: `tap-rater-app`
 - URL: `https://tap-rater-app.sam-alshalah1.workers.dev/`
-- Source today: GitHub Actions runs `npx wrangler deploy`
+- Source today: manual GitHub Actions workflow runs `npx wrangler deploy`
 - Repo: `samalshalah/tap-rater`
 - Branch: `nextjs-commerce`
 - Wrangler config: `wrangler.jsonc`
@@ -95,23 +95,23 @@ Cloudflare Workers Builds was connected to GitHub with:
 - Deploy command: `npx wrangler deploy -c wrangler.cloudflare-git.jsonc`
 - Temporary public URL variable: `NEXT_PUBLIC_SITE_URL=https://tap-rater-app-git.sam-alshalah1.workers.dev`
 
-Important: Cloudflare Workers Builds deploys `tap-rater-app-git`. It does not inherit secrets from `tap-rater-app`.
+Important: Cloudflare Workers Builds is the source-of-truth deployment path for the `nextjs-commerce` branch. It deploys `tap-rater-app-git` and does not inherit secrets from `tap-rater-app`.
 
-Current verification gate before cutover:
+Current cutover notes:
 
 - `tap-rater-app-git` now has the required Worker secret names configured.
-- Public/static smoke routes and admin auth must be re-tested after the next Git-linked deployment.
-- Neon persistence must be verified after deployment by exercising a safe DB-backed read/write path.
+- Public/static smoke routes, admin auth, and Neon-backed admin API reads passed after the Git-linked deployment.
+- Active tap-event logging still needs a real active redirect device or a safe temporary test-data script before it can be marked fully verified.
 - Resend is configured, but `taprater.com` is not verified in Resend yet, so email delivery is not production-ready until DNS verification is finished.
 - Change `NEXT_PUBLIC_SITE_URL` back to `https://taprater.com` only when the custom domain is attached to the final Worker.
 
-## Current GitHub Actions Fallback
+## Manual GitHub Actions Fallback
 
 The repository still contains `.github/workflows/deploy-cloudflare-worker.yml`.
 
-That workflow deploys `nextjs-commerce` to the production-safe `tap-rater-app` Worker using GitHub Actions and Wrangler. Keep it enabled until the Cloudflare Git-linked Worker has all required secrets and passes the full smoke checklist.
+That workflow is manual-only and deploys `nextjs-commerce` to the rollback `tap-rater-app` Worker using GitHub Actions and Wrangler. Use it only if the Git-linked Worker fails and you intentionally need to restore the old Worker.
 
-The default `wrangler.jsonc` must stay pointed at `tap-rater-app` while the GitHub Actions fallback remains active.
+The default `wrangler.jsonc` stays pointed at `tap-rater-app` so the manual rollback workflow still targets the old Worker. The Git-linked Worker uses `wrangler.cloudflare-git.jsonc`.
 
 ## Local Verification
 
@@ -124,7 +124,7 @@ npm test
 npm run cf:build
 ```
 
-Smoke test the current production-safe Worker:
+Smoke test the manual rollback Worker:
 
 ```bash
 SMOKE_BASE_URL=https://tap-rater-app.sam-alshalah1.workers.dev npm run smoke
@@ -155,7 +155,7 @@ Check these paths before any cutover:
 
 ## Cutover Rules
 
-Do not cut over to `tap-rater-app-git` until:
+Do not attach the final custom domain to `tap-rater-app-git` until:
 
 1. All required Worker secrets are added to `tap-rater-app-git`.
 2. `NEXT_PUBLIC_SITE_URL` is set to the active public URL for the Worker being verified.
@@ -166,13 +166,13 @@ Do not cut over to `tap-rater-app-git` until:
 7. A push to `nextjs-commerce` automatically starts and completes a Cloudflare Workers Build.
 8. The deployed commit SHA matches the latest pushed commit.
 
-After cutover, remove the older manual deploy path only after the Git-linked Worker is proven stable.
+After custom-domain cutover, remove the older manual deploy path only after the Git-linked Worker is proven stable and rollback is no longer needed.
 
 ## Rollback
 
 If the Git-linked Worker fails:
 
 1. Keep using `tap-rater-app`.
-2. Re-run the GitHub Actions workflow `Deploy Cloudflare Worker` from GitHub Actions.
+2. Re-run the GitHub Actions workflow `Manual Deploy Old Cloudflare Worker` from GitHub Actions.
 3. Confirm `https://tap-rater-app.sam-alshalah1.workers.dev/` passes smoke tests.
 4. Do not delete any Worker, secret, domain, or route until a replacement has passed verification.
