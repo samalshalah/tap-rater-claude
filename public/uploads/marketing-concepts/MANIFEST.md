@@ -20,6 +20,25 @@ Uploaded 2026-07-10. Stored at `public/uploads/marketing-concepts/`. Reference b
 | 14 | `14-menu-share-your-menu-instantly.png` | Menu | Share Your Menu Instantly | Restaurant table, burger + fries, blue-circle logo variant |
 | 15 | `15-reference-apple-store-page.png` | Reference | — | Screenshot of apple.com/store for design reference (not a Tap Rater asset) |
 
+## Round 2 — Apple-tile-style stand renders (2026-07-10)
+
+8 additional images, stored at `public/uploads/marketing-concepts/round2/`, in the exact Apple homepage-tile format (eyebrow + headline + subhead + "Learn more" link + studio product shot, composed as one image). These mapped cleanly 1:1 onto 8 existing STAND SKUs, so the product photo portion was cropped out (headline/text column removed) and swapped in as the new live product images:
+
+| # | File | Replaced product image | Used for |
+|---|---|---|---|
+| 16 | `round2/16-menu-stand.png` | `view-menu-stand-v2.png` | View Our Menu Stand |
+| 17 | `round2/17-social-media-stand.png` | `social-media-stand-v2.png` | Follow Us on Social Media Stand |
+| 18 | `round2/18-appointment-stand.png` | `book-next-visit-stand-v2.png` | Book Your Next Visit Stand |
+| 19 | `round2/19-google-review-stand.png` | `google-review-stand-v2.png` | Google Review Stand |
+| 20 | `round2/20-yelp-review-stand.png` | `yelp-review-stand-v2.png` | Yelp Review Stand |
+| 21 | `round2/21-facebook-review-stand.png` | `facebook-review-stand-v2.png` | Facebook Review Stand |
+| 22 | `round2/22-tripadvisor-review-stand.png` | `tripadvisor-review-stand-v2.png` | TripAdvisor Review Stand |
+| 23 | `round2/23-rate-your-experience-stand.png` | `rate-your-experience-stand-v2.png` | Rate Your Experience Stand |
+
+The cropped versions live in `public/uploads/products/*-v2.png` and are now referenced directly in `src/data/migrated-products.ts`. The original full composite images (with baked-in headline/link text) are kept in `round2/` for reference — e.g. if we ever want to reuse the full tile (text + image combined) as a homepage promo module rather than a plain product photo.
+
+Plate-format equivalents (8 SKUs) still use the older renders/placeholders — not covered by this batch.
+
 ## Note on logo inconsistency
 
 The mocked-up "TAP RATER" device screens across these images use **different placeholder logos** — a shield/checkmark mark, a star, a "T" monogram, a speech-bubble icon, and a blue star wordmark all appear across different images. None of these match the real Tap Rater logo currently in `public/uploads/brand/tap-rater-logo.png`. Worth deciding on one final device-screen design before any of these go live, or treating the device screen as illustrative only and not literal.
