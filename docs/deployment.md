@@ -45,10 +45,11 @@ Cloudflare Workers Builds was connected to GitHub with:
 - Repo: `samalshalah/tap-rater`
 - Production branch: `nextjs-commerce`
 - Root directory: `/`
+- Wrangler config for this test Worker: `wrangler.cloudflare-git.jsonc`
 - Build command: `npm ci && npm test && npm run cf:build`
-- Deploy command configured during setup: `npx wrangler deploy --name tap-rater-app`
+- Deploy command: `npx wrangler deploy -c wrangler.cloudflare-git.jsonc`
 
-Important: Cloudflare Workers Builds forced the deployment name to match the build project and deployed `tap-rater-app-git`. It did not inherit secrets from `tap-rater-app`.
+Important: Cloudflare Workers Builds deploys `tap-rater-app-git`. It does not inherit secrets from `tap-rater-app`.
 
 Current blocker before cutover:
 
@@ -61,6 +62,8 @@ Current blocker before cutover:
 The repository still contains `.github/workflows/deploy-cloudflare-worker.yml`.
 
 That workflow deploys `nextjs-commerce` to the production-safe `tap-rater-app` Worker using GitHub Actions and Wrangler. Keep it enabled until the Cloudflare Git-linked Worker has all required secrets and passes the full smoke checklist.
+
+The default `wrangler.jsonc` must stay pointed at `tap-rater-app` while the GitHub Actions fallback remains active.
 
 ## Local Verification
 
