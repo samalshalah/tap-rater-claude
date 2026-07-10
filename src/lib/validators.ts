@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+const productCustomizationOptions = ["standard_design", "add_logo", "custom_design"] as const;
+
 export const contactFormSchema = z.object({
   name: z.string().trim().min(2).max(120),
   email: z.string().trim().email().max(180),
@@ -115,6 +117,10 @@ export const productContentSchema = z.object({
     .default(["custom"]),
   activationType: z.enum(["free_basic_activation", "managed_setup", "premium_hosted_activation"]).default("free_basic_activation"),
   includedServiceLabel: z.string().trim().min(2).max(120).default("Free basic activation"),
+  customizationOptions: z.array(z.enum(productCustomizationOptions)).min(1).default(["standard_design"]),
+  allowsLogoUpload: z.boolean().default(false),
+  allowsCustomDesign: z.boolean().default(false),
+  designMode: z.enum(["standard", "logo", "custom"]).default("standard"),
   seoTitle: z.string().trim().max(180).optional(),
   seoDescription: z.string().trim().max(320).optional(),
   isActive: z.boolean()

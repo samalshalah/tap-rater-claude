@@ -65,27 +65,31 @@ export function getProductActivationCopy(product: MigratedProduct): ProductActiv
   return {
     title: "Free basic activation",
     body:
-      "This one-time product redirects directly to your review, booking, social, or business link after basic activation. No monthly fee is required, and premium features are optional later."
+      "This one-time product redirects directly to your review, booking, social, menu, feedback, or business link after basic activation. No monthly fee is required, and premium features are optional later."
   };
 }
 
 export function getProductPageHighlights(product: MigratedProduct): ProductPageContentItem[] {
   const destination = getReviewDestination(product);
+  const format = product.format;
 
   return [
     {
-      title: "Tap-to-review flow",
+      title: "Tap or scan ready",
       body: `Customers tap or scan and open your ${destination} destination without searching.`
     },
     {
-      title: product.requiresLandingPage ? "Hosted landing page" : "Configured for your link",
+      title: product.requiresLandingPage ? "Hosted landing page" : "Connects to one destination URL",
       body: product.requiresLandingPage
         ? "Use a hosted Tap Rater page for feedback forms, multiple buttons, or future analytics."
-        : "Use your business review page, recommendation page, booking page, survey, or custom feedback URL."
+        : "Use your business review page, recommendation page, booking page, menu, feedback form, or custom URL."
     },
     {
-      title: "Counter-ready display",
-      body: "Built for checkout counters, reception desks, tables, pickup areas, and service desks."
+      title: format === "plate" ? "Low-profile physical product" : "Countertop physical product",
+      body:
+        format === "plate"
+          ? "Built for desks, tables, reception areas, checkout counters, and compact customer touchpoints."
+          : "Built for checkout counters, reception desks, host stands, pickup areas, and service desks."
     },
     {
       title: "Simple customer prompt",
@@ -123,37 +127,37 @@ export function getProductComparisonRows(product: MigratedProduct): ProductCompa
       label: "Stand",
       bestFor: "Counters, reception, checkout, pickup",
       fit: "Most visible review prompt",
-      active: title.includes("stand") && !title.includes("bundle")
+      active: product.format === "stand"
     },
     {
       label: "Plate",
       bestFor: "Tables, desks, compact counters",
       fit: "Low-profile review prompt",
-      active: title.includes("plate")
+      active: product.format === "plate"
     },
     {
       label: "Bundle",
       bestFor: "Multiple rooms, counters, or teams",
       fit: "Best value for several touchpoints",
-      active: product.productType === "bundle" || title.includes("bundle") || title.includes("kit")
+      active: product.format === "bundle" || product.productType === "bundle" || title.includes("bundle") || title.includes("kit")
     },
     {
       label: "Social/Booking",
-      bestFor: "Facebook, Yelp, booking pages, social profiles",
+      bestFor: "Social media, booking pages, menu links",
       fit: "Best for direct non-Google destinations",
-      active: product.categorySlug === "social-booking-products" || product.categorySlug === "review-platform-products"
+      active: product.categorySlug === "social-media" || product.categorySlug === "appointments" || product.categorySlug === "menu"
     },
     {
       label: "Feedback/Referral",
       bestFor: "Hosted forms and platform-powered flows",
       fit: "Best when a landing page is needed",
-      active: product.categorySlug === "feedback-referral-products" || product.categorySlug === "hosted-landing-page-products"
+      active: product.categorySlug === "feedback"
     },
     {
       label: "Custom",
       bestFor: "Custom UV printing and direct custom URLs",
       fit: "Best for branded prompts",
-      active: product.supportedDestinations.includes("custom") && product.categorySlug === "social-booking-products"
+      active: product.supportedDestinations.includes("custom") && ["social-media", "appointments", "menu"].includes(product.categorySlug)
     }
   ];
 }
@@ -169,8 +173,24 @@ export function getReviewDestination(product: MigratedProduct): string {
     return "Yelp review";
   }
 
+  if (title.includes("tripadvisor")) {
+    return "TripAdvisor review";
+  }
+
   if (title.includes("experience")) {
     return "feedback";
+  }
+
+  if (title.includes("social")) {
+    return "social media";
+  }
+
+  if (title.includes("book")) {
+    return "booking";
+  }
+
+  if (title.includes("menu")) {
+    return "menu";
   }
 
   return "Google review";

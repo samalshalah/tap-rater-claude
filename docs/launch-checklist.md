@@ -43,7 +43,7 @@ Stripe checkout is available for test mode only. Live payments, live paid orders
   - [ ] `contact_requests`
   - [ ] `setup_requests`
   - [ ] `change_link_requests`
-- [ ] Confirm product metadata columns exist: `product_type`, `service_mode`, `checkout_mode`, `requires_account`, `requires_subscription`, `requires_landing_page`, `supported_destinations`, `activation_type`, `included_service_label`.
+- [ ] Confirm product metadata columns exist: `product_type`, `service_mode`, `checkout_mode`, `requires_account`, `requires_subscription`, `requires_landing_page`, `supported_destinations`, `activation_type`, `included_service_label`, `customization_options`, `allows_logo_upload`, `allows_custom_design`, `design_mode`.
 - [ ] Confirm `buy_now` products can use Stripe test checkout and quote/subscription/contact-sales products do not enter one-time checkout.
 - [ ] Confirm demo rows such as `TR-DEMO-GOOGLE` are not used as real customer devices.
 
@@ -228,7 +228,7 @@ SMOKE_BASE_URL=https://taprater.com npm run smoke
 The smoke script checks:
 
 - `/`
-- `/product/google-review-nfc-stand`
+- `/product/google-review-stand`
 - `/admin/login`
 - `/activate`
 - `/r/TR-DEMO-GOOGLE`

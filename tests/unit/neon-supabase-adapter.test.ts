@@ -78,6 +78,31 @@ describe("Neon Supabase adapter", () => {
     expect(query.mock.calls[0][1][3]).toBe(JSON.stringify({ heroTitle: "Tap Rater" }));
   });
 
+  it("upserts product customization columns with text-array casting", async () => {
+    const query = vi.fn().mockResolvedValue([]);
+    const client = createNeonSupabaseAdapter(query);
+
+    const result = await client.from("products").upsert({
+      slug: "google-review-stand",
+      title: "Google Review Stand",
+      sku: "TR-GOOGLE-STAND",
+      category_slug: "reviews",
+      base_price_cents: 4900,
+      stock_status: "instock",
+      short_description: "Short text",
+      description: "Long text",
+      customization_options: ["standard_design", "add_logo", "custom_design"],
+      allows_logo_upload: true,
+      allows_custom_design: true,
+      design_mode: "standard"
+    });
+
+    expect(result.error).toBeNull();
+    expect(query.mock.calls[0][0]).toContain("on conflict (slug) do update");
+    expect(query.mock.calls[0][0]).toContain("customization_options");
+    expect(query.mock.calls[0][0]).toContain("::text[]");
+  });
+
   it("returns Supabase-style errors for unsupported table or column names", async () => {
     const query = vi.fn().mockResolvedValue([]);
     const client = createNeonSupabaseAdapter(query);

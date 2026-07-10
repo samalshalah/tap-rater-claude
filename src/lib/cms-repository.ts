@@ -18,16 +18,16 @@ export type CmsDbClient = {
 
 export function getDefaultHomepageContent(): HomepageContentInput {
   return {
-    eyebrow: "NFC review products and hosted reputation pages",
-    heroTitle: "NFC review products and hosted reputation pages for local businesses.",
+    eyebrow: "Tap Rater for local businesses",
+    heroTitle: "NFC review stands and smart reputation pages for local businesses.",
     heroDescription:
-      "Tap Rater combines standalone NFC review products, managed setup, hosted landing pages, feedback forms, and dashboard-ready reputation tools.",
-    primaryButtonLabel: "Shop products",
+      "Help customers tap or scan to open reviews, social links, menus, booking pages, feedback forms, or hosted Tap Rater pages with setup and tracking options built in.",
+    primaryButtonLabel: "Shop NFC Products",
     primaryButtonHref: "/shop",
-    secondaryButtonLabel: "Setup TapRater",
-    secondaryButtonHref: "/setup-new-taprater",
-    featuredBadge: "Best seller",
-    featuredLabel: "Featured Google Review Stand"
+    secondaryButtonLabel: "Explore Platform Options",
+    secondaryButtonHref: "#platform-preview",
+    featuredBadge: "Phase 1 products",
+    featuredLabel: "Stands and plates"
   };
 }
 
@@ -94,6 +94,10 @@ export async function saveProductContent(client: CmsDbClient, input: ProductCont
     supported_destinations: input.supportedDestinations,
     activation_type: input.activationType,
     included_service_label: input.includedServiceLabel,
+    customization_options: input.customizationOptions,
+    allows_logo_upload: input.allowsLogoUpload,
+    allows_custom_design: input.allowsCustomDesign,
+    design_mode: input.designMode,
     seo_title: input.seoTitle ?? null,
     seo_description: input.seoDescription ?? null,
     is_active: input.isActive

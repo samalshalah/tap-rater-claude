@@ -1,7 +1,7 @@
 "use client";
 
 import { type FormEvent, useState } from "react";
-import type { CatalogCategory, MigratedProduct } from "@/data/migrated-products";
+import type { CatalogCategory, MigratedProduct, ProductCustomizationOption } from "@/data/migrated-products";
 
 const supportedDestinationOptions = [
   "google",
@@ -17,6 +17,24 @@ const supportedDestinationOptions = [
   "feedback",
   "referral",
   "custom"
+];
+
+const customizationOptionLabels: { value: ProductCustomizationOption; label: string; description: string }[] = [
+  {
+    value: "standard_design",
+    label: "Standard Design",
+    description: "Uses the Tap Rater template."
+  },
+  {
+    value: "add_logo",
+    label: "Add Your Logo",
+    description: "Logo details are collected after request."
+  },
+  {
+    value: "custom_design",
+    label: "Custom Design",
+    description: "Custom layout requires design approval."
+  }
 ];
 
 type ProductEditorProps = {
@@ -65,6 +83,10 @@ export function ProductEditor({ product, categories, mode }: ProductEditorProps)
           supportedDestinations: form.getAll("supportedDestinations"),
           activationType: form.get("activationType"),
           includedServiceLabel: form.get("includedServiceLabel"),
+          customizationOptions: form.getAll("customizationOptions"),
+          allowsLogoUpload: form.get("allowsLogoUpload") === "true",
+          allowsCustomDesign: form.get("allowsCustomDesign") === "true",
+          designMode: form.get("designMode"),
           seoTitle: form.get("seoTitle"),
           seoDescription: form.get("seoDescription"),
           isActive: form.get("isActive") === "true"
@@ -249,6 +271,58 @@ export function ProductEditor({ product, categories, mode }: ProductEditorProps)
               ))}
             </div>
           </fieldset>
+          <fieldset className="grid gap-3">
+            <legend className="text-sm font-bold text-ink">Customization options</legend>
+            <p className="text-sm text-muted">Logo and custom design details are collected after request. This does not enable automated uploads.</p>
+            <div className="grid gap-2 md:grid-cols-3">
+              {customizationOptionLabels.map((option) => (
+                <label key={option.value} className="grid gap-1 rounded-md border border-line bg-white px-3 py-3 text-sm text-ink">
+                  <span className="flex items-center gap-2 font-semibold">
+                    <input
+                      type="checkbox"
+                      name="customizationOptions"
+                      value={option.value}
+                      defaultChecked={product.customizationOptions.includes(option.value)}
+                    />
+                    {option.label}
+                  </span>
+                  <span className="text-xs leading-5 text-muted">{option.description}</span>
+                </label>
+              ))}
+            </div>
+          </fieldset>
+          <div className="grid gap-4 md:grid-cols-3">
+            <label className="grid gap-2 text-sm font-bold text-ink">
+              Logo option
+              <select
+                className="rounded-md border border-line bg-white px-4 py-3 font-normal"
+                name="allowsLogoUpload"
+                defaultValue={product.allowsLogoUpload ? "true" : "false"}
+              >
+                <option value="true">Logo setup available</option>
+                <option value="false">No logo setup</option>
+              </select>
+            </label>
+            <label className="grid gap-2 text-sm font-bold text-ink">
+              Custom design option
+              <select
+                className="rounded-md border border-line bg-white px-4 py-3 font-normal"
+                name="allowsCustomDesign"
+                defaultValue={product.allowsCustomDesign ? "true" : "false"}
+              >
+                <option value="true">Custom design available</option>
+                <option value="false">No custom design</option>
+              </select>
+            </label>
+            <label className="grid gap-2 text-sm font-bold text-ink">
+              Default design mode
+              <select className="rounded-md border border-line bg-white px-4 py-3 font-normal" name="designMode" defaultValue={product.designMode}>
+                <option value="standard">Standard</option>
+                <option value="logo">Logo</option>
+                <option value="custom">Custom</option>
+              </select>
+            </label>
+          </div>
         </section>
 
         <section className="grid gap-4 rounded-md border border-line bg-gray-50 p-4">
@@ -256,7 +330,7 @@ export function ProductEditor({ product, categories, mode }: ProductEditorProps)
             <h2 className="text-lg font-black text-ink">SEO</h2>
             <p className="mt-1 text-sm text-muted">Used by public product metadata when this product is published.</p>
           </div>
-          <Input name="seoTitle" label="SEO title" defaultValue={product.seoTitle ?? ""} required={false} placeholder="Google Review NFC Stand for Businesses" />
+          <Input name="seoTitle" label="SEO title" defaultValue={product.seoTitle ?? ""} required={false} placeholder="Google Review Stand for Businesses" />
           <Textarea name="seoDescription" label="SEO description" defaultValue={product.seoDescription ?? ""} required={false} />
         </section>
       </div>

@@ -17,8 +17,8 @@ export function createSmokeChecks(baseUrl = defaultBaseUrl) {
     },
     {
       label: "Product page",
-      path: "/product/google-review-nfc-stand",
-      url: `${normalizedBaseUrl}/product/google-review-nfc-stand`,
+      path: "/product/google-review-stand",
+      url: `${normalizedBaseUrl}/product/google-review-stand`,
       acceptableStatuses: [200]
     },
     {

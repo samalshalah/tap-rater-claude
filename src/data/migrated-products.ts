@@ -32,6 +32,12 @@ export type MigratedProduct = {
   supportedDestinations: SupportedDestination[];
   activationType: ProductActivationType;
   includedServiceLabel: string;
+  format: ProductFormat;
+  customizationOptions: ProductCustomizationOption[];
+  allowsLogoUpload: boolean;
+  allowsCustomDesign: boolean;
+  designMode: ProductDesignMode;
+  displayText?: string;
   images: { src: string; alt: string }[];
   variants: { id: string; label: string; sku: string; stockStatus: "instock" | "outofstock" }[];
   isActive: boolean;
@@ -48,12 +54,18 @@ export type ProductCheckoutMode = "buy_now" | "request_quote" | "subscription" |
 
 export type ProductActivationType = "free_basic_activation" | "managed_setup" | "premium_hosted_activation";
 
+export type ProductFormat = "stand" | "plate" | "bundle" | "platform";
+
+export type ProductCustomizationOption = "standard_design" | "add_logo" | "custom_design";
+
+export type ProductDesignMode = "standard" | "logo" | "custom";
+
 export type CatalogCategorySlug =
-  | "google-review-products"
-  | "review-platform-products"
-  | "social-booking-products"
-  | "feedback-referral-products"
-  | "hosted-landing-page-products"
+  | "reviews"
+  | "social-media"
+  | "appointments"
+  | "menu"
+  | "feedback"
   | "business-bundles";
 
 export type CatalogCategory = {
@@ -70,614 +82,415 @@ export type CatalogCategory = {
 
 export const catalogCategories: CatalogCategory[] = [
   {
-    slug: "google-review-products",
-    title: "Google Review Products",
-    eyebrow: "Google-first",
-    description: "NFC stands, plates, cards, and managed employee prompts that open a Google review destination.",
-    seoTitle: "Google Review NFC Products | Tap Rater",
-    seoDescription: "Shop Google Review NFC stands, plates, cards, name tags, and starter kits for local businesses.",
-    buyerIntent: "For businesses that want a clear in-person prompt to open a Google review link.",
-    aliases: ["google-review-stands", "review-plates", "google-review-plates"],
+    slug: "reviews",
+    title: "Review Products",
+    eyebrow: "Reviews",
+    description: "NFC stands and plates that open Google, Yelp, Facebook, TripAdvisor, or other review destinations.",
+    seoTitle: "NFC Review Products | Tap Rater",
+    seoDescription: "Shop NFC review stands and plates for Google, Yelp, Facebook, TripAdvisor, and other review destinations.",
+    buyerIntent: "For businesses that want customers to tap or scan and open a public review destination.",
+    aliases: ["review-stands", "review-plates", "google-review-products", "review-platform-products", "google-review-stands", "review-platform-stands", "google-review-plates"],
     seoCopy:
-      "Google Review NFC products help customers tap or scan a physical prompt and open the business Google review link without searching."
+      "Review products focus on the review use case first, then let the customer choose the physical format: tabletop stand or low-profile plate."
   },
   {
-    slug: "review-platform-products",
-    title: "Review Platform Products",
-    eyebrow: "Review sites",
-    description: "Physical NFC products for Facebook, Yelp, TripAdvisor, and multi-platform review flows.",
-    seoTitle: "Review Platform NFC Products | Tap Rater",
-    seoDescription: "Shop Facebook, Yelp, TripAdvisor, and multi-platform review NFC products for local businesses.",
-    buyerIntent: "For businesses that need review prompts beyond Google.",
-    aliases: ["review-platform-stands"],
+    slug: "social-media",
+    title: "Social Media Products",
+    eyebrow: "Social",
+    description: "NFC stands and plates that open social profiles or a social media hub for Facebook, X, Instagram, and YouTube.",
+    seoTitle: "NFC Social Media Products | Tap Rater",
+    seoDescription: "Shop NFC social media stands and plates that open social profiles or a social media hub.",
+    buyerIntent: "For businesses that want customers to follow or visit social profiles after an in-person interaction.",
+    aliases: ["social-booking-products", "social-booking-stands", "social-booking-plates", "social-follow-products", "social-media-products"],
     seoCopy:
-      "Review platform products connect physical NFC prompts to public review profiles or hosted multi-platform pages."
+      "Social media products can open a direct social profile or a social media hub for Facebook, X, Instagram, and YouTube."
   },
   {
-    slug: "social-booking-products",
-    title: "Social & Booking Products",
-    eyebrow: "Direct actions",
-    description: "NFC products for appointment booking, social follow pages, menus, Wi-Fi, websites, and direct links.",
-    seoTitle: "Social, Booking and Direct Link NFC Products | Tap Rater",
-    seoDescription: "Shop NFC stands for appointment booking, social follows, menus, Wi-Fi, websites, and custom direct links.",
-    buyerIntent: "For businesses that want customers to open a booking page, social profile, menu, Wi-Fi page, or custom URL.",
-    aliases: ["social-booking-stands", "custom-uv-printed-stands"],
+    slug: "appointments",
+    title: "Appointment Products",
+    eyebrow: "Booking",
+    description: "NFC stands and plates that open booking pages, appointment forms, calendars, or scheduling URLs.",
+    seoTitle: "Appointment NFC Products | Tap Rater",
+    seoDescription: "Shop NFC appointment stands and plates that open booking pages, appointment forms, calendars, or scheduling URLs.",
+    buyerIntent: "For salons, clinics, consultants, service businesses, and teams that want customers to book the next visit.",
+    aliases: ["appointment-products", "booking-products"],
     seoCopy:
-      "Social and booking NFC products give customers a quick tap or scan path to the next action a business wants them to take."
+      "Appointment products open one booking, calendar, form, or scheduling URL through a permanent Tap Rater link."
   },
   {
-    slug: "feedback-referral-products",
-    title: "Feedback & Referral Products",
-    eyebrow: "Forms",
-    description: "Hosted feedback, referral, and rate-your-experience pages powered by Tap Rater forms.",
-    seoTitle: "Feedback and Referral NFC Products | Tap Rater",
-    seoDescription: "Shop hosted feedback, referral, and rate-your-experience Tap Rater products for local businesses.",
-    buyerIntent: "For businesses that need private forms, referral requests, and customer experience flows.",
-    aliases: ["feedback-referral-stands", "feedback-stands"],
+    slug: "menu",
+    title: "Menu Products",
+    eyebrow: "Menu",
+    description: "NFC stands and plates that open a restaurant, cafe, or service menu.",
+    seoTitle: "NFC Menu Products | Tap Rater",
+    seoDescription: "Shop NFC menu stands and plates that open a restaurant, cafe, or service menu.",
+    buyerIntent: "For restaurants, cafes, counters, tables, and service businesses that need customers to open a menu.",
+    aliases: ["menu-products"],
     seoCopy:
-      "Feedback and referral products collect customer input through Tap Rater hosted pages without blocking access to public review platforms."
+      "Menu products are menu-only customer prompts. They should not be marketed as Wi-Fi products."
   },
   {
-    slug: "hosted-landing-page-products",
-    title: "Hosted Landing Page Products",
-    eyebrow: "Platform",
-    description: "Hosted reputation pages, social hubs, review hubs, staff tracking pages, and multi-location dashboards.",
-    seoTitle: "Hosted Reputation Landing Pages | Tap Rater",
-    seoDescription: "Tap Rater hosted landing pages support review hubs, reputation pages, social hubs, staff tracking, and multi-location dashboards.",
-    buyerIntent: "For businesses that need account-based platform features, hosted pages, analytics, forms, and dashboards.",
+    slug: "feedback",
+    title: "Feedback Products",
+    eyebrow: "Feedback",
+    description: "NFC stands and plates that open customer feedback or experience forms.",
+    seoTitle: "NFC Feedback Products | Tap Rater",
+    seoDescription: "Shop NFC feedback stands and plates that open customer feedback or experience forms.",
+    buyerIntent: "For businesses that want customers to tap or scan and share experience feedback.",
+    aliases: ["experience-feedback-products", "feedback-referral-products", "feedback-referral-stands", "feedback-stands"],
     seoCopy:
-      "Hosted landing page products require Tap Rater platform setup, a customer account, a business profile, and a hosted page or dashboard."
+      "Feedback products open customer feedback or experience forms without review-gating language."
   },
   {
     slug: "business-bundles",
     title: "Business Bundles",
-    eyebrow: "Setup included",
-    description: "Bundles that combine physical NFC products with managed setup for business review programs.",
-    seoTitle: "Business Bundles and Review Starter Kits | Tap Rater",
-    seoDescription: "Shop Tap Rater business bundles with physical NFC products and managed setup for local business reputation programs.",
-    buyerIntent: "For businesses that want physical products plus Tap Rater setup help.",
+    eyebrow: "Managed",
+    description: "Managed setup packages and multi-product kits for businesses that need several tap points.",
+    seoTitle: "Business Bundles and Managed Setup | Tap Rater",
+    seoDescription: "Tap Rater business bundles and managed setup options for future multi-device launches.",
+    buyerIntent: "For businesses that want Tap Rater to configure several physical products together.",
+    aliases: ["hosted-landing-page-products"],
     seoCopy:
-      "Business bundles combine NFC hardware and managed setup so a business can launch several review touchpoints together."
+      "Business bundles and managed setup remain quote-based while Phase 1 focuses on sellable tabletop stands and flat plates."
   }
 ];
 
-const googleStandImage = { src: "/uploads/products/google-review-white-stand.jpg", alt: "Tap Rater NFC stand for Google reviews" };
-const googlePlateImage = { src: "/uploads/products/google-review-white-plate.jpg", alt: "Tap Rater NFC review plate for counters and tables" };
-const facebookImage = { src: "/uploads/products/facebook-review-stand.jpg", alt: "Tap Rater Facebook review NFC stand" };
-const yelpImage = { src: "/uploads/products/yelp-review-stand.jpg", alt: "Tap Rater Yelp review NFC stand" };
-const feedbackImage = { src: "/uploads/products/rate-your-experience-white-stand.jpg", alt: "Tap Rater hosted feedback NFC stand" };
-const bundleImage = { src: "/uploads/products/business-google-white-bundle.jpg", alt: "Tap Rater business review starter kit bundle" };
-const standsBundleImage = { src: "/uploads/products/business-google-white-stands-bundle.jpg", alt: "Tap Rater multi-stand business bundle" };
+const googleStandImage = { src: "/uploads/products/google-review-stand.png", alt: "Tap Rater Google Review Stand" };
+const googlePlateImage = { src: "/uploads/products/google-review-plate.png", alt: "Tap Rater Google Review Plate" };
+const yelpStandImage = { src: "/uploads/products/yelp-review-stand.png", alt: "Tap Rater Yelp Review Stand" };
+const yelpPlateImage = { src: "/uploads/products/yelp-review-plate.png", alt: "Tap Rater Yelp Review Plate placeholder" };
+const facebookStandImage = { src: "/uploads/products/facebook-review-stand.png", alt: "Tap Rater Facebook Review Stand" };
+const facebookPlateImage = { src: "/uploads/products/facebook-review-plate.png", alt: "Tap Rater Facebook Review Plate placeholder" };
+const tripadvisorStandImage = { src: "/uploads/products/tripadvisor-review-stand.png", alt: "Tap Rater TripAdvisor Review Stand" };
+const tripadvisorPlateImage = { src: "/uploads/products/tripadvisor-review-plate.png", alt: "Tap Rater TripAdvisor Review Plate placeholder" };
+const experienceStandImage = { src: "/uploads/products/rate-your-experience-stand.png", alt: "Tap Rater Rate Your Experience Stand" };
+const experiencePlateImage = { src: "/uploads/products/rate-your-experience-plate.png", alt: "Tap Rater Rate Your Experience Plate placeholder" };
+const socialStandImage = { src: "/uploads/products/social-media-stand.png", alt: "Tap Rater Follow Us on Social Media Stand" };
+const socialPlateImage = { src: "/uploads/products/social-media-plate.png", alt: "Tap Rater Follow Us on Social Media Plate placeholder" };
+const bookingStandImage = { src: "/uploads/products/book-next-visit-stand.png", alt: "Tap Rater Book Your Next Visit Stand" };
+const bookingPlateImage = { src: "/uploads/products/book-next-visit-plate.png", alt: "Tap Rater Book Your Next Visit Plate placeholder" };
+const menuStandImage = { src: "/uploads/products/view-menu-stand.png", alt: "Tap Rater View Our Menu Stand" };
+const menuPlateImage = { src: "/uploads/products/view-menu-plate.png", alt: "Tap Rater View Our Menu Plate placeholder" };
+
+const standPriceCents = 4900;
+const platePriceCents = 3900;
+const defaultPhysicalCustomizationOptions: ProductCustomizationOption[] = ["standard_design", "add_logo", "custom_design"];
+
+const colors = [
+  { id: "white", label: "White", suffix: "W" },
+  { id: "black", label: "Black", suffix: "B" }
+];
+
+type PhaseOneProductInput = {
+  slug: string;
+  title: string;
+  sku: string;
+  categorySlug: CatalogCategorySlug;
+  basePriceCents: number;
+  shortDescription: string;
+  description: string;
+  supportedDestinations: SupportedDestination[];
+  displayText: string;
+  image: { src: string; alt: string };
+  seoTitle: string;
+  seoDescription: string;
+  searchKeywords: string[];
+};
+
+function phaseOneProduct(input: PhaseOneProductInput): MigratedProduct {
+  return {
+    slug: input.slug,
+    title: input.title,
+    sku: input.sku,
+    categorySlug: input.categorySlug,
+    basePriceCents: input.basePriceCents,
+    stockStatus: "instock",
+    shortDescription: input.shortDescription,
+    description: `${input.description} Available as standard design, with your logo, or with a custom layout.`,
+    productType: "physical_redirect",
+    serviceMode: "basic_redirect",
+    checkoutMode: "buy_now",
+    requiresAccount: false,
+    requiresSubscription: false,
+    requiresLandingPage: false,
+    supportedDestinations: input.supportedDestinations,
+    activationType: "free_basic_activation",
+    includedServiceLabel: "Free basic activation",
+    format: input.title.includes("Plate") ? "plate" : "stand",
+    customizationOptions: [...defaultPhysicalCustomizationOptions],
+    allowsLogoUpload: true,
+    allowsCustomDesign: true,
+    designMode: "standard",
+    displayText: input.displayText,
+    images: [input.image],
+    variants: colors.map((color) => ({
+      id: color.id,
+      label: color.label,
+      sku: `${input.sku}-${color.suffix}`,
+      stockStatus: "instock"
+    })),
+    isActive: true,
+    seoTitle: input.seoTitle,
+    seoDescription: input.seoDescription,
+    searchKeywords: input.searchKeywords
+  };
+}
 
 export const migratedProducts: MigratedProduct[] = [
-  {
-    slug: "google-review-nfc-stand",
-    title: "Google Review NFC Stand",
+  phaseOneProduct({
+    slug: "google-review-stand",
+    title: "Google Review Stand",
     sku: "TR-GOOGLE-STAND",
-    categorySlug: "google-review-products",
-    basePriceCents: 4900,
-    stockStatus: "instock",
-    shortDescription: "Countertop NFC stand that opens a Google review link with one tap or scan.",
+    categorySlug: "reviews",
+    basePriceCents: standPriceCents,
+    shortDescription: "Countertop NFC stand that opens your Google review link with one tap or scan.",
     description:
-      "A Google Review NFC Stand gives customers a clear counter, front-desk, or checkout prompt that opens your Google review destination. Basic activation redirects directly to the URL you provide.",
-    productType: "physical_redirect",
-    serviceMode: "basic_redirect",
-    checkoutMode: "buy_now",
-    requiresAccount: false,
-    requiresSubscription: false,
-    requiresLandingPage: false,
+      "Google Review Stand is a tabletop NFC display for counters, desks, checkout areas, and reception spaces. It opens your Google review link through free basic activation, connects to one destination URL, and is tap or scan ready.",
     supportedDestinations: ["google"],
-    activationType: "free_basic_activation",
-    includedServiceLabel: "Free basic activation",
-    images: [googleStandImage],
-    variants: [
-      { id: "white", label: "White", sku: "TR-GOOGLE-STAND-W", stockStatus: "instock" },
-      { id: "black", label: "Black", sku: "TR-GOOGLE-STAND-B", stockStatus: "instock" }
-    ],
-    isActive: true,
-    seoTitle: "Google Review NFC Stand for Local Businesses | Tap Rater",
-    seoDescription: "Buy a Google Review NFC Stand that lets customers tap or scan to open your Google review link.",
-    searchKeywords: ["google review nfc stand", "nfc review stand", "google review stand"]
-  },
-  {
-    slug: "google-review-nfc-plate",
-    title: "Google Review NFC Plate",
+    displayText: "Review us on Google",
+    image: googleStandImage,
+    seoTitle: "Google Review Stand | NFC Review Stand for Local Businesses",
+    seoDescription: "Buy a Google Review Stand that opens your Google review link with one tap or scan. No monthly fee required for basic activation.",
+    searchKeywords: ["google review stand", "google nfc stand", "review us on google stand"]
+  }),
+  phaseOneProduct({
+    slug: "google-review-plate",
+    title: "Google Review Plate",
     sku: "TR-GOOGLE-PLATE",
-    categorySlug: "google-review-products",
-    basePriceCents: 3900,
-    stockStatus: "instock",
-    shortDescription: "Low-profile NFC plate for desks, tables, counters, and reception areas.",
+    categorySlug: "reviews",
+    basePriceCents: platePriceCents,
+    shortDescription: "Low-profile NFC plate for counters, desks, tables, and reception areas.",
     description:
-      "A Google Review NFC Plate keeps the review prompt compact while still giving customers a simple way to open your Google review destination.",
-    productType: "physical_redirect",
-    serviceMode: "basic_redirect",
-    checkoutMode: "buy_now",
-    requiresAccount: false,
-    requiresSubscription: false,
-    requiresLandingPage: false,
+      "Google Review Plate is a flat NFC prompt for counters, desks, tables, and reception areas. It opens your Google review link through free basic activation, connects to one destination URL, and is tap or scan ready.",
     supportedDestinations: ["google"],
-    activationType: "free_basic_activation",
-    includedServiceLabel: "Free basic activation",
-    images: [googlePlateImage],
-    variants: [
-      { id: "white", label: "White", sku: "TR-GOOGLE-PLATE-W", stockStatus: "instock" },
-      { id: "black", label: "Black", sku: "TR-GOOGLE-PLATE-B", stockStatus: "instock" }
-    ],
-    isActive: true,
-    seoTitle: "Google Review NFC Plate for Counters and Tables | Tap Rater",
-    seoDescription: "Compact NFC Google review plate for counters, tables, front desks, and checkout areas.",
-    searchKeywords: ["google review nfc plate", "nfc review plate", "review plate"]
-  },
-  {
-    slug: "google-review-nfc-card",
-    title: "Google Review NFC Card",
-    sku: "TR-GOOGLE-CARD",
-    categorySlug: "google-review-products",
-    basePriceCents: 2900,
-    stockStatus: "instock",
-    shortDescription: "Portable NFC card for opening a Google review link during handoffs, events, or service visits.",
-    description:
-      "A Google Review NFC Card is a portable review prompt for staff, technicians, events, and customer handoffs. It opens one configured Google review destination.",
-    productType: "physical_redirect",
-    serviceMode: "basic_redirect",
-    checkoutMode: "buy_now",
-    requiresAccount: false,
-    requiresSubscription: false,
-    requiresLandingPage: false,
-    supportedDestinations: ["google"],
-    activationType: "free_basic_activation",
-    includedServiceLabel: "Free basic activation",
-    images: [googlePlateImage],
-    variants: [],
-    isActive: true,
-    seoTitle: "Google Review NFC Card | Tap Rater",
-    seoDescription: "Portable NFC card that opens a Google review link for service teams and local businesses.",
-    searchKeywords: ["google review nfc card", "review tap card", "nfc review card"]
-  },
-  {
-    slug: "employee-review-name-tag",
-    title: "Employee Review Name Tag",
-    sku: "TR-STAFF-TAG",
-    categorySlug: "google-review-products",
-    basePriceCents: 5900,
-    stockStatus: "instock",
-    shortDescription: "Managed employee NFC name tag for staff-specific review or feedback routing.",
-    description:
-      "Employee Review Name Tags help staff invite customers to open the correct review, feedback, or staff tracking destination. Tap Rater managed setup is included.",
-    productType: "physical_managed",
-    serviceMode: "managed_redirect",
-    checkoutMode: "request_quote",
-    requiresAccount: false,
-    requiresSubscription: false,
-    requiresLandingPage: false,
-    supportedDestinations: ["google", "feedback", "custom"],
-    activationType: "managed_setup",
-    includedServiceLabel: "Managed setup included",
-    images: [googleStandImage],
-    variants: [],
-    isActive: true,
-    seoTitle: "Employee Review Name Tag | Tap Rater",
-    seoDescription: "Managed NFC employee name tag for staff review, feedback, or custom destination routing.",
-    searchKeywords: ["employee review name tag", "staff nfc review tag", "nfc name tag"]
-  },
-  {
-    slug: "facebook-review-stand",
-    title: "Facebook Review Stand",
-    sku: "TR-FACEBOOK-STAND",
-    categorySlug: "review-platform-products",
-    basePriceCents: 4900,
-    stockStatus: "instock",
-    shortDescription: "NFC stand that opens a Facebook review, recommendation, or business profile destination.",
-    description:
-      "A Facebook Review Stand gives customers a simple tap or scan prompt for your Facebook recommendation, review, or profile destination.",
-    productType: "physical_redirect",
-    serviceMode: "basic_redirect",
-    checkoutMode: "buy_now",
-    requiresAccount: false,
-    requiresSubscription: false,
-    requiresLandingPage: false,
-    supportedDestinations: ["facebook"],
-    activationType: "free_basic_activation",
-    includedServiceLabel: "Free basic activation",
-    images: [facebookImage],
-    variants: [],
-    isActive: true,
-    seoTitle: "Facebook Review NFC Stand | Tap Rater",
-    seoDescription: "NFC Facebook review stand for businesses that want customers to open a Facebook review or recommendation destination.",
-    searchKeywords: ["facebook review stand", "facebook nfc stand"]
-  },
-  {
+    displayText: "Review us on Google",
+    image: googlePlateImage,
+    seoTitle: "Google Review Plate | NFC Review Plate for Counters and Tables",
+    seoDescription: "Buy a Google Review Plate for counters, desks, tables, and reception areas. Opens your Google review link with one tap or scan.",
+    searchKeywords: ["google review plate", "nfc review plate", "review us on google plate"]
+  }),
+  phaseOneProduct({
     slug: "yelp-review-stand",
     title: "Yelp Review Stand",
     sku: "TR-YELP-STAND",
-    categorySlug: "review-platform-products",
-    basePriceCents: 4900,
-    stockStatus: "instock",
-    shortDescription: "NFC stand that opens a Yelp business profile or review destination.",
+    categorySlug: "reviews",
+    basePriceCents: standPriceCents,
+    shortDescription: "Countertop NFC stand that opens your Yelp review or business profile destination.",
     description:
-      "A Yelp Review Stand helps customers open your Yelp destination from a counter, host stand, table, or service desk.",
-    productType: "physical_redirect",
-    serviceMode: "basic_redirect",
-    checkoutMode: "buy_now",
-    requiresAccount: false,
-    requiresSubscription: false,
-    requiresLandingPage: false,
+      "Yelp Review Stand is a tabletop NFC display for businesses that want customers to open a Yelp review or business profile destination. It connects to one destination URL and does not require a monthly fee for basic activation.",
     supportedDestinations: ["yelp"],
-    activationType: "free_basic_activation",
-    includedServiceLabel: "Free basic activation",
-    images: [yelpImage],
-    variants: [],
-    isActive: true,
-    seoTitle: "Yelp Review NFC Stand | Tap Rater",
-    seoDescription: "NFC Yelp review stand for restaurants, salons, retail stores, and local service businesses.",
-    searchKeywords: ["yelp review stand", "yelp nfc stand"]
-  },
-  {
+    displayText: "Review us on Yelp",
+    image: yelpStandImage,
+    seoTitle: "Yelp Review Stand | NFC Yelp Review Product",
+    seoDescription: "Buy a Yelp Review Stand that opens your Yelp review or business profile destination with one tap or scan.",
+    searchKeywords: ["yelp review stand", "yelp nfc stand", "review us on yelp stand"]
+  }),
+  phaseOneProduct({
+    slug: "yelp-review-plate",
+    title: "Yelp Review Plate",
+    sku: "TR-YELP-PLATE",
+    categorySlug: "reviews",
+    basePriceCents: platePriceCents,
+    shortDescription: "Low-profile NFC plate that helps customers open your Yelp destination.",
+    description:
+      "Yelp Review Plate is a low-profile NFC prompt that helps customers open your Yelp destination from a counter, table, desk, or reception area. It connects to one destination URL and is tap or scan ready.",
+    supportedDestinations: ["yelp"],
+    displayText: "Review us on Yelp",
+    image: yelpPlateImage,
+    seoTitle: "Yelp Review Plate | Low-Profile NFC Yelp Product",
+    seoDescription: "Low-profile NFC plate that helps customers open your Yelp destination from counters, desks, tables, or reception areas.",
+    searchKeywords: ["yelp review plate", "yelp nfc plate", "review us on yelp plate"]
+  }),
+  phaseOneProduct({
+    slug: "facebook-review-stand",
+    title: "Facebook Review Stand",
+    sku: "TR-FACEBOOK-STAND",
+    categorySlug: "reviews",
+    basePriceCents: standPriceCents,
+    shortDescription: "Countertop NFC stand that opens your Facebook review, recommendation, or business profile destination.",
+    description:
+      "Facebook Review Stand is a tabletop NFC display that opens your Facebook review, recommendation, or business profile destination. It uses free basic activation, connects to one destination URL, and is tap or scan ready.",
+    supportedDestinations: ["facebook"],
+    displayText: "Review us on Facebook",
+    image: facebookStandImage,
+    seoTitle: "Facebook Review Stand | NFC Facebook Review Product",
+    seoDescription: "Buy a Facebook Review Stand that opens your Facebook review, recommendation, or business profile destination.",
+    searchKeywords: ["facebook review stand", "facebook nfc stand", "review us on facebook stand"]
+  }),
+  phaseOneProduct({
+    slug: "facebook-review-plate",
+    title: "Facebook Review Plate",
+    sku: "TR-FACEBOOK-PLATE",
+    categorySlug: "reviews",
+    basePriceCents: platePriceCents,
+    shortDescription: "Low-profile NFC plate for Facebook reviews, recommendations, or profile visits.",
+    description:
+      "Facebook Review Plate is a flat NFC product for Facebook reviews, recommendations, or profile visits. It connects to one destination URL and does not require a monthly fee for basic activation.",
+    supportedDestinations: ["facebook"],
+    displayText: "Review us on Facebook",
+    image: facebookPlateImage,
+    seoTitle: "Facebook Review Plate | Low-Profile NFC Facebook Product",
+    seoDescription: "Low-profile NFC plate for Facebook reviews, recommendations, or profile visits.",
+    searchKeywords: ["facebook review plate", "facebook nfc plate", "review us on facebook plate"]
+  }),
+  phaseOneProduct({
     slug: "tripadvisor-review-stand",
     title: "TripAdvisor Review Stand",
     sku: "TR-TRIPADVISOR-STAND",
-    categorySlug: "review-platform-products",
-    basePriceCents: 4900,
-    stockStatus: "instock",
-    shortDescription: "NFC stand for hotels, restaurants, attractions, and visitor-facing businesses.",
+    categorySlug: "reviews",
+    basePriceCents: standPriceCents,
+    shortDescription: "Countertop NFC stand for hotels, restaurants, attractions, and visitor-facing businesses.",
     description:
-      "A TripAdvisor Review Stand opens your TripAdvisor destination for guests, diners, visitors, and travelers after an in-person experience.",
-    productType: "physical_redirect",
-    serviceMode: "basic_redirect",
-    checkoutMode: "buy_now",
-    requiresAccount: false,
-    requiresSubscription: false,
-    requiresLandingPage: false,
+      "TripAdvisor Review Stand is a tabletop NFC display for hotels, restaurants, attractions, and visitor-facing businesses. It opens your TripAdvisor destination through one configured URL.",
     supportedDestinations: ["tripadvisor"],
-    activationType: "free_basic_activation",
-    includedServiceLabel: "Free basic activation",
-    images: [googleStandImage],
-    variants: [],
-    isActive: true,
-    seoTitle: "TripAdvisor Review NFC Stand | Tap Rater",
-    seoDescription: "NFC TripAdvisor review stand for hospitality, tourism, restaurant, and attraction businesses.",
-    searchKeywords: ["tripadvisor review stand", "tripadvisor nfc stand"]
-  },
-  {
-    slug: "appointment-booking-stand",
-    title: "Appointment Booking Stand",
-    sku: "TR-BOOKING-STAND",
-    categorySlug: "social-booking-products",
-    basePriceCents: 4900,
-    stockStatus: "instock",
-    shortDescription: "NFC stand that opens a booking page, appointment form, calendar, or scheduling URL.",
+    displayText: "Review us on TripAdvisor",
+    image: tripadvisorStandImage,
+    seoTitle: "TripAdvisor Review Stand | NFC Review Stand for Hospitality",
+    seoDescription: "Buy a TripAdvisor Review Stand for hotels, restaurants, attractions, and visitor-facing businesses.",
+    searchKeywords: ["tripadvisor review stand", "tripadvisor nfc stand", "review us on tripadvisor stand"]
+  }),
+  phaseOneProduct({
+    slug: "tripadvisor-review-plate",
+    title: "TripAdvisor Review Plate",
+    sku: "TR-TRIPADVISOR-PLATE",
+    categorySlug: "reviews",
+    basePriceCents: platePriceCents,
+    shortDescription: "Low-profile NFC plate for hospitality, restaurants, tourism, and visitor-facing businesses.",
     description:
-      "An Appointment Booking Stand opens your scheduling page in one tap or scan, making it useful for salons, clinics, consultants, and service businesses.",
-    productType: "physical_redirect",
-    serviceMode: "basic_redirect",
-    checkoutMode: "buy_now",
-    requiresAccount: false,
-    requiresSubscription: false,
-    requiresLandingPage: false,
-    supportedDestinations: ["booking", "website", "custom"],
-    activationType: "free_basic_activation",
-    includedServiceLabel: "Free basic activation",
-    images: [googleStandImage],
-    variants: [],
-    isActive: true,
-    seoTitle: "Appointment Booking NFC Stand | Tap Rater",
-    seoDescription: "NFC appointment booking stand that opens your booking, calendar, or scheduling page.",
-    searchKeywords: ["appointment booking nfc stand", "booking stand", "nfc booking sign"]
-  },
-  {
-    slug: "social-follow-nfc-stand",
-    title: "Social Follow NFC Stand",
-    sku: "TR-SOCIAL-STAND",
-    categorySlug: "social-booking-products",
-    basePriceCents: 4900,
-    stockStatus: "instock",
-    shortDescription: "NFC stand for Instagram, TikTok, Facebook, and social profile follow actions.",
+      "TripAdvisor Review Plate is a flat NFC product for hospitality, restaurants, tourism, and visitor-facing businesses. It opens your TripAdvisor destination with one tap or scan.",
+    supportedDestinations: ["tripadvisor"],
+    displayText: "Review us on TripAdvisor",
+    image: tripadvisorPlateImage,
+    seoTitle: "TripAdvisor Review Plate | Low-Profile NFC Hospitality Product",
+    seoDescription: "Low-profile NFC plate for TripAdvisor destinations at hotels, restaurants, attractions, and visitor-facing businesses.",
+    searchKeywords: ["tripadvisor review plate", "tripadvisor nfc plate", "review us on tripadvisor plate"]
+  }),
+  phaseOneProduct({
+    slug: "rate-your-experience-stand",
+    title: "Rate Your Experience Stand",
+    sku: "TR-EXPERIENCE-STAND",
+    categorySlug: "feedback",
+    basePriceCents: standPriceCents,
+    shortDescription: "Countertop NFC stand for collecting customer experience feedback through a Tap Rater destination.",
     description:
-      "A Social Follow NFC Stand gives customers a quick way to open your Instagram, TikTok, Facebook, or other social profile.",
-    productType: "physical_redirect",
-    serviceMode: "basic_redirect",
-    checkoutMode: "buy_now",
-    requiresAccount: false,
-    requiresSubscription: false,
-    requiresLandingPage: false,
-    supportedDestinations: ["instagram", "tiktok", "facebook", "custom"],
-    activationType: "free_basic_activation",
-    includedServiceLabel: "Free basic activation",
-    images: [facebookImage],
-    variants: [],
-    isActive: true,
-    seoTitle: "Social Follow NFC Stand | Tap Rater",
-    seoDescription: "NFC social follow stand for Instagram, TikTok, Facebook, and other social profiles.",
-    searchKeywords: ["social follow nfc stand", "instagram nfc stand", "tiktok nfc stand"]
-  },
-  {
-    slug: "menu-wifi-direct-link-stand",
-    title: "Menu / WiFi / Direct Link Stand",
-    sku: "TR-DIRECT-STAND",
-    categorySlug: "social-booking-products",
-    basePriceCents: 4900,
-    stockStatus: "instock",
-    shortDescription: "Custom NFC stand for menus, Wi-Fi pages, websites, forms, and direct business links.",
-    description:
-      "A Menu / WiFi / Direct Link Stand opens one configured destination such as a menu, Wi-Fi page, website, form, or custom URL.",
-    productType: "physical_redirect",
-    serviceMode: "basic_redirect",
-    checkoutMode: "buy_now",
-    requiresAccount: false,
-    requiresSubscription: false,
-    requiresLandingPage: false,
-    supportedDestinations: ["menu", "wifi", "website", "custom"],
-    activationType: "free_basic_activation",
-    includedServiceLabel: "Free basic activation",
-    images: [googleStandImage],
-    variants: [],
-    isActive: true,
-    seoTitle: "Menu, WiFi and Direct Link NFC Stand | Tap Rater",
-    seoDescription: "Custom NFC stand for menus, Wi-Fi pages, websites, forms, and direct links.",
-    searchKeywords: ["menu nfc stand", "wifi nfc stand", "direct link nfc stand"]
-  },
-  {
-    slug: "multi-platform-review-page",
-    title: "Multi-Platform Review Page",
-    sku: "TR-MULTI-REVIEW",
-    categorySlug: "hosted-landing-page-products",
-    basePriceCents: 0,
-    stockStatus: "instock",
-    shortDescription: "Hosted Tap Rater page with multiple public review destination buttons.",
-    description:
-      "A Multi-Platform Review Page gives a business one hosted Tap Rater URL with buttons for Google, Facebook, Yelp, TripAdvisor, or other approved destinations. It requires account and landing page setup.",
-    productType: "platform_landing_page",
-    serviceMode: "hosted_landing_page",
-    checkoutMode: "contact_sales",
-    requiresAccount: true,
-    requiresSubscription: true,
-    requiresLandingPage: true,
-    supportedDestinations: ["google", "facebook", "yelp", "tripadvisor", "custom"],
-    activationType: "premium_hosted_activation",
-    includedServiceLabel: "Premium landing page",
-    images: [feedbackImage],
-    variants: [],
-    isActive: true,
-    seoTitle: "Multi-Platform Review Page | Tap Rater",
-    seoDescription: "Hosted review landing page with buttons for Google, Facebook, Yelp, TripAdvisor, and custom destinations.",
-    searchKeywords: ["multi platform review page", "review landing page", "reputation landing page"]
-  },
-  {
-    slug: "reputation-hub-page",
-    title: "Reputation Hub Page",
-    sku: "TR-REPUTATION-HUB",
-    categorySlug: "hosted-landing-page-products",
-    basePriceCents: 0,
-    stockStatus: "instock",
-    shortDescription: "Hosted reputation page for reviews, business links, social profiles, and support actions.",
-    description:
-      "A Reputation Hub Page centralizes review links, social links, contact actions, and business destinations in one Tap Rater hosted page.",
-    productType: "platform_landing_page",
-    serviceMode: "hosted_landing_page",
-    checkoutMode: "contact_sales",
-    requiresAccount: true,
-    requiresSubscription: true,
-    requiresLandingPage: true,
-    supportedDestinations: ["google", "facebook", "yelp", "website", "instagram", "custom"],
-    activationType: "premium_hosted_activation",
-    includedServiceLabel: "Premium landing page",
-    images: [feedbackImage],
-    variants: [],
-    isActive: true,
-    seoTitle: "Reputation Hub Page | Tap Rater",
-    seoDescription: "Hosted reputation hub page for reviews, social profiles, business links, and local customer actions.",
-    searchKeywords: ["reputation hub page", "hosted review page", "business reputation page"]
-  },
-  {
-    slug: "rate-your-experience-page",
-    title: "Rate Your Experience Page",
-    sku: "TR-RATE-EXPERIENCE",
-    categorySlug: "feedback-referral-products",
-    basePriceCents: 0,
-    stockStatus: "instock",
-    shortDescription: "Hosted experience page for customer feedback and follow-up routing.",
-    description:
-      "A Rate Your Experience Page opens a hosted Tap Rater page where customers can share feedback or choose an approved business destination.",
-    productType: "platform_landing_page",
-    serviceMode: "hosted_landing_page",
-    checkoutMode: "request_quote",
-    requiresAccount: true,
-    requiresSubscription: true,
-    requiresLandingPage: true,
-    supportedDestinations: ["feedback", "google", "custom"],
-    activationType: "premium_hosted_activation",
-    includedServiceLabel: "Premium landing page",
-    images: [feedbackImage],
-    variants: [
-      { id: "white", label: "White stand", sku: "TR-RATE-EXPERIENCE-W", stockStatus: "instock" },
-      { id: "black", label: "Black stand", sku: "TR-RATE-EXPERIENCE-B", stockStatus: "instock" }
-    ],
-    isActive: true,
-    seoTitle: "Rate Your Experience Page | Tap Rater",
-    seoDescription: "Hosted Tap Rater customer experience page for feedback, review links, and custom routing.",
-    searchKeywords: ["rate your experience page", "feedback nfc stand", "customer experience page"]
-  },
-  {
-    slug: "private-feedback-page",
-    title: "Private Feedback Page",
-    sku: "TR-PRIVATE-FEEDBACK",
-    categorySlug: "feedback-referral-products",
-    basePriceCents: 0,
-    stockStatus: "instock",
-    shortDescription: "Hosted private feedback form for customers to send comments directly to the business.",
-    description:
-      "A Private Feedback Page collects customer comments through a Tap Rater hosted form. It is not a review-gating tool and does not block access to public review destinations.",
-    productType: "platform_landing_page",
-    serviceMode: "hosted_landing_page",
-    checkoutMode: "request_quote",
-    requiresAccount: true,
-    requiresSubscription: true,
-    requiresLandingPage: true,
+      "Rate Your Experience Stand is a tabletop NFC display for customer experience feedback through a Tap Rater destination. It connects to one destination URL and can support a direct feedback or follow-up flow.",
     supportedDestinations: ["feedback", "custom"],
-    activationType: "premium_hosted_activation",
-    includedServiceLabel: "Premium landing page",
-    images: [feedbackImage],
-    variants: [],
-    isActive: true,
-    seoTitle: "Private Feedback Page | Tap Rater",
-    seoDescription: "Hosted private feedback page for collecting customer comments through Tap Rater forms.",
-    searchKeywords: ["private feedback page", "customer feedback form", "nfc feedback page"]
-  },
-  {
-    slug: "referral-request-page",
-    title: "Referral Request Page",
-    sku: "TR-REFERRAL-PAGE",
-    categorySlug: "feedback-referral-products",
-    basePriceCents: 0,
-    stockStatus: "instock",
-    shortDescription: "Hosted referral request page for customers who want to share your business.",
+    displayText: "Rate Your Experience",
+    image: experienceStandImage,
+    seoTitle: "Rate Your Experience Stand | NFC Feedback Stand",
+    seoDescription: "Countertop NFC stand for collecting customer experience feedback through a Tap Rater destination.",
+    searchKeywords: ["rate your experience stand", "feedback nfc stand", "customer experience stand"]
+  }),
+  phaseOneProduct({
+    slug: "rate-your-experience-plate",
+    title: "Rate Your Experience Plate",
+    sku: "TR-EXPERIENCE-PLATE",
+    categorySlug: "feedback",
+    basePriceCents: platePriceCents,
+    shortDescription: "Low-profile NFC plate for customer experience feedback and follow-up flows.",
     description:
-      "A Referral Request Page lets customers open a hosted Tap Rater page for referral prompts, share links, and referral form submissions.",
-    productType: "platform_landing_page",
-    serviceMode: "hosted_landing_page",
-    checkoutMode: "request_quote",
-    requiresAccount: true,
-    requiresSubscription: true,
-    requiresLandingPage: true,
-    supportedDestinations: ["referral", "website", "custom"],
-    activationType: "premium_hosted_activation",
-    includedServiceLabel: "Premium landing page",
-    images: [feedbackImage],
-    variants: [],
-    isActive: true,
-    seoTitle: "Referral Request Page | Tap Rater",
-    seoDescription: "Hosted referral request page for local businesses using Tap Rater NFC products.",
-    searchKeywords: ["referral request page", "nfc referral stand", "referral form page"]
-  },
-  {
-    slug: "social-media-hub-page",
-    title: "Social Media Hub Page",
-    sku: "TR-SOCIAL-HUB",
-    categorySlug: "hosted-landing-page-products",
-    basePriceCents: 0,
-    stockStatus: "instock",
-    shortDescription: "Hosted social hub for Instagram, TikTok, Facebook, website, and custom links.",
+      "Rate Your Experience Plate is a low-profile NFC product for customer experience feedback and follow-up flows. It opens one Tap Rater destination URL and is tap or scan ready.",
+    supportedDestinations: ["feedback", "custom"],
+    displayText: "Rate Your Experience",
+    image: experiencePlateImage,
+    seoTitle: "Rate Your Experience Plate | Low-Profile NFC Feedback Product",
+    seoDescription: "Low-profile NFC plate for customer experience feedback and follow-up flows.",
+    searchKeywords: ["rate your experience plate", "feedback nfc plate", "customer experience plate"]
+  }),
+  phaseOneProduct({
+    slug: "follow-us-social-media-stand",
+    title: "Follow Us on Social Media Stand",
+    sku: "TR-SOCIAL-STAND",
+    categorySlug: "social-media",
+    basePriceCents: standPriceCents,
+    shortDescription: "Countertop NFC stand that opens a social media hub or direct social profile.",
     description:
-      "A Social Media Hub Page gives customers one hosted Tap Rater page for social profiles, website links, booking links, and custom calls to action.",
-    productType: "platform_landing_page",
-    serviceMode: "hosted_landing_page",
-    checkoutMode: "contact_sales",
-    requiresAccount: true,
-    requiresSubscription: true,
-    requiresLandingPage: true,
-    supportedDestinations: ["instagram", "tiktok", "facebook", "website", "booking", "custom"],
-    activationType: "premium_hosted_activation",
-    includedServiceLabel: "Premium landing page",
-    images: [facebookImage],
-    variants: [],
-    isActive: true,
-    seoTitle: "Social Media Hub Page | Tap Rater",
-    seoDescription: "Hosted social media hub page for Instagram, TikTok, Facebook, booking links, websites, and custom actions.",
-    searchKeywords: ["social media hub page", "social links nfc page", "instagram tiktok nfc"]
-  },
-  {
-    slug: "review-feedback-combo-page",
-    title: "Review + Feedback Combo Page",
-    sku: "TR-REVIEW-FEEDBACK",
-    categorySlug: "hosted-landing-page-products",
-    basePriceCents: 0,
-    stockStatus: "instock",
-    shortDescription: "Hosted page that combines public review links and private feedback options.",
+      "Follow Us on Social Media Stand is a tabletop NFC display that opens a social media hub or direct social profile. It is designed for Facebook, X, Instagram, and YouTube destinations through one configured URL.",
+    supportedDestinations: ["facebook", "instagram", "website", "custom"],
+    displayText: "Follow Us on Social Media",
+    image: socialStandImage,
+    seoTitle: "Follow Us on Social Media Stand | NFC Social Follow Stand",
+    seoDescription: "Countertop NFC stand that opens a social media hub or direct profile for Facebook, X, Instagram, and YouTube.",
+    searchKeywords: ["social media nfc stand", "follow us social media stand", "instagram facebook youtube nfc stand"]
+  }),
+  phaseOneProduct({
+    slug: "follow-us-social-media-plate",
+    title: "Follow Us on Social Media Plate",
+    sku: "TR-SOCIAL-PLATE",
+    categorySlug: "social-media",
+    basePriceCents: platePriceCents,
+    shortDescription: "Low-profile NFC plate that opens a social media hub or direct social profile.",
     description:
-      "A Review + Feedback Combo Page can show public review buttons and a private feedback form without steering customers away from public review platforms based on sentiment.",
-    productType: "platform_landing_page",
-    serviceMode: "hosted_landing_page",
-    checkoutMode: "contact_sales",
-    requiresAccount: true,
-    requiresSubscription: true,
-    requiresLandingPage: true,
-    supportedDestinations: ["google", "facebook", "yelp", "feedback", "custom"],
-    activationType: "premium_hosted_activation",
-    includedServiceLabel: "Premium landing page",
-    images: [feedbackImage],
-    variants: [],
-    isActive: true,
-    seoTitle: "Review and Feedback Combo Page | Tap Rater",
-    seoDescription: "Hosted review and feedback combo page with public review links and private feedback options.",
-    searchKeywords: ["review feedback combo page", "review and feedback page", "hosted feedback page"]
-  },
-  {
-    slug: "staff-review-tracking-page",
-    title: "Staff Review Tracking Page",
-    sku: "TR-STAFF-TRACKING",
-    categorySlug: "hosted-landing-page-products",
-    basePriceCents: 0,
-    stockStatus: "instock",
-    shortDescription: "Hosted staff tracking page for employee cards, tags, and team-level reporting.",
+      "Follow Us on Social Media Plate is a flat NFC prompt that opens a social media hub or direct profile. It supports Facebook, X, Instagram, and YouTube through one configured URL.",
+    supportedDestinations: ["facebook", "instagram", "website", "custom"],
+    displayText: "Follow Us on Social Media",
+    image: socialPlateImage,
+    seoTitle: "Follow Us on Social Media Plate | NFC Social Follow Plate",
+    seoDescription: "Low-profile NFC plate that opens a social media hub or direct social profile for Facebook, X, Instagram, and YouTube.",
+    searchKeywords: ["social media nfc plate", "follow us social media plate", "social follow plate"]
+  }),
+  phaseOneProduct({
+    slug: "book-your-next-visit-stand",
+    title: "Book Your Next Visit Stand",
+    sku: "TR-BOOKING-STAND",
+    categorySlug: "appointments",
+    basePriceCents: standPriceCents,
+    shortDescription: "Countertop NFC stand that opens a booking page, appointment form, calendar, or scheduling URL.",
     description:
-      "A Staff Review Tracking Page connects staff NFC cards, tags, or stands to Tap Rater reporting so a business can understand tap activity by employee or team.",
-    productType: "platform_landing_page",
-    serviceMode: "hosted_landing_page",
-    checkoutMode: "contact_sales",
-    requiresAccount: true,
-    requiresSubscription: true,
-    requiresLandingPage: true,
-    supportedDestinations: ["google", "feedback", "custom"],
-    activationType: "premium_hosted_activation",
-    includedServiceLabel: "Premium landing page",
-    images: [googleStandImage],
-    variants: [],
-    isActive: true,
-    seoTitle: "Staff Review Tracking Page | Tap Rater",
-    seoDescription: "Hosted staff review tracking page for employee review cards, NFC tags, and team reporting.",
-    searchKeywords: ["staff review tracking", "employee review tracking", "staff nfc dashboard"]
-  },
-  {
-    slug: "multi-location-dashboard",
-    title: "Multi-Location Dashboard",
-    sku: "TR-MULTI-LOCATION",
-    categorySlug: "hosted-landing-page-products",
-    basePriceCents: 0,
-    stockStatus: "instock",
-    shortDescription: "Account-based dashboard for businesses with multiple locations, devices, and reputation pages.",
+      "Book Your Next Visit Stand is a tabletop NFC display that opens a booking page, appointment form, calendar, or scheduling URL. It connects to one destination URL and is tap or scan ready.",
+    supportedDestinations: ["booking", "website", "custom"],
+    displayText: "Book Your Next Visit",
+    image: bookingStandImage,
+    seoTitle: "Book Your Next Visit Stand | Appointment Booking NFC Stand",
+    seoDescription: "Countertop NFC stand that opens a booking page, appointment form, calendar, or scheduling URL.",
+    searchKeywords: ["book your next visit stand", "appointment booking nfc stand", "booking nfc stand"]
+  }),
+  phaseOneProduct({
+    slug: "book-your-next-visit-plate",
+    title: "Book Your Next Visit Plate",
+    sku: "TR-BOOKING-PLATE",
+    categorySlug: "appointments",
+    basePriceCents: platePriceCents,
+    shortDescription: "Low-profile NFC plate that opens a booking page, appointment form, calendar, or scheduling URL.",
     description:
-      "A Multi-Location Dashboard is for businesses that need location-level Tap Rater devices, hosted pages, analytics, destination management, and reporting.",
-    productType: "platform_landing_page",
-    serviceMode: "multi_location_platform",
-    checkoutMode: "contact_sales",
-    requiresAccount: true,
-    requiresSubscription: true,
-    requiresLandingPage: true,
-    supportedDestinations: ["google", "facebook", "yelp", "tripadvisor", "feedback", "referral", "custom"],
-    activationType: "premium_hosted_activation",
-    includedServiceLabel: "Premium landing page",
-    images: [standsBundleImage],
-    variants: [],
-    isActive: true,
-    seoTitle: "Multi-Location Reputation Dashboard | Tap Rater",
-    seoDescription: "Tap Rater multi-location dashboard for devices, hosted pages, analytics, and business reputation workflows.",
-    searchKeywords: ["multi location review dashboard", "reputation dashboard", "tap rater dashboard"]
-  },
-  {
-    slug: "business-review-starter-kit",
-    title: "Business Review Starter Kit",
-    sku: "TR-STARTER-KIT",
-    categorySlug: "business-bundles",
-    basePriceCents: 12700,
-    salePriceCents: 10160,
-    stockStatus: "instock",
-    shortDescription: "Bundle of physical review products with Tap Rater managed setup included.",
+      "Book Your Next Visit Plate is a flat NFC prompt that opens a booking page, appointment form, calendar, or scheduling URL. It connects to one destination URL and is tap or scan ready.",
+    supportedDestinations: ["booking", "website", "custom"],
+    displayText: "Book Your Next Visit",
+    image: bookingPlateImage,
+    seoTitle: "Book Your Next Visit Plate | Appointment Booking NFC Plate",
+    seoDescription: "Low-profile NFC plate that opens a booking page, appointment form, calendar, or scheduling URL.",
+    searchKeywords: ["book your next visit plate", "appointment booking nfc plate", "booking nfc plate"]
+  }),
+  phaseOneProduct({
+    slug: "view-our-menu-stand",
+    title: "View Our Menu Stand",
+    sku: "TR-MENU-STAND",
+    categorySlug: "menu",
+    basePriceCents: standPriceCents,
+    shortDescription: "Countertop NFC stand that opens a restaurant, cafe, or service menu.",
     description:
-      "The Business Review Starter Kit combines NFC review hardware and managed setup so a local business can launch multiple review touchpoints together.",
-    productType: "bundle",
-    serviceMode: "managed_redirect",
-    checkoutMode: "request_quote",
-    requiresAccount: false,
-    requiresSubscription: false,
-    requiresLandingPage: false,
-    supportedDestinations: ["google", "facebook", "yelp", "website", "custom"],
-    activationType: "managed_setup",
-    includedServiceLabel: "Managed setup included",
-    images: [bundleImage],
-    variants: [],
-    isActive: true,
-    seoTitle: "Business Review Starter Kit | Tap Rater",
-    seoDescription: "Business review starter kit with physical NFC products and Tap Rater managed setup for local businesses.",
-    searchKeywords: ["business review starter kit", "nfc review bundle", "tap rater bundle"]
-  }
+      "View Our Menu Stand is a tabletop NFC display that opens a restaurant, cafe, or service menu. It connects to one menu destination URL and is tap or scan ready.",
+    supportedDestinations: ["menu", "website", "custom"],
+    displayText: "View Our Menu",
+    image: menuStandImage,
+    seoTitle: "View Our Menu Stand | NFC Menu Stand",
+    seoDescription: "Countertop NFC stand that opens a restaurant, cafe, or service menu with one tap or scan.",
+    searchKeywords: ["view our menu stand", "nfc menu stand", "restaurant menu nfc stand"]
+  }),
+  phaseOneProduct({
+    slug: "view-our-menu-plate",
+    title: "View Our Menu Plate",
+    sku: "TR-MENU-PLATE",
+    categorySlug: "menu",
+    basePriceCents: platePriceCents,
+    shortDescription: "Low-profile NFC plate that opens a restaurant, cafe, or service menu.",
+    description:
+      "View Our Menu Plate is a flat NFC product that opens a restaurant, cafe, or service menu. It connects to one menu destination URL and is tap or scan ready.",
+    supportedDestinations: ["menu", "website", "custom"],
+    displayText: "View Our Menu",
+    image: menuPlateImage,
+    seoTitle: "View Our Menu Plate | Low-Profile NFC Menu Product",
+    seoDescription: "Low-profile NFC plate that opens a restaurant, cafe, or service menu.",
+    searchKeywords: ["view our menu plate", "nfc menu plate", "restaurant menu nfc plate"]
+  })
 ];

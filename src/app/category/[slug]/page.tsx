@@ -76,7 +76,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
             <h2 className="mt-2 text-3xl font-black text-ink">Shop {category.title.toLowerCase()}</h2>
           </div>
           <p className="max-w-xl text-sm leading-6 text-muted">
-            These products are selected for the same customer action: tap or scan the Tap Rater display, open the right destination, and make reviews, booking, feedback, or social actions easier.
+            These products are selected for the same customer action first. Choose the stand format for a more visible tabletop display, or the plate format for counters, desks, tables, and reception areas.
           </p>
         </div>
         <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">

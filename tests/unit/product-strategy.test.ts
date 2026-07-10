@@ -20,7 +20,9 @@ describe("Tap Rater product strategy", () => {
   it("positions the homepage around NFC products and hosted reputation pages", () => {
     const homepage = readFileSync("src/app/page.tsx", "utf8");
 
-    expect(homepage).toContain("NFC review products and hosted reputation pages for local businesses.");
+    expect(homepage).toContain("NFC review stands and smart reputation pages for local businesses.");
+    expect(homepage).toContain("Start simple. Grow into the platform.");
+    expect(homepage).toContain("More than a sign. A reputation platform.");
   });
 
   it("documents the platform domain split, redirect engine, and database entities", () => {

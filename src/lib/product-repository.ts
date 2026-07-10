@@ -19,6 +19,8 @@ export function staticStorefrontProducts(): MigratedProduct[] {
   return migratedProducts.filter((product) => product.isActive);
 }
 
+const staticStorefrontProductSlugs = new Set(staticStorefrontProducts().map((product) => product.slug));
+
 export async function getStorefrontProducts(): Promise<MigratedProduct[]> {
   noStore();
 
@@ -62,7 +64,7 @@ export async function getStorefrontProductsFromClient(client: ProductRepositoryC
 
   const products = data
     .map((row) => normalizeStorefrontProductRow(row))
-    .filter((product): product is MigratedProduct => Boolean(product?.isActive));
+    .filter((product): product is MigratedProduct => Boolean(product?.isActive && staticStorefrontProductSlugs.has(product.slug)));
 
   return products.length > 0 ? products : staticStorefrontProducts();
 }
@@ -77,7 +79,9 @@ export function normalizeStorefrontProductRow(row: unknown): MigratedProduct | n
   const staticProduct = slug ? getProductBySlug(slug) : undefined;
   const title = readString(productRow.title) ?? staticProduct?.title;
   const sku = readString(productRow.sku) ?? staticProduct?.sku;
-  const categorySlug = readString(productRow.category_slug) ?? readString(productRow.categorySlug) ?? staticProduct?.categorySlug;
+  const rawCategorySlug = readString(productRow.category_slug) ?? readString(productRow.categorySlug) ?? staticProduct?.categorySlug;
+  const matchedCategory = rawCategorySlug ? getCategoryBySlug(rawCategorySlug) : undefined;
+  const categorySlug = matchedCategory?.slug === rawCategorySlug ? rawCategorySlug : staticProduct?.categorySlug ?? matchedCategory?.slug ?? rawCategorySlug;
   const basePriceCents = readNumber(productRow.base_price_cents) ?? readNumber(productRow.basePriceCents) ?? staticProduct?.basePriceCents;
   const stockStatus = readStockStatus(productRow.stock_status) ?? readStockStatus(productRow.stockStatus) ?? staticProduct?.stockStatus;
   const shortDescription =
@@ -102,6 +106,28 @@ export function normalizeStorefrontProductRow(row: unknown): MigratedProduct | n
     readActivationType(productRow.activation_type) ?? readActivationType(productRow.activationType) ?? staticProduct?.activationType;
   const includedServiceLabel =
     readString(productRow.included_service_label) ?? readString(productRow.includedServiceLabel) ?? staticProduct?.includedServiceLabel;
+  const format =
+    readProductFormat(productRow.format) ??
+    readProductFormat(productRow.product_format) ??
+    staticProduct?.format ??
+    inferProductFormatFromTitle(title);
+  const customizationOptions =
+    readCustomizationOptions(productRow.customization_options) ??
+    readCustomizationOptions(productRow.customizationOptions) ??
+    staticProduct?.customizationOptions ??
+    ["standard_design"];
+  const allowsLogoUpload =
+    readBoolean(productRow.allows_logo_upload) ??
+    readBoolean(productRow.allowsLogoUpload) ??
+    staticProduct?.allowsLogoUpload ??
+    customizationOptions.includes("add_logo");
+  const allowsCustomDesign =
+    readBoolean(productRow.allows_custom_design) ??
+    readBoolean(productRow.allowsCustomDesign) ??
+    staticProduct?.allowsCustomDesign ??
+    customizationOptions.includes("custom_design");
+  const designMode = readDesignMode(productRow.design_mode) ?? readDesignMode(productRow.designMode) ?? staticProduct?.designMode ?? "standard";
+  const displayText = readString(productRow.display_text) ?? readString(productRow.displayText) ?? staticProduct?.displayText;
 
   if (
     !slug ||
@@ -119,7 +145,12 @@ export function normalizeStorefrontProductRow(row: unknown): MigratedProduct | n
     requiresSubscription === undefined ||
     requiresLandingPage === undefined ||
     !activationType ||
-    !includedServiceLabel
+    !includedServiceLabel ||
+    !format ||
+    customizationOptions.length === 0 ||
+    allowsLogoUpload === undefined ||
+    allowsCustomDesign === undefined ||
+    !designMode
   ) {
     return null;
   }
@@ -143,6 +174,12 @@ export function normalizeStorefrontProductRow(row: unknown): MigratedProduct | n
     supportedDestinations,
     activationType,
     includedServiceLabel,
+    format,
+    customizationOptions,
+    allowsLogoUpload,
+    allowsCustomDesign,
+    designMode,
+    displayText,
     images: readImages(productRow.images) ?? staticProduct?.images ?? [],
     variants: readVariants(productRow.variants) ?? staticProduct?.variants ?? [],
     isActive: readBoolean(productRow.is_active) ?? readBoolean(productRow.isActive) ?? true,
@@ -218,6 +255,39 @@ function readSupportedDestinations(value: unknown): MigratedProduct["supportedDe
 
 function readActivationType(value: unknown): MigratedProduct["activationType"] | undefined {
   return value === "free_basic_activation" || value === "managed_setup" || value === "premium_hosted_activation" ? value : undefined;
+}
+
+function readProductFormat(value: unknown): MigratedProduct["format"] | undefined {
+  return value === "stand" || value === "plate" || value === "bundle" || value === "platform" ? value : undefined;
+}
+
+function readCustomizationOptions(value: unknown): MigratedProduct["customizationOptions"] | undefined {
+  const options: MigratedProduct["customizationOptions"][number][] = ["standard_design", "add_logo", "custom_design"];
+
+  if (!Array.isArray(value)) {
+    return undefined;
+  }
+
+  const normalized = value.filter((item): item is MigratedProduct["customizationOptions"][number] => {
+    return options.includes(item as MigratedProduct["customizationOptions"][number]);
+  });
+  return normalized.length > 0 ? Array.from(new Set(normalized)) : undefined;
+}
+
+function readDesignMode(value: unknown): MigratedProduct["designMode"] | undefined {
+  return value === "standard" || value === "logo" || value === "custom" ? value : undefined;
+}
+
+function inferProductFormatFromTitle(title: string | undefined): MigratedProduct["format"] | undefined {
+  if (!title) {
+    return undefined;
+  }
+
+  const normalized = title.toLowerCase();
+  if (normalized.includes("plate")) return "plate";
+  if (normalized.includes("bundle") || normalized.includes("kit")) return "bundle";
+  if (normalized.includes("page") || normalized.includes("dashboard")) return "platform";
+  return "stand";
 }
 
 function readStringArray(value: unknown) {

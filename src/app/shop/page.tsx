@@ -5,9 +5,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Shop Review NFC Products and Hosted Reputation Pages",
+  title: "Shop NFC Review, Social, Appointment, Menu, and Feedback Products",
   description:
-    "Shop Tap Rater review NFC products, hosted reputation pages, feedback flows, social and booking products, and business bundles.",
+    "Shop Tap Rater Phase 1 tabletop NFC stands and flat NFC plates for reviews, social, booking, menu, and experience flows.",
   alternates: {
     canonical: "/shop"
   }
@@ -24,16 +24,16 @@ export default async function ShopPage() {
           <div>
             <p className="text-sm font-semibold uppercase text-brand">Tap Rater shop</p>
             <h1 className="mt-3 max-w-4xl text-4xl font-black leading-tight text-ink md:text-5xl">
-              Shop NFC review stands, plates, bundles, and platform-ready products
+              Shop NFC products by customer use case
             </h1>
             <p className="mt-5 max-w-3xl text-lg leading-8 text-muted">
-              Choose standalone NFC products, managed setup, hosted landing pages, feedback flows, social and booking products, or bundles. Basic redirect products open one destination. Platform products use hosted pages, accounts, forms, and dashboards.
+              Phase 1 products are physical tabletop stands and low-profile plates, grouped by purpose: reviews, social media, appointments, menu, and feedback. Each product supports free basic activation, connects to one destination URL, and is tap or scan ready.
             </p>
           </div>
           <div className="grid gap-3 rounded-md border border-line bg-white p-5">
             <p className="text-sm font-bold uppercase text-ink">Popular searches</p>
             <div className="flex flex-wrap gap-2">
-              {["Google Review NFC Stand", "NFC Review Plate", "Custom Review Stand", "Appointment Booking NFC Stand", "Feedback NFC Stand"].map((term) => (
+              {["Google Review Stand", "Yelp Review Plate", "Book Your Next Visit Stand", "View Our Menu Plate", "Rate Your Experience Stand"].map((term) => (
                 <span key={term} className="rounded-full border border-line px-3 py-2 text-sm text-muted">
                   {term}
                 </span>
@@ -49,8 +49,8 @@ export default async function ShopPage() {
             <p className="text-sm font-semibold uppercase text-brand">Shop by category</p>
             <h2 className="mt-2 text-3xl font-black text-ink">Find the right review product faster</h2>
           </div>
-          <p className="max-w-xl text-sm leading-6 text-muted">
-            Categories are organized around buying intent: Google review products, review platforms, social and booking links, feedback and referral flows, hosted landing pages, and bundles.
+            <p className="max-w-xl text-sm leading-6 text-muted">
+            Categories are organized around what customers are trying to do. Inside each category, choose the physical format that fits the space: stand or plate.
           </p>
         </div>
         <div className="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-3">

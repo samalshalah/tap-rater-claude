@@ -18,8 +18,9 @@ describe("cms repository", () => {
   it("provides default homepage content", () => {
     const content = getDefaultHomepageContent();
 
-    expect(content.heroTitle).toContain("NFC review products");
+    expect(content.heroTitle).toContain("NFC review stands");
     expect(content.primaryButtonHref).toBe("/shop");
+    expect(content.secondaryButtonHref).toBe("#platform-preview");
   });
 
   it("stores homepage content in site_content", async () => {
@@ -117,6 +118,10 @@ describe("cms repository", () => {
       supportedDestinations: ["google"],
       activationType: "free_basic_activation",
       includedServiceLabel: "Free basic activation",
+      customizationOptions: ["standard_design", "add_logo", "custom_design"],
+      allowsLogoUpload: true,
+      allowsCustomDesign: true,
+      designMode: "standard",
       seoTitle: "SEO title",
       seoDescription: "SEO description",
       isActive: true
@@ -142,6 +147,10 @@ describe("cms repository", () => {
       supported_destinations: ["google"],
       activation_type: "free_basic_activation",
       included_service_label: "Free basic activation",
+      customization_options: ["standard_design", "add_logo", "custom_design"],
+      allows_logo_upload: true,
+      allows_custom_design: true,
+      design_mode: "standard",
       seo_title: "SEO title",
       seo_description: "SEO description",
       is_active: true

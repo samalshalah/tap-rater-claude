@@ -198,6 +198,10 @@ create table if not exists products (
   supported_destinations text[] not null default array['custom']::text[],
   activation_type text not null default 'free_basic_activation' check (activation_type in ('free_basic_activation', 'managed_setup', 'premium_hosted_activation')),
   included_service_label text not null default 'Free basic activation',
+  customization_options text[] not null default array['standard_design', 'add_logo', 'custom_design']::text[],
+  allows_logo_upload boolean not null default true,
+  allows_custom_design boolean not null default true,
+  design_mode text not null default 'standard' check (design_mode in ('standard', 'logo', 'custom')),
   seo_title text,
   seo_description text,
   is_active boolean not null default true,
@@ -214,6 +218,10 @@ alter table products add column if not exists requires_landing_page boolean not 
 alter table products add column if not exists supported_destinations text[] not null default array['custom']::text[];
 alter table products add column if not exists activation_type text not null default 'free_basic_activation' check (activation_type in ('free_basic_activation', 'managed_setup', 'premium_hosted_activation'));
 alter table products add column if not exists included_service_label text not null default 'Free basic activation';
+alter table products add column if not exists customization_options text[] not null default array['standard_design', 'add_logo', 'custom_design']::text[];
+alter table products add column if not exists allows_logo_upload boolean not null default true;
+alter table products add column if not exists allows_custom_design boolean not null default true;
+alter table products add column if not exists design_mode text not null default 'standard';
 
 do $$
 begin
@@ -238,6 +246,12 @@ begin
       'custom'
     ]::text[]
   );
+  alter table products drop constraint if exists products_customization_options_check;
+  alter table products add constraint products_customization_options_check check (
+    customization_options <@ array['standard_design', 'add_logo', 'custom_design']::text[]
+  );
+  alter table products drop constraint if exists products_design_mode_check;
+  alter table products add constraint products_design_mode_check check (design_mode in ('standard', 'logo', 'custom'));
 end $$;
 
 update products

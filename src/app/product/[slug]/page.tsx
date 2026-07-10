@@ -2,8 +2,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { CheckCircle2, Link2, MessageSquareText, Smartphone, Store } from "lucide-react";
-import { AddToCartButton } from "@/components/cart/add-to-cart-button";
-import { migratedProducts } from "@/data/migrated-products";
+import { migratedProducts, type MigratedProduct } from "@/data/migrated-products";
 import { ProductCard } from "@/components/product/product-card";
 import { ProductGallery } from "@/components/product/product-gallery";
 import {
@@ -11,7 +10,7 @@ import {
   getStorefrontProducts,
   getStorefrontRelatedProducts
 } from "@/lib/product-repository";
-import { formatPrice, getCategoryBySlug, getProductPriceCents } from "@/lib/products";
+import { formatPrice, getCategoryBySlug } from "@/lib/products";
 import {
   getProductActivationCopy,
   getProductComparisonRows,
@@ -80,6 +79,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
   const serviceBadges = getProductServiceBadges(product);
   const activationCopy = getProductActivationCopy(product);
   const checkoutAction = getCheckoutAction(product);
+  const designOptions = getDesignOptions(product);
   const productFaqs = [
     {
       question: `How does ${product.title} work?`,
@@ -93,9 +93,9 @@ export default async function ProductPage({ params }: ProductPageProps) {
         : "No monthly fee is required for basic activation. Optional premium dashboard and hosted landing page features can be added later when needed."
     },
     {
-      question: "Where should I place an NFC review stand?",
+      question: "Where should I place this Tap Rater product?",
       answer:
-        "Place it where customers naturally pause: checkout counters, front desks, reception areas, pickup counters, service desks, tables, or point-of-sale areas."
+        "Place stands where customers naturally pause, such as checkout counters, front desks, reception areas, pickup counters, or service desks. Place plates on desks, tables, counters, or compact reception areas."
     }
   ];
 
@@ -135,6 +135,12 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
               <h1 className="mt-5 text-4xl font-black leading-tight text-ink md:text-5xl">{product.seoTitle?.replace(" | Tap Rater", "") ?? product.title}</h1>
               <p className="mt-5 text-lg leading-8 text-muted">{product.description}</p>
+              {product.displayText ? (
+                <div className="mt-5 rounded-md border border-line bg-gray-50 p-4">
+                  <p className="text-xs font-black uppercase text-muted">Main display text</p>
+                  <p className="mt-1 text-xl font-black text-ink">{product.displayText}</p>
+                </div>
+              ) : null}
 
               <div className="mt-6 flex flex-col gap-3 border-y border-line py-5 sm:flex-row sm:items-end sm:justify-between">
                 <div>
@@ -161,21 +167,49 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 </div>
               ) : null}
 
-              {product.checkoutMode === "buy_now" ? (
-                <AddToCartButton productId={product.slug} disabled={product.stockStatus !== "instock"} />
-              ) : (
-                <Link
-                  href={checkoutAction.href}
-                  className="mt-6 inline-flex w-full items-center justify-center rounded-md bg-brand px-5 py-3 text-sm font-bold text-white transition hover:bg-ink"
-                >
-                  {checkoutAction.label}
-                </Link>
-              )}
+              <Link
+                href={checkoutAction.href}
+                className="mt-6 inline-flex w-full items-center justify-center rounded-md bg-brand px-5 py-3 text-sm font-bold text-white transition hover:bg-ink"
+              >
+                {checkoutAction.label}
+              </Link>
+              <p className="mt-2 text-xs font-bold uppercase text-muted">{checkoutAction.supportingCopy}</p>
               <div className="mt-4 grid gap-2 text-sm text-muted sm:grid-cols-2">
-                <p className="flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-brand" /> {checkoutAction.supportingCopy}</p>
+                <p className="flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-brand" /> No monthly fee required for basic activation.</p>
+                <p className="flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-brand" /> Connects to one destination URL.</p>
+                <p className="flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-brand" /> Tap or scan ready.</p>
                 <p className="flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-brand" /> Stripe remains test-mode only</p>
               </div>
             </div>
+
+            {designOptions.length > 0 ? (
+              <section className="mt-5 rounded-md border border-line bg-white p-5 shadow-sm md:p-7">
+                <p className="text-sm font-semibold uppercase text-brand">Design options</p>
+                <h2 className="mt-2 text-2xl font-black text-ink">Choose your design option</h2>
+                <p className="mt-3 text-sm leading-6 text-muted">
+                  Available as standard design, with your logo, or with a custom layout. Logo and custom design details are collected after request.
+                </p>
+                <div className="mt-5 grid gap-3">
+                  {designOptions.map((option) => (
+                    <article key={option.id} className="rounded-md border border-line bg-gray-50 p-4">
+                      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                        <div>
+                          <h3 className="font-black text-ink">{option.title}</h3>
+                          <p className="mt-2 text-sm leading-6 text-muted">{option.body}</p>
+                          <p className="mt-2 text-xs font-bold uppercase text-muted">{option.bestFor}</p>
+                        </div>
+                        <Link
+                          href={option.href}
+                          className="inline-flex shrink-0 items-center justify-center rounded-md border border-line bg-white px-4 py-2 text-sm font-bold text-ink transition hover:border-brand hover:text-brand"
+                        >
+                          {option.cta}
+                        </Link>
+                      </div>
+                    </article>
+                  ))}
+                </div>
+              </section>
+            ) : null}
 
             <div className="mt-5 grid gap-3 rounded-md border border-line bg-gray-50 p-5 text-sm text-muted md:grid-cols-2">
               <p><strong className="text-ink">Best for:</strong> restaurants, salons, clinics, retail stores, service counters, and customer-facing teams.</p>
@@ -216,9 +250,9 @@ export default async function ProductPage({ params }: ProductPageProps) {
             <div className="grid gap-3">
               {[
                 "NFC-enabled Tap Rater display for your counter, desk, table, or service point.",
-                "Support for Google, Facebook, Yelp, booking pages, survey pages, and custom feedback URLs.",
+                "Support for Google, Facebook, Yelp, TripAdvisor, social profiles, booking pages, menu links, and feedback URLs.",
                 "Clear tap or scan wording that works without asking customers to search online.",
-                "A product type that fits your business setup: stand, plate, bundle, or feedback display."
+                "A Phase 1 product format that fits your business setup: tabletop stand or low-profile plate."
               ].map((item) => (
                 <div key={item} className="flex gap-3 rounded-md border border-line bg-gray-50 p-4">
                   <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-brand" />
@@ -241,7 +275,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
             <div className="rounded-md border border-line bg-white p-5">
               <h3 className="font-black text-ink">One-time product clarity</h3>
               <p className="mt-2 text-sm leading-6 text-muted">
-                Basic and managed redirect products point to your permanent Tap Rater URL, then redirect directly to the business link configured during activation.
+                No monthly fee required for basic activation. Connects to one destination URL. Tap or scan ready.
               </p>
             </div>
             <div className="rounded-md border border-line bg-white p-5">
@@ -420,10 +454,46 @@ function getCheckoutAction(product: { checkoutMode: string }) {
   }
 
   return {
-    href: "/cart",
-    label: "Add to cart",
-    supportingCopy: "Buy-now product"
+    href: "/setup-new-taprater",
+    label: "Request setup",
+    supportingCopy: "Checkout is not live yet. Setup details are collected by request."
   };
+}
+
+function getDesignOptions(product: Pick<MigratedProduct, "slug" | "customizationOptions" | "allowsLogoUpload" | "allowsCustomDesign">) {
+  const allOptions = [
+    {
+      id: "standard_design" as const,
+      title: "A. Standard Design",
+      body: "Uses the Tap Rater template and is the fastest setup for simple review, social, appointment, menu, or feedback use.",
+      bestFor: "Best for fast setup",
+      href: `/setup-new-taprater?product=${product.slug}&design=standard`,
+      cta: "Request setup"
+    },
+    {
+      id: "add_logo" as const,
+      title: "B. Add Your Logo",
+      body: "Add your business logo to the Tap Rater design for branded counters, reception areas, restaurants, salons, clinics, and hotels.",
+      bestFor: "Logo setup required after request",
+      href: `/setup-new-taprater?product=${product.slug}&design=logo`,
+      cta: "Request logo setup"
+    },
+    {
+      id: "custom_design" as const,
+      title: "C. Custom Design",
+      body: "Custom colors, layout, wording, and logo placement for multi-location businesses or brand-specific displays.",
+      bestFor: "Requires design approval before production",
+      href: `/contact-us?product=${product.slug}&design=custom`,
+      cta: "Request custom design"
+    }
+  ];
+
+  return allOptions.filter((option) => {
+    if (!product.customizationOptions.includes(option.id)) return false;
+    if (option.id === "add_logo") return product.allowsLogoUpload;
+    if (option.id === "custom_design") return product.allowsCustomDesign;
+    return true;
+  });
 }
 
 function getProductPriceLabel(product: { checkoutMode: string; salePriceCents?: number; basePriceCents: number }) {

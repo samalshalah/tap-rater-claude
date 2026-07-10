@@ -14,9 +14,9 @@ export function Footer() {
         <div className="grid content-start gap-2 text-sm text-gray-300">
           <p className="mb-2 font-bold text-white">Shop</p>
           <Link href="/shop">All products</Link>
-          <Link href="/product/google-review-nfc-stand">Google stands</Link>
-          <Link href="/product/google-review-nfc-plate">Review plates</Link>
-          <Link href="/category/hosted-landing-page-products">Hosted pages</Link>
+          <Link href="/product/google-review-stand">Google stands</Link>
+          <Link href="/product/google-review-plate">Review plates</Link>
+          <Link href="/category/social-media">Social media</Link>
         </div>
         <div className="grid content-start gap-2 text-sm text-gray-300">
           <p className="mb-2 font-bold text-white">Support</p>

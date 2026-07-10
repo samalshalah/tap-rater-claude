@@ -11,9 +11,9 @@ describe("Stripe checkout helpers", () => {
   it("validates cart items server-side against active in-stock products", () => {
     const result = validateCheckoutCart(
       [
-        { productId: "google-review-nfc-stand", quantity: 2 },
+        { productId: "google-review-stand", quantity: 2 },
         { productId: "old-product", quantity: 5 },
-        { productId: "rate-your-experience-page", quantity: 1 }
+        { productId: "stale-platform-product", quantity: 1 }
       ],
       migratedProducts
     );
@@ -22,7 +22,7 @@ describe("Stripe checkout helpers", () => {
     if (!result.ok) return;
     expect(result.rows).toHaveLength(1);
     expect(result.rows[0]).toMatchObject({
-      productId: "google-review-nfc-stand",
+      productId: "google-review-stand",
       quantity: 2,
       unitAmountCents: 4900,
       lineSubtotalCents: 9800
@@ -39,7 +39,7 @@ describe("Stripe checkout helpers", () => {
   });
 
   it("allows only buy-now products in the current one-time checkout", () => {
-    expect(validateCheckoutCart([{ productId: "rate-your-experience-page", quantity: 1 }], migratedProducts)).toMatchObject({
+    expect(validateCheckoutCart([{ productId: "stale-platform-product", quantity: 1 }], migratedProducts)).toMatchObject({
       ok: false,
       reason: "empty_cart"
     });
@@ -52,7 +52,7 @@ describe("Stripe checkout helpers", () => {
   });
 
   it("builds Stripe line items from validated cart rows", () => {
-    const result = validateCheckoutCart([{ productId: "google-review-nfc-stand", quantity: 1 }], migratedProducts);
+    const result = validateCheckoutCart([{ productId: "google-review-stand", quantity: 1 }], migratedProducts);
 
     expect(result.ok).toBe(true);
     if (!result.ok) return;
@@ -62,10 +62,10 @@ describe("Stripe checkout helpers", () => {
         price_data: {
           currency: "usd",
           product_data: {
-            name: "Google Review NFC Stand",
-            description: "Countertop NFC stand that opens a Google review link with one tap or scan.",
+            name: "Google Review Stand",
+            description: "Countertop NFC stand that opens your Google review link with one tap or scan.",
             metadata: {
-              product_id: "google-review-nfc-stand",
+              product_id: "google-review-stand",
               sku: "TR-GOOGLE-STAND"
             }
           },
@@ -76,7 +76,7 @@ describe("Stripe checkout helpers", () => {
   });
 
   it("creates test-mode Checkout Session params with success and cancel URLs", () => {
-    const result = validateCheckoutCart([{ productId: "google-review-nfc-stand", quantity: 1 }], migratedProducts);
+    const result = validateCheckoutCart([{ productId: "google-review-stand", quantity: 1 }], migratedProducts);
 
     expect(result.ok).toBe(true);
     if (!result.ok) return;

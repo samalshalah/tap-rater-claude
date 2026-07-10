@@ -1,43 +1,92 @@
 # Tap Rater Product Strategy
 
-Tap Rater is both a product store and a reputation platform. The public storefront sells physical NFC products, managed setup packages, hosted reputation pages, feedback flows, and business bundles. The platform layer powers permanent device URLs, activation, business profiles, hosted landing pages, tap tracking, forms, and future customer dashboards.
+Tap Rater is both a product store and a reputation platform. The public storefront sells physical NFC products first, while the platform layer powers permanent device URLs, activation, business profiles, hosted landing pages, tap tracking, forms, and future customer dashboards. In the long-term model, some products are standalone NFC products, some require managed setup, some require hosted landing pages, and some require a customer account.
 
-In plain terms: some products are standalone NFC products, some products require hosted landing pages, some products require a customer account and dashboard, and some products are bundles.
+The current storefront strategy is intentionally narrower than the long-term platform strategy. Phase 1 sells only products Tap Rater can fulfill now: tabletop NFC stands and flat NFC plates.
+
+## Phase 1 Fulfillment Scope
+
+Phase 1 active storefront products:
+
+- Google Review Stand
+- Yelp Review Stand
+- Facebook Review Stand
+- TripAdvisor Review Stand
+- Rate Your Experience Stand
+- Follow Us on Social Media Stand
+- Book Your Next Visit Stand
+- View Our Menu Stand
+- Google Review Plate
+- Yelp Review Plate
+- Facebook Review Plate
+- TripAdvisor Review Plate
+- Rate Your Experience Plate
+- Follow Us on Social Media Plate
+- Book Your Next Visit Plate
+- View Our Menu Plate
+
+Cards, employee name tags, badges, staff cards, and other card/tag products are postponed until Tap Rater has card or badge printing ready. They should not appear as active storefront products.
+
+## Phase 1 Design Customization
+
+Every active Phase 1 stand and plate can be sold in three design modes:
+
+- Standard Design: uses the Tap Rater template and is the fastest setup path.
+- Add Your Logo: adds the customer business logo to the Tap Rater design. Logo setup is required and logo files are collected after the order or setup request.
+- Custom Design: supports custom colors, layout, wording, and logo placement. Custom designs require approval before production.
+
+The product model supports this with:
+
+- `customizationOptions = standard_design | add_logo | custom_design`
+- `allowsLogoUpload = true` for stand and plate products
+- `allowsCustomDesign = true` for stand and plate products
+- `designMode = standard | logo | custom`
+
+Customization is an option inside each product, not a storefront category. The categories remain based on customer use case: Reviews, Social Media, Appointments, Menu, Feedback, and Business Bundles.
+
+Logo upload, automated proofing, and custom approval workflows are not live in Phase 1. Product pages and admin copy must use request-based wording such as "Logo and custom design details are collected after request."
 
 ## Product Families
 
-### Standalone NFC Products
+### Standalone Physical Redirect Products
 
-Standalone NFC products are simple physical products that open one destination. Examples include Google Review NFC Stand, Google Review NFC Plate, Google Review NFC Card, Facebook Review Stand, Yelp Review Stand, TripAdvisor Review Stand, Appointment Booking Stand, Social Follow NFC Stand, and Menu / WiFi / Direct Link Stand.
+Standalone NFC products are simple physical products that open one destination URL. Phase 1 stands and plates use this model.
 
 These products use:
 
 - `productType = physical_redirect`
 - `serviceMode = basic_redirect`
-- `checkoutMode = buy_now`
+- `checkoutMode = buy_now` while checkout remains test/preview
 - `requiresAccount = false`
 - `requiresLandingPage = false`
 - `requiresSubscription = false`
+- `activationType = free_basic_activation`
+- `includedServiceLabel = Free basic activation`
 
 Basic activation can work with only a destination URL. The device can still point to a permanent Tap Rater route such as `/r/{deviceCode}`, but the behavior is a direct redirect after activation.
 
-### Managed Physical Products
+### Managed Setup and Bundles
 
-Managed physical products are still physical NFC products, but Tap Rater helps configure or maintain the destination. Employee Review Name Tag is an example because staff-level destinations may need naming, routing, or reporting setup.
+Managed setup and bundles remain quote-based while Phase 1 focuses on individual stands and plates.
 
-These products usually use:
+These products should use:
 
-- `productType = physical_managed`
+- `productType = physical_managed` or `bundle`
 - `serviceMode = managed_redirect`
 - `checkoutMode = request_quote`
+- `requiresAccount = false` for now
 - `requiresLandingPage = false`
 - `requiresSubscription = false`
+- `activationType = managed_setup`
+- `includedServiceLabel = Managed setup included`
 
-### Hosted Landing Page Products
+Bundles may create multiple devices during fulfillment or setup, but they are not the main Phase 1 shop grid.
 
-Hosted landing page products require Tap Rater platform setup. They need a customer account, business profile, device or public URL, landing page, and usually tracking or form storage. Examples include Multi-Platform Review Page, Reputation Hub Page, Rate Your Experience Page, Private Feedback Page, Referral Request Page, Social Media Hub Page, Review + Feedback Combo Page, Staff Review Tracking Page, and Multi-Location Dashboard.
+### Platform Products
 
-These products use:
+Hosted landing page products remain part of the long-term Tap Rater platform strategy, not the main Phase 1 physical product grid. They require Tap Rater platform setup, a customer account, business profile, device or public URL, landing page, and usually tracking or form storage.
+
+Future platform products should use:
 
 - `productType = platform_landing_page`
 - `serviceMode = hosted_landing_page` or `multi_location_platform`
@@ -46,25 +95,24 @@ These products use:
 - `requiresLandingPage = true`
 - `requiresSubscription = true` only where hosted features require recurring service
 
-Platform landing page activation must create or connect to a customer account, business, device, and landing page. It should not be treated like a simple one-destination redirect.
+## Phase 1 Categories
 
-### Bundles
+Phase 1 categories are based on customer use case, not physical format. The physical format is stored separately as `format = stand | plate | bundle | platform`.
 
-Bundles combine physical NFC products with managed setup. Business Review Starter Kit is the starting bundle model.
+The storefront categories are:
 
-Bundles use:
+- Review Products (`reviews`)
+- Social Media Products (`social-media`)
+- Appointment Products (`appointments`)
+- Menu Products (`menu`)
+- Feedback Products (`feedback`)
+- Business Bundles (`business-bundles`)
 
-- `productType = bundle`
-- `serviceMode = managed_redirect`
-- `checkoutMode = request_quote`
-- `requiresAccount = false` unless dashboard access is included
-- `requiresLandingPage = false` unless hosted pages are part of the bundle
-
-Bundles may create multiple devices during fulfillment or setup.
+The first five categories contain the active Phase 1 stand and plate products. Each use-case category can show both physical formats. Business Bundles remains quote-based and optional while Phase 1 focuses on individual sellable products.
 
 ## Supported Destinations
 
-Products declare the destinations they support:
+The product model still supports these destinations for current and future products:
 
 - `google`
 - `facebook`
@@ -80,38 +128,35 @@ Products declare the destinations they support:
 - `referral`
 - `custom`
 
+Phase 1 menu products are menu-only in customer-facing copy and should not be marketed as Wi-Fi products.
+
 ## Compliance Language
 
-Tap Rater must avoid review-gating language. Do not imply unhappy customers are blocked from public review platforms. Do not say or imply that Tap Rater gets only positive reviews, filters negative reviews, asks only happy customers, rewards reviews, or prevents public review access.
+Tap Rater must avoid review-gating language. Do not block unhappy customers from public review platforms. Do not imply unhappy customers are blocked from public review platforms. Do not say or imply that Tap Rater gets only positive reviews, filters negative reviews, asks only happy customers, rewards reviews, or prevents public review access.
 
-Do not block unhappy customers from public review platforms. Acceptable language focuses on reducing friction:
+Acceptable language focuses on reducing friction:
 
 - "Tap or scan to open your review link."
 - "Make it easier for customers to share their experience."
-- "Open the right review, booking, social, feedback, or business link."
+- "Open the right review, booking, social, menu, feedback, or business link."
 - "Hosted pages can include public review links and private feedback options without steering customers based on sentiment."
 
 ## Checkout Direction
 
-Live Stripe payments are not enabled. Current one-time Stripe test checkout is only for `checkoutMode = buy_now` products. Platform products and bundles should use `request_quote` or `contact_sales` until pricing, subscription billing, tax, shipping, and fulfillment are intentionally approved.
+Live Stripe payments are not enabled. Current one-time Stripe test checkout is only for `checkoutMode = buy_now` products. Platform products, managed setup, and bundles should use `request_quote` or `contact_sales` until pricing, subscription billing, tax, shipping, and fulfillment are intentionally approved.
 
 ## Launch Phases
 
-### Phase 1: Storefront, Activation, and Basic Platform Foundation
-
-Phase 1 should make Tap Rater useful as a real replacement for the WordPress/WooCommerce storefront while preserving the platform direction.
+### Phase 1: Physical Stands and Plates
 
 - Publish SEO-focused marketing pages and product discovery pages.
-- Expand the catalog around physical redirect products, managed setup products, hosted platform products, and bundles.
-- Keep `buy_now` for simple physical redirect products only.
-- Use `request_quote` or `contact_sales` for managed, platform, and bundle products until billing is intentionally approved.
+- Sell only tabletop NFC stands and flat NFC plates.
+- Keep card, badge, and name-tag products postponed.
 - Support device activation for simple redirect devices with a destination URL.
 - Support basic customer, business, location, and device records for platform growth.
 - Track basic tap analytics without storing raw IP addresses.
 
 ### Phase 2: Hosted Reputation Pages
-
-Phase 2 should make platform products distinct from simple hardware.
 
 - Add hosted landing pages for multi-platform review, feedback, referral, social hub, and reputation hub products.
 - Connect hosted pages to customer accounts, businesses, locations, devices, and analytics.
@@ -119,8 +164,6 @@ Phase 2 should make platform products distinct from simple hardware.
 - Keep review links available without steering customers based on sentiment.
 
 ### Phase 3: Quotes, Bundles, Billing, and Subscriptions
-
-Phase 3 should add commercial workflows after the product and platform model is stable.
 
 - Add quote requests for bundles, custom setup, and multi-location platform products.
 - Add bundle fulfillment flows that can create multiple devices.

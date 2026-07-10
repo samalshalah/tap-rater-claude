@@ -121,6 +121,10 @@ describe("backend validators", () => {
       supportedDestinations: ["google", "feedback", "custom"],
       activationType: "premium_hosted_activation",
       includedServiceLabel: "Premium landing page",
+      customizationOptions: ["standard_design", "custom_design"],
+      allowsLogoUpload: false,
+      allowsCustomDesign: true,
+      designMode: "custom",
       isActive: true
     });
 
@@ -129,5 +133,8 @@ describe("backend validators", () => {
     expect(product.checkoutMode).toBe("subscription");
     expect(product.requiresAccount).toBe(true);
     expect(product.supportedDestinations).toEqual(["google", "feedback", "custom"]);
+    expect(product.customizationOptions).toEqual(["standard_design", "custom_design"]);
+    expect(product.allowsCustomDesign).toBe(true);
+    expect(product.designMode).toBe("custom");
   });
 });
