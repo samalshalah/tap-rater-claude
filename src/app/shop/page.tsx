@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { ProductCard } from "@/components/product/product-card";
 import { getStorefrontProducts } from "@/lib/product-repository";
 import { getCatalogCategories } from "@/lib/products";
@@ -12,6 +13,37 @@ export const metadata: Metadata = {
     canonical: "/shop"
   }
 };
+
+const industries = [
+  {
+    slug: "restaurants-cafes",
+    title: "Restaurants & Cafés",
+    subhead: "Share menus, promote specials, and turn counter visits into repeat business.",
+    image: "/uploads/industries/restaurants-cafes.png",
+    categorySlug: "menu"
+  },
+  {
+    slug: "car-dealerships",
+    title: "Car Dealerships",
+    subhead: "Guide shoppers, book appointments, and improve the showroom experience.",
+    image: "/uploads/industries/car-dealerships.png",
+    categorySlug: "appointments"
+  },
+  {
+    slug: "front-desk-reception",
+    title: "Front Desk & Reception",
+    subhead: "Welcome guests, share information, and capture feedback with ease.",
+    image: "/uploads/industries/front-desk-reception.png",
+    categorySlug: "feedback"
+  },
+  {
+    slug: "retail-grocery",
+    title: "Retail & Grocery",
+    subhead: "Create smoother checkouts, stronger reviews, and better in-store engagement.",
+    image: "/uploads/industries/retail-grocery.png",
+    categorySlug: "reviews"
+  }
+];
 
 export default async function ShopPage() {
   const products = await getStorefrontProducts();
@@ -52,6 +84,34 @@ export default async function ShopPage() {
                 <p className="mt-4 text-[13px] font-medium text-brand">
                   {products.filter((product) => product.categorySlug === category.slug).length} products &rsaquo;
                 </p>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="bg-white py-16 sm:py-20">
+        <div className="mx-auto max-w-[1100px] px-6">
+          <h2 className="text-[22px] font-semibold tracking-tightest text-ink">Find your industry</h2>
+          <div className="mt-8 grid gap-4 sm:grid-cols-2">
+            {industries.map((industry) => (
+              <Link
+                key={industry.slug}
+                href={`/category/${industry.categorySlug}`}
+                className="group overflow-hidden rounded-2xl bg-surface transition hover:shadow-[0_8px_30px_rgba(0,0,0,0.08)]"
+              >
+                <div className="p-6">
+                  <h3 className="text-[20px] font-semibold tracking-tightest text-ink">{industry.title}</h3>
+                  <p className="mt-2 text-[14px] leading-5 text-muted">{industry.subhead}</p>
+                </div>
+                <div className="relative aspect-[4/3] w-full overflow-hidden">
+                  <Image
+                    src={industry.image}
+                    alt={industry.title}
+                    fill
+                    className="object-cover transition duration-300 group-hover:scale-[1.03]"
+                  />
+                </div>
               </Link>
             ))}
           </div>

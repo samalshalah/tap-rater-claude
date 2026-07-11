@@ -77,3 +77,7 @@ The mocked-up "TAP RATER" device screens across these images use **different pla
 8 transparent stand images resent; 7 were byte-identical to round 4 (confirmed already live). Only Yelp was new — filled the one gap left from round 4. Now all 8 stands use matching `-v4.png` transparent renders.
 
 Built the new **Shop by Stand** page (`/shop/by-stand`), rebuilding the marketing-tile concept (round 5's promo images) as real HTML — headline, subhead, and eyebrow are actual text (indexable, accessible, editable), paired with the clean transparent product photo. A "Shop by use / Shop by stand" toggle links the two catalog views on both `/shop` and `/shop/by-stand`.
+
+## Round 7 — industry vertical images for Shop by Use (2026-07-11)
+
+4 lifestyle images (Restaurants & Cafés, Car Dealerships, Front Desk & Reception, Retail & Grocery), stored full at `public/uploads/marketing-concepts/round7/`. Cropped (headline/subhead text removed via row-variance detection) and saved as clean photos at `public/uploads/industries/`. Headline and subhead are now real HTML in a new "Find your industry" section on `/shop` (Shop by Use), each linking to its best-fit category: Restaurants & Cafés → menu, Car Dealerships → appointments, Front Desk & Reception → feedback, Retail & Grocery → reviews.
