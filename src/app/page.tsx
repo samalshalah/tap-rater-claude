@@ -30,6 +30,17 @@ const useCases = [
   { title: "Feedback", slug: "feedback", image: "/uploads/products/rate-your-experience-stand-v4.png" }
 ];
 
+const stands = [
+  { title: "Google", slug: "google-review-stand", image: "/uploads/products/google-review-stand-v4.png" },
+  { title: "Yelp", slug: "yelp-review-stand", image: "/uploads/products/yelp-review-stand-v4.png" },
+  { title: "Facebook", slug: "facebook-review-stand", image: "/uploads/products/facebook-review-stand-v4.png" },
+  { title: "TripAdvisor", slug: "tripadvisor-review-stand", image: "/uploads/products/tripadvisor-review-stand-v4.png" },
+  { title: "Social", slug: "follow-us-social-media-stand", image: "/uploads/products/social-media-stand-v4.png" },
+  { title: "Appointments", slug: "book-your-next-visit-stand", image: "/uploads/products/book-next-visit-stand-v4.png" },
+  { title: "Menu", slug: "view-our-menu-stand", image: "/uploads/products/view-menu-stand-v4.png" },
+  { title: "Feedback", slug: "rate-your-experience-stand", image: "/uploads/products/rate-your-experience-stand-v4.png" }
+];
+
 const howItWorks = [
   { title: "Choose a use case", body: "Reviews, social, appointments, menu, feedback, or a hosted page." },
   { title: "Pick your stand", body: "Whatever fits the counter, table, or reception desk." },
@@ -111,11 +122,41 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* Use cases — Apple category-row style: product image above plain label, no cards */}
+      {/* Shop by stand */}
       <section className="border-t border-line bg-white py-20 sm:py-28">
         <div className="mx-auto max-w-[1100px] px-6">
           <div className="text-center">
-            <h2 className="text-[28px] font-semibold tracking-tightest text-ink sm:text-[34px]">What do you want customers to open?</h2>
+            <p className="text-[13px] font-medium uppercase tracking-[0.06em] text-brand">Shop by stand</p>
+            <h2 className="mt-3 text-[28px] font-semibold tracking-tightest text-ink sm:text-[34px]">Every stand, by name.</h2>
+          </div>
+          <div className="mt-12 flex justify-center gap-8 overflow-x-auto sm:gap-10 lg:gap-12">
+            {stands.map((stand) => (
+              <Link
+                key={stand.slug}
+                href={`/product/${stand.slug}`}
+                className="group flex shrink-0 flex-col items-center gap-3"
+              >
+                <div className="relative h-16 w-16 transition duration-200 group-hover:-translate-y-0.5">
+                  <Image src={stand.image} alt={stand.title} fill className="object-contain" />
+                </div>
+                <span className="text-[13px] font-medium text-ink">{stand.title}</span>
+              </Link>
+            ))}
+          </div>
+          <div className="mt-10 text-center">
+            <Link href="/shop/by-stand" className="text-[14px] font-medium text-brand hover:text-brand-dark">
+              Shop by stand &rsaquo;
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Shop by use — Apple category-row style: product image above plain label, no cards */}
+      <section className="border-t border-line bg-surface py-20 sm:py-28">
+        <div className="mx-auto max-w-[1100px] px-6">
+          <div className="text-center">
+            <p className="text-[13px] font-medium uppercase tracking-[0.06em] text-brand">Shop by use</p>
+            <h2 className="mt-3 text-[28px] font-semibold tracking-tightest text-ink sm:text-[34px]">What do you want customers to open?</h2>
           </div>
           <div className="mt-12 flex justify-center gap-8 overflow-x-auto sm:gap-12 lg:gap-16">
             {categoryCards.map((card) => (
@@ -131,11 +172,16 @@ export default async function HomePage() {
               </Link>
             ))}
           </div>
+          <div className="mt-10 text-center">
+            <Link href="/shop" className="text-[14px] font-medium text-brand hover:text-brand-dark">
+              Shop by use &rsaquo;
+            </Link>
+          </div>
         </div>
       </section>
 
       {/* Featured products */}
-      <section className="border-t border-line bg-surface py-20 sm:py-28">
+      <section className="border-t border-line bg-white py-20 sm:py-28">
         <div className="mx-auto max-w-[1100px] px-6">
           <div className="flex flex-col items-center gap-3 text-center">
             <h2 className="text-[28px] font-semibold tracking-tightest text-ink sm:text-[34px]">Stands for the moments that matter.</h2>
@@ -152,7 +198,7 @@ export default async function HomePage() {
       </section>
 
       {/* How it works */}
-      <section className="border-t border-line bg-white py-20 sm:py-28">
+      <section className="border-t border-line bg-surface py-20 sm:py-28">
         <div className="mx-auto max-w-[900px] px-6">
           <div className="text-center">
             <h2 className="text-[28px] font-semibold tracking-tightest text-ink sm:text-[34px]">From product to tap point.</h2>
