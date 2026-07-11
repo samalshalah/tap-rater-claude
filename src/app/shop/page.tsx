@@ -21,7 +21,13 @@ export default async function ShopPage() {
     <>
       <section className="border-b border-line bg-white py-16 sm:py-20">
         <div className="mx-auto max-w-[1100px] px-6 text-center">
-          <p className="text-[13px] font-medium uppercase tracking-[0.08em] text-muted">Tap Rater shop</p>
+          <div className="inline-flex rounded-full bg-surface p-1 text-[13px] font-medium">
+            <span className="rounded-full bg-white px-4 py-1.5 text-ink shadow-sm">Shop by use</span>
+            <Link href="/shop/by-stand" className="rounded-full px-4 py-1.5 text-muted transition hover:text-ink">
+              Shop by stand
+            </Link>
+          </div>
+          <p className="mt-6 text-[13px] font-medium uppercase tracking-[0.08em] text-muted">Tap Rater shop</p>
           <h1 className="mx-auto mt-4 max-w-2xl text-[34px] font-semibold tracking-tightest text-ink sm:text-[44px]">
             Shop by what you want customers to open.
           </h1>

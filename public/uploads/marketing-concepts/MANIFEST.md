@@ -71,3 +71,9 @@ The mocked-up "TAP RATER" device screens across these images use **different pla
 **Tech specs section added**: a new brand-adapted specifications table now appears on every stand product page (dimensions in both mm and inches, material, chip, tap range, personalization options, etc.), sourced from the actual factory spec sheet with all factory/OEM/origin information stripped per instruction.
 
 **Category row redesigned**: homepage "What do you want customers to open?" section now matches Apple's actual category-row pattern (small product image above a plain text label, no card chrome), using real product photography for each category's icon.
+
+## Round 6 — Yelp transparent render + Shop by Stand page (2026-07-11)
+
+8 transparent stand images resent; 7 were byte-identical to round 4 (confirmed already live). Only Yelp was new — filled the one gap left from round 4. Now all 8 stands use matching `-v4.png` transparent renders.
+
+Built the new **Shop by Stand** page (`/shop/by-stand`), rebuilding the marketing-tile concept (round 5's promo images) as real HTML — headline, subhead, and eyebrow are actual text (indexable, accessible, editable), paired with the clean transparent product photo. A "Shop by use / Shop by stand" toggle links the two catalog views on both `/shop` and `/shop/by-stand`.

@@ -157,7 +157,7 @@ export const catalogCategories: CatalogCategory[] = [
 
 const googleStandImage = { src: "/uploads/products/google-review-stand-v4.png", alt: "Tap Rater Google Review Stand" };
 const googlePlateImage = { src: "/uploads/products/google-review-plate.png", alt: "Tap Rater Google Review Plate" };
-const yelpStandImage = { src: "/uploads/products/yelp-review-stand-v3.png", alt: "Tap Rater Yelp Review Stand" };
+const yelpStandImage = { src: "/uploads/products/yelp-review-stand-v4.png", alt: "Tap Rater Yelp Review Stand" };
 const yelpPlateImage = { src: "/uploads/products/yelp-review-plate.png", alt: "Tap Rater Yelp Review Plate placeholder" };
 const facebookStandImage = { src: "/uploads/products/facebook-review-stand-v4.png", alt: "Tap Rater Facebook Review Stand" };
 const facebookPlateImage = { src: "/uploads/products/facebook-review-plate.png", alt: "Tap Rater Facebook Review Plate placeholder" };
