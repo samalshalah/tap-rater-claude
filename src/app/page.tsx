@@ -2,9 +2,10 @@ import Image from "next/image";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { BarChart3, FileText, LayoutDashboard, Link2, MapPin, Smartphone } from "lucide-react";
-import { ProductCard } from "@/components/product/product-card";
 import { getStorefrontProducts } from "@/lib/product-repository";
-import { getCatalogCategories } from "@/lib/products";
+import { formatPrice, getProductPriceCents } from "@/lib/products";
+import { standSpotlights } from "@/data/stand-spotlights";
+import { industries } from "@/data/industries";
 import { JsonLd, organizationJsonLd, websiteJsonLd } from "@/lib/seo";
 
 export const metadata: Metadata = {
@@ -22,24 +23,7 @@ export const metadata: Metadata = {
   }
 };
 
-const useCases = [
-  { title: "Reviews", slug: "reviews", image: "/uploads/products/google-review-stand-v4.png" },
-  { title: "Social", slug: "social-media", image: "/uploads/products/social-media-stand-v4.png" },
-  { title: "Appointments", slug: "appointments", image: "/uploads/products/book-next-visit-stand-v4.png" },
-  { title: "Menu", slug: "menu", image: "/uploads/products/view-menu-stand-v4.png" },
-  { title: "Feedback", slug: "feedback", image: "/uploads/products/rate-your-experience-stand-v4.png" }
-];
-
-const stands = [
-  { title: "Google", slug: "google-review-stand", image: "/uploads/products/google-review-stand-v4.png" },
-  { title: "Yelp", slug: "yelp-review-stand", image: "/uploads/products/yelp-review-stand-v4.png" },
-  { title: "Facebook", slug: "facebook-review-stand", image: "/uploads/products/facebook-review-stand-v4.png" },
-  { title: "TripAdvisor", slug: "tripadvisor-review-stand", image: "/uploads/products/tripadvisor-review-stand-v4.png" },
-  { title: "Social", slug: "follow-us-social-media-stand", image: "/uploads/products/social-media-stand-v4.png" },
-  { title: "Appointments", slug: "book-your-next-visit-stand", image: "/uploads/products/book-next-visit-stand-v4.png" },
-  { title: "Menu", slug: "view-our-menu-stand", image: "/uploads/products/view-menu-stand-v4.png" },
-  { title: "Feedback", slug: "rate-your-experience-stand", image: "/uploads/products/rate-your-experience-stand-v4.png" }
-];
+const homeStandSlugs = ["google-review-stand", "follow-us-social-media-stand", "book-your-next-visit-stand", "view-our-menu-stand"];
 
 const howItWorks = [
   { title: "Choose a use case", body: "Reviews, social, appointments, menu, feedback, or a hosted page." },
@@ -61,22 +45,11 @@ const platformFeatures = [
 
 export default async function HomePage() {
   const products = await getStorefrontProducts();
-  const catalogCategories = getCatalogCategories();
-  const featuredProducts = [
-    "google-review-stand",
-    "yelp-review-stand",
-    "follow-us-social-media-stand",
-    "book-your-next-visit-stand"
-  ].flatMap((slug) => {
+  const homeStands = homeStandSlugs.flatMap((slug) => {
     const product = products.find((item) => item.slug === slug);
-    return product ? [product] : [];
+    return product && standSpotlights[slug] ? [{ product, spotlight: standSpotlights[slug] }] : [];
   });
   const heroProduct = products.find((product) => product.slug === "google-review-stand") ?? products[0];
-
-  const categoryCards = useCases.flatMap((card) => {
-    const category = catalogCategories.find((item) => item.slug === card.slug);
-    return category ? [{ ...card, href: `/category/${category.slug}` }] : [];
-  });
 
   return (
     <main className="bg-white text-ink">
@@ -122,24 +95,32 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* Shop by stand */}
+      {/* Shop by stand — card design matching /shop/by-stand */}
       <section className="border-t border-line bg-white py-20 sm:py-28">
         <div className="mx-auto max-w-[1100px] px-6">
           <div className="text-center">
             <p className="text-[13px] font-medium uppercase tracking-[0.06em] text-brand">Shop by stand</p>
             <h2 className="mt-3 text-[28px] font-semibold tracking-tightest text-ink sm:text-[34px]">Every stand, by name.</h2>
           </div>
-          <div className="mt-12 flex justify-center gap-8 overflow-x-auto sm:gap-10 lg:gap-12">
-            {stands.map((stand) => (
+          <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {homeStands.map(({ product, spotlight }) => (
               <Link
-                key={stand.slug}
-                href={`/product/${stand.slug}`}
-                className="group flex shrink-0 flex-col items-center gap-3"
+                key={product.slug}
+                href={`/product/${product.slug}`}
+                className="group flex flex-col rounded-2xl bg-surface p-6 transition hover:shadow-[0_8px_30px_rgba(0,0,0,0.08)]"
               >
-                <div className="relative h-16 w-16 transition duration-200 group-hover:-translate-y-0.5">
-                  <Image src={stand.image} alt={stand.title} fill className="object-contain" />
+                <p className="text-[11px] font-medium uppercase tracking-[0.06em] text-brand">{spotlight.eyebrow}</p>
+                <h3 className="mt-2 text-[17px] font-semibold leading-tight tracking-tightest text-ink">{spotlight.headline}</h3>
+                <p className="mt-2 text-[13px] leading-5 text-muted">{spotlight.subhead}</p>
+                <div className="relative mt-5 aspect-square">
+                  <Image
+                    src={product.images[0].src}
+                    alt={product.images[0].alt}
+                    fill
+                    className="object-contain transition duration-300 group-hover:scale-[1.03]"
+                  />
                 </div>
-                <span className="text-[13px] font-medium text-ink">{stand.title}</span>
+                <p className="mt-4 text-[14px] font-medium text-ink">{formatPrice(getProductPriceCents(product))}</p>
               </Link>
             ))}
           </div>
@@ -151,24 +132,32 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* Shop by use — Apple category-row style: product image above plain label, no cards */}
+      {/* Shop by use — card design matching /shop's industry section */}
       <section className="border-t border-line bg-surface py-20 sm:py-28">
         <div className="mx-auto max-w-[1100px] px-6">
           <div className="text-center">
             <p className="text-[13px] font-medium uppercase tracking-[0.06em] text-brand">Shop by use</p>
-            <h2 className="mt-3 text-[28px] font-semibold tracking-tightest text-ink sm:text-[34px]">What do you want customers to open?</h2>
+            <h2 className="mt-3 text-[28px] font-semibold tracking-tightest text-ink sm:text-[34px]">Find your industry.</h2>
           </div>
-          <div className="mt-12 flex justify-center gap-8 overflow-x-auto sm:gap-12 lg:gap-16">
-            {categoryCards.map((card) => (
+          <div className="mt-12 grid gap-4 sm:grid-cols-2">
+            {industries.map((industry) => (
               <Link
-                key={card.slug}
-                href={card.href}
-                className="group flex shrink-0 flex-col items-center gap-3"
+                key={industry.slug}
+                href={`/category/${industry.categorySlug}`}
+                className="group overflow-hidden rounded-2xl bg-white transition hover:shadow-[0_8px_30px_rgba(0,0,0,0.08)]"
               >
-                <div className="relative h-16 w-16 transition duration-200 group-hover:-translate-y-0.5">
-                  <Image src={card.image} alt={card.title} fill className="object-contain" />
+                <div className="p-6">
+                  <h3 className="text-[18px] font-semibold tracking-tightest text-ink">{industry.title}</h3>
+                  <p className="mt-2 text-[13px] leading-5 text-muted">{industry.subhead}</p>
                 </div>
-                <span className="text-[13px] font-medium text-ink">{card.title}</span>
+                <div className="relative aspect-[4/3] w-full overflow-hidden">
+                  <Image
+                    src={industry.image}
+                    alt={industry.title}
+                    fill
+                    className="object-cover transition duration-300 group-hover:scale-[1.03]"
+                  />
+                </div>
               </Link>
             ))}
           </div>
@@ -176,23 +165,6 @@ export default async function HomePage() {
             <Link href="/shop" className="text-[14px] font-medium text-brand hover:text-brand-dark">
               Shop by use &rsaquo;
             </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* Featured products */}
-      <section className="border-t border-line bg-white py-20 sm:py-28">
-        <div className="mx-auto max-w-[1100px] px-6">
-          <div className="flex flex-col items-center gap-3 text-center">
-            <h2 className="text-[28px] font-semibold tracking-tightest text-ink sm:text-[34px]">Stands for the moments that matter.</h2>
-            <Link href="/shop" className="text-[14px] font-medium text-brand hover:text-brand-dark">
-              Shop all products &rsaquo;
-            </Link>
-          </div>
-          <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {featuredProducts.map((product) => (
-              <ProductCard key={product.slug} product={product} />
-            ))}
           </div>
         </div>
       </section>

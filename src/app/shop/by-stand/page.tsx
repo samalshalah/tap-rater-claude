@@ -3,6 +3,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { getStorefrontProducts } from "@/lib/product-repository";
 import { formatPrice, getProductPriceCents } from "@/lib/products";
+import { standSpotlights as spotlights, standSpotlightOrder as order } from "@/data/stand-spotlights";
 
 export const metadata: Metadata = {
   title: "Shop by Stand",
@@ -11,60 +12,6 @@ export const metadata: Metadata = {
     canonical: "/shop/by-stand"
   }
 };
-
-const spotlights: Record<string, { eyebrow: string; headline: string; subhead: string }> = {
-  "google-review-stand": {
-    eyebrow: "Review stand",
-    headline: "Capture more Google reviews.",
-    subhead: "Make reviewing your business fast and contactless."
-  },
-  "yelp-review-stand": {
-    eyebrow: "Review stand",
-    headline: "Capture more Yelp reviews.",
-    subhead: "Help customers leave a quick review before they go."
-  },
-  "facebook-review-stand": {
-    eyebrow: "Review stand",
-    headline: "Capture more Facebook reviews.",
-    subhead: "Invite customers to leave a review with one quick tap."
-  },
-  "tripadvisor-review-stand": {
-    eyebrow: "Review stand",
-    headline: "Collect more TripAdvisor reviews.",
-    subhead: "Encourage travelers to share their experience instantly."
-  },
-  "follow-us-social-media-stand": {
-    eyebrow: "Social media stand",
-    headline: "Grow your social following.",
-    subhead: "Help guests connect with your brand instantly."
-  },
-  "book-your-next-visit-stand": {
-    eyebrow: "Appointment stand",
-    headline: "Book your appointment.",
-    subhead: "A clean, contactless way to schedule your next visit."
-  },
-  "view-our-menu-stand": {
-    eyebrow: "Menu stand",
-    headline: "Tap to view our menu.",
-    subhead: "Share your menu instantly with a quick tap."
-  },
-  "rate-your-experience-stand": {
-    eyebrow: "Feedback stand",
-    headline: "Rate your experience.",
-    subhead: "Collect quick feedback in a simple contactless format."
-  }
-};
-
-const order = [
-  "google-review-stand",
-  "yelp-review-stand",
-  "facebook-review-stand",
-  "tripadvisor-review-stand",
-  "follow-us-social-media-stand",
-  "book-your-next-visit-stand",
-  "view-our-menu-stand",
-  "rate-your-experience-stand"
-];
 
 export default async function ShopByStandPage() {
   const products = await getStorefrontProducts();
