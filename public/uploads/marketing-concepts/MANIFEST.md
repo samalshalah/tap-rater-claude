@@ -61,3 +61,13 @@ The round-2 crops (`*-v2.png` in `public/uploads/products/`) are now superseded 
 ## Note on logo inconsistency
 
 The mocked-up "TAP RATER" device screens across these images use **different placeholder logos** — a shield/checkmark mark, a star, a "T" monogram, a speech-bubble icon, and a blue star wordmark all appear across different images. None of these match the real Tap Rater logo currently in `public/uploads/brand/tap-rater-logo.png`. Worth deciding on one final device-screen design before any of these go live, or treating the device screen as illustrative only and not literal.
+
+## Round 4 — refreshed stand renders + plates discontinued (2026-07-11)
+
+7 new stand images sent (all except Yelp), stored at `public/uploads/marketing-concepts/round4/`, swapped in as `*-v4.png` for: Google, Facebook, TripAdvisor, Rate Your Experience, Social Media, Book Your Next Visit, View Our Menu. Yelp remains on the round-3 image (no new Yelp render sent this round).
+
+**Plates discontinued**: all 8 plate-format products (`isActive: false`) — removed from shop, category pages, checkout, and static generation, but kept in the data file for easy reversal. All "stands and plates" copy across the site (homepage, shop, footer, meta descriptions, FAQ, contact) updated to stands-only language. The product-page comparison table's "Plate" row was removed.
+
+**Tech specs section added**: a new brand-adapted specifications table now appears on every stand product page (dimensions in both mm and inches, material, chip, tap range, personalization options, etc.), sourced from the actual factory spec sheet with all factory/OEM/origin information stripped per instruction.
+
+**Category row redesigned**: homepage "What do you want customers to open?" section now matches Apple's actual category-row pattern (small product image above a plain text label, no card chrome), using real product photography for each category's icon.

@@ -5,7 +5,8 @@ import {
   getProductComparisonRows,
   getProductPageHighlights,
   getProductPageUseCases,
-  getProductServiceBadges
+  getProductServiceBadges,
+  getStandSpecifications
 } from "@/lib/product-page-content";
 
 describe("product page content", () => {
@@ -30,10 +31,18 @@ describe("product page content", () => {
 
   it("marks the active product type in comparison rows", () => {
     const stand = getProductBySlug("google-review-stand");
-    const plate = getProductBySlug("google-review-plate");
 
     expect(getProductComparisonRows(stand!).find((row) => row.label === "Stand")?.active).toBe(true);
-    expect(getProductComparisonRows(plate!).find((row) => row.label === "Plate")?.active).toBe(true);
+    expect(getProductComparisonRows(stand!).find((row) => row.label === "Plate")).toBeUndefined();
+  });
+
+  it("provides brand-adapted stand specifications with inch and cm dimensions", () => {
+    const stand = getProductBySlug("google-review-stand");
+    const specs = getStandSpecifications(stand!);
+
+    expect(specs.find((row) => row.label === "Dimensions")?.value).toContain("165 × 108 × 50 mm");
+    expect(specs.find((row) => row.label === "Dimensions")?.value).toContain("in");
+    expect(JSON.stringify(specs)).not.toMatch(/sichuan|china|oem|odm|gs-stand/i);
   });
 
   it("builds customer-facing service badges from product strategy metadata", () => {

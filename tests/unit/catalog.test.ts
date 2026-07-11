@@ -32,7 +32,6 @@ describe("catalog categories", () => {
     const products = getProductsByCategory("reviews");
 
     expect(products.map((product) => product.title)).toContain("Google Review Stand");
-    expect(products.map((product) => product.title)).toContain("Google Review Plate");
     expect(products.every((product) => product.categorySlug === "reviews")).toBe(true);
   });
 
@@ -107,47 +106,39 @@ describe("catalog categories", () => {
     ).toBe(true);
   });
 
-  it("groups Phase 1 products by customer use case and keeps format separate", () => {
+  it("groups Phase 1 products by customer use case (stands only, plates discontinued)", () => {
     const reviewProducts = getProductsByCategory("reviews");
     const socialProducts = getProductsByCategory("social-media");
     const appointmentProducts = getProductsByCategory("appointments");
     const menuProducts = getProductsByCategory("menu");
     const feedbackProducts = getProductsByCategory("feedback");
 
-    expect(reviewProducts).toHaveLength(8);
-    expect(socialProducts).toHaveLength(2);
-    expect(appointmentProducts).toHaveLength(2);
-    expect(menuProducts).toHaveLength(2);
-    expect(feedbackProducts).toHaveLength(2);
-    expect(reviewProducts.filter((product) => product.format === "stand")).toHaveLength(4);
-    expect(reviewProducts.filter((product) => product.format === "plate")).toHaveLength(4);
+    expect(reviewProducts).toHaveLength(4);
+    expect(socialProducts).toHaveLength(1);
+    expect(appointmentProducts).toHaveLength(1);
+    expect(menuProducts).toHaveLength(1);
+    expect(feedbackProducts).toHaveLength(1);
+    expect(reviewProducts.every((product) => product.format === "stand")).toBe(true);
   });
 
-  it("includes only the Phase 1 stand and plate catalog as active storefront products", () => {
+  it("includes only the Phase 1 stand catalog as active storefront products (plates discontinued)", () => {
     const products = getActiveProducts();
     const titles = products.map((product) => product.title);
 
-    expect(products).toHaveLength(16);
+    expect(products).toHaveLength(8);
     expect(titles).toEqual(
       expect.arrayContaining([
         "Google Review Stand",
-        "Google Review Plate",
         "Facebook Review Stand",
-        "Facebook Review Plate",
         "Yelp Review Stand",
-        "Yelp Review Plate",
         "TripAdvisor Review Stand",
-        "TripAdvisor Review Plate",
         "Rate Your Experience Stand",
-        "Rate Your Experience Plate",
         "Follow Us on Social Media Stand",
-        "Follow Us on Social Media Plate",
         "Book Your Next Visit Stand",
-        "Book Your Next Visit Plate",
-        "View Our Menu Stand",
-        "View Our Menu Plate"
+        "View Our Menu Stand"
       ])
     );
+    expect(titles).not.toContain("Google Review Plate");
     expect(titles).not.toContain("Google Review NFC Card");
     expect(titles).not.toContain("Employee Review Name Tag");
     expect(titles).not.toContain("Staff Review Tracking Page");
@@ -157,7 +148,7 @@ describe("catalog categories", () => {
   it("keeps menu products menu-only", () => {
     const menuProducts = getActiveProducts().filter((product) => product.slug.includes("menu"));
 
-    expect(menuProducts).toHaveLength(2);
+    expect(menuProducts).toHaveLength(1);
     expect(JSON.stringify(menuProducts)).not.toMatch(/wifi/i);
   });
 

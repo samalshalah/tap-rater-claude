@@ -10,29 +10,29 @@ import { JsonLd, organizationJsonLd, websiteJsonLd } from "@/lib/seo";
 export const metadata: Metadata = {
   title: "NFC Review Stands and Smart Reputation Pages",
   description:
-    "Tap Rater sells NFC stands and plates for reviews, social links, menus, booking pages, feedback forms, and future hosted reputation platform features.",
+    "Tap Rater sells NFC stands for reviews, social links, menus, booking pages, feedback forms, and future hosted reputation platform features.",
   alternates: {
     canonical: "/"
   },
   openGraph: {
     title: "Tap. Scan. Review. | Tap Rater",
     description:
-      "NFC stands and plates that help local businesses collect reviews, share menus, book visits, get feedback, and grow social followers.",
+      "NFC stands that help local businesses collect reviews, share menus, book visits, get feedback, and grow social followers.",
     url: "/"
   }
 };
 
 const useCases = [
-  { title: "Reviews", copy: "Google, Yelp, Facebook, TripAdvisor", slug: "reviews", icon: Smartphone },
-  { title: "Social", copy: "Facebook, X, Instagram, YouTube", slug: "social-media", icon: Link2 },
-  { title: "Appointments", copy: "Booking pages and calendars", slug: "appointments", icon: LayoutDashboard },
-  { title: "Menu", copy: "Restaurant, cafe, or service menu", slug: "menu", icon: FileText },
-  { title: "Feedback", copy: "Private feedback and experience forms", slug: "feedback", icon: BarChart3 }
+  { title: "Reviews", slug: "reviews", image: "/uploads/products/google-review-stand-v4.png" },
+  { title: "Social", slug: "social-media", image: "/uploads/products/social-media-stand-v4.png" },
+  { title: "Appointments", slug: "appointments", image: "/uploads/products/book-next-visit-stand-v4.png" },
+  { title: "Menu", slug: "menu", image: "/uploads/products/view-menu-stand-v4.png" },
+  { title: "Feedback", slug: "feedback", image: "/uploads/products/rate-your-experience-stand-v4.png" }
 ];
 
 const howItWorks = [
   { title: "Choose a use case", body: "Reviews, social, appointments, menu, feedback, or a hosted page." },
-  { title: "Pick stand or plate", body: "Whatever fits the counter, table, or reception desk." },
+  { title: "Pick your stand", body: "Whatever fits the counter, table, or reception desk." },
   { title: "Choose a design", body: "Standard template, your logo, or a fully custom layout." },
   { title: "Activate your link", body: "Connect the permanent Tap Rater URL to your destination." },
   { title: "Customers tap or scan", body: "No app, no searching — just a single tap." },
@@ -53,9 +53,9 @@ export default async function HomePage() {
   const catalogCategories = getCatalogCategories();
   const featuredProducts = [
     "google-review-stand",
-    "google-review-plate",
     "yelp-review-stand",
-    "follow-us-social-media-stand"
+    "follow-us-social-media-stand",
+    "book-your-next-visit-stand"
   ].flatMap((slug) => {
     const product = products.find((item) => item.slug === slug);
     return product ? [product] : [];
@@ -80,7 +80,7 @@ export default async function HomePage() {
             Tap. Scan. Review.
           </h1>
           <p className="mx-auto mt-6 max-w-xl text-[17px] leading-7 text-muted sm:text-[19px]">
-            NFC stands and plates that help customers open your reviews, socials, menu, or booking page — with a single tap.
+            NFC stands that help customers open your reviews, socials, menu, or booking page — with a single tap.
           </p>
           <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
             <Link href="/shop" className="inline-flex items-center justify-center rounded-full bg-ink px-7 py-3 text-[15px] font-medium text-white transition hover:bg-brand">
@@ -111,29 +111,25 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* Use cases */}
+      {/* Use cases — Apple category-row style: product image above plain label, no cards */}
       <section className="border-t border-line bg-white py-20 sm:py-28">
         <div className="mx-auto max-w-[1100px] px-6">
           <div className="text-center">
             <h2 className="text-[28px] font-semibold tracking-tightest text-ink sm:text-[34px]">What do you want customers to open?</h2>
           </div>
-          <div className="mt-12 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
-            {categoryCards.map((card) => {
-              const Icon = card.icon;
-              return (
-                <Link
-                  key={card.slug}
-                  href={card.href}
-                  className="group flex flex-col items-center gap-3 rounded-2xl border border-line/70 px-5 py-8 text-center transition hover:border-line hover:bg-surface"
-                >
-                  <span className="grid h-11 w-11 place-items-center rounded-full bg-surface text-brand transition group-hover:bg-white">
-                    <Icon size={20} strokeWidth={1.5} />
-                  </span>
-                  <span className="text-[15px] font-medium text-ink">{card.title}</span>
-                  <span className="text-[13px] leading-5 text-muted">{card.copy}</span>
-                </Link>
-              );
-            })}
+          <div className="mt-12 flex justify-center gap-8 overflow-x-auto sm:gap-12 lg:gap-16">
+            {categoryCards.map((card) => (
+              <Link
+                key={card.slug}
+                href={card.href}
+                className="group flex shrink-0 flex-col items-center gap-3"
+              >
+                <div className="relative h-16 w-16 transition duration-200 group-hover:-translate-y-0.5">
+                  <Image src={card.image} alt={card.title} fill className="object-contain" />
+                </div>
+                <span className="text-[13px] font-medium text-ink">{card.title}</span>
+              </Link>
+            ))}
           </div>
         </div>
       </section>
@@ -142,7 +138,7 @@ export default async function HomePage() {
       <section className="border-t border-line bg-surface py-20 sm:py-28">
         <div className="mx-auto max-w-[1100px] px-6">
           <div className="flex flex-col items-center gap-3 text-center">
-            <h2 className="text-[28px] font-semibold tracking-tightest text-ink sm:text-[34px]">Stands and plates for the moments that matter.</h2>
+            <h2 className="text-[28px] font-semibold tracking-tightest text-ink sm:text-[34px]">Stands for the moments that matter.</h2>
             <Link href="/shop" className="text-[14px] font-medium text-brand hover:text-brand-dark">
               Shop all products &rsaquo;
             </Link>
@@ -206,7 +202,7 @@ export default async function HomePage() {
         <div className="mx-auto max-w-[640px] px-6">
           <h2 className="text-[30px] font-semibold tracking-tightest text-ink sm:text-[40px]">Launch your first tap point.</h2>
           <p className="mx-auto mt-4 max-w-md text-[15px] leading-6 text-muted">
-            Start with a standard stand or plate. Add your logo or a custom design when you're ready.
+            Start with a standard stand. Add your logo or a custom design when you're ready.
           </p>
           <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
             <Link href="/shop" className="inline-flex items-center justify-center rounded-full bg-ink px-7 py-3 text-[15px] font-medium text-white transition hover:bg-brand">

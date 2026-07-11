@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Tap Rater FAQs",
-  description: "Answers about Tap Rater NFC review stands, Google review plates, setup, link changes, and review destinations.",
+  description: "Answers about Tap Rater NFC review stands, setup, link changes, and review destinations.",
   alternates: {
     canonical: "/faqs"
   }

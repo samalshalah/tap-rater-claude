@@ -7,7 +7,7 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "Shop NFC Review, Social, Appointment, Menu, and Feedback Products",
   description:
-    "Shop Tap Rater Phase 1 tabletop NFC stands and flat NFC plates for reviews, social, booking, menu, and experience flows.",
+    "Shop Tap Rater Phase 1 tabletop NFC stands for reviews, social, booking, menu, and experience flows.",
   alternates: {
     canonical: "/shop"
   }
@@ -26,7 +26,7 @@ export default async function ShopPage() {
             Shop by what you want customers to open.
           </h1>
           <p className="mx-auto mt-4 max-w-xl text-[15px] leading-6 text-muted">
-            Tabletop stands and low-profile plates for reviews, social, booking, menu, and feedback. Every product supports free basic activation.
+            Tabletop NFC stands for reviews, social, booking, menu, and feedback. Every product supports free basic activation.
           </p>
         </div>
       </section>

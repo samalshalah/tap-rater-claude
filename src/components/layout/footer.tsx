@@ -29,7 +29,7 @@ export function Footer() {
         <div>
           <p className="text-[15px] font-semibold text-ink">Tap Rater</p>
           <p className="mt-3 max-w-xs text-[13px] leading-6 text-muted">
-            NFC review stands and plates that help local businesses collect reviews, share menus, and stay connected with customers.
+            NFC review stands that help local businesses collect reviews, share menus, and stay connected with customers.
           </p>
         </div>
         {columns.map((column) => (

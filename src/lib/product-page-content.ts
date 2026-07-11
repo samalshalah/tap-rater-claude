@@ -6,7 +6,7 @@ export type ProductPageContentItem = {
 };
 
 export type ProductComparisonRow = {
-  label: "Stand" | "Plate" | "Bundle" | "Social/Booking" | "Feedback/Referral" | "Custom";
+  label: "Stand" | "Bundle" | "Social/Booking" | "Feedback/Referral" | "Custom";
   bestFor: string;
   fit: string;
   active: boolean;
@@ -71,7 +71,6 @@ export function getProductActivationCopy(product: MigratedProduct): ProductActiv
 
 export function getProductPageHighlights(product: MigratedProduct): ProductPageContentItem[] {
   const destination = getReviewDestination(product);
-  const format = product.format;
 
   return [
     {
@@ -85,11 +84,8 @@ export function getProductPageHighlights(product: MigratedProduct): ProductPageC
         : "Use your business review page, recommendation page, booking page, menu, feedback form, or custom URL."
     },
     {
-      title: format === "plate" ? "Low-profile physical product" : "Countertop physical product",
-      body:
-        format === "plate"
-          ? "Built for desks, tables, reception areas, checkout counters, and compact customer touchpoints."
-          : "Built for checkout counters, reception desks, host stands, pickup areas, and service desks."
+      title: "Countertop physical product",
+      body: "Built for checkout counters, reception desks, host stands, pickup areas, and service desks."
     },
     {
       title: "Simple customer prompt",
@@ -128,12 +124,6 @@ export function getProductComparisonRows(product: MigratedProduct): ProductCompa
       bestFor: "Counters, reception, checkout, pickup",
       fit: "Most visible review prompt",
       active: product.format === "stand"
-    },
-    {
-      label: "Plate",
-      bestFor: "Tables, desks, compact counters",
-      fit: "Low-profile review prompt",
-      active: product.format === "plate"
     },
     {
       label: "Bundle",
@@ -194,4 +184,29 @@ export function getReviewDestination(product: MigratedProduct): string {
   }
 
   return "Google review";
+}
+
+export type ProductSpecRow = {
+  label: string;
+  value: string;
+};
+
+export function getStandSpecifications(product: MigratedProduct): ProductSpecRow[] {
+  if (product.format !== "stand") {
+    return [];
+  }
+
+  return [
+    { label: "Dimensions", value: "6.5 × 4.25 × 2.0 in (165 × 108 × 50 mm)" },
+    { label: "Weight", value: "1.8 oz (50 g)" },
+    { label: "Material", value: "Acrylic, 3–4 mm thickness" },
+    { label: "Finish", value: "Glossy, matte, or frosted" },
+    { label: "NFC chip", value: "NTAG213" },
+    { label: "Frequency", value: "13.56 MHz" },
+    { label: "Tap range", value: "0.8–2 in (2–5 cm)" },
+    { label: "Connectivity", value: "NFC tap, with QR code as a backup" },
+    { label: "Printing", value: "Full-color CMYK or silkscreen printing" },
+    { label: "Personalization", value: "Serial number, QR code, logo, or custom chip programming" },
+    { label: "Build", value: "Weather-resistant acrylic, indoor or covered outdoor countertop use" }
+  ];
 }

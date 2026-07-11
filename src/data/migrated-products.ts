@@ -155,21 +155,21 @@ export const catalogCategories: CatalogCategory[] = [
   }
 ];
 
-const googleStandImage = { src: "/uploads/products/google-review-stand-v3.png", alt: "Tap Rater Google Review Stand" };
+const googleStandImage = { src: "/uploads/products/google-review-stand-v4.png", alt: "Tap Rater Google Review Stand" };
 const googlePlateImage = { src: "/uploads/products/google-review-plate.png", alt: "Tap Rater Google Review Plate" };
 const yelpStandImage = { src: "/uploads/products/yelp-review-stand-v3.png", alt: "Tap Rater Yelp Review Stand" };
 const yelpPlateImage = { src: "/uploads/products/yelp-review-plate.png", alt: "Tap Rater Yelp Review Plate placeholder" };
-const facebookStandImage = { src: "/uploads/products/facebook-review-stand-v3.png", alt: "Tap Rater Facebook Review Stand" };
+const facebookStandImage = { src: "/uploads/products/facebook-review-stand-v4.png", alt: "Tap Rater Facebook Review Stand" };
 const facebookPlateImage = { src: "/uploads/products/facebook-review-plate.png", alt: "Tap Rater Facebook Review Plate placeholder" };
-const tripadvisorStandImage = { src: "/uploads/products/tripadvisor-review-stand-v3.png", alt: "Tap Rater TripAdvisor Review Stand" };
+const tripadvisorStandImage = { src: "/uploads/products/tripadvisor-review-stand-v4.png", alt: "Tap Rater TripAdvisor Review Stand" };
 const tripadvisorPlateImage = { src: "/uploads/products/tripadvisor-review-plate.png", alt: "Tap Rater TripAdvisor Review Plate placeholder" };
-const experienceStandImage = { src: "/uploads/products/rate-your-experience-stand-v3.png", alt: "Tap Rater Rate Your Experience Stand" };
+const experienceStandImage = { src: "/uploads/products/rate-your-experience-stand-v4.png", alt: "Tap Rater Rate Your Experience Stand" };
 const experiencePlateImage = { src: "/uploads/products/rate-your-experience-plate.png", alt: "Tap Rater Rate Your Experience Plate placeholder" };
-const socialStandImage = { src: "/uploads/products/social-media-stand-v3.png", alt: "Tap Rater Follow Us on Social Media Stand" };
+const socialStandImage = { src: "/uploads/products/social-media-stand-v4.png", alt: "Tap Rater Follow Us on Social Media Stand" };
 const socialPlateImage = { src: "/uploads/products/social-media-plate.png", alt: "Tap Rater Follow Us on Social Media Plate placeholder" };
-const bookingStandImage = { src: "/uploads/products/book-next-visit-stand-v3.png", alt: "Tap Rater Book Your Next Visit Stand" };
+const bookingStandImage = { src: "/uploads/products/book-next-visit-stand-v4.png", alt: "Tap Rater Book Your Next Visit Stand" };
 const bookingPlateImage = { src: "/uploads/products/book-next-visit-plate.png", alt: "Tap Rater Book Your Next Visit Plate placeholder" };
-const menuStandImage = { src: "/uploads/products/view-menu-stand-v3.png", alt: "Tap Rater View Our Menu Stand" };
+const menuStandImage = { src: "/uploads/products/view-menu-stand-v4.png", alt: "Tap Rater View Our Menu Stand" };
 const menuPlateImage = { src: "/uploads/products/view-menu-plate.png", alt: "Tap Rater View Our Menu Plate placeholder" };
 
 const standPriceCents = 4900;
@@ -195,6 +195,7 @@ type PhaseOneProductInput = {
   seoTitle: string;
   seoDescription: string;
   searchKeywords: string[];
+  isActive?: boolean;
 };
 
 function phaseOneProduct(input: PhaseOneProductInput): MigratedProduct {
@@ -229,7 +230,7 @@ function phaseOneProduct(input: PhaseOneProductInput): MigratedProduct {
       sku: `${input.sku}-${color.suffix}`,
       stockStatus: "instock"
     })),
-    isActive: true,
+    isActive: input.isActive ?? true,
     seoTitle: input.seoTitle,
     seoDescription: input.seoDescription,
     searchKeywords: input.searchKeywords
@@ -267,7 +268,8 @@ export const migratedProducts: MigratedProduct[] = [
     image: googlePlateImage,
     seoTitle: "Google Review Plate | NFC Review Plate for Counters and Tables",
     seoDescription: "Buy a Google Review Plate for counters, desks, tables, and reception areas. Opens your Google review link with one tap or scan.",
-    searchKeywords: ["google review plate", "nfc review plate", "review us on google plate"]
+    searchKeywords: ["google review plate", "nfc review plate", "review us on google plate"],
+    isActive: false
   }),
   phaseOneProduct({
     slug: "yelp-review-stand",
@@ -299,7 +301,8 @@ export const migratedProducts: MigratedProduct[] = [
     image: yelpPlateImage,
     seoTitle: "Yelp Review Plate | Low-Profile NFC Yelp Product",
     seoDescription: "Low-profile NFC plate that helps customers open your Yelp destination from counters, desks, tables, or reception areas.",
-    searchKeywords: ["yelp review plate", "yelp nfc plate", "review us on yelp plate"]
+    searchKeywords: ["yelp review plate", "yelp nfc plate", "review us on yelp plate"],
+    isActive: false
   }),
   phaseOneProduct({
     slug: "facebook-review-stand",
@@ -331,7 +334,8 @@ export const migratedProducts: MigratedProduct[] = [
     image: facebookPlateImage,
     seoTitle: "Facebook Review Plate | Low-Profile NFC Facebook Product",
     seoDescription: "Low-profile NFC plate for Facebook reviews, recommendations, or profile visits.",
-    searchKeywords: ["facebook review plate", "facebook nfc plate", "review us on facebook plate"]
+    searchKeywords: ["facebook review plate", "facebook nfc plate", "review us on facebook plate"],
+    isActive: false
   }),
   phaseOneProduct({
     slug: "tripadvisor-review-stand",
@@ -363,7 +367,8 @@ export const migratedProducts: MigratedProduct[] = [
     image: tripadvisorPlateImage,
     seoTitle: "TripAdvisor Review Plate | Low-Profile NFC Hospitality Product",
     seoDescription: "Low-profile NFC plate for TripAdvisor destinations at hotels, restaurants, attractions, and visitor-facing businesses.",
-    searchKeywords: ["tripadvisor review plate", "tripadvisor nfc plate", "review us on tripadvisor plate"]
+    searchKeywords: ["tripadvisor review plate", "tripadvisor nfc plate", "review us on tripadvisor plate"],
+    isActive: false
   }),
   phaseOneProduct({
     slug: "rate-your-experience-stand",
@@ -395,7 +400,8 @@ export const migratedProducts: MigratedProduct[] = [
     image: experiencePlateImage,
     seoTitle: "Rate Your Experience Plate | Low-Profile NFC Feedback Product",
     seoDescription: "Low-profile NFC plate for customer experience feedback and follow-up flows.",
-    searchKeywords: ["rate your experience plate", "feedback nfc plate", "customer experience plate"]
+    searchKeywords: ["rate your experience plate", "feedback nfc plate", "customer experience plate"],
+    isActive: false
   }),
   phaseOneProduct({
     slug: "follow-us-social-media-stand",
@@ -427,7 +433,8 @@ export const migratedProducts: MigratedProduct[] = [
     image: socialPlateImage,
     seoTitle: "Follow Us on Social Media Plate | NFC Social Follow Plate",
     seoDescription: "Low-profile NFC plate that opens a social media hub or direct social profile for Facebook, X, Instagram, and YouTube.",
-    searchKeywords: ["social media nfc plate", "follow us social media plate", "social follow plate"]
+    searchKeywords: ["social media nfc plate", "follow us social media plate", "social follow plate"],
+    isActive: false
   }),
   phaseOneProduct({
     slug: "book-your-next-visit-stand",
@@ -459,7 +466,8 @@ export const migratedProducts: MigratedProduct[] = [
     image: bookingPlateImage,
     seoTitle: "Book Your Next Visit Plate | Appointment Booking NFC Plate",
     seoDescription: "Low-profile NFC plate that opens a booking page, appointment form, calendar, or scheduling URL.",
-    searchKeywords: ["book your next visit plate", "appointment booking nfc plate", "booking nfc plate"]
+    searchKeywords: ["book your next visit plate", "appointment booking nfc plate", "booking nfc plate"],
+    isActive: false
   }),
   phaseOneProduct({
     slug: "view-our-menu-stand",
@@ -491,6 +499,7 @@ export const migratedProducts: MigratedProduct[] = [
     image: menuPlateImage,
     seoTitle: "View Our Menu Plate | Low-Profile NFC Menu Product",
     seoDescription: "Low-profile NFC plate that opens a restaurant, cafe, or service menu.",
-    searchKeywords: ["view our menu plate", "nfc menu plate", "restaurant menu nfc plate"]
+    searchKeywords: ["view our menu plate", "nfc menu plate", "restaurant menu nfc plate"],
+    isActive: false
   })
 ];

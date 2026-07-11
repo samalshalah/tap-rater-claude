@@ -17,7 +17,8 @@ import {
   getProductPageHighlights,
   getProductPageUseCases,
   getProductServiceBadges,
-  getReviewDestination
+  getReviewDestination,
+  getStandSpecifications
 } from "@/lib/product-page-content";
 import { absoluteUrl, faqJsonLd, JsonLd, productJsonLd } from "@/lib/seo";
 
@@ -77,6 +78,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
   const comparisonRows = getProductComparisonRows(product);
   const destination = getReviewDestination(product);
   const serviceBadges = getProductServiceBadges(product);
+  const specifications = getStandSpecifications(product);
   const activationCopy = getProductActivationCopy(product);
   const checkoutAction = getCheckoutAction(product);
   const designOptions = getDesignOptions(product);
@@ -95,7 +97,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
     {
       question: "Where should I place this Tap Rater product?",
       answer:
-        "Place stands where customers naturally pause, such as checkout counters, front desks, reception areas, pickup counters, or service desks. Place plates on desks, tables, counters, or compact reception areas."
+        "Place stands where customers naturally pause, such as checkout counters, front desks, reception areas, pickup counters, or service desks."
     }
   ];
 
@@ -225,7 +227,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
               "NFC-enabled display for your counter, desk, table, or service point.",
               "Support for Google, Facebook, Yelp, TripAdvisor, social, booking, menu, and feedback links.",
               "Clear tap or scan wording — no app, no searching.",
-              "Available as a tabletop stand or a low-profile plate."
+              "Available as a tabletop stand."
             ].map((item) => (
               <div key={item} className="flex gap-3 rounded-2xl bg-surface p-4">
                 <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-brand" strokeWidth={1.5} />
@@ -325,6 +327,23 @@ export default async function ProductPage({ params }: ProductPageProps) {
           </div>
         </div>
       </section>
+
+      {specifications.length > 0 ? (
+        <section className="border-b border-line bg-surface py-16">
+          <div className="mx-auto max-w-[760px] px-6">
+            <p className="text-[13px] font-medium uppercase tracking-[0.06em] text-muted">Tech specs</p>
+            <h2 className="mt-3 text-[26px] font-semibold tracking-tightest text-ink">Built to a real spec, not a guess.</h2>
+            <div className="mt-8 overflow-hidden rounded-2xl bg-white">
+              {specifications.map((spec) => (
+                <div key={spec.label} className="grid grid-cols-[1fr_1.4fr] gap-4 border-t border-line px-5 py-3.5 first:border-t-0 sm:px-6">
+                  <p className="text-[13px] font-medium text-muted">{spec.label}</p>
+                  <p className="text-[13px] text-ink">{spec.value}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      ) : null}
 
       <section className="border-b border-line bg-white py-16">
         <div className="mx-auto max-w-[1100px] px-6">
