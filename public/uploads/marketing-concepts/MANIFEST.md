@@ -39,6 +39,25 @@ The cropped versions live in `public/uploads/products/*-v2.png` and are now refe
 
 Plate-format equivalents (8 SKUs) still use the older renders/placeholders — not covered by this batch.
 
+## Round 3 — true transparent-background stand renders (2026-07-11) — CURRENT
+
+9 images (8 SKUs + 1 duplicate), stored at `public/uploads/marketing-concepts/round3/`. These are genuine isolated product shots — **true alpha transparency** (verified: corner pixels are `alpha=0`, not just white), no baked-in headline/link text at all. Better than round 2 in every way, so these are now the live images for all 8 stand SKUs, replacing the round-2 crops:
+
+| File | Used for |
+|---|---|
+| `google-review-stand-v3.png` (from `google-review-stand-v3-b.png`, the July 11 regeneration) | Google Review Stand |
+| `yelp-review-stand-v3.png` | Yelp Review Stand |
+| `facebook-review-stand-v3.png` | Facebook Review Stand |
+| `tripadvisor-review-stand-v3.png` | TripAdvisor Review Stand |
+| `rate-your-experience-stand-v3.png` | Rate Your Experience Stand |
+| `social-media-stand-v3.png` | Follow Us on Social Media Stand |
+| `book-next-visit-stand-v3.png` | Book Your Next Visit Stand |
+| `view-menu-stand-v3.png` | View Our Menu Stand |
+
+Note: there were two Google Review Stand renders (`google-review-stand-v3-a.png` from Jul 9, `-b.png` from Jul 11). Used `-b` (the newer one) as the live image since it looked like a refinement of the same shot — both are kept in `round3/` if `-a` is preferred instead.
+
+The round-2 crops (`*-v2.png` in `public/uploads/products/`) are now superseded but left in place for rollback.
+
 ## Note on logo inconsistency
 
 The mocked-up "TAP RATER" device screens across these images use **different placeholder logos** — a shield/checkmark mark, a star, a "T" monogram, a speech-bubble icon, and a blue star wordmark all appear across different images. None of these match the real Tap Rater logo currently in `public/uploads/brand/tap-rater-logo.png`. Worth deciding on one final device-screen design before any of these go live, or treating the device screen as illustrative only and not literal.
