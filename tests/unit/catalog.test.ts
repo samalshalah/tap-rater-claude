@@ -89,9 +89,10 @@ describe("catalog categories", () => {
     });
   });
 
-  it("makes standard, logo, and custom design available on every Phase 1 physical product", () => {
-    const products = getActiveProducts();
+  it("makes standard, logo, and custom design available on every Phase 1 physical_redirect product", () => {
+    const products = getActiveProducts().filter((product) => product.productType === "physical_redirect");
 
+    expect(products).toHaveLength(8);
     expect(
       products.every((product) => {
         return (
@@ -121,11 +122,11 @@ describe("catalog categories", () => {
     expect(reviewProducts.every((product) => product.format === "stand")).toBe(true);
   });
 
-  it("includes only the Phase 1 stand catalog as active storefront products (plates discontinued)", () => {
+  it("includes the Phase 1 stand catalog plus the new Custom Stand and Hosted Landing Page entries as active storefront products (plates discontinued)", () => {
     const products = getActiveProducts();
     const titles = products.map((product) => product.title);
 
-    expect(products).toHaveLength(8);
+    expect(products).toHaveLength(10);
     expect(titles).toEqual(
       expect.arrayContaining([
         "Google Review Stand",
@@ -135,7 +136,9 @@ describe("catalog categories", () => {
         "Rate Your Experience Stand",
         "Follow Us on Social Media Stand",
         "Book Your Next Visit Stand",
-        "View Our Menu Stand"
+        "View Our Menu Stand",
+        "Custom NFC Stand",
+        "Hosted Landing Page Subscription"
       ])
     );
     expect(titles).not.toContain("Google Review Plate");
@@ -143,6 +146,27 @@ describe("catalog categories", () => {
     expect(titles).not.toContain("Employee Review Name Tag");
     expect(titles).not.toContain("Staff Review Tracking Page");
     expect(titles).not.toContain("Business Review Starter Kit");
+  });
+
+  it("models Custom NFC Stand as a managed, request-quote physical product that can point to a direct link or a hosted landing page", () => {
+    const product = getActiveProducts().find((item) => item.slug === "custom-nfc-stand");
+
+    expect(product).toBeDefined();
+    expect(product?.productType).toBe("physical_managed");
+    expect(product?.checkoutMode).toBe("request_quote");
+    expect(product?.format).toBe("stand");
+    expect(product?.requiresSubscription).toBe(false);
+  });
+
+  it("models Hosted Landing Page Subscription as a contact-sales platform product requiring an account and subscription", () => {
+    const product = getActiveProducts().find((item) => item.slug === "hosted-landing-page-subscription");
+
+    expect(product).toBeDefined();
+    expect(product?.productType).toBe("platform_landing_page");
+    expect(product?.checkoutMode).toBe("contact_sales");
+    expect(product?.requiresAccount).toBe(true);
+    expect(product?.requiresSubscription).toBe(true);
+    expect(product?.requiresLandingPage).toBe(true);
   });
 
   it("keeps menu products menu-only", () => {

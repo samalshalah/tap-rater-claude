@@ -501,5 +501,79 @@ export const migratedProducts: MigratedProduct[] = [
     seoDescription: "Low-profile NFC plate that opens a restaurant, cafe, or service menu.",
     searchKeywords: ["view our menu plate", "nfc menu plate", "restaurant menu nfc plate"],
     isActive: false
-  })
+  }),
+
+  // --- Phase 2/3 catalog entries -------------------------------------------------
+  // These are NOT phaseOneProduct() entries: they intentionally use request_quote /
+  // contact_sales checkout (no Stripe changes), matching docs/product-strategy.md's
+  // guidance for physical_managed and platform_landing_page products. Added per the
+  // 2026-07-12 three-tier product model (Direct-Link / Custom Printed / Hosted
+  // Landing Page Subscription). Placeholder imagery — see note below.
+  {
+    slug: "custom-nfc-stand",
+    title: "Custom NFC Stand",
+    sku: "TR-CUSTOM-STAND",
+    categorySlug: "business-bundles",
+    basePriceCents: 7900,
+    stockStatus: "instock",
+    shortDescription: "A fully custom-printed NFC stand with your logo, business name, and headline.",
+    description:
+      "Custom NFC Stand is a managed, fully custom-printed physical product. Add your business logo, business name, a custom headline, and choose the destination — a single direct link, or a Tap Rater hosted landing page with multiple links. Design details are collected after request and require approval before production.",
+    productType: "physical_managed",
+    serviceMode: "managed_redirect",
+    checkoutMode: "request_quote",
+    requiresAccount: false,
+    requiresSubscription: false,
+    requiresLandingPage: false,
+    supportedDestinations: ["google", "facebook", "yelp", "tripadvisor", "instagram", "tiktok", "booking", "menu", "feedback", "referral", "website", "custom"],
+    activationType: "managed_setup",
+    includedServiceLabel: "Managed setup included",
+    format: "stand",
+    customizationOptions: ["standard_design", "add_logo", "custom_design"],
+    allowsLogoUpload: true,
+    allowsCustomDesign: true,
+    designMode: "custom",
+    images: [experienceStandImage],
+    variants: colors.map((color) => ({
+      id: color.id,
+      label: color.label,
+      sku: `TR-CUSTOM-STAND-${color.suffix}`,
+      stockStatus: "instock"
+    })),
+    isActive: true,
+    seoTitle: "Custom NFC Stand | Fully Custom-Printed Business Stand | Tap Rater",
+    seoDescription: "Custom-printed NFC stand with your logo, business name, and headline. Points to a direct link or a Tap Rater hosted landing page.",
+    searchKeywords: ["custom nfc stand", "custom printed stand", "business logo nfc stand", "custom tap rater stand"]
+  },
+  {
+    slug: "hosted-landing-page-subscription",
+    title: "Hosted Landing Page Subscription",
+    sku: "TR-HOSTED-PAGE",
+    categorySlug: "business-bundles",
+    basePriceCents: 1900,
+    stockStatus: "instock",
+    shortDescription: "A hosted Tap Rater page with multiple links, logos, and buttons behind a single tap.",
+    description:
+      "Hosted Landing Page Subscription connects a Tap Rater device to a hosted page instead of one direct link. Customers tap and see Google, Yelp, Facebook, and TripAdvisor review buttons, a menu, appointment booking, social media, website, feedback, and custom links — all on one branded page. Requires a Tap Rater account and a monthly subscription for hosted features.",
+    productType: "platform_landing_page",
+    serviceMode: "hosted_landing_page",
+    checkoutMode: "contact_sales",
+    requiresAccount: true,
+    requiresSubscription: true,
+    requiresLandingPage: true,
+    supportedDestinations: ["google", "facebook", "yelp", "tripadvisor", "instagram", "tiktok", "booking", "menu", "feedback", "referral", "website", "custom"],
+    activationType: "premium_hosted_activation",
+    includedServiceLabel: "Hosted landing page and account setup included",
+    format: "platform",
+    customizationOptions: ["standard_design", "add_logo", "custom_design"],
+    allowsLogoUpload: true,
+    allowsCustomDesign: true,
+    designMode: "standard",
+    images: [socialStandImage],
+    variants: [],
+    isActive: true,
+    seoTitle: "Hosted Landing Page Subscription | Multi-Link Tap Rater Page",
+    seoDescription: "One tap opens a hosted Tap Rater page with review, menu, booking, social, and feedback links. Requires an account and monthly subscription.",
+    searchKeywords: ["hosted landing page", "multi link nfc page", "tap rater subscription", "hosted reputation page"]
+  }
 ];

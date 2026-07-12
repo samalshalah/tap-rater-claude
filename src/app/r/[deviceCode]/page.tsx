@@ -4,6 +4,7 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { getDeviceRedirectAction, hashIpAddress, type PlatformDevice } from "@/lib/device-redirect";
 import { getDeviceByCode, isDeviceRepositoryConfigured, logTapEvent } from "@/lib/device-repository";
+import { getLandingPageById } from "@/lib/landing-pages";
 
 type DeviceRedirectPageProps = {
   params: Promise<{ deviceCode: string }>;
@@ -32,7 +33,13 @@ export default async function DeviceRedirectPage({ params }: DeviceRedirectPageP
   }
 
   if (action.type === "landing_page") {
-    return <PremiumLandingPlaceholder device={device} landingPageId={action.landingPageId} />;
+    const landingPage = action.landingPageId ? await getLandingPageById(action.landingPageId) : null;
+
+    if (landingPage) {
+      redirect(`/l/${landingPage.slug}`);
+    }
+
+    return <LandingPageNotPublished device={device} landingPageId={action.landingPageId} />;
   }
 
   if (action.type === "unavailable") {
@@ -113,12 +120,12 @@ function DeviceUnavailable({ reason }: { reason: string }) {
   );
 }
 
-function PremiumLandingPlaceholder({ device, landingPageId }: { device: PlatformDevice | null; landingPageId?: string }) {
+function LandingPageNotPublished({ device, landingPageId }: { device: PlatformDevice | null; landingPageId?: string }) {
   return (
     <DeviceShell
       eyebrow="Hosted page"
       title={device?.label ?? "Tap Rater hosted page"}
-      body="This premium Tap Rater device is connected to a hosted landing page. The landing page renderer will be added in the next platform phase."
+      body="This device is connected to a hosted Tap Rater page, but that page isn't published yet."
     >
       <p className="rounded-md bg-gray-50 p-4 text-sm text-muted">Landing page ID: {landingPageId ?? "not assigned yet"}</p>
     </DeviceShell>

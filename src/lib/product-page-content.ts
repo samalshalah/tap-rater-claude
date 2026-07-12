@@ -6,7 +6,7 @@ export type ProductPageContentItem = {
 };
 
 export type ProductComparisonRow = {
-  label: "Stand" | "Bundle" | "Social/Booking" | "Feedback/Referral" | "Custom";
+  label: "Stand" | "Bundle" | "Social/Booking" | "Feedback/Referral" | "Custom" | "Hosted Page";
   bestFor: string;
   fit: string;
   active: boolean;
@@ -148,6 +148,12 @@ export function getProductComparisonRows(product: MigratedProduct): ProductCompa
       bestFor: "Custom UV printing and direct custom URLs",
       fit: "Best for branded prompts",
       active: product.supportedDestinations.includes("custom") && ["social-media", "appointments", "menu"].includes(product.categorySlug)
+    },
+    {
+      label: "Hosted Page",
+      bestFor: "Multiple links, forms, and a branded page behind one tap",
+      fit: "Best when one destination isn't enough",
+      active: product.format === "platform" || product.productType === "platform_landing_page"
     }
   ];
 }

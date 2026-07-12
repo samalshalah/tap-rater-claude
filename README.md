@@ -1,6 +1,6 @@
 # Tap Rater
 
-Tap Rater is a Next.js ecommerce storefront for NFC review stands and review plates, plus a platform foundation for permanent device URLs, activation, analytics, and future hosted reputation pages. Phase 1 sells only tabletop stands and flat plates while cards, name tags, badges, bundles, and platform products remain postponed or quote-based.
+Tap Rater is a Next.js ecommerce storefront for NFC review stands, plus a platform foundation for permanent device URLs, activation, analytics, and hosted reputation pages. The catalog now covers three tiers: Direct-Link Stands (buy now), a Custom NFC Stand (request quote), and a Hosted Landing Page Subscription (contact sales, requires account + subscription — no Stripe subscription billing built yet). Plates, cards, name tags, badges, and bundles remain postponed or discontinued.
 
 Stripe checkout is available in test mode only until the business bank account and final live payment setup are explicitly approved.
 

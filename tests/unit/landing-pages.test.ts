@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 import {
   getLandingPageBySlugFromClient,
+  getLandingPageByIdFromClient,
   getDemoLandingPage,
   logLandingPageClickWithClient,
   saveLandingPageSubmissionWithClient,
@@ -46,6 +47,29 @@ describe("landing pages", () => {
     });
     expect(page?.buttons[0]).toMatchObject({ label: "Google", url: "https://example.com/google", platform: "google" });
     expect(page?.formConfig.fields).toEqual(["name", "email", "message"]);
+  });
+
+  it("resolves a landing page by id, so a device's landingPageId can redirect to /l/{slug}", async () => {
+    const db = createLandingPageDb({
+      landing_pages: [
+        {
+          id: "page-42",
+          slug: "acme-reviews",
+          template_type: "multi_platform_review",
+          title: "Acme Reviews",
+          headline: "Leave us a review",
+          description: "Choose a platform.",
+          buttons_json: [{ label: "Google", url: "https://example.com/google" }],
+          form_config_json: {},
+          status: "published"
+        }
+      ]
+    });
+
+    const page = await getLandingPageByIdFromClient(db.client, "page-42");
+
+    expect(page?.slug).toBe("acme-reviews");
+    expect(page?.id).toBe("page-42");
   });
 
   it("saves landing page form submissions", async () => {

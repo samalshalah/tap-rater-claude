@@ -107,6 +107,29 @@ export async function getLandingPageBySlugFromClient(client: LandingPageDbClient
   return normalizeLandingPage(data);
 }
 
+export async function getLandingPageById(id: string): Promise<LandingPage | null> {
+  if (!hasSupabaseAdminConfig()) {
+    return id === "demo-landing-page" ? getDemoLandingPage() : null;
+  }
+
+  try {
+    const page = await getLandingPageByIdFromClient(getSupabaseAdmin() as LandingPageDbClient, id);
+    return page ?? (id === "demo-landing-page" ? getDemoLandingPage() : null);
+  } catch {
+    return id === "demo-landing-page" ? getDemoLandingPage() : null;
+  }
+}
+
+export async function getLandingPageByIdFromClient(client: LandingPageDbClient, id: string): Promise<LandingPage | null> {
+  const { data, error } = await client.from("landing_pages").select("*").eq("id", id).maybeSingle();
+
+  if (error || !data) {
+    return null;
+  }
+
+  return normalizeLandingPage(data);
+}
+
 export async function saveLandingPageSubmission(input: LandingPageSubmissionInput) {
   if (!hasSupabaseAdminConfig()) {
     return;

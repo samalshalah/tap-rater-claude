@@ -2,7 +2,7 @@
 
 Tap Rater is both a product store and a reputation platform. The public storefront sells physical NFC products first, while the platform layer powers permanent device URLs, activation, business profiles, hosted landing pages, tap tracking, forms, and future customer dashboards. In the long-term model, some products are standalone NFC products, some require managed setup, some require hosted landing pages, and some require a customer account.
 
-The current storefront strategy is intentionally narrower than the long-term platform strategy. Phase 1 sells only products Tap Rater can fulfill now: tabletop NFC stands and flat NFC plates.
+The current storefront strategy is intentionally narrower than the long-term platform strategy. Phase 1 sells stands as its core catalog, plus two Phase 2/3 tiers (Custom NFC Stand, Hosted Landing Page Subscription) already added to the catalog as quote-based products ahead of the original phased schedule.
 
 ## Phase 1 Fulfillment Scope
 
@@ -16,20 +16,16 @@ Phase 1 active storefront products:
 - Follow Us on Social Media Stand
 - Book Your Next Visit Stand
 - View Our Menu Stand
-- Google Review Plate
-- Yelp Review Plate
-- Facebook Review Plate
-- TripAdvisor Review Plate
-- Rate Your Experience Plate
-- Follow Us on Social Media Plate
-- Book Your Next Visit Plate
-- View Our Menu Plate
+- Custom NFC Stand (managed, `request_quote`)
+- Hosted Landing Page Subscription (platform, `contact_sales`)
+
+Plates (all 8 SKUs) are discontinued — deactivated (`isActive: false`) rather than deleted, so the storefront no longer shows them but the data remains reversible.
 
 Cards, employee name tags, badges, staff cards, and other card/tag products are postponed until Tap Rater has card or badge printing ready. They should not appear as active storefront products.
 
 ## Phase 1 Design Customization
 
-Every active Phase 1 stand and plate can be sold in three design modes:
+Every active Phase 1 stand can be sold in three design modes:
 
 - Standard Design: uses the Tap Rater template and is the fastest setup path.
 - Add Your Logo: adds the customer business logo to the Tap Rater design. Logo setup is required and logo files are collected after the order or setup request.
@@ -38,8 +34,8 @@ Every active Phase 1 stand and plate can be sold in three design modes:
 The product model supports this with:
 
 - `customizationOptions = standard_design | add_logo | custom_design`
-- `allowsLogoUpload = true` for stand and plate products
-- `allowsCustomDesign = true` for stand and plate products
+- `allowsLogoUpload = true` for stand products
+- `allowsCustomDesign = true` for stand products
 - `designMode = standard | logo | custom`
 
 Customization is an option inside each product, not a storefront category. The categories remain based on customer use case: Reviews, Social Media, Appointments, Menu, Feedback, and Business Bundles.
@@ -50,7 +46,7 @@ Logo upload, automated proofing, and custom approval workflows are not live in P
 
 ### Standalone Physical Redirect Products
 
-Standalone NFC products are simple physical products that open one destination URL. Phase 1 stands and plates use this model.
+Standalone NFC products are simple physical products that open one destination URL. Phase 1 stands use this model.
 
 These products use:
 
@@ -67,7 +63,7 @@ Basic activation can work with only a destination URL. The device can still poin
 
 ### Managed Setup and Bundles
 
-Managed setup and bundles remain quote-based while Phase 1 focuses on individual stands and plates.
+Managed setup and bundles remain quote-based while Phase 1 focuses on individual stands. **Custom NFC Stand** is now a real catalog entry using this exact model (see `docs/phase-1-products.md`). Business Bundles/Starter Kits remain unbuilt.
 
 These products should use:
 
@@ -84,7 +80,7 @@ Bundles may create multiple devices during fulfillment or setup, but they are no
 
 ### Platform Products
 
-Hosted landing page products remain part of the long-term Tap Rater platform strategy, not the main Phase 1 physical product grid. They require Tap Rater platform setup, a customer account, business profile, device or public URL, landing page, and usually tracking or form storage.
+Hosted landing page products remain part of the long-term Tap Rater platform strategy. **Hosted Landing Page Subscription** is now a real catalog entry (`checkoutMode = contact_sales`, `requiresSubscription = true`) — but no Stripe subscription billing exists yet, and no account gating exists on `/l/[slug]` itself. The content-rendering side (templates, buttons, form/click tracking) is real and functional; the billing/access-control side is not. They require Tap Rater platform setup, a customer account, business profile, device or public URL, landing page, and usually tracking or form storage.
 
 Future platform products should use:
 
@@ -97,7 +93,7 @@ Future platform products should use:
 
 ## Phase 1 Categories
 
-Phase 1 categories are based on customer use case, not physical format. The physical format is stored separately as `format = stand | plate | bundle | platform`.
+Phase 1 categories are based on customer use case, not physical format. The physical format is stored separately as `format = stand | plate | bundle | platform` (plate is deactivated but kept as a valid value for reversibility).
 
 The storefront categories are:
 
@@ -108,7 +104,7 @@ The storefront categories are:
 - Feedback Products (`feedback`)
 - Business Bundles (`business-bundles`)
 
-The first five categories contain the active Phase 1 stand and plate products. Each use-case category can show both physical formats. Business Bundles remains quote-based and optional while Phase 1 focuses on individual sellable products.
+The first five categories contain the active Phase 1 stand products. Business Bundles now contains Custom NFC Stand and Hosted Landing Page Subscription, both quote-based, alongside future bundle/starter-kit products.
 
 ## Supported Destinations
 
@@ -150,7 +146,7 @@ Live Stripe payments are not enabled. Current one-time Stripe test checkout is o
 ### Phase 1: Physical Stands and Plates
 
 - Publish SEO-focused marketing pages and product discovery pages.
-- Sell only tabletop NFC stands and flat NFC plates.
+- Sell tabletop NFC stands, plus Custom NFC Stand and Hosted Landing Page Subscription as quote-based catalog entries.
 - Keep card, badge, and name-tag products postponed.
 - Support device activation for simple redirect devices with a destination URL.
 - Support basic customer, business, location, and device records for platform growth.
