@@ -1,8 +1,10 @@
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { ProductCard } from "@/components/product/product-card";
 import { catalogCategories } from "@/data/migrated-products";
+import { categoryHeroes } from "@/data/category-heroes";
 import { getStorefrontProductsByCategory } from "@/lib/product-repository";
 import { getCategoryBySlug } from "@/lib/products";
 
@@ -47,6 +49,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   }
 
   const products = await getStorefrontProductsByCategory(category.slug);
+  const hero = categoryHeroes[category.slug];
 
   return (
     <>
@@ -67,6 +70,11 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
               <p className="mt-2 text-[14px] leading-5 text-ink">{category.seoCopy}</p>
             </div>
           </div>
+          {hero ? (
+            <div className="relative mt-8 aspect-[16/8] w-full overflow-hidden rounded-2xl">
+              <Image src={hero.src} alt={hero.alt} fill className="object-cover" priority />
+            </div>
+          ) : null}
         </div>
       </section>
 

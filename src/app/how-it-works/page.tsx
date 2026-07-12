@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import type { Metadata } from "next";
 
@@ -63,6 +64,15 @@ export default function HowItWorksPage() {
           <p className="mx-auto mt-4 max-w-xl text-[15px] leading-6 text-muted">
             Six simple steps, start to finish — whether it's an individual stand, a custom printed stand, or a hosted Tap Rater page.
           </p>
+          <div className="relative mx-auto mt-10 aspect-[16/7] w-full max-w-[1100px] overflow-hidden rounded-2xl">
+            <Image
+              src="/uploads/heroes/how-it-works-hero.jpg"
+              alt="Two people reviewing product details together at a dealership"
+              fill
+              priority
+              className="object-cover"
+            />
+          </div>
         </div>
       </section>
 

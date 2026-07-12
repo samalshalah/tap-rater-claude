@@ -36,6 +36,15 @@ export default async function ShopPage() {
           <p className="mx-auto mt-4 max-w-xl text-[15px] leading-6 text-muted">
             Tabletop NFC stands for reviews, social, booking, menu, and feedback. Every product supports free basic activation.
           </p>
+          <div className="relative mx-auto mt-10 aspect-[16/7] w-full max-w-[1100px] overflow-hidden rounded-2xl">
+            <Image
+              src="/uploads/heroes/shop-hero.jpg"
+              alt="Smiling business owner standing behind a service counter"
+              fill
+              priority
+              className="object-cover"
+            />
+          </div>
         </div>
       </section>
 
