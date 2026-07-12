@@ -161,6 +161,14 @@ export function getProductComparisonRows(product: MigratedProduct): ProductCompa
 export function getReviewDestination(product: MigratedProduct): string {
   const title = product.title.toLowerCase();
 
+  if (title.includes("custom nfc stand")) {
+    return "your custom";
+  }
+
+  if (title.includes("hosted landing page")) {
+    return "hosted page";
+  }
+
   if (title.includes("facebook")) {
     return "Facebook review";
   }
