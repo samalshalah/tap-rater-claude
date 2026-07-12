@@ -70,7 +70,7 @@ export default async function HomePage() {
             <Link href="/shop" className="inline-flex items-center justify-center rounded-full bg-ink px-7 py-3 text-[15px] font-medium text-white transition hover:bg-brand">
               Shop NFC products
             </Link>
-            <Link href="#platform-preview" className="inline-flex items-center justify-center rounded-full px-7 py-3 text-[15px] font-medium text-brand transition hover:text-brand-dark">
+            <Link href="/how-it-works" className="inline-flex items-center justify-center rounded-full px-7 py-3 text-[15px] font-medium text-brand transition hover:text-brand-dark">
               How it works &rsaquo;
             </Link>
           </div>

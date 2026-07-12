@@ -88,7 +88,7 @@ export default async function ShopPage() {
         </div>
       </section>
 
-      <section className="bg-white py-16 sm:py-20">
+      <section id="all-products" className="scroll-mt-20 bg-white py-16 sm:py-20">
         <div className="mx-auto max-w-[1100px] px-6">
           <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
             <h2 className="text-[22px] font-semibold tracking-tightest text-ink">All products</h2>
