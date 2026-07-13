@@ -58,7 +58,12 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
           <Link href="/shop" className="text-[13px] font-medium text-brand hover:text-brand-dark">
             &lsaquo; Shop all products
           </Link>
-          <h1 className="mt-6 max-w-2xl text-[34px] font-semibold tracking-tightest text-ink sm:text-[44px]">{category.title}</h1>
+          {hero ? (
+            <div className="relative mt-6 aspect-[16/8] w-full overflow-hidden rounded-2xl">
+              <Image src={hero.src} alt={hero.alt} fill className="object-cover" priority />
+            </div>
+          ) : null}
+          <h1 className="mt-8 max-w-2xl text-[34px] font-semibold tracking-tightest text-ink sm:text-[44px]">{category.title}</h1>
           <p className="mt-4 max-w-2xl text-[15px] leading-6 text-muted">{category.description}</p>
           <div className="mt-8 grid gap-3 sm:grid-cols-2">
             <div className="rounded-2xl bg-surface p-5">
@@ -70,11 +75,6 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
               <p className="mt-2 text-[14px] leading-5 text-ink">{category.seoCopy}</p>
             </div>
           </div>
-          {hero ? (
-            <div className="relative mt-8 aspect-[16/8] w-full overflow-hidden rounded-2xl">
-              <Image src={hero.src} alt={hero.alt} fill className="object-cover" priority />
-            </div>
-          ) : null}
         </div>
       </section>
 

@@ -31,13 +31,7 @@ export default async function ShopByStandPage() {
             </Link>
             <span className="rounded-full bg-white px-4 py-1.5 text-ink shadow-sm">Shop by stand</span>
           </div>
-          <h1 className="mx-auto mt-6 max-w-2xl text-[34px] font-semibold tracking-tightest text-ink sm:text-[44px]">
-            Every stand, by name.
-          </h1>
-          <p className="mx-auto mt-4 max-w-xl text-[15px] leading-6 text-muted">
-            Eight NFC stands, one for each destination. Pick the one that matches what you want customers to open.
-          </p>
-          <div className="relative mx-auto mt-10 aspect-[16/7] w-full max-w-[1100px] overflow-hidden rounded-2xl">
+          <div className="relative mx-auto mt-8 aspect-[16/7] w-full max-w-[1100px] overflow-hidden rounded-2xl">
             <Image
               src="/uploads/heroes/shop-by-stand-hero.jpg"
               alt="Waiter smiling at a restaurant cash register"
@@ -46,6 +40,12 @@ export default async function ShopByStandPage() {
               className="object-cover"
             />
           </div>
+          <h1 className="mx-auto mt-8 max-w-2xl text-[34px] font-semibold tracking-tightest text-ink sm:text-[44px]">
+            Every stand, by name.
+          </h1>
+          <p className="mx-auto mt-4 max-w-xl text-[15px] leading-6 text-muted">
+            Eight NFC stands, one for each destination. Pick the one that matches what you want customers to open.
+          </p>
         </div>
       </section>
 

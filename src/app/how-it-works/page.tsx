@@ -58,13 +58,7 @@ export default function HowItWorksPage() {
       <section className="border-b border-line bg-white py-16 sm:py-20">
         <div className="mx-auto max-w-[860px] px-6 text-center">
           <p className="text-[13px] font-medium uppercase tracking-[0.08em] text-muted">How it works</p>
-          <h1 className="mx-auto mt-4 max-w-2xl text-[34px] font-semibold tracking-tightest text-ink sm:text-[44px]">
-            From product to tap point.
-          </h1>
-          <p className="mx-auto mt-4 max-w-xl text-[15px] leading-6 text-muted">
-            Six simple steps, start to finish — whether it's an individual stand, a custom printed stand, or a hosted Tap Rater page.
-          </p>
-          <div className="relative mx-auto mt-10 aspect-[16/7] w-full max-w-[1100px] overflow-hidden rounded-2xl">
+          <div className="relative mx-auto mt-6 aspect-[16/7] w-full max-w-[1100px] overflow-hidden rounded-2xl">
             <Image
               src="/uploads/heroes/how-it-works-hero.jpg"
               alt="Two people reviewing product details together at a dealership"
@@ -73,6 +67,12 @@ export default function HowItWorksPage() {
               className="object-cover"
             />
           </div>
+          <h1 className="mx-auto mt-8 max-w-2xl text-[34px] font-semibold tracking-tightest text-ink sm:text-[44px]">
+            From product to tap point.
+          </h1>
+          <p className="mx-auto mt-4 max-w-xl text-[15px] leading-6 text-muted">
+            Six simple steps, start to finish — whether it's an individual stand, a custom printed stand, or a hosted Tap Rater page.
+          </p>
         </div>
       </section>
 

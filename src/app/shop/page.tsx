@@ -29,14 +29,7 @@ export default async function ShopPage() {
               Shop by stand
             </Link>
           </div>
-          <p className="mt-6 text-[13px] font-medium uppercase tracking-[0.08em] text-muted">Tap Rater shop</p>
-          <h1 className="mx-auto mt-4 max-w-2xl text-[34px] font-semibold tracking-tightest text-ink sm:text-[44px]">
-            Shop by what you want customers to open.
-          </h1>
-          <p className="mx-auto mt-4 max-w-xl text-[15px] leading-6 text-muted">
-            Tabletop NFC stands for reviews, social, booking, menu, and feedback. Every product supports free basic activation.
-          </p>
-          <div className="relative mx-auto mt-10 aspect-[16/7] w-full max-w-[1100px] overflow-hidden rounded-2xl">
+          <div className="relative mx-auto mt-8 aspect-[16/7] w-full max-w-[1100px] overflow-hidden rounded-2xl">
             <Image
               src="/uploads/heroes/shop-hero.jpg"
               alt="Smiling business owner standing behind a service counter"
@@ -45,6 +38,13 @@ export default async function ShopPage() {
               className="object-cover"
             />
           </div>
+          <p className="mt-8 text-[13px] font-medium uppercase tracking-[0.08em] text-muted">Tap Rater shop</p>
+          <h1 className="mx-auto mt-4 max-w-2xl text-[34px] font-semibold tracking-tightest text-ink sm:text-[44px]">
+            Shop by what you want customers to open.
+          </h1>
+          <p className="mx-auto mt-4 max-w-xl text-[15px] leading-6 text-muted">
+            Tabletop NFC stands for reviews, social, booking, menu, and feedback. Every product supports free basic activation.
+          </p>
         </div>
       </section>
 
