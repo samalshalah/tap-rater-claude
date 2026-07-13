@@ -44,7 +44,41 @@ export type MigratedProduct = {
   seoTitle?: string;
   seoDescription?: string;
   searchKeywords?: string[];
+  // --- Catalog v2 fields (2026-07-13 restructure) ---
+  // Optional so the original 16 Phase 1 entries stay valid without edits.
+  standCategorySlug?: StandCategorySlug;
+  destinationType?: DestinationType;
+  platformSlug?: string;
+  tags?: string[];
+  useCaseSlugs?: string[];
+  supportsLogo?: boolean;
+  supportsBusinessName?: boolean;
+  supportsCustomHeadline?: boolean;
+  supportsMultipleLinks?: boolean;
 };
+
+export type StandCategorySlug =
+  | "review-stands"
+  | "social-media-stands"
+  | "appointment-stands"
+  | "feedback-stands"
+  | "menu-info-stands"
+  | "website-link-stands"
+  | "payment-tip-donation-stands"
+  | "loyalty-rewards-stands"
+  | "custom-stands"
+  | "hosted-tap-page-stands";
+
+export type DestinationType =
+  | "review"
+  | "social"
+  | "appointment"
+  | "feedback"
+  | "menu_info"
+  | "website"
+  | "payment"
+  | "custom"
+  | "hosted_page";
 
 export type ProductCommerceType = "physical_redirect" | "physical_managed" | "platform_landing_page" | "bundle";
 
@@ -66,7 +100,10 @@ export type CatalogCategorySlug =
   | "appointments"
   | "menu"
   | "feedback"
-  | "business-bundles";
+  | "business-bundles"
+  | "website-links"
+  | "payments-donations"
+  | "loyalty-rewards";
 
 export type CatalogCategory = {
   slug: CatalogCategorySlug;
@@ -152,6 +189,39 @@ export const catalogCategories: CatalogCategory[] = [
     aliases: ["hosted-landing-page-products"],
     seoCopy:
       "Business bundles and managed setup remain quote-based while Phase 1 focuses on sellable tabletop stands and flat plates."
+  },
+  {
+    slug: "website-links",
+    title: "Website & Link Products",
+    eyebrow: "Website",
+    description: "NFC stands that open your website, landing page, offers, newsletter, app, or portfolio.",
+    seoTitle: "Website & Link NFC Products | Tap Rater",
+    seoDescription: "Shop NFC stands that open your website, landing page, offers, newsletter, app download, or portfolio.",
+    buyerIntent: "For businesses that want customers to visit their website, download an app, or view a linked resource.",
+    aliases: ["website-link-stands", "link-products"],
+    seoCopy: "Website and link products open one website, app, or resource URL through a permanent Tap Rater link."
+  },
+  {
+    slug: "payments-donations",
+    title: "Payment, Tip & Donation Products",
+    eyebrow: "Payments",
+    description: "NFC stands that open a payment link, tip jar, invoice, or donation page.",
+    seoTitle: "Payment, Tip & Donation NFC Products | Tap Rater",
+    seoDescription: "Shop NFC stands for tips, payments, invoices, and donations via Venmo, PayPal, Cash App, Zelle, and more.",
+    buyerIntent: "For businesses, service providers, and nonprofits that want customers to pay, tip, or donate with a tap.",
+    aliases: ["payment-tip-donation-stands", "payment-products", "donation-products"],
+    seoCopy: "Payment products open one payment, tip, or donation URL. Tap Rater does not process the payment itself."
+  },
+  {
+    slug: "loyalty-rewards",
+    title: "Loyalty & Rewards Products",
+    eyebrow: "Loyalty",
+    description: "NFC stands that open a loyalty program, rewards sign-up, or referral link.",
+    seoTitle: "Loyalty & Rewards NFC Products | Tap Rater",
+    seoDescription: "Shop NFC stands that open a loyalty program, rewards sign-up, VIP list, or referral link.",
+    buyerIntent: "For businesses that want customers to join a rewards program or refer a friend with a tap.",
+    aliases: ["loyalty-rewards-stands", "rewards-products"],
+    seoCopy: "Loyalty and rewards products open one sign-up or referral URL through a permanent Tap Rater link."
   }
 ];
 
@@ -577,3 +647,86 @@ export const migratedProducts: MigratedProduct[] = [
     searchKeywords: ["hosted landing page", "multi link nfc page", "tap rater subscription", "hosted reputation page"]
   }
 ];
+
+// --- Catalog v2 backfill (2026-07-13) ---------------------------------------
+// These 7 slugs already existed in the Phase 1 catalog above AND are also
+// explicitly required by the new stand-category/use-case spec under the exact
+// same slug. Rather than duplicate them, backfill the new v2 fields directly
+// onto the existing live product objects.
+const catalogV2Backfill: Record<string, Partial<MigratedProduct>> = {
+  "google-review-stand": {
+    standCategorySlug: "review-stands",
+    destinationType: "review",
+    platformSlug: "google",
+    tags: ["review", "google", "reputation", "universal"]
+  },
+  "yelp-review-stand": {
+    standCategorySlug: "review-stands",
+    destinationType: "review",
+    platformSlug: "yelp",
+    tags: ["review", "yelp", "reputation", "universal"]
+  },
+  "facebook-review-stand": {
+    standCategorySlug: "review-stands",
+    destinationType: "review",
+    platformSlug: "facebook",
+    tags: ["review", "facebook", "reputation", "universal"]
+  },
+  "tripadvisor-review-stand": {
+    standCategorySlug: "review-stands",
+    destinationType: "review",
+    platformSlug: "tripadvisor",
+    tags: ["review", "tripadvisor", "reputation", "travel", "hospitality"]
+  },
+  "rate-your-experience-stand": {
+    standCategorySlug: "feedback-stands",
+    destinationType: "feedback",
+    tags: ["feedback", "experience", "universal"]
+  },
+  "book-your-next-visit-stand": {
+    standCategorySlug: "appointment-stands",
+    destinationType: "appointment",
+    tags: ["appointment", "booking", "universal"]
+  },
+  "custom-nfc-stand": {
+    standCategorySlug: "custom-stands",
+    destinationType: "custom",
+    tags: ["custom", "logo", "business-name", "headline"],
+    supportsLogo: true,
+    supportsBusinessName: true,
+    supportsCustomHeadline: true,
+    supportsMultipleLinks: false
+  },
+  // These 3 don't have an exact slug match in the new spec (spec instead lists
+  // "follow-us-stand"/"social-media-stand", "view-menu-stand", and 7 hosted-*
+  // slugs as separate new products) -- but they're real, live, already-sold
+  // products, so they're backfilled into the same taxonomy rather than left
+  // as orphans outside the new stand-category/use-case system.
+  "follow-us-social-media-stand": {
+    standCategorySlug: "social-media-stands",
+    destinationType: "social",
+    tags: ["social"]
+  },
+  "view-our-menu-stand": {
+    standCategorySlug: "menu-info-stands",
+    destinationType: "menu_info",
+    tags: ["menu", "info"]
+  },
+  "hosted-landing-page-subscription": {
+    standCategorySlug: "hosted-tap-page-stands",
+    destinationType: "hosted_page",
+    tags: ["hosted", "subscription"],
+    supportsLogo: true,
+    supportsBusinessName: true,
+    supportsCustomHeadline: true,
+    supportsMultipleLinks: true
+  }
+};
+
+for (const product of migratedProducts) {
+  const backfill = catalogV2Backfill[product.slug];
+  if (backfill) {
+    Object.assign(product, backfill);
+  }
+}
+

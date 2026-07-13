@@ -4,6 +4,10 @@ Tap Rater is both a product store and a reputation platform. The public storefro
 
 The current storefront strategy is intentionally narrower than the long-term platform strategy. Phase 1 sells stands as its core catalog, plus two Phase 2/3 tiers (Custom NFC Stand, Hosted Landing Page Subscription) already added to the catalog as quote-based products ahead of the original phased schedule.
 
+## Catalog v2 (2026-07-13)
+
+The catalog was restructured into a full print-on-demand stand business: 181 active products across 10 stand categories and 15 use cases, with explicit slug-based relationships (not tags) controlling Shop by Stand and Shop by Use. See `docs/product-model.md` (architecture, slug vs. tag rule, spec-to-implementation terminology mapping) and `docs/catalog-structure.md` (full category/use-case lists, conditional-slug resolutions, legacy product reconciliation) for the complete picture. The narrower Phase 1 framing below still describes the original 16-product foundation this was built on top of.
+
 ## Phase 1 Fulfillment Scope
 
 Phase 1 active storefront products:

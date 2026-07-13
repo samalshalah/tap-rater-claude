@@ -6,9 +6,11 @@ import {
   getProductBySlug,
   getProductsByCategory
 } from "@/lib/products";
+import { standCategories } from "@/data/stand-categories";
+import { useCases } from "@/data/use-cases";
 
 describe("catalog categories", () => {
-  it("exposes SEO category groups for the shop", () => {
+  it("exposes SEO category groups for the shop, including the 3 new catalog-v2 buckets", () => {
     const categories = getCatalogCategories();
 
     expect(categories.map((category) => category.title)).toEqual([
@@ -18,6 +20,9 @@ describe("catalog categories", () => {
       "Menu Products",
       "Feedback Products",
       "Business Bundles",
+      "Website & Link Products",
+      "Payment, Tip & Donation Products",
+      "Loyalty & Rewards Products"
     ]);
   });
 
@@ -85,14 +90,17 @@ describe("catalog categories", () => {
       allowsLogoUpload: true,
       allowsCustomDesign: true,
       designMode: "standard",
-      displayText: "Review us on Google"
+      displayText: "Review us on Google",
+      standCategorySlug: "review-stands",
+      destinationType: "review",
+      platformSlug: "google"
     });
   });
 
-  it("makes standard, logo, and custom design available on every Phase 1 physical_redirect product", () => {
+  it("makes standard, logo, and custom design available on every direct_link_stand (physical_redirect) product", () => {
     const products = getActiveProducts().filter((product) => product.productType === "physical_redirect");
 
-    expect(products).toHaveLength(8);
+    expect(products.length).toBeGreaterThan(150);
     expect(
       products.every((product) => {
         return (
@@ -107,26 +115,26 @@ describe("catalog categories", () => {
     ).toBe(true);
   });
 
-  it("groups Phase 1 products by customer use case (stands only, plates discontinued)", () => {
+  it("groups the catalog by customer use case category, now spanning far more than the original Phase 1 SKUs", () => {
     const reviewProducts = getProductsByCategory("reviews");
     const socialProducts = getProductsByCategory("social-media");
     const appointmentProducts = getProductsByCategory("appointments");
     const menuProducts = getProductsByCategory("menu");
     const feedbackProducts = getProductsByCategory("feedback");
 
-    expect(reviewProducts).toHaveLength(4);
-    expect(socialProducts).toHaveLength(1);
-    expect(appointmentProducts).toHaveLength(1);
-    expect(menuProducts).toHaveLength(1);
-    expect(feedbackProducts).toHaveLength(1);
+    expect(reviewProducts.length).toBe(59);
+    expect(socialProducts.length).toBe(14);
+    expect(appointmentProducts.length).toBe(19);
+    expect(menuProducts.length).toBe(24);
+    expect(feedbackProducts.length).toBe(15);
     expect(reviewProducts.every((product) => product.format === "stand")).toBe(true);
   });
 
-  it("includes the Phase 1 stand catalog plus the new Custom Stand and Hosted Landing Page entries as active storefront products (plates discontinued)", () => {
+  it("includes the full catalog-v2 stand/use-case restructure as active storefront products (plates discontinued)", () => {
     const products = getActiveProducts();
     const titles = products.map((product) => product.title);
 
-    expect(products).toHaveLength(10);
+    expect(products.length).toBe(181);
     expect(titles).toEqual(
       expect.arrayContaining([
         "Google Review Stand",
@@ -138,7 +146,20 @@ describe("catalog categories", () => {
         "Book Your Next Visit Stand",
         "View Our Menu Stand",
         "Custom NFC Stand",
-        "Hosted Landing Page Subscription"
+        "Hosted Landing Page Subscription",
+        "Trustpilot Review Stand",
+        "DealerRater Review Stand",
+        "Healthgrades Review Stand",
+        "Zillow Review Stand",
+        "Instagram Stand",
+        "Book Appointment Stand",
+        "Share Your Feedback Stand",
+        "View Menu Stand",
+        "Visit Our Website Stand",
+        "Donate Now Stand",
+        "Join Rewards Stand",
+        "Custom Review Stand",
+        "Hosted Tap Page Stand"
       ])
     );
     expect(titles).not.toContain("Google Review Plate");
@@ -146,6 +167,7 @@ describe("catalog categories", () => {
     expect(titles).not.toContain("Employee Review Name Tag");
     expect(titles).not.toContain("Staff Review Tracking Page");
     expect(titles).not.toContain("Business Review Starter Kit");
+    expect(titles).not.toContain("SureCritic Review Stand");
   });
 
   it("models Custom NFC Stand as a managed, request-quote physical product that can point to a direct link or a hosted landing page", () => {
@@ -156,6 +178,7 @@ describe("catalog categories", () => {
     expect(product?.checkoutMode).toBe("request_quote");
     expect(product?.format).toBe("stand");
     expect(product?.requiresSubscription).toBe(false);
+    expect(product?.standCategorySlug).toBe("custom-stands");
   });
 
   it("models Hosted Landing Page Subscription as a contact-sales platform product requiring an account and subscription", () => {
@@ -169,10 +192,10 @@ describe("catalog categories", () => {
     expect(product?.requiresLandingPage).toBe(true);
   });
 
-  it("keeps menu products menu-only", () => {
-    const menuProducts = getActiveProducts().filter((product) => product.slug.includes("menu"));
+  it("keeps menu products menu-only (across the whole menu-info-stands category, not just Phase 1)", () => {
+    const menuProducts = getActiveProducts().filter((product) => product.standCategorySlug === "menu-info-stands" || product.slug === "view-our-menu-stand");
 
-    expect(menuProducts).toHaveLength(1);
+    expect(menuProducts.length).toBe(24);
     expect(JSON.stringify(menuProducts)).not.toMatch(/wifi/i);
   });
 
@@ -187,5 +210,107 @@ describe("catalog categories", () => {
     expect(copy).not.toMatch(/reward customers for reviews/i);
     expect(copy).not.toMatch(/happy customers/i);
     expect(copy).not.toMatch(/satisfied customers/i);
+  });
+
+  it("gives every active product a unique slug", () => {
+    const products = getActiveProducts();
+    const slugs = products.map((product) => product.slug);
+
+    expect(new Set(slugs).size).toBe(slugs.length);
+  });
+
+  it("gives every active product a standCategorySlug", () => {
+    const products = getActiveProducts();
+    const missing = products.filter((product) => !product.standCategorySlug);
+
+    expect(missing.map((product) => product.slug)).toEqual([]);
+  });
+
+  it("gives every active product a useCaseSlugs array (may be empty, but must exist)", () => {
+    const products = getActiveProducts();
+
+    expect(products.every((product) => Array.isArray(product.useCaseSlugs))).toBe(true);
+  });
+
+  it("resolves every standCategory's products to real, active product slugs", () => {
+    const products = getActiveProducts();
+    const slugSet = new Set(products.map((product) => product.slug));
+
+    for (const category of standCategories) {
+      const productsInCategory = products.filter((product) => product.standCategorySlug === category.slug);
+      expect(productsInCategory.length).toBeGreaterThan(0);
+      for (const product of productsInCategory) {
+        expect(slugSet.has(product.slug)).toBe(true);
+      }
+    }
+  });
+
+  it("resolves every useCase.recommendedProductSlugs and featuredProductSlugs to a real, active product", () => {
+    const products = getActiveProducts();
+    const slugSet = new Set(products.map((product) => product.slug));
+
+    for (const useCase of useCases) {
+      for (const slug of useCase.recommendedProductSlugs) {
+        expect(slugSet.has(slug)).toBe(true);
+      }
+      for (const slug of useCase.featuredProductSlugs) {
+        expect(slugSet.has(slug)).toBe(true);
+      }
+    }
+  });
+
+  it("has no plate, card, badge, or name tag product active", () => {
+    const products = getActiveProducts();
+    const bannedPattern = /\bplate\b|\bcard\b|\bbadge\b|name tag/i;
+
+    const offenders = products.filter((product) => bannedPattern.test(product.title));
+    expect(offenders.map((p) => p.title)).toEqual([]);
+  });
+
+  it("requires a subscription for every hosted_tap_page_stand (platform_landing_page) product", () => {
+    const hostedProducts = getActiveProducts().filter((product) => product.standCategorySlug === "hosted-tap-page-stands");
+
+    expect(hostedProducts.length).toBe(8);
+    expect(hostedProducts.every((product) => product.requiresSubscription === true)).toBe(true);
+    expect(hostedProducts.every((product) => product.productType === "platform_landing_page")).toBe(true);
+  });
+
+  it("never requires a subscription for direct_link_stand (physical_redirect) products", () => {
+    const directLinkProducts = getActiveProducts().filter((product) => product.productType === "physical_redirect");
+
+    expect(directLinkProducts.every((product) => product.requiresSubscription === false)).toBe(true);
+  });
+
+  it("/use/car-dealerships includes Google, DealerRater, Cars.com, Social/Follow, Custom, and Hosted Tap Page, in the specified order", () => {
+    const useCase = useCases.find((item) => item.slug === "car-dealerships");
+
+    expect(useCase).toBeDefined();
+    expect(useCase?.recommendedProductSlugs).toEqual([
+      "google-review-stand",
+      "yelp-review-stand",
+      "facebook-review-stand",
+      "dealerrater-review-stand",
+      "cars-com-review-stand",
+      "cargurus-review-stand",
+      "edmunds-review-stand",
+      "autotrader-review-stand",
+      "carfax-review-stand",
+      "schedule-service-stand",
+      "book-appointment-stand",
+      "rate-your-experience-stand",
+      "social-media-stand",
+      "follow-us-stand",
+      "request-a-quote-stand",
+      "auto-service-menu-stand",
+      "custom-nfc-stand",
+      "hosted-tap-page-stand"
+    ]);
+    const slugs = useCase!.recommendedProductSlugs;
+    expect(new Set(slugs).size).toBe(slugs.length);
+  });
+
+  it("all 15 use cases exist with non-empty recommendedProductSlugs", () => {
+    expect(useCases.length).toBe(15);
+    expect(useCases.every((useCase) => useCase.recommendedProductSlugs.length > 0)).toBe(true);
   });
 });

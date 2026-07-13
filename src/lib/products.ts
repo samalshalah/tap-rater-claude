@@ -1,17 +1,17 @@
 import {
   catalogCategories,
-  migratedProducts,
   type CatalogCategory,
   type CatalogCategorySlug,
   type MigratedProduct
 } from "@/data/migrated-products";
+import { allProducts } from "@/data/catalog";
 
 export function getActiveProducts(): MigratedProduct[] {
-  return migratedProducts.filter((product) => product.isActive);
+  return allProducts.filter((product) => product.isActive);
 }
 
 export function getProductBySlug(slug: string): MigratedProduct | undefined {
-  return migratedProducts.find((product) => product.slug === slug && product.isActive);
+  return allProducts.find((product) => product.slug === slug && product.isActive);
 }
 
 export function getCatalogCategories(): CatalogCategory[] {

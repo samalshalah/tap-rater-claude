@@ -1,5 +1,6 @@
 import { unstable_noStore as noStore } from "next/cache";
-import { migratedProducts, type MigratedProduct } from "@/data/migrated-products";
+import { type MigratedProduct } from "@/data/migrated-products";
+import { allProducts } from "@/data/catalog";
 import { getSupabaseAdmin, hasSupabaseAdminConfig } from "@/lib/db";
 import { getCategoryBySlug, getProductBySlug } from "@/lib/products";
 
@@ -16,7 +17,7 @@ export type ProductRepositoryClient = {
 type ProductRow = Record<string, unknown>;
 
 export function staticStorefrontProducts(): MigratedProduct[] {
-  return migratedProducts.filter((product) => product.isActive);
+  return allProducts.filter((product) => product.isActive);
 }
 
 const staticStorefrontProductSlugs = new Set(staticStorefrontProducts().map((product) => product.slug));

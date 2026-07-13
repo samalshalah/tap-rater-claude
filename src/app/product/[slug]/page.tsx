@@ -2,7 +2,10 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { CheckCircle2, Link2, MessageSquareText, Smartphone, Store } from "lucide-react";
-import { migratedProducts, type MigratedProduct } from "@/data/migrated-products";
+import { type MigratedProduct } from "@/data/migrated-products";
+import { allProducts } from "@/data/catalog";
+import { getStandCategoryBySlug } from "@/data/stand-categories";
+import { getUseCaseBySlug } from "@/data/use-cases";
 import { ProductCard } from "@/components/product/product-card";
 import { ProductGallery } from "@/components/product/product-gallery";
 import { DestinationLinkField } from "@/components/product/destination-link-field";
@@ -60,7 +63,7 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
 }
 
 export function generateStaticParams() {
-  return migratedProducts.filter((product) => product.isActive).map((product) => ({ slug: product.slug }));
+  return allProducts.filter((product) => product.isActive).map((product) => ({ slug: product.slug }));
 }
 
 export default async function ProductPage({ params }: ProductPageProps) {
@@ -80,6 +83,11 @@ export default async function ProductPage({ params }: ProductPageProps) {
   const destination = getReviewDestination(product);
   const serviceBadges = getProductServiceBadges(product);
   const specifications = getStandSpecifications(product);
+  const standCategory = product.standCategorySlug ? getStandCategoryBySlug(product.standCategorySlug) : undefined;
+  const productUseCases = (product.useCaseSlugs ?? []).flatMap((useCaseSlug) => {
+    const useCase = getUseCaseBySlug(useCaseSlug);
+    return useCase ? [useCase] : [];
+  });
   const activationCopy = getProductActivationCopy(product);
   const checkoutAction = getCheckoutAction(product);
   const designOptions = getDesignOptions(product);
@@ -353,6 +361,65 @@ export default async function ProductPage({ params }: ProductPageProps) {
       ) : null}
 
       <section className="border-b border-line bg-white py-16">
+        <div className="mx-auto max-w-[760px] px-6">
+          <p className="text-[13px] font-medium uppercase tracking-[0.06em] text-muted">Product details</p>
+          <h2 className="mt-3 text-[26px] font-semibold tracking-tightest text-ink">How this stand is set up.</h2>
+          <div className="mt-8 overflow-hidden rounded-2xl bg-surface">
+            {standCategory ? (
+              <div className="grid grid-cols-[1fr_1.4fr] gap-4 border-t border-line px-5 py-3.5 first:border-t-0 sm:px-6">
+                <p className="text-[13px] font-medium text-muted">Stand category</p>
+                <Link href={`/shop/stands/${standCategory.slug}`} className="text-[13px] font-medium text-brand hover:text-brand-dark">
+                  {standCategory.name}
+                </Link>
+              </div>
+            ) : null}
+            {product.destinationType ? (
+              <div className="grid grid-cols-[1fr_1.4fr] gap-4 border-t border-line px-5 py-3.5 first:border-t-0 sm:px-6">
+                <p className="text-[13px] font-medium text-muted">Destination type</p>
+                <p className="text-[13px] text-ink">{destinationTypeLabel(product.destinationType)}</p>
+              </div>
+            ) : null}
+            <div className="grid grid-cols-[1fr_1.4fr] gap-4 border-t border-line px-5 py-3.5 first:border-t-0 sm:px-6">
+              <p className="text-[13px] font-medium text-muted">Subscription</p>
+              <p className="text-[13px] text-ink">{product.requiresSubscription ? "Required" : "Not required"}</p>
+            </div>
+            <div className="grid grid-cols-[1fr_1.4fr] gap-4 border-t border-line px-5 py-3.5 first:border-t-0 sm:px-6">
+              <p className="text-[13px] font-medium text-muted">Customization</p>
+              <p className="text-[13px] text-ink">
+                {[
+                  product.supportsLogo ? "logo" : null,
+                  product.supportsBusinessName ? "business name" : null,
+                  product.supportsCustomHeadline ? "custom headline" : null,
+                  product.supportsMultipleLinks ? "multiple links" : null
+                ]
+                  .filter(Boolean)
+                  .join(", ") || "Standard design"}
+              </p>
+            </div>
+          </div>
+
+          <p className="mt-5 rounded-2xl bg-surface p-4 text-[13px] leading-5 text-ink">{directLinkVsCustomVsHostedCopy(product)}</p>
+
+          {productUseCases.length > 0 ? (
+            <div className="mt-8">
+              <p className="text-[14px] font-medium text-ink">Popular use cases</p>
+              <div className="mt-3 flex flex-wrap gap-2">
+                {productUseCases.map((useCase) => (
+                  <Link
+                    key={useCase.slug}
+                    href={`/use/${useCase.slug}`}
+                    className="rounded-full bg-surface px-4 py-2 text-[13px] font-medium text-ink transition hover:bg-white hover:shadow-sm"
+                  >
+                    {useCase.name}
+                  </Link>
+                ))}
+              </div>
+            </div>
+          ) : null}
+        </div>
+      </section>
+
+      <section className="border-b border-line bg-white py-16">
         <div className="mx-auto max-w-[1100px] px-6">
           <p className="text-[13px] font-medium uppercase tracking-[0.06em] text-muted">Product questions</p>
           <h2 className="mt-3 text-[26px] font-semibold tracking-tightest text-ink">Answers before you buy.</h2>
@@ -388,6 +455,31 @@ export default async function ProductPage({ params }: ProductPageProps) {
       ) : null}
     </>
   );
+}
+
+function destinationTypeLabel(destinationType: string): string {
+  const labels: Record<string, string> = {
+    review: "Review",
+    social: "Social",
+    appointment: "Appointment",
+    feedback: "Feedback",
+    menu_info: "Menu & Info",
+    website: "Website",
+    payment: "Payment",
+    custom: "Custom",
+    hosted_page: "Hosted Page"
+  };
+  return labels[destinationType] ?? destinationType;
+}
+
+function directLinkVsCustomVsHostedCopy(product: { productType: string }): string {
+  if (product.productType === "platform_landing_page") {
+    return "Hosted Tap Page stands require a monthly subscription because they open a Tap Rater landing page with multiple links.";
+  }
+  if (product.productType === "physical_managed") {
+    return "Custom stands can include your business logo, business name, custom headline, and custom destination link.";
+  }
+  return "Direct-link stands open one destination link and do not require a subscription.";
 }
 
 function getCheckoutAction(product: { checkoutMode: string }) {
