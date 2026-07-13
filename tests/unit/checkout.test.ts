@@ -7,11 +7,13 @@ import {
   validateCheckoutCart
 } from "@/lib/checkout";
 
+const GOOGLE_REVIEW_URL = "https://g.page/r/example-business/review";
+
 describe("Stripe checkout helpers", () => {
   it("validates cart items server-side against active in-stock products", () => {
     const result = validateCheckoutCart(
       [
-        { productId: "google-review-stand", quantity: 2 },
+        { productId: "google-review-stand", quantity: 2, destinationUrl: GOOGLE_REVIEW_URL },
         { productId: "old-product", quantity: 5 },
         { productId: "stale-platform-product", quantity: 1 }
       ],
@@ -25,7 +27,8 @@ describe("Stripe checkout helpers", () => {
       productId: "google-review-stand",
       quantity: 2,
       unitAmountCents: 4900,
-      lineSubtotalCents: 9800
+      lineSubtotalCents: 9800,
+      destinationUrl: GOOGLE_REVIEW_URL
     });
     expect(result.totalCents).toBe(9800);
   });
@@ -45,14 +48,32 @@ describe("Stripe checkout helpers", () => {
     });
   });
 
+  it("rejects a buy-now product missing a verified destination link, even if it slips past the client", () => {
+    const result = validateCheckoutCart([{ productId: "google-review-stand", quantity: 1 }], migratedProducts);
+
+    expect(result).toMatchObject({ ok: false, reason: "missing_destination" });
+  });
+
+  it("drops an unsafe destination URL (SSRF attempt) rather than trusting client input", () => {
+    const result = validateCheckoutCart(
+      [{ productId: "google-review-stand", quantity: 1, destinationUrl: "http://169.254.169.254/latest/meta-data" }],
+      migratedProducts
+    );
+
+    expect(result).toMatchObject({ ok: false, reason: "missing_destination" });
+  });
+
   it("only accepts Stripe test secret keys", () => {
     expect(isStripeTestSecretKey("sk_test_123")).toBe(true);
     expect(isStripeTestSecretKey("sk_live_123")).toBe(false);
     expect(isStripeTestSecretKey("")).toBe(false);
   });
 
-  it("builds Stripe line items from validated cart rows", () => {
-    const result = validateCheckoutCart([{ productId: "google-review-stand", quantity: 1 }], migratedProducts);
+  it("builds Stripe line items from validated cart rows, including the destination URL in metadata", () => {
+    const result = validateCheckoutCart(
+      [{ productId: "google-review-stand", quantity: 1, destinationUrl: GOOGLE_REVIEW_URL }],
+      migratedProducts
+    );
 
     expect(result.ok).toBe(true);
     if (!result.ok) return;
@@ -66,7 +87,8 @@ describe("Stripe checkout helpers", () => {
             description: "Countertop NFC stand that opens your Google review link with one tap or scan.",
             metadata: {
               product_id: "google-review-stand",
-              sku: "TR-GOOGLE-STAND"
+              sku: "TR-GOOGLE-STAND",
+              destination_url: GOOGLE_REVIEW_URL
             }
           },
           unit_amount: 4900
@@ -76,7 +98,10 @@ describe("Stripe checkout helpers", () => {
   });
 
   it("creates test-mode Checkout Session params with success and cancel URLs", () => {
-    const result = validateCheckoutCart([{ productId: "google-review-stand", quantity: 1 }], migratedProducts);
+    const result = validateCheckoutCart(
+      [{ productId: "google-review-stand", quantity: 1, destinationUrl: GOOGLE_REVIEW_URL }],
+      migratedProducts
+    );
 
     expect(result.ok).toBe(true);
     if (!result.ok) return;

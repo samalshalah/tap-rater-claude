@@ -5,6 +5,7 @@ export const cartStorageKey = "taprater:cart";
 export type CartItem = {
   productId: string;
   quantity: number;
+  destinationUrl?: string;
 };
 
 export type CartRow = {
@@ -18,26 +19,44 @@ function isPositiveQuantity(quantity: unknown): quantity is number {
   return typeof quantity === "number" && Number.isInteger(quantity) && quantity > 0;
 }
 
+function isValidDestinationUrl(value: unknown): value is string {
+  if (typeof value !== "string" || value.length === 0 || value.length > 2048) {
+    return false;
+  }
+  try {
+    const url = new URL(value);
+    return url.protocol === "http:" || url.protocol === "https:";
+  } catch {
+    return false;
+  }
+}
+
 export function normalizeCartItems(value: unknown): CartItem[] {
   if (!Array.isArray(value)) {
     return [];
   }
 
   const activeProductIds = new Set(getActiveProducts().map((product) => product.slug));
-  const normalized = new Map<string, number>();
+  const normalized = new Map<string, CartItem>();
 
   for (const entry of value) {
     const productId = typeof entry?.productId === "string" ? entry.productId : "";
     const quantity = entry?.quantity;
+    const destinationUrl = isValidDestinationUrl(entry?.destinationUrl) ? entry.destinationUrl : undefined;
 
     if (!activeProductIds.has(productId) || !isPositiveQuantity(quantity)) {
       continue;
     }
 
-    normalized.set(productId, (normalized.get(productId) ?? 0) + quantity);
+    const existing = normalized.get(productId);
+    normalized.set(productId, {
+      productId,
+      quantity: (existing?.quantity ?? 0) + quantity,
+      destinationUrl: destinationUrl ?? existing?.destinationUrl
+    });
   }
 
-  return Array.from(normalized, ([productId, quantity]) => ({ productId, quantity }));
+  return Array.from(normalized.values());
 }
 
 export function parseStoredCart(value: string | null): CartItem[] {

@@ -2,6 +2,7 @@ import Stripe from "stripe";
 import type { MigratedProduct } from "@/data/migrated-products";
 import { getProductPriceCents } from "@/lib/products";
 import type { CartItem } from "@/lib/cart";
+import { isSafeExternalUrl } from "@/lib/link-verification";
 
 export type CheckoutCartRow = {
   productId: string;
@@ -11,6 +12,7 @@ export type CheckoutCartRow = {
   unitAmountCents: number;
   lineSubtotalCents: number;
   shortDescription: string;
+  destinationUrl?: string;
 };
 
 export type ValidatedCheckoutCart =
@@ -22,7 +24,7 @@ export type ValidatedCheckoutCart =
     }
   | {
       ok: false;
-      reason: "empty_cart";
+      reason: "empty_cart" | "missing_destination";
       message: string;
     };
 
@@ -33,6 +35,7 @@ export function validateCheckoutCart(items: CartItem[], products: MigratedProduc
       .map((product) => [product.slug, product])
   );
   const quantityByProductId = new Map<string, number>();
+  const destinationByProductId = new Map<string, string>();
 
   for (const item of items) {
     if (!Number.isInteger(item.quantity) || item.quantity <= 0 || !productById.has(item.productId)) {
@@ -40,6 +43,9 @@ export function validateCheckoutCart(items: CartItem[], products: MigratedProduc
     }
 
     quantityByProductId.set(item.productId, (quantityByProductId.get(item.productId) ?? 0) + item.quantity);
+    if (item.destinationUrl && isSafeExternalUrl(item.destinationUrl)) {
+      destinationByProductId.set(item.productId, item.destinationUrl);
+    }
   }
 
   const rows = Array.from(quantityByProductId.entries()).map(([productId, quantity]) => {
@@ -53,12 +59,22 @@ export function validateCheckoutCart(items: CartItem[], products: MigratedProduc
       quantity,
       unitAmountCents,
       lineSubtotalCents: unitAmountCents * quantity,
-      shortDescription: product.shortDescription
+      shortDescription: product.shortDescription,
+      destinationUrl: destinationByProductId.get(productId)
     };
   });
 
   if (rows.length === 0) {
     return { ok: false, reason: "empty_cart", message: "Your cart is empty or contains unavailable products." };
+  }
+
+  const missingDestination = rows.find((row) => productById.get(row.productId)?.checkoutMode === "buy_now" && !row.destinationUrl);
+  if (missingDestination) {
+    return {
+      ok: false,
+      reason: "missing_destination",
+      message: `${missingDestination.title} is missing a verified destination link. Add it again from the product page.`
+    };
   }
 
   return {
@@ -79,7 +95,8 @@ export function buildStripeCheckoutLineItems(rows: CheckoutCartRow[]): Stripe.Ch
         description: row.shortDescription,
         metadata: {
           product_id: row.productId,
-          sku: row.sku
+          sku: row.sku,
+          destination_url: row.destinationUrl ?? ""
         }
       },
       unit_amount: row.unitAmountCents

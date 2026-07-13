@@ -51,4 +51,35 @@ describe("cart utilities", () => {
 
     expect(total).toBe(9800);
   });
+
+  it("carries a valid destinationUrl through merge", () => {
+    const items = mergeCartItem([], {
+      productId: "google-review-stand",
+      quantity: 1,
+      destinationUrl: "https://g.page/r/example/review"
+    });
+
+    expect(items).toEqual([
+      { productId: "google-review-stand", quantity: 1, destinationUrl: "https://g.page/r/example/review" }
+    ]);
+  });
+
+  it("keeps the existing destinationUrl when increasing quantity without a new one", () => {
+    const withUrl = mergeCartItem([], {
+      productId: "google-review-stand",
+      quantity: 1,
+      destinationUrl: "https://g.page/r/example/review"
+    });
+    const items = mergeCartItem(withUrl, { productId: "google-review-stand", quantity: 1 });
+
+    expect(items).toEqual([
+      { productId: "google-review-stand", quantity: 2, destinationUrl: "https://g.page/r/example/review" }
+    ]);
+  });
+
+  it("drops an invalid destinationUrl rather than storing it", () => {
+    const items = normalizeCartItems([{ productId: "google-review-stand", quantity: 1, destinationUrl: "javascript:alert(1)" }]);
+
+    expect(items).toEqual([{ productId: "google-review-stand", quantity: 1 }]);
+  });
 });

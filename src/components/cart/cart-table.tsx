@@ -14,6 +14,7 @@ export function CartTable() {
 
   const rows = getCartRows(items);
   const total = calculateCartTotalCents(items);
+  const missingDestination = rows.some((row) => row.product.checkoutMode === "buy_now" && !row.item.destinationUrl);
 
   async function startCheckout() {
     setIsCheckingOut(true);
@@ -58,6 +59,13 @@ export function CartTable() {
           <div>
             <p className="text-[15px] font-medium text-ink">{row.product.title}</p>
             <p className="text-[13px] text-muted">{formatPrice(row.unitPriceCents)} each</p>
+            {row.item.destinationUrl ? (
+              <p className="mt-1 max-w-xs truncate text-[12px] text-muted" title={row.item.destinationUrl}>
+                Opens: {row.item.destinationUrl}
+              </p>
+            ) : row.product.checkoutMode === "buy_now" ? (
+              <p className="mt-1 text-[12px] font-medium text-red-600">No destination link set — remove and re-add from the product page.</p>
+            ) : null}
           </div>
           <div className="flex h-10 w-fit items-center overflow-hidden rounded-full border border-line">
             <button
@@ -103,12 +111,17 @@ export function CartTable() {
       </div>
       <button
         type="button"
-        disabled={isCheckingOut}
+        disabled={isCheckingOut || missingDestination}
         className="rounded-full bg-ink px-6 py-3.5 text-[15px] font-medium text-white transition hover:bg-brand disabled:cursor-not-allowed disabled:bg-line"
         onClick={startCheckout}
       >
         {isCheckingOut ? "Starting Stripe test checkout..." : "Checkout with Stripe test mode"}
       </button>
+      {missingDestination ? (
+        <p className="text-[13px] font-medium text-red-600">
+          One or more stands is missing a verified destination link. Remove it and add it again from the product page.
+        </p>
+      ) : null}
       <p className="text-[13px] leading-5 text-muted">
         Test mode only. Use Stripe test cards; live payments stay disabled until explicitly approved.
       </p>

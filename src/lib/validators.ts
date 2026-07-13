@@ -227,7 +227,8 @@ export const checkoutCartSchema = z.object({
     .array(
       z.object({
         productId: z.string().trim().min(2).max(160),
-        quantity: z.number().int().min(1).max(99)
+        quantity: z.number().int().min(1).max(99),
+        destinationUrl: z.string().trim().url().max(2048).optional()
       })
     )
     .max(50)

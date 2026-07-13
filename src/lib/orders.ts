@@ -12,6 +12,7 @@ export type OrderLineItem = {
   quantity: number;
   unitAmountCents: number;
   lineSubtotalCents: number;
+  destinationUrl?: string;
 };
 
 export type OrderRecord = {
@@ -55,7 +56,8 @@ export function mapCheckoutRowsToOrderLineItems(rows: CheckoutCartRow[]): OrderL
     sku: row.sku,
     quantity: row.quantity,
     unitAmountCents: row.unitAmountCents,
-    lineSubtotalCents: row.lineSubtotalCents
+    lineSubtotalCents: row.lineSubtotalCents,
+    destinationUrl: row.destinationUrl
   }));
 }
 

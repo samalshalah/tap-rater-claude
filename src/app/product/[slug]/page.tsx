@@ -5,6 +5,7 @@ import { CheckCircle2, Link2, MessageSquareText, Smartphone, Store } from "lucid
 import { migratedProducts, type MigratedProduct } from "@/data/migrated-products";
 import { ProductCard } from "@/components/product/product-card";
 import { ProductGallery } from "@/components/product/product-gallery";
+import { DestinationLinkField } from "@/components/product/destination-link-field";
 import {
   getStorefrontProductBySlug,
   getStorefrontProducts,
@@ -159,13 +160,19 @@ export default async function ProductPage({ params }: ProductPageProps) {
               </div>
             ) : null}
 
-            <Link
-              href={checkoutAction.href}
-              className="mt-7 inline-flex w-full items-center justify-center rounded-full bg-ink px-6 py-3.5 text-[15px] font-medium text-white transition hover:bg-brand"
-            >
-              {checkoutAction.label}
-            </Link>
-            <p className="mt-2 text-[12px] text-muted">{checkoutAction.supportingCopy}</p>
+            {product.checkoutMode === "buy_now" ? (
+              <DestinationLinkField productId={product.slug} />
+            ) : (
+              <>
+                <Link
+                  href={checkoutAction.href}
+                  className="mt-7 inline-flex w-full items-center justify-center rounded-full bg-ink px-6 py-3.5 text-[15px] font-medium text-white transition hover:bg-brand"
+                >
+                  {checkoutAction.label}
+                </Link>
+                <p className="mt-2 text-[12px] text-muted">{checkoutAction.supportingCopy}</p>
+              </>
+            )}
 
             <div className="mt-5 grid gap-2.5 text-[13px] text-muted sm:grid-cols-2">
               <p className="flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-brand" strokeWidth={1.5} /> No monthly fee for basic activation</p>
