@@ -33,6 +33,24 @@ export function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [mobileSection, setMobileSection] = useState<"shop" | "solutions" | null>(null);
   const navRef = useRef<HTMLDivElement>(null);
+  const closeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  function clearCloseTimeout() {
+    if (closeTimeoutRef.current) {
+      clearTimeout(closeTimeoutRef.current);
+      closeTimeoutRef.current = null;
+    }
+  }
+
+  function openOnHover(menu: "shop" | "solutions") {
+    clearCloseTimeout();
+    setOpenMenu(menu);
+  }
+
+  function scheduleCloseOnHoverOut() {
+    clearCloseTimeout();
+    closeTimeoutRef.current = setTimeout(() => setOpenMenu(null), 150);
+  }
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -75,6 +93,8 @@ export function Header() {
             isOpen={openMenu === "shop"}
             onToggle={() => setOpenMenu(openMenu === "shop" ? null : "shop")}
             onClose={() => setOpenMenu(null)}
+            onHoverOpen={() => openOnHover("shop")}
+            onHoverClose={scheduleCloseOnHoverOut}
           />
           <NavDropdown
             label="Solutions"
@@ -82,6 +102,8 @@ export function Header() {
             isOpen={openMenu === "solutions"}
             onToggle={() => setOpenMenu(openMenu === "solutions" ? null : "solutions")}
             onClose={() => setOpenMenu(null)}
+            onHoverOpen={() => openOnHover("solutions")}
+            onHoverClose={scheduleCloseOnHoverOut}
           />
           {plainNavItems.map((item) => (
             <Link key={item.href} href={item.href} className="transition hover:text-ink">
@@ -190,16 +212,20 @@ function NavDropdown({
   links,
   isOpen,
   onToggle,
-  onClose
+  onClose,
+  onHoverOpen,
+  onHoverClose
 }: {
   label: string;
   links: NavLinkItem[];
   isOpen: boolean;
   onToggle: () => void;
   onClose: () => void;
+  onHoverOpen: () => void;
+  onHoverClose: () => void;
 }) {
   return (
-    <div className="relative">
+    <div className="relative" onMouseEnter={onHoverOpen} onMouseLeave={onHoverClose}>
       <button
         type="button"
         aria-haspopup="true"
@@ -223,19 +249,21 @@ function NavDropdown({
         <div
           role="menu"
           aria-label={label}
-          className="absolute left-1/2 top-full mt-3 w-64 -translate-x-1/2 rounded-2xl border border-line bg-white p-2 shadow-[0_16px_40px_rgba(0,0,0,0.1)]"
+          className="absolute left-1/2 top-full w-64 -translate-x-1/2 pt-3"
         >
-          {links.map((link) => (
-            <Link
-              key={link.href + link.label}
-              href={link.href}
-              role="menuitem"
-              onClick={onClose}
-              className="block rounded-xl px-3 py-2.5 text-[13px] font-medium text-ink/80 transition hover:bg-surface hover:text-ink"
-            >
-              {link.label}
-            </Link>
-          ))}
+          <div className="rounded-2xl border border-line bg-white p-2 shadow-[0_16px_40px_rgba(0,0,0,0.1)]">
+            {links.map((link) => (
+              <Link
+                key={link.href + link.label}
+                href={link.href}
+                role="menuitem"
+                onClick={onClose}
+                className="block rounded-xl px-3 py-2.5 text-[13px] font-medium text-ink/80 transition hover:bg-surface hover:text-ink"
+              >
+                {link.label}
+              </Link>
+            ))}
+          </div>
         </div>
       ) : null}
     </div>
