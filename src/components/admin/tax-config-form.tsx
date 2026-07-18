@@ -3,15 +3,28 @@
 import { type FormEvent, useState } from "react";
 import type { TaxConfigInput } from "@/lib/validators";
 
-const US_STATES = [
-  "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD",
-  "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC",
-  "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY"
-];
+type StateRateRow = { state: string; ratePercent: string };
 
-export function TaxConfigForm({ initialValues }: { initialValues: TaxConfigInput | null }) {
+export function TaxConfigForm({ initialValues }: { initialValues: TaxConfigInput }) {
+  const [rows, setRows] = useState<StateRateRow[]>(
+    initialValues.stateRates.length > 0
+      ? initialValues.stateRates.map((r) => ({ state: r.state, ratePercent: String(r.ratePercent) }))
+      : [{ state: "VA", ratePercent: "6" }]
+  );
   const [status, setStatus] = useState<{ tone: "success" | "error"; message: string } | null>(null);
   const [isSaving, setIsSaving] = useState(false);
+
+  function updateRow(index: number, field: keyof StateRateRow, value: string) {
+    setRows((prev) => prev.map((row, i) => (i === index ? { ...row, [field]: value } : row)));
+  }
+
+  function addRow() {
+    setRows((prev) => [...prev, { state: "", ratePercent: "" }]);
+  }
+
+  function removeRow(index: number) {
+    setRows((prev) => prev.filter((_, i) => i !== index));
+  }
 
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -19,7 +32,9 @@ export function TaxConfigForm({ initialValues }: { initialValues: TaxConfigInput
     setStatus(null);
 
     const form = new FormData(event.currentTarget);
-    const nexusStates = form.getAll("nexusStates").map(String);
+    const stateRates = rows
+      .filter((row) => row.state.trim() && row.ratePercent.trim())
+      .map((row) => ({ state: row.state.trim().toUpperCase(), ratePercent: Number(row.ratePercent) }));
 
     try {
       const response = await fetch("/api/admin/tax-config", {
@@ -27,7 +42,7 @@ export function TaxConfigForm({ initialValues }: { initialValues: TaxConfigInput
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           provider: form.get("provider"),
-          nexusStates,
+          stateRates,
           pricesIncludeTax: form.get("pricesIncludeTax") === "true",
           notes: form.get("notes")
         })
@@ -45,40 +60,63 @@ export function TaxConfigForm({ initialValues }: { initialValues: TaxConfigInput
     <form className="grid gap-4 rounded-md border border-line bg-white p-5 shadow-sm" onSubmit={submit}>
       <h2 className="text-xl font-black text-ink">Tax configuration</h2>
       <p className="text-sm leading-6 text-muted">
-        Sales tax nexus is a real legal question -- which states you're required to collect tax in depends on where you have a
-        physical presence or meet economic nexus thresholds. Confirm with an accountant before setting this. Stripe Tax can
-        calculate and file automatically if you'd rather not manage rates yourself.
+        Rates are stored per state, not hardcoded, so adding nexus in a new state later is just another row here -- no code
+        change needed. Confirm rates with an accountant, especially if local/county tax adds on top of the state rate.
       </p>
+
       <label className="grid gap-2 text-sm font-bold text-ink">
         Provider
-        <select className="rounded-md border border-line px-4 py-3 font-normal" name="provider" defaultValue={initialValues?.provider ?? "none"}>
-          <option value="none">Not decided yet</option>
+        <select className="rounded-md border border-line px-4 py-3 font-normal" name="provider" defaultValue={initialValues.provider}>
+          <option value="manual">Manual rates (set below)</option>
           <option value="stripe_tax">Stripe Tax (automatic)</option>
-          <option value="manual">Manual rates</option>
+          <option value="none">Not decided yet</option>
         </select>
       </label>
+
       <label className="grid gap-2 text-sm font-bold text-ink">
         Prices shown to customers
-        <select className="rounded-md border border-line px-4 py-3 font-normal" name="pricesIncludeTax" defaultValue={initialValues?.pricesIncludeTax ? "true" : "false"}>
+        <select className="rounded-md border border-line px-4 py-3 font-normal" name="pricesIncludeTax" defaultValue={initialValues.pricesIncludeTax ? "true" : "false"}>
           <option value="false">Tax added at checkout (prices shown are pre-tax)</option>
           <option value="true">Tax included in displayed price</option>
         </select>
       </label>
-      <fieldset className="grid gap-2">
-        <legend className="text-sm font-bold text-ink">Nexus states (where you collect tax)</legend>
-        <div className="grid grid-cols-6 gap-2 sm:grid-cols-10">
-          {US_STATES.map((state) => (
-            <label key={state} className="flex items-center gap-1 text-xs font-semibold text-ink">
-              <input type="checkbox" name="nexusStates" value={state} defaultChecked={initialValues?.nexusStates?.includes(state)} />
-              {state}
-            </label>
-          ))}
-        </div>
-      </fieldset>
+
+      <div className="grid gap-3">
+        <p className="text-sm font-bold text-ink">Nexus states and rates</p>
+        {rows.map((row, index) => (
+          <div key={index} className="flex items-center gap-3">
+            <input
+              className="w-20 rounded-md border border-line px-3 py-2 text-center font-normal uppercase text-ink"
+              value={row.state}
+              onChange={(e) => updateRow(index, "state", e.target.value)}
+              maxLength={2}
+              placeholder="VA"
+            />
+            <div className="flex items-center gap-2">
+              <input
+                className="w-24 rounded-md border border-line px-3 py-2 font-normal text-ink"
+                value={row.ratePercent}
+                onChange={(e) => updateRow(index, "ratePercent", e.target.value)}
+                inputMode="decimal"
+                placeholder="6"
+              />
+              <span className="text-sm text-muted">%</span>
+            </div>
+            <button type="button" onClick={() => removeRow(index)} className="text-xs font-bold text-red-600 hover:text-red-700">
+              Remove
+            </button>
+          </div>
+        ))}
+        <button type="button" onClick={addRow} className="w-fit rounded-full border border-line px-4 py-2 text-xs font-bold text-ink hover:border-ink">
+          + Add another state
+        </button>
+      </div>
+
       <label className="grid gap-2 text-sm font-bold text-ink">
         Notes
-        <textarea className="min-h-24 rounded-md border border-line px-4 py-3 font-normal text-ink" name="notes" defaultValue={initialValues?.notes ?? ""} placeholder="Exemptions, accountant contact, filing schedule" />
+        <textarea className="min-h-24 rounded-md border border-line px-4 py-3 font-normal text-ink" name="notes" defaultValue={initialValues.notes} placeholder="Exemptions, accountant contact, filing schedule" />
       </label>
+
       <div className="flex items-center gap-3">
         <button className="rounded-md bg-brand px-5 py-3 text-sm font-bold text-white disabled:cursor-not-allowed disabled:bg-gray-300" disabled={isSaving}>
           {isSaving ? "Saving..." : "Save tax settings"}

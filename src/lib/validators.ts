@@ -271,7 +271,14 @@ export type ShippingConfigInput = z.infer<typeof shippingConfigSchema>;
 
 export const taxConfigSchema = z.object({
   provider: z.enum(["stripe_tax", "manual", "none"]),
-  nexusStates: z.array(z.string().trim().length(2)).default([]),
+  stateRates: z
+    .array(
+      z.object({
+        state: z.string().trim().length(2),
+        ratePercent: z.number().min(0).max(20)
+      })
+    )
+    .default([]),
   pricesIncludeTax: z.boolean(),
   notes: z.string().max(1000).default("")
 });

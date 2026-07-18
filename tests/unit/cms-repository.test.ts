@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 import {
   getDefaultHomepageContent,
+  getDefaultTaxConfig,
   saveAdminConfig,
   saveHomepageContent,
   savePageContent,
@@ -59,6 +60,13 @@ describe("cms repository", () => {
     expect(content.heroTitle).toContain("NFC review stands");
     expect(content.primaryButtonHref).toBe("/shop");
     expect(content.secondaryButtonHref).toBe("#platform-preview");
+  });
+
+  it("defaults tax config to the real Virginia registration and 6% rate, not an empty/placeholder form", () => {
+    const config = getDefaultTaxConfig();
+
+    expect(config.provider).toBe("manual");
+    expect(config.stateRates).toEqual([{ state: "VA", ratePercent: 6 }]);
   });
 
   it("stores homepage content in site_content", async () => {

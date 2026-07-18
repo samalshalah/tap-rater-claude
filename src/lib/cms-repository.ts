@@ -139,11 +139,23 @@ export async function saveTaxConfig(client: CmsDbClient, input: TaxConfigInput) 
   });
 }
 
-export async function getTaxConfig(): Promise<TaxConfigInput | null> {
+export function getDefaultTaxConfig(): TaxConfigInput {
+  return {
+    provider: "manual",
+    // Company registered in Virginia -- 6% is the starting rate. Structured as
+    // a list (not a hardcoded constant) specifically so more states can be
+    // added later with their own rate, without a code change.
+    stateRates: [{ state: "VA", ratePercent: 6 }],
+    pricesIncludeTax: false,
+    notes: "Company registered in Virginia. Add more states here as nexus is established elsewhere."
+  };
+}
+
+export async function getTaxConfig(): Promise<TaxConfigInput> {
   noStore();
 
   if (!hasSupabaseAdminConfig()) {
-    return null;
+    return getDefaultTaxConfig();
   }
 
   try {
@@ -153,9 +165,9 @@ export async function getTaxConfig(): Promise<TaxConfigInput | null> {
       .eq("key", "tax_config")
       .maybeSingle<{ payload?: TaxConfigInput }>();
 
-    return result.data?.payload ?? null;
+    return result.data?.payload ?? getDefaultTaxConfig();
   } catch {
-    return null;
+    return getDefaultTaxConfig();
   }
 }
 

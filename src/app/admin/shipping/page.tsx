@@ -19,6 +19,10 @@ export default async function AdminShippingPage() {
             Configure the shipping rate, free-shipping threshold, and delivery estimate. This also directly drives the{" "}
             <code>/shipping-policy</code> page's bracketed placeholders once you fill it in here.
           </p>
+          <p className="mt-3 max-w-3xl rounded-md bg-amber-50 p-3 text-sm font-semibold text-ink">
+            Deferred for now: connecting real FedEx/USPS carrier accounts for live rate quotes and label printing. The flat-rate
+            fields below can still be used as a simple stopgap in the meantime if you want one.
+          </p>
         </div>
 
         {!canSave ? (
