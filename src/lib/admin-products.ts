@@ -1,5 +1,5 @@
 import type { MigratedProduct } from "@/data/migrated-products";
-import { migratedProducts } from "@/data/migrated-products";
+import { allProducts } from "@/data/catalog";
 import { getSupabaseAdmin, hasSupabaseAdminConfig } from "@/lib/db";
 import { normalizeStorefrontProductRow } from "@/lib/product-repository";
 
@@ -40,29 +40,33 @@ export function createBlankAdminProduct(): MigratedProduct {
     isActive: false,
     seoTitle: "",
     seoDescription: "",
-    searchKeywords: []
+    searchKeywords: [],
+    standCategorySlug: "review-stands",
+    destinationType: "review",
+    tags: [],
+    useCaseSlugs: []
   };
 }
 
 export async function getAdminProducts(): Promise<MigratedProduct[]> {
   if (!hasSupabaseAdminConfig()) {
-    return migratedProducts;
+    return allProducts;
   }
 
   try {
     const { data, error } = await (getSupabaseAdmin() as AdminProductClient).from("products").select("*");
 
     if (error || !data) {
-      return migratedProducts;
+      return allProducts;
     }
 
     const products = data
       .map((row) => normalizeStorefrontProductRow(row))
       .filter((product): product is MigratedProduct => Boolean(product));
 
-    return products.length > 0 ? products : migratedProducts;
+    return products.length > 0 ? products : allProducts;
   } catch {
-    return migratedProducts;
+    return allProducts;
   }
 }
 
