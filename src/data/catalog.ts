@@ -1,6 +1,7 @@
 import { migratedProducts, type MigratedProduct } from "@/data/migrated-products";
 import { extendedCatalogProducts } from "@/data/extended-catalog";
 import { useCases } from "@/data/use-cases";
+import { productImageOverrides } from "@/data/product-image-overrides";
 
 // Single source of truth for "which use cases recommend this product" --
 // derived from src/data/use-cases.ts (UseCase.featuredProductSlugs /
@@ -20,7 +21,11 @@ for (const useCase of useCases) {
 // loyalty/custom/hosted-tap-page stands). This is the ONLY array that should be
 // treated as the canonical product list -- everything else (products.ts,
 // product-repository.ts, cart, checkout) should read from here.
-export const allProducts: MigratedProduct[] = [...migratedProducts, ...extendedCatalogProducts].map((product) => ({
-  ...product,
-  useCaseSlugs: useCaseSlugsByProduct.get(product.slug) ?? product.useCaseSlugs ?? []
-}));
+export const allProducts: MigratedProduct[] = [...migratedProducts, ...extendedCatalogProducts].map((product) => {
+  const overrideSrc = productImageOverrides[product.slug];
+  return {
+    ...product,
+    useCaseSlugs: useCaseSlugsByProduct.get(product.slug) ?? product.useCaseSlugs ?? [],
+    images: overrideSrc ? [{ src: overrideSrc, alt: `Tap Rater ${product.title}` }] : product.images
+  };
+});
