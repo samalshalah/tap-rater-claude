@@ -1,9 +1,11 @@
 import { AdminSectionPage } from "@/components/admin/admin-section-page";
 import { AdminShell } from "@/components/admin/admin-shell";
 import { requireAdmin } from "@/lib/admin-auth";
+import { getAdminConfig } from "@/lib/cms-repository";
 
 export default async function AdminSeoPage() {
   await requireAdmin();
+  const initialConfigValues = await getAdminConfig("seo");
 
   return (
     <AdminShell>
@@ -22,6 +24,7 @@ export default async function AdminSeoPage() {
           secondaryPlaceholder: "Redirect all old WordPress product URLs",
           notesPlaceholder: "Target pages, local SEO ideas, or metadata rules"
         }}
+        initialConfigValues={initialConfigValues}
       />
     </AdminShell>
   );

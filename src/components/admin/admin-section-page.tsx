@@ -18,6 +18,10 @@ type AdminSectionPageProps = {
     secondaryPlaceholder: string;
     notesPlaceholder: string;
   };
+  initialConfigValues?: {
+    status?: string;
+    settings?: { primary?: string; secondary?: string; notes?: string };
+  } | null;
 };
 
 export function AdminSectionPage({
@@ -28,7 +32,8 @@ export function AdminSectionPage({
   nextItems,
   primaryHref,
   primaryLabel,
-  config
+  config,
+  initialConfigValues
 }: AdminSectionPageProps) {
   return (
     <section className="mx-auto max-w-7xl px-4 py-8 md:px-8 lg:py-12">
@@ -62,6 +67,7 @@ export function AdminSectionPage({
                 primaryPlaceholder={config.primaryPlaceholder}
                 secondaryPlaceholder={config.secondaryPlaceholder}
                 notesPlaceholder={config.notesPlaceholder}
+                initialValues={initialConfigValues}
               />
             </div>
           </div>

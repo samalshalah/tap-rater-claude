@@ -8,6 +8,35 @@ import {
   type CmsDbClient
 } from "@/lib/cms-repository";
 
+vi.mock("@/lib/db", () => ({
+  hasSupabaseAdminConfig: () => true,
+  getSupabaseAdmin: () => ({
+    from(table: string) {
+      expect(table).toBe("site_content");
+      return {
+        select() {
+          return {
+            eq(column: string, value: string) {
+              expect(column).toBe("key");
+              expect(value).toBe("admin:shipping");
+              return {
+                maybeSingle() {
+                  return Promise.resolve({
+                    data: { payload: { area: "shipping", status: "published", settings: { primary: "US flat rate $7.95", secondary: "Free over $150", notes: "" } } },
+                    error: null
+                  });
+                }
+              };
+            }
+          };
+        }
+      };
+    }
+  })
+}));
+
+const { getAdminConfig } = await import("@/lib/cms-repository");
+
 function createDbClient() {
   const upsert = vi.fn().mockResolvedValue({ error: null });
   const from = vi.fn(() => ({ upsert }));
@@ -15,6 +44,15 @@ function createDbClient() {
 }
 
 describe("cms repository", () => {
+  it("reads back a previously saved admin config so the form isn't blank on reload", async () => {
+    const config = await getAdminConfig("shipping");
+
+    expect(config).toMatchObject({
+      status: "published",
+      settings: { primary: "US flat rate $7.95", secondary: "Free over $150" }
+    });
+  });
+
   it("provides default homepage content", () => {
     const content = getDefaultHomepageContent();
 

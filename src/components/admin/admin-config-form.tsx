@@ -11,6 +11,10 @@ type AdminConfigFormProps = {
   primaryPlaceholder: string;
   secondaryPlaceholder: string;
   notesPlaceholder: string;
+  initialValues?: {
+    status?: string;
+    settings?: { primary?: string; secondary?: string; notes?: string };
+  } | null;
 };
 
 export function AdminConfigForm({
@@ -21,7 +25,8 @@ export function AdminConfigForm({
   notesLabel,
   primaryPlaceholder,
   secondaryPlaceholder,
-  notesPlaceholder
+  notesPlaceholder,
+  initialValues
 }: AdminConfigFormProps) {
   const [status, setStatus] = useState("");
 
@@ -48,21 +53,43 @@ export function AdminConfigForm({
 
   return (
     <form className="grid gap-4" onSubmit={submit}>
+      {initialValues ? (
+        <p className="rounded-md bg-teal-50 px-3 py-2 text-xs font-semibold text-brand">
+          Showing your last saved settings for {title.toLowerCase()}.
+        </p>
+      ) : null}
       <label className="grid gap-2 text-sm font-bold text-ink">
         {primaryLabel}
-        <input className="rounded-md border border-line px-4 py-3 font-normal text-ink" name="primary" placeholder={primaryPlaceholder} required />
+        <input
+          className="rounded-md border border-line px-4 py-3 font-normal text-ink"
+          name="primary"
+          defaultValue={initialValues?.settings?.primary ?? ""}
+          placeholder={primaryPlaceholder}
+          required
+        />
       </label>
       <label className="grid gap-2 text-sm font-bold text-ink">
         {secondaryLabel}
-        <input className="rounded-md border border-line px-4 py-3 font-normal text-ink" name="secondary" placeholder={secondaryPlaceholder} required />
+        <input
+          className="rounded-md border border-line px-4 py-3 font-normal text-ink"
+          name="secondary"
+          defaultValue={initialValues?.settings?.secondary ?? ""}
+          placeholder={secondaryPlaceholder}
+          required
+        />
       </label>
       <label className="grid gap-2 text-sm font-bold text-ink">
         {notesLabel}
-        <textarea className="min-h-28 rounded-md border border-line px-4 py-3 font-normal text-ink" name="notes" placeholder={notesPlaceholder} />
+        <textarea
+          className="min-h-28 rounded-md border border-line px-4 py-3 font-normal text-ink"
+          name="notes"
+          defaultValue={initialValues?.settings?.notes ?? ""}
+          placeholder={notesPlaceholder}
+        />
       </label>
       <label className="grid gap-2 text-sm font-bold text-ink">
         Status
-        <select className="rounded-md border border-line px-4 py-3 font-normal text-ink" name="status" defaultValue="draft">
+        <select className="rounded-md border border-line px-4 py-3 font-normal text-ink" name="status" defaultValue={initialValues?.status ?? "draft"}>
           <option value="draft">Draft</option>
           <option value="published">Published</option>
         </select>

@@ -1,9 +1,11 @@
 import { AdminSectionPage } from "@/components/admin/admin-section-page";
 import { AdminShell } from "@/components/admin/admin-shell";
 import { requireAdmin } from "@/lib/admin-auth";
+import { getAdminConfig } from "@/lib/cms-repository";
 
 export default async function AdminSettingsPage() {
   await requireAdmin();
+  const initialConfigValues = await getAdminConfig("settings");
 
   return (
     <AdminShell>
@@ -22,6 +24,7 @@ export default async function AdminSettingsPage() {
           secondaryPlaceholder: "Preview until Stripe is connected",
           notesPlaceholder: "Admin policy, integration status, or launch checklist notes"
         }}
+        initialConfigValues={initialConfigValues}
       />
     </AdminShell>
   );

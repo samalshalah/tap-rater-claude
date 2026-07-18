@@ -1,9 +1,11 @@
 import { AdminSectionPage } from "@/components/admin/admin-section-page";
 import { AdminShell } from "@/components/admin/admin-shell";
 import { requireAdmin } from "@/lib/admin-auth";
+import { getAdminConfig } from "@/lib/cms-repository";
 
 export default async function AdminShippingPage() {
   await requireAdmin();
+  const initialConfigValues = await getAdminConfig("shipping");
 
   return (
     <AdminShell>
@@ -22,6 +24,7 @@ export default async function AdminShippingPage() {
           secondaryPlaceholder: "Free shipping over $150",
           notesPlaceholder: "Packaging, handling time, or carrier details"
         }}
+        initialConfigValues={initialConfigValues}
       />
     </AdminShell>
   );

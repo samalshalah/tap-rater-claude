@@ -74,6 +74,26 @@ export async function saveAdminConfig(client: CmsDbClient, input: AdminConfigInp
   });
 }
 
+export async function getAdminConfig(area: string): Promise<AdminConfigInput | null> {
+  noStore();
+
+  if (!hasSupabaseAdminConfig()) {
+    return null;
+  }
+
+  try {
+    const result = await (getSupabaseAdmin() as CmsDbClient)
+      .from("site_content")
+      .select("payload")
+      .eq("key", `admin:${area}`)
+      .maybeSingle<{ payload?: AdminConfigInput }>();
+
+    return result.data?.payload ?? null;
+  } catch {
+    return null;
+  }
+}
+
 export async function saveProductContent(client: CmsDbClient, input: ProductContentInput) {
   await upsertOrThrow(client, "products", {
     slug: input.slug,

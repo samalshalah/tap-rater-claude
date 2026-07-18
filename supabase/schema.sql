@@ -324,6 +324,22 @@ create table if not exists media_assets (
   created_at timestamptz not null default now()
 );
 
+create table if not exists discount_codes (
+  id uuid primary key default gen_random_uuid(),
+  code text not null unique,
+  discount_type text not null check (discount_type in ('percent', 'fixed_cents')),
+  value integer not null check (value > 0),
+  is_active boolean not null default true,
+  usage_limit integer,
+  times_used integer not null default 0,
+  expires_at timestamptz,
+  notes text not null default '',
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+create index if not exists discount_codes_code_idx on discount_codes(code);
+
 -- Catalog v2 columns (2026-07-18): stand category (what kind of stand),
 -- destination type, platform, and tags (which use cases this product belongs
 -- to -- see docs/product-model.md for the categories/slugs/tags rule).

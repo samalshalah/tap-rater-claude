@@ -1,9 +1,11 @@
 import { AdminSectionPage } from "@/components/admin/admin-section-page";
 import { AdminShell } from "@/components/admin/admin-shell";
 import { requireAdmin } from "@/lib/admin-auth";
+import { getAdminConfig } from "@/lib/cms-repository";
 
 export default async function AdminTaxesPage() {
   await requireAdmin();
+  const initialConfigValues = await getAdminConfig("taxes");
 
   return (
     <AdminShell>
@@ -22,6 +24,7 @@ export default async function AdminTaxesPage() {
           secondaryPlaceholder: "Show prices before tax",
           notesPlaceholder: "Nexus states, exemptions, or accounting notes"
         }}
+        initialConfigValues={initialConfigValues}
       />
     </AdminShell>
   );
