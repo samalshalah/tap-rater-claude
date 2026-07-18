@@ -44,6 +44,15 @@ const columns = [
       { href: "/contact", label: "Contact" },
       { href: "/faqs", label: "FAQs" }
     ]
+  },
+  {
+    title: "Legal",
+    links: [
+      { href: "/privacy-policy", label: "Privacy Policy" },
+      { href: "/terms-of-service", label: "Terms of Service" },
+      { href: "/refund-policy", label: "Refund Policy" },
+      { href: "/shipping-policy", label: "Shipping Policy" }
+    ]
   }
 ];
 
@@ -55,7 +64,7 @@ export function Footer() {
         <p className="mt-3 max-w-sm text-[13px] leading-6 text-muted">
           NFC stands, custom printed stands, and hosted Tap Rater pages that help local businesses collect reviews, share menus, and stay connected with customers.
         </p>
-        <div className="mt-10 grid grid-cols-2 gap-8 sm:grid-cols-3 lg:grid-cols-5">
+        <div className="mt-10 grid grid-cols-2 gap-8 sm:grid-cols-3 lg:grid-cols-6">
           {columns.map((column) => (
             <div key={column.title}>
               <p className="text-[13px] font-semibold text-ink">{column.title}</p>

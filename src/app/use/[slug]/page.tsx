@@ -3,8 +3,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { ProductCard } from "@/components/product/product-card";
 import { useCases, getUseCaseBySlug } from "@/data/use-cases";
-import { getActiveProducts } from "@/lib/products";
-import { getProductsForUseCase } from "@/data/catalog";
+import { getStorefrontProducts } from "@/lib/product-repository";
 import type { MigratedProduct } from "@/data/migrated-products";
 
 type PageProps = {
@@ -40,13 +39,20 @@ export default async function UseCasePage({ params }: PageProps) {
     notFound();
   }
 
-  const products = getActiveProducts();
+  // Fetched dynamically (DB-aware, falls back to static catalog-v2 data when no
+  // database is configured) so a tag edited via admin shows up here without
+  // waiting for a redeploy -- previously this page only ever saw the static
+  // catalog snapshot.
+  const products = await getStorefrontProducts();
   const productBySlug = new Map(products.map((product) => [product.slug, product]));
 
   // The real relationship: a product belongs to this use case if its tags say
-  // so. recommendedProductSlugs is only passed in here as a display-order hint
-  // -- it plays no part in *whether* a product shows up on this page.
-  const recommended = getProductsForUseCase(useCase.slug, useCase.recommendedProductSlugs);
+  // so. recommendedProductSlugs is only used here as a display-order hint --
+  // it plays no part in *whether* a product shows up on this page.
+  const orderIndex = new Map(useCase.recommendedProductSlugs.map((productSlug, index) => [productSlug, index]));
+  const recommended = products
+    .filter((product) => product.tags?.includes(useCase.slug))
+    .sort((a, b) => (orderIndex.get(a.slug) ?? Number.MAX_SAFE_INTEGER) - (orderIndex.get(b.slug) ?? Number.MAX_SAFE_INTEGER));
 
   // Featured stays a small, explicitly hand-picked highlight subset (not a
   // separate relationship mechanism -- every featured product is also reachable

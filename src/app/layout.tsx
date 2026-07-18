@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { CartProvider } from "@/components/cart/cart-provider";
 import { SiteShell } from "@/components/layout/site-shell";
+import { CookieConsent } from "@/components/layout/cookie-consent";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -38,6 +39,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <CartProvider>
           <SiteShell>{children}</SiteShell>
         </CartProvider>
+        <CookieConsent />
       </body>
     </html>
   );
