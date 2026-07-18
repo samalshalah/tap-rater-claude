@@ -20,8 +20,6 @@ export function staticStorefrontProducts(): MigratedProduct[] {
   return allProducts.filter((product) => product.isActive);
 }
 
-const staticStorefrontProductSlugs = new Set(staticStorefrontProducts().map((product) => product.slug));
-
 export async function getStorefrontProducts(): Promise<MigratedProduct[]> {
   noStore();
 
@@ -57,17 +55,29 @@ export function getStorefrontRelatedProducts(product: MigratedProduct, products:
 }
 
 export async function getStorefrontProductsFromClient(client: ProductRepositoryClient): Promise<MigratedProduct[]> {
+  const staticProducts = staticStorefrontProducts();
   const { data, error } = await client.from("products").select("*").eq("is_active", true);
 
   if (error || !data) {
-    return staticStorefrontProducts();
+    return staticProducts;
   }
 
-  const products = data
+  const dbProducts = data
     .map((row) => normalizeStorefrontProductRow(row))
-    .filter((product): product is MigratedProduct => Boolean(product?.isActive && staticStorefrontProductSlugs.has(product.slug)));
+    .filter((product): product is MigratedProduct => Boolean(product?.isActive));
 
-  return products.length > 0 ? products : staticStorefrontProducts();
+  // Merge, don't replace: a product saved via admin overrides the static entry
+  // for that slug (by design -- the DB is the source of truth once someone has
+  // edited it), and a genuinely new admin-created product gets added. Every
+  // other product keeps showing its rich static catalog-v2 data untouched.
+  // Without this merge, saving even a single product edit would replace the
+  // ENTIRE 168-product storefront with just whatever rows exist in the DB.
+  const merged = new Map(staticProducts.map((product) => [product.slug, product]));
+  for (const product of dbProducts) {
+    merged.set(product.slug, product);
+  }
+
+  return Array.from(merged.values());
 }
 
 export function normalizeStorefrontProductRow(row: unknown): MigratedProduct | null {
@@ -129,6 +139,19 @@ export function normalizeStorefrontProductRow(row: unknown): MigratedProduct | n
     customizationOptions.includes("custom_design");
   const designMode = readDesignMode(productRow.design_mode) ?? readDesignMode(productRow.designMode) ?? staticProduct?.designMode ?? "standard";
   const displayText = readString(productRow.display_text) ?? readString(productRow.displayText) ?? staticProduct?.displayText;
+  const standCategorySlug =
+    readStandCategorySlug(productRow.stand_category_slug) ?? readStandCategorySlug(productRow.standCategorySlug) ?? staticProduct?.standCategorySlug;
+  const destinationType =
+    readDestinationType(productRow.destination_type) ?? readDestinationType(productRow.destinationType) ?? staticProduct?.destinationType;
+  const platformSlug = readString(productRow.platform_slug) ?? readString(productRow.platformSlug) ?? staticProduct?.platformSlug;
+  const tags = readStringArray(productRow.tags) ?? staticProduct?.tags ?? [];
+  const supportsLogo = readBoolean(productRow.supports_logo) ?? readBoolean(productRow.supportsLogo) ?? staticProduct?.supportsLogo ?? true;
+  const supportsBusinessName =
+    readBoolean(productRow.supports_business_name) ?? readBoolean(productRow.supportsBusinessName) ?? staticProduct?.supportsBusinessName ?? true;
+  const supportsCustomHeadline =
+    readBoolean(productRow.supports_custom_headline) ?? readBoolean(productRow.supportsCustomHeadline) ?? staticProduct?.supportsCustomHeadline ?? false;
+  const supportsMultipleLinks =
+    readBoolean(productRow.supports_multiple_links) ?? readBoolean(productRow.supportsMultipleLinks) ?? staticProduct?.supportsMultipleLinks ?? false;
 
   if (
     !slug ||
@@ -187,7 +210,15 @@ export function normalizeStorefrontProductRow(row: unknown): MigratedProduct | n
     seoTitle: readString(productRow.seo_title) ?? readString(productRow.seoTitle) ?? staticProduct?.seoTitle,
     seoDescription: readString(productRow.seo_description) ?? readString(productRow.seoDescription) ?? staticProduct?.seoDescription,
     searchKeywords:
-      readStringArray(productRow.search_keywords) ?? readStringArray(productRow.searchKeywords) ?? staticProduct?.searchKeywords
+      readStringArray(productRow.search_keywords) ?? readStringArray(productRow.searchKeywords) ?? staticProduct?.searchKeywords,
+    standCategorySlug,
+    destinationType,
+    platformSlug,
+    tags,
+    supportsLogo,
+    supportsBusinessName,
+    supportsCustomHeadline,
+    supportsMultipleLinks
   };
 }
 
@@ -277,6 +308,27 @@ function readCustomizationOptions(value: unknown): MigratedProduct["customizatio
 
 function readDesignMode(value: unknown): MigratedProduct["designMode"] | undefined {
   return value === "standard" || value === "logo" || value === "custom" ? value : undefined;
+}
+
+function readStandCategorySlug(value: unknown): MigratedProduct["standCategorySlug"] | undefined {
+  const valid = [
+    "review-stands",
+    "social-media-stands",
+    "appointment-stands",
+    "feedback-stands",
+    "menu-info-stands",
+    "website-link-stands",
+    "payment-tip-donation-stands",
+    "loyalty-rewards-stands",
+    "custom-stands",
+    "hosted-tap-page-stands"
+  ];
+  return typeof value === "string" && valid.includes(value) ? (value as MigratedProduct["standCategorySlug"]) : undefined;
+}
+
+function readDestinationType(value: unknown): MigratedProduct["destinationType"] | undefined {
+  const valid = ["review", "social", "appointment", "feedback", "menu_info", "website", "payment", "custom", "hosted_page"];
+  return typeof value === "string" && valid.includes(value) ? (value as MigratedProduct["destinationType"]) : undefined;
 }
 
 function inferProductFormatFromTitle(title: string | undefined): MigratedProduct["format"] | undefined {

@@ -89,7 +89,18 @@ export function ProductEditor({ product, categories, mode }: ProductEditorProps)
           designMode: form.get("designMode"),
           seoTitle: form.get("seoTitle"),
           seoDescription: form.get("seoDescription"),
-          isActive: form.get("isActive") === "true"
+          isActive: form.get("isActive") === "true",
+          standCategorySlug: form.get("standCategorySlug") || undefined,
+          destinationType: form.get("destinationType") || undefined,
+          platformSlug: form.get("platformSlug") || undefined,
+          tags: String(form.get("tags") ?? "")
+            .split(",")
+            .map((tag) => tag.trim())
+            .filter(Boolean),
+          supportsLogo: form.get("supportsLogo") === "true",
+          supportsBusinessName: form.get("supportsBusinessName") === "true",
+          supportsCustomHeadline: form.get("supportsCustomHeadline") === "true",
+          supportsMultipleLinks: form.get("supportsMultipleLinks") === "true"
         })
       });
       const body = await response.json().catch(() => ({}));
@@ -320,6 +331,118 @@ export function ProductEditor({ product, categories, mode }: ProductEditorProps)
                 <option value="standard">Standard</option>
                 <option value="logo">Logo</option>
                 <option value="custom">Custom</option>
+              </select>
+            </label>
+          </div>
+        </section>
+
+        <section className="grid gap-4 rounded-md border border-line bg-gray-50 p-4">
+          <div>
+            <h2 className="text-lg font-black text-ink">Catalog v2 -- stand category and use cases</h2>
+            <p className="mt-1 text-sm leading-6 text-muted">
+              Stand category is what kind of stand this is (Shop by Stand). Tags are which business/use case this product
+              belongs to (Shop by Use) -- a product can carry many tags without ever being duplicated as a separate SKU.
+              Never used as a URL. Comma-separated, e.g. <code>restaurants-cafes, retail-grocery</code>.
+            </p>
+          </div>
+          <div className="grid gap-4 md:grid-cols-3">
+            <label className="grid gap-2 text-sm font-bold text-ink">
+              Stand category
+              <select
+                className="rounded-md border border-line bg-white px-4 py-3 font-normal"
+                name="standCategorySlug"
+                defaultValue={product.standCategorySlug ?? ""}
+              >
+                <option value="">Not set</option>
+                <option value="review-stands">Review Stands</option>
+                <option value="social-media-stands">Social Media Stands</option>
+                <option value="appointment-stands">Appointment Stands</option>
+                <option value="feedback-stands">Feedback Stands</option>
+                <option value="menu-info-stands">Menu & Info Stands</option>
+                <option value="website-link-stands">Website & Link Stands</option>
+                <option value="payment-tip-donation-stands">Payment, Tip & Donation Stands</option>
+                <option value="loyalty-rewards-stands">Loyalty & Rewards Stands</option>
+                <option value="custom-stands">Custom Stands</option>
+                <option value="hosted-tap-page-stands">Hosted Tap Page Stands</option>
+              </select>
+            </label>
+            <label className="grid gap-2 text-sm font-bold text-ink">
+              Destination type
+              <select
+                className="rounded-md border border-line bg-white px-4 py-3 font-normal"
+                name="destinationType"
+                defaultValue={product.destinationType ?? ""}
+              >
+                <option value="">Not set</option>
+                <option value="review">Review</option>
+                <option value="social">Social</option>
+                <option value="appointment">Appointment</option>
+                <option value="feedback">Feedback</option>
+                <option value="menu_info">Menu & Info</option>
+                <option value="website">Website</option>
+                <option value="payment">Payment</option>
+                <option value="custom">Custom</option>
+                <option value="hosted_page">Hosted Page</option>
+              </select>
+            </label>
+            <Input
+              name="platformSlug"
+              label="Platform (optional)"
+              defaultValue={product.platformSlug ?? ""}
+              required={false}
+              placeholder="google, yelp, trustpilot..."
+            />
+          </div>
+          <Input
+            name="tags"
+            label="Tags / use cases (comma-separated)"
+            defaultValue={(product.tags ?? []).join(", ")}
+            required={false}
+            placeholder="restaurants-cafes, retail-grocery, review, universal"
+          />
+          <div className="grid gap-4 md:grid-cols-4">
+            <label className="grid gap-2 text-sm font-bold text-ink">
+              Logo
+              <select
+                className="rounded-md border border-line bg-white px-4 py-3 font-normal"
+                name="supportsLogo"
+                defaultValue={product.supportsLogo === false ? "false" : "true"}
+              >
+                <option value="true">Supported</option>
+                <option value="false">Not supported</option>
+              </select>
+            </label>
+            <label className="grid gap-2 text-sm font-bold text-ink">
+              Business name
+              <select
+                className="rounded-md border border-line bg-white px-4 py-3 font-normal"
+                name="supportsBusinessName"
+                defaultValue={product.supportsBusinessName === false ? "false" : "true"}
+              >
+                <option value="true">Supported</option>
+                <option value="false">Not supported</option>
+              </select>
+            </label>
+            <label className="grid gap-2 text-sm font-bold text-ink">
+              Custom headline
+              <select
+                className="rounded-md border border-line bg-white px-4 py-3 font-normal"
+                name="supportsCustomHeadline"
+                defaultValue={product.supportsCustomHeadline ? "true" : "false"}
+              >
+                <option value="false">Not supported</option>
+                <option value="true">Supported</option>
+              </select>
+            </label>
+            <label className="grid gap-2 text-sm font-bold text-ink">
+              Multiple links
+              <select
+                className="rounded-md border border-line bg-white px-4 py-3 font-normal"
+                name="supportsMultipleLinks"
+                defaultValue={product.supportsMultipleLinks ? "true" : "false"}
+              >
+                <option value="false">Not supported</option>
+                <option value="true">Supported</option>
               </select>
             </label>
           </div>

@@ -123,7 +123,30 @@ export const productContentSchema = z.object({
   designMode: z.enum(["standard", "logo", "custom"]).default("standard"),
   seoTitle: z.string().trim().max(180).optional(),
   seoDescription: z.string().trim().max(320).optional(),
-  isActive: z.boolean()
+  isActive: z.boolean(),
+  standCategorySlug: z
+    .enum([
+      "review-stands",
+      "social-media-stands",
+      "appointment-stands",
+      "feedback-stands",
+      "menu-info-stands",
+      "website-link-stands",
+      "payment-tip-donation-stands",
+      "loyalty-rewards-stands",
+      "custom-stands",
+      "hosted-tap-page-stands"
+    ])
+    .optional(),
+  destinationType: z
+    .enum(["review", "social", "appointment", "feedback", "menu_info", "website", "payment", "custom", "hosted_page"])
+    .optional(),
+  platformSlug: z.string().trim().max(80).optional(),
+  tags: z.array(z.string().trim().min(1).max(60)).max(30).default([]),
+  supportsLogo: z.boolean().default(true),
+  supportsBusinessName: z.boolean().default(true),
+  supportsCustomHeadline: z.boolean().default(false),
+  supportsMultipleLinks: z.boolean().default(false)
 });
 
 export type HomepageContentInput = z.infer<typeof homepageContentSchema>;

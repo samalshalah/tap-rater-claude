@@ -124,7 +124,15 @@ describe("cms repository", () => {
       designMode: "standard",
       seoTitle: "SEO title",
       seoDescription: "SEO description",
-      isActive: true
+      isActive: true,
+      standCategorySlug: "review-stands",
+      destinationType: "review",
+      platformSlug: "google",
+      tags: ["review", "universal"],
+      supportsLogo: true,
+      supportsBusinessName: true,
+      supportsCustomHeadline: false,
+      supportsMultipleLinks: false
     });
 
     expect(db.from).toHaveBeenCalledWith("products");
@@ -153,7 +161,15 @@ describe("cms repository", () => {
       design_mode: "standard",
       seo_title: "SEO title",
       seo_description: "SEO description",
-      is_active: true
+      is_active: true,
+      stand_category_slug: "review-stands",
+      destination_type: "review",
+      platform_slug: "google",
+      tags: ["review", "universal"],
+      supports_logo: true,
+      supports_business_name: true,
+      supports_custom_headline: false,
+      supports_multiple_links: false
     });
   });
 });

@@ -323,3 +323,18 @@ create table if not exists media_assets (
   asset_type text not null default 'image',
   created_at timestamptz not null default now()
 );
+
+-- Catalog v2 columns (2026-07-18): stand category (what kind of stand),
+-- destination type, platform, and tags (which use cases this product belongs
+-- to -- see docs/product-model.md for the categories/slugs/tags rule).
+alter table products add column if not exists stand_category_slug text;
+alter table products add column if not exists destination_type text;
+alter table products add column if not exists platform_slug text;
+alter table products add column if not exists tags text[] not null default array[]::text[];
+alter table products add column if not exists supports_logo boolean not null default true;
+alter table products add column if not exists supports_business_name boolean not null default true;
+alter table products add column if not exists supports_custom_headline boolean not null default false;
+alter table products add column if not exists supports_multiple_links boolean not null default false;
+
+create index if not exists products_stand_category_slug_idx on products(stand_category_slug);
+create index if not exists products_tags_idx on products using gin(tags);
