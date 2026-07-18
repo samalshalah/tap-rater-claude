@@ -79,8 +79,16 @@ Categories are based on customer use case:
 - Follow Us on Social Media products should mention Facebook, X, Instagram, and YouTube.
 - Avoid review-gating language.
 
-## Image Status
+## Image Status (updated 2026-07-17)
 
-Real stand renders (v4, transparent background) exist for all 8 Phase 1 stands.
+Real, dedicated product photography exists for 138 products (the 2026-07-17 batch, `public/uploads/products/v5/`), all matched via OCR against the printed text on each stand and verified against the actual catalog slugs.
 
-**Custom NFC Stand and Hosted Landing Page Subscription are using placeholder/reused imagery** (borrowed from Rate Your Experience Stand and Social Media Stand respectively) since no dedicated product photography exists yet for either. Real photography is needed before these are promoted heavily.
+**43 products have no dedicated photo yet** and use a genuine "Photo coming soon" placeholder (`public/uploads/products/no-photo-available.png`) — not another product's photo. This spans the review platforms not yet shot (Booking.com, Bing Places, DoorDash, Grubhub, OpenTable review, Resy review) plus every Custom Stand and Hosted Tap Page product (9 + 8 = 17), since those are inherently non-fixed/custom rather than a single fixed design.
+
+All older placeholder-reuse renders (the v2/v3/v4 transparent-background batches) have been deleted from `public/uploads/products/` — nothing in the codebase references them anymore.
+
+## Payment, Tip & Donation Stands — discontinued (2026-07-17)
+
+All 13 products in this stand category were deactivated (`isActive: false`), same reversible pattern as the plates. They're hidden from `/shop`, `/shop/stands`, and category listings, but the data stays in `src/data/extended-catalog.ts` in case this changes.
+
+**Known consequence, not yet fixed:** the "Nonprofits & Donations" use case leaned heavily on this category — it now has only 5 of its original 12 recommended products (and only 1 of its original 4 featured products) still active. Worth revisiting that use case's product list directly if Payment/Tip/Donation stays off.
