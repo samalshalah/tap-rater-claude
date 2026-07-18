@@ -52,19 +52,23 @@ export default async function ShopPage() {
         <div className="mx-auto max-w-[1100px] px-6">
           <h2 className="text-[22px] font-semibold tracking-tightest text-ink">Shop by category</h2>
           <div className="mt-8 grid gap-3 md:grid-cols-2 lg:grid-cols-3">
-            {categories.map((category) => (
-              <Link
-                key={category.slug}
-                href={`/category/${category.slug}`}
-                className="rounded-2xl bg-white p-6 transition hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)]"
-              >
-                <p className="text-[15px] font-medium text-ink">{category.title}</p>
-                <p className="mt-2 text-[13px] leading-5 text-muted">{category.buyerIntent}</p>
-                <p className="mt-4 text-[13px] font-medium text-brand">
-                  {products.filter((product) => product.categorySlug === category.slug).length} products &rsaquo;
-                </p>
-              </Link>
-            ))}
+            {categories
+              .map((category) => ({
+                category,
+                count: products.filter((product) => product.categorySlug === category.slug).length
+              }))
+              .filter(({ count }) => count > 0)
+              .map(({ category, count }) => (
+                <Link
+                  key={category.slug}
+                  href={`/category/${category.slug}`}
+                  className="rounded-2xl bg-white p-6 transition hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)]"
+                >
+                  <p className="text-[15px] font-medium text-ink">{category.title}</p>
+                  <p className="mt-2 text-[13px] leading-5 text-muted">{category.buyerIntent}</p>
+                  <p className="mt-4 text-[13px] font-medium text-brand">{count} products &rsaquo;</p>
+                </Link>
+              ))}
           </div>
         </div>
       </section>

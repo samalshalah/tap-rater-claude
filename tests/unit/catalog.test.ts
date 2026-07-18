@@ -8,7 +8,7 @@ import {
 } from "@/lib/products";
 import { standCategories } from "@/data/stand-categories";
 import { useCases } from "@/data/use-cases";
-import { getProductsForUseCase } from "@/data/catalog";
+import { getProductsForUseCase, allProducts } from "@/data/catalog";
 
 describe("catalog categories", () => {
   it("exposes SEO category groups for the shop, including the 3 new catalog-v2 buckets", () => {
@@ -131,11 +131,11 @@ describe("catalog categories", () => {
     expect(reviewProducts.every((product) => product.format === "stand")).toBe(true);
   });
 
-  it("includes the full catalog-v2 stand/use-case restructure as active storefront products (plates discontinued)", () => {
+  it("includes the full catalog-v2 stand/use-case restructure as active storefront products (plates and Payment/Tip/Donation discontinued)", () => {
     const products = getActiveProducts();
     const titles = products.map((product) => product.title);
 
-    expect(products.length).toBe(181);
+    expect(products.length).toBe(168);
     expect(titles).toEqual(
       expect.arrayContaining([
         "Google Review Stand",
@@ -157,7 +157,6 @@ describe("catalog categories", () => {
         "Share Your Feedback Stand",
         "View Menu Stand",
         "Visit Our Website Stand",
-        "Donate Now Stand",
         "Join Rewards Stand",
         "Custom Review Stand",
         "Hosted Tap Page Stand"
@@ -169,6 +168,11 @@ describe("catalog categories", () => {
     expect(titles).not.toContain("Staff Review Tracking Page");
     expect(titles).not.toContain("Business Review Starter Kit");
     expect(titles).not.toContain("SureCritic Review Stand");
+    // Discontinued 2026-07-17 -- Payment, Tip & Donation Stands deactivated entirely:
+    expect(titles).not.toContain("Venmo Stand");
+    expect(titles).not.toContain("PayPal Stand");
+    expect(titles).not.toContain("Donate Now Stand");
+    expect(titles).not.toContain("GoFundMe Stand");
   });
 
   it("models Custom NFC Stand as a managed, request-quote physical product that can point to a direct link or a hosted landing page", () => {
@@ -233,22 +237,37 @@ describe("catalog categories", () => {
     expect(products.every((product) => Array.isArray(product.useCaseSlugs))).toBe(true);
   });
 
-  it("resolves every standCategory's products to real, active product slugs", () => {
+  it("resolves every standCategory's products to real, active product slugs (except payment-tip-donation-stands, intentionally emptied)", () => {
     const products = getActiveProducts();
     const slugSet = new Set(products.map((product) => product.slug));
 
     for (const category of standCategories) {
       const productsInCategory = products.filter((product) => product.standCategorySlug === category.slug);
-      expect(productsInCategory.length).toBeGreaterThan(0);
+      if (category.slug !== "payment-tip-donation-stands") {
+        expect(productsInCategory.length).toBeGreaterThan(0);
+      }
       for (const product of productsInCategory) {
         expect(slugSet.has(product.slug)).toBe(true);
       }
     }
   });
 
-  it("resolves every useCase.recommendedProductSlugs and featuredProductSlugs to a real, active product", () => {
-    const products = getActiveProducts();
-    const slugSet = new Set(products.map((product) => product.slug));
+  it("discontinued the entire Payment, Tip & Donation Stands category (2026-07-17) -- kept in data for reversibility, zero active", () => {
+    const paymentProducts = allProducts.filter((product) => product.standCategorySlug === "payment-tip-donation-stands");
+    const activePaymentProducts = paymentProducts.filter((product) => product.isActive);
+
+    expect(paymentProducts.length).toBe(13);
+    expect(activePaymentProducts.length).toBe(0);
+  });
+
+  it("resolves every useCase.recommendedProductSlugs and featuredProductSlugs to a real product in the catalog (active or not)", () => {
+    // Checks against the full catalog, not just active products: a use case is
+    // allowed to reference a product that's been intentionally deactivated
+    // (e.g. Nonprofits & Donations references several now-discontinued Payment
+    // products) without that being treated as a typo/broken slug. The
+    // corresponding page will simply show fewer products until those
+    // references are updated -- see the follow-up test below.
+    const slugSet = new Set(allProducts.map((product) => product.slug));
 
     for (const useCase of useCases) {
       for (const slug of useCase.recommendedProductSlugs) {
@@ -258,6 +277,18 @@ describe("catalog categories", () => {
         expect(slugSet.has(slug)).toBe(true);
       }
     }
+  });
+
+  it("flags use cases whose product list shrank because Payment/Tip/Donation was discontinued (known, not silently patched)", () => {
+    const activeSlugs = new Set(getActiveProducts().map((product) => product.slug));
+    const nonprofits = useCases.find((useCase) => useCase.slug === "nonprofits-donations")!;
+    const stillActive = nonprofits.recommendedProductSlugs.filter((slug) => activeSlugs.has(slug));
+
+    // Documents the real, current state: 7 of 12 recommended products (and 3 of
+    // 4 featured products) are now inactive. This is surfaced here rather than
+    // fixed automatically -- the use case's product list should be revisited.
+    expect(stillActive.length).toBe(5);
+    expect(nonprofits.featuredProductSlugs.filter((slug) => activeSlugs.has(slug)).length).toBe(1);
   });
 
   it("has no plate, card, badge, or name tag product active", () => {

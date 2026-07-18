@@ -36,9 +36,13 @@ export default async function ShopStandsPage() {
       <section className="bg-surface py-16 sm:py-20">
         <div className="mx-auto max-w-[1100px] px-6">
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {standCategories.map((category) => {
-              const count = products.filter((product) => product.standCategorySlug === category.slug).length;
-              return (
+            {standCategories
+              .map((category) => ({
+                category,
+                count: products.filter((product) => product.standCategorySlug === category.slug).length
+              }))
+              .filter(({ count }) => count > 0)
+              .map(({ category, count }) => (
                 <Link
                   key={category.slug}
                   href={`/shop/stands/${category.slug}`}
@@ -48,8 +52,7 @@ export default async function ShopStandsPage() {
                   <p className="mt-2 text-[13px] leading-5 text-muted">{category.description}</p>
                   <p className="mt-4 text-[13px] font-medium text-brand">{count} products &rsaquo;</p>
                 </Link>
-              );
-            })}
+              ))}
           </div>
         </div>
       </section>

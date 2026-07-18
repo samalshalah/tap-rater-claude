@@ -225,22 +225,22 @@ export const catalogCategories: CatalogCategory[] = [
   }
 ];
 
-const googleStandImage = { src: "/uploads/products/google-review-stand-v4.png", alt: "Tap Rater Google Review Stand" };
-const googlePlateImage = { src: "/uploads/products/google-review-plate.png", alt: "Tap Rater Google Review Plate" };
-const yelpStandImage = { src: "/uploads/products/yelp-review-stand-v4.png", alt: "Tap Rater Yelp Review Stand" };
-const yelpPlateImage = { src: "/uploads/products/yelp-review-plate.png", alt: "Tap Rater Yelp Review Plate placeholder" };
-const facebookStandImage = { src: "/uploads/products/facebook-review-stand-v4.png", alt: "Tap Rater Facebook Review Stand" };
-const facebookPlateImage = { src: "/uploads/products/facebook-review-plate.png", alt: "Tap Rater Facebook Review Plate placeholder" };
-const tripadvisorStandImage = { src: "/uploads/products/tripadvisor-review-stand-v4.png", alt: "Tap Rater TripAdvisor Review Stand" };
-const tripadvisorPlateImage = { src: "/uploads/products/tripadvisor-review-plate.png", alt: "Tap Rater TripAdvisor Review Plate placeholder" };
-const experienceStandImage = { src: "/uploads/products/rate-your-experience-stand-v4.png", alt: "Tap Rater Rate Your Experience Stand" };
-const experiencePlateImage = { src: "/uploads/products/rate-your-experience-plate.png", alt: "Tap Rater Rate Your Experience Plate placeholder" };
-const socialStandImage = { src: "/uploads/products/social-media-stand-v4.png", alt: "Tap Rater Follow Us on Social Media Stand" };
-const socialPlateImage = { src: "/uploads/products/social-media-plate.png", alt: "Tap Rater Follow Us on Social Media Plate placeholder" };
-const bookingStandImage = { src: "/uploads/products/book-next-visit-stand-v4.png", alt: "Tap Rater Book Your Next Visit Stand" };
-const bookingPlateImage = { src: "/uploads/products/book-next-visit-plate.png", alt: "Tap Rater Book Your Next Visit Plate placeholder" };
-const menuStandImage = { src: "/uploads/products/view-menu-stand-v4.png", alt: "Tap Rater View Our Menu Stand" };
-const menuPlateImage = { src: "/uploads/products/view-menu-plate.png", alt: "Tap Rater View Our Menu Plate placeholder" };
+const googleStandImage = { src: "/uploads/products/no-photo-available.png", alt: "Photo coming soon" };
+const googlePlateImage = { src: "/uploads/products/no-photo-available.png", alt: "Photo coming soon" };
+const yelpStandImage = { src: "/uploads/products/no-photo-available.png", alt: "Photo coming soon" };
+const yelpPlateImage = { src: "/uploads/products/no-photo-available.png", alt: "Photo coming soon" };
+const facebookStandImage = { src: "/uploads/products/no-photo-available.png", alt: "Photo coming soon" };
+const facebookPlateImage = { src: "/uploads/products/no-photo-available.png", alt: "Photo coming soon" };
+const tripadvisorStandImage = { src: "/uploads/products/no-photo-available.png", alt: "Photo coming soon" };
+const tripadvisorPlateImage = { src: "/uploads/products/no-photo-available.png", alt: "Photo coming soon" };
+const experienceStandImage = { src: "/uploads/products/no-photo-available.png", alt: "Photo coming soon" };
+const experiencePlateImage = { src: "/uploads/products/no-photo-available.png", alt: "Photo coming soon" };
+const socialStandImage = { src: "/uploads/products/no-photo-available.png", alt: "Photo coming soon" };
+const socialPlateImage = { src: "/uploads/products/no-photo-available.png", alt: "Photo coming soon" };
+const bookingStandImage = { src: "/uploads/products/no-photo-available.png", alt: "Photo coming soon" };
+const bookingPlateImage = { src: "/uploads/products/no-photo-available.png", alt: "Photo coming soon" };
+const menuStandImage = { src: "/uploads/products/no-photo-available.png", alt: "Photo coming soon" };
+const menuPlateImage = { src: "/uploads/products/no-photo-available.png", alt: "Photo coming soon" };
 
 const standPriceCents = 4900;
 const platePriceCents = 3900;

@@ -9,30 +9,16 @@ import type {
 const STAND_PRICE = 4900;
 
 const genericStandImage = {
-  src: "/uploads/products/rate-your-experience-stand-v4.png",
-  alt: "Tap Rater NFC stand (placeholder image pending dedicated product photography)"
-};
-const googleImg = { src: "/uploads/products/google-review-stand-v4.png", alt: "Tap Rater Google-branded NFC stand" };
-const yelpImg = { src: "/uploads/products/yelp-review-stand-v4.png", alt: "Tap Rater Yelp-branded NFC stand" };
-const facebookImg = { src: "/uploads/products/facebook-review-stand-v4.png", alt: "Tap Rater Facebook-branded NFC stand" };
-const tripadvisorImg = {
-  src: "/uploads/products/tripadvisor-review-stand-v4.png",
-  alt: "Tap Rater TripAdvisor-branded NFC stand"
+  src: "/uploads/products/no-photo-available.png",
+  alt: "Photo coming soon"
 };
 
-function imageFor(platformSlug?: string) {
-  switch (platformSlug) {
-    case "google":
-      return googleImg;
-    case "yelp":
-      return yelpImg;
-    case "facebook":
-      return facebookImg;
-    case "tripadvisor":
-      return tripadvisorImg;
-    default:
-      return genericStandImage;
-  }
+function imageFor() {
+  // Real branded photography (Google/Yelp/Facebook/TripAdvisor etc.) now comes
+  // entirely through src/data/product-image-overrides.ts (the v5 photo batch).
+  // This factory-time default is only ever seen for products that batch didn't
+  // cover, so it should never claim a specific brand.
+  return genericStandImage;
 }
 
 type Entry = { slug: string; title: string; platformSlug?: string };
@@ -74,7 +60,13 @@ const destinationVerb: Record<DestinationType, string> = {
 
 function directLinkStand(
   entry: Entry,
-  opts: { standCategorySlug: StandCategorySlug; destinationType: DestinationType; categorySlug: CatalogCategorySlug; tags: string[] }
+  opts: {
+    standCategorySlug: StandCategorySlug;
+    destinationType: DestinationType;
+    categorySlug: CatalogCategorySlug;
+    tags: string[];
+    isActive?: boolean;
+  }
 ): MigratedProduct {
   const verb = destinationVerb[opts.destinationType];
   const displayText = entry.title.replace(/ Stand$/, "");
@@ -103,9 +95,9 @@ function directLinkStand(
     allowsCustomDesign: true,
     designMode: "standard",
     displayText,
-    images: [imageFor(entry.platformSlug)],
+    images: [imageFor()],
     variants: [],
-    isActive: true,
+    isActive: opts.isActive ?? true,
     seoTitle: `${entry.title} | NFC Stand | Tap Rater`,
     seoDescription: `${entry.title} ${verb} with one tap or scan. No monthly fee for basic activation.`,
     searchKeywords: [entry.title.toLowerCase(), entry.slug.replace(/-/g, " "), "nfc stand"],
@@ -455,7 +447,7 @@ export const extendedCatalogProducts: MigratedProduct[] = [
 
   ...websiteLink.map((e) => directLinkStand(e, { standCategorySlug: "website-link-stands", destinationType: "website", categorySlug: "website-links", tags: ["website", "link"] })),
 
-  ...paymentTipDonation.map((e) => directLinkStand(e, { standCategorySlug: "payment-tip-donation-stands", destinationType: "payment", categorySlug: "payments-donations", tags: ["payment", "tip", "donation"] })),
+  ...paymentTipDonation.map((e) => directLinkStand(e, { standCategorySlug: "payment-tip-donation-stands", destinationType: "payment", categorySlug: "payments-donations", tags: ["payment", "tip", "donation"], isActive: false })),
 
   ...loyaltyRewards.map((e) => directLinkStand(e, { standCategorySlug: "loyalty-rewards-stands", destinationType: "custom", categorySlug: "loyalty-rewards", tags: ["loyalty", "rewards"] })),
 
