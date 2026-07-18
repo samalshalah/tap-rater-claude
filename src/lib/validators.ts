@@ -258,3 +258,22 @@ export const checkoutCartSchema = z.object({
 });
 
 export type CheckoutCartInput = z.infer<typeof checkoutCartSchema>;
+
+export const shippingConfigSchema = z.object({
+  flatRateCents: z.number().int().min(0),
+  freeShippingThresholdCents: z.number().int().min(0).optional(),
+  shipsInternationally: z.boolean(),
+  estimatedDeliveryDays: z.string().trim().max(60),
+  notes: z.string().max(1000).default("")
+});
+
+export type ShippingConfigInput = z.infer<typeof shippingConfigSchema>;
+
+export const taxConfigSchema = z.object({
+  provider: z.enum(["stripe_tax", "manual", "none"]),
+  nexusStates: z.array(z.string().trim().length(2)).default([]),
+  pricesIncludeTax: z.boolean(),
+  notes: z.string().max(1000).default("")
+});
+
+export type TaxConfigInput = z.infer<typeof taxConfigSchema>;

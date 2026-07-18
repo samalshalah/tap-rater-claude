@@ -1,31 +1,36 @@
-import { AdminSectionPage } from "@/components/admin/admin-section-page";
 import { AdminShell } from "@/components/admin/admin-shell";
+import { ShippingConfigForm } from "@/components/admin/shipping-config-form";
 import { requireAdmin } from "@/lib/admin-auth";
-import { getAdminConfig } from "@/lib/cms-repository";
+import { getShippingConfig } from "@/lib/cms-repository";
+import { hasSupabaseAdminConfig } from "@/lib/db";
 
 export default async function AdminShippingPage() {
   await requireAdmin();
-  const initialConfigValues = await getAdminConfig("shipping");
+  const initialValues = await getShippingConfig();
+  const canSave = hasSupabaseAdminConfig();
 
   return (
     <AdminShell>
-      <AdminSectionPage
-        eyebrow="Commerce"
-        title="Shipping"
-        description="Configure shipping zones, rates, package rules, free-shipping thresholds, and fulfillment settings."
-        primaryItems={["Shipping zones", "Flat-rate rules", "Free-shipping threshold", "Package dimensions", "Fulfillment status options"]}
-        nextItems={["Confirm US/international shipping scope.", "Add shipping settings table.", "Include shipping rates in checkout validation."]}
-        config={{
-          area: "shipping",
-          primaryLabel: "Shipping rate",
-          secondaryLabel: "Free-shipping rule",
-          notesLabel: "Fulfillment notes",
-          primaryPlaceholder: "US flat rate $7.95",
-          secondaryPlaceholder: "Free shipping over $150",
-          notesPlaceholder: "Packaging, handling time, or carrier details"
-        }}
-        initialConfigValues={initialConfigValues}
-      />
+      <section className="mx-auto max-w-7xl px-4 py-8 md:px-8 lg:py-12">
+        <p className="text-sm font-black uppercase text-brand">Commerce</p>
+        <div className="mt-3">
+          <h1 className="text-4xl font-black text-ink">Shipping</h1>
+          <p className="mt-2 max-w-3xl text-sm leading-6 text-muted">
+            Configure the shipping rate, free-shipping threshold, and delivery estimate. This also directly drives the{" "}
+            <code>/shipping-policy</code> page's bracketed placeholders once you fill it in here.
+          </p>
+        </div>
+
+        {!canSave ? (
+          <div className="mt-6 rounded-md border border-amber-200 bg-amber-50 p-4 text-sm font-semibold text-ink">
+            Database persistence is not configured yet. Shipping settings can't be saved.
+          </div>
+        ) : null}
+
+        <div className="mt-6">
+          <ShippingConfigForm initialValues={initialValues} />
+        </div>
+      </section>
     </AdminShell>
   );
 }

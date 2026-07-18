@@ -1,6 +1,13 @@
 import { unstable_noStore as noStore } from "next/cache";
 import { getSupabaseAdmin, hasSupabaseAdminConfig } from "@/lib/db";
-import type { AdminConfigInput, HomepageContentInput, PageContentInput, ProductContentInput } from "@/lib/validators";
+import type {
+  AdminConfigInput,
+  HomepageContentInput,
+  PageContentInput,
+  ProductContentInput,
+  ShippingConfigInput,
+  TaxConfigInput
+} from "@/lib/validators";
 
 type UpsertResult = PromiseLike<{ error: null | { message: string } }>;
 type SelectSingleResult<T> = PromiseLike<{ data: T | null; error: null | { message: string } }>;
@@ -87,6 +94,64 @@ export async function getAdminConfig(area: string): Promise<AdminConfigInput | n
       .select("payload")
       .eq("key", `admin:${area}`)
       .maybeSingle<{ payload?: AdminConfigInput }>();
+
+    return result.data?.payload ?? null;
+  } catch {
+    return null;
+  }
+}
+
+export async function saveShippingConfig(client: CmsDbClient, input: ShippingConfigInput) {
+  await upsertOrThrow(client, "site_content", {
+    key: "shipping_config",
+    type: "section",
+    status: "published",
+    payload: input
+  });
+}
+
+export async function getShippingConfig(): Promise<ShippingConfigInput | null> {
+  noStore();
+
+  if (!hasSupabaseAdminConfig()) {
+    return null;
+  }
+
+  try {
+    const result = await (getSupabaseAdmin() as CmsDbClient)
+      .from("site_content")
+      .select("payload")
+      .eq("key", "shipping_config")
+      .maybeSingle<{ payload?: ShippingConfigInput }>();
+
+    return result.data?.payload ?? null;
+  } catch {
+    return null;
+  }
+}
+
+export async function saveTaxConfig(client: CmsDbClient, input: TaxConfigInput) {
+  await upsertOrThrow(client, "site_content", {
+    key: "tax_config",
+    type: "section",
+    status: "published",
+    payload: input
+  });
+}
+
+export async function getTaxConfig(): Promise<TaxConfigInput | null> {
+  noStore();
+
+  if (!hasSupabaseAdminConfig()) {
+    return null;
+  }
+
+  try {
+    const result = await (getSupabaseAdmin() as CmsDbClient)
+      .from("site_content")
+      .select("payload")
+      .eq("key", "tax_config")
+      .maybeSingle<{ payload?: TaxConfigInput }>();
 
     return result.data?.payload ?? null;
   } catch {

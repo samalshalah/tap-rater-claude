@@ -1,31 +1,127 @@
-import { AdminSectionPage } from "@/components/admin/admin-section-page";
+import Link from "next/link";
 import { AdminShell } from "@/components/admin/admin-shell";
+import { AdminConfigForm } from "@/components/admin/admin-config-form";
 import { requireAdmin } from "@/lib/admin-auth";
 import { getAdminConfig } from "@/lib/cms-repository";
+import { getAdminProducts } from "@/lib/admin-products";
+import { getCatalogCategories } from "@/lib/products";
 
 export default async function AdminSeoPage() {
   await requireAdmin();
   const initialConfigValues = await getAdminConfig("seo");
+  const products = (await getAdminProducts()).filter((product) => product.isActive);
+  const categories = getCatalogCategories();
+
+  const missingSeoTitle = products.filter((product) => !product.seoTitle?.trim());
+  const missingSeoDescription = products.filter((product) => !product.seoDescription?.trim());
+  const coveragePct = Math.round(((products.length - missingSeoTitle.length) / Math.max(products.length, 1)) * 100);
 
   return (
     <AdminShell>
-      <AdminSectionPage
-        eyebrow="Growth"
-        title="SEO"
-        description="Control metadata, redirects, sitemap inclusion, Open Graph images, canonical URLs, and migrated WordPress URL mapping."
-        primaryItems={["Page metadata", "Product/category metadata", "301 redirects", "Sitemap controls", "Open Graph image controls"]}
-        nextItems={["Add redirects table and Next.js redirect generation.", "Create sitemap/robots routes.", "Add SEO fields to page/category/product editors."]}
-        config={{
-          area: "seo",
-          primaryLabel: "Primary keyword focus",
-          secondaryLabel: "Redirect policy",
-          notesLabel: "SEO notes",
-          primaryPlaceholder: "Google review NFC stand",
-          secondaryPlaceholder: "Redirect all old WordPress product URLs",
-          notesPlaceholder: "Target pages, local SEO ideas, or metadata rules"
-        }}
-        initialConfigValues={initialConfigValues}
-      />
+      <section className="mx-auto max-w-7xl px-4 py-8 md:px-8 lg:py-12">
+        <p className="text-sm font-black uppercase text-brand">Growth</p>
+        <div className="mt-3">
+          <h1 className="text-4xl font-black text-ink">SEO</h1>
+          <p className="mt-2 max-w-3xl text-sm leading-6 text-muted">
+            Sitemap and robots.txt are generated automatically from the live catalog --{" "}
+            <Link href="/sitemap.xml" className="text-brand hover:text-brand-dark">
+              /sitemap.xml
+            </Link>{" "}
+            and{" "}
+            <Link href="/robots.txt" className="text-brand hover:text-brand-dark">
+              /robots.txt
+            </Link>{" "}
+            always reflect exactly what's active, with no manual step. This page tracks metadata coverage across the catalog.
+          </p>
+        </div>
+
+        <div className="mt-8 grid gap-4 md:grid-cols-4">
+          <SummaryCard label="Active products" value={String(products.length)} />
+          <SummaryCard label="SEO title coverage" value={`${coveragePct}%`} />
+          <SummaryCard label="Missing SEO title" value={String(missingSeoTitle.length)} />
+          <SummaryCard label="Missing SEO description" value={String(missingSeoDescription.length)} />
+        </div>
+
+        <div className="mt-6 rounded-md border border-line bg-white shadow-sm">
+          <div className="border-b border-line p-4">
+            <h2 className="text-lg font-black text-ink">Category SEO</h2>
+          </div>
+          <table className="w-full border-collapse text-left text-sm">
+            <thead>
+              <tr className="border-b border-line bg-gray-50 text-xs uppercase text-muted">
+                <th className="p-4">Category</th>
+                <th className="p-4">SEO title</th>
+                <th className="p-4">SEO description</th>
+              </tr>
+            </thead>
+            <tbody>
+              {categories.map((category) => (
+                <tr key={category.slug} className="border-b border-line last:border-b-0">
+                  <td className="p-4 font-bold text-ink">{category.title}</td>
+                  <td className="p-4 text-muted">{category.seoTitle ?? <MissingBadge />}</td>
+                  <td className="p-4 text-muted">{category.seoDescription ? "Set" : <MissingBadge />}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        {missingSeoTitle.length > 0 ? (
+          <div className="mt-6 rounded-md border border-line bg-white shadow-sm">
+            <div className="border-b border-line p-4">
+              <h2 className="text-lg font-black text-ink">Products missing an SEO title ({missingSeoTitle.length})</h2>
+              <p className="mt-1 text-sm text-muted">Falls back to the product title, which is fine, but a dedicated SEO title usually converts better in search results.</p>
+            </div>
+            <table className="w-full border-collapse text-left text-sm">
+              <tbody>
+                {missingSeoTitle.slice(0, 25).map((product) => (
+                  <tr key={product.slug} className="border-b border-line last:border-b-0">
+                    <td className="p-4 font-bold text-ink">{product.title}</td>
+                    <td className="p-4">
+                      <Link href={`/admin/products/${product.slug}`} className="font-bold text-brand hover:text-brand-dark">
+                        Edit &rsaquo;
+                      </Link>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            {missingSeoTitle.length > 25 ? (
+              <p className="border-t border-line p-4 text-xs text-muted">+ {missingSeoTitle.length - 25} more</p>
+            ) : null}
+          </div>
+        ) : null}
+
+        <div className="mt-6 rounded-md border border-line bg-white p-5 shadow-sm">
+          <h2 className="text-xl font-black text-ink">Notes</h2>
+          <div className="mt-5">
+            <AdminConfigForm
+              area="seo"
+              title="SEO"
+              primaryLabel="Primary keyword focus"
+              secondaryLabel="Redirect policy"
+              notesLabel="SEO notes"
+              primaryPlaceholder="Google review NFC stand"
+              secondaryPlaceholder="Redirect all old WordPress product URLs"
+              notesPlaceholder="Target pages, local SEO ideas, or metadata rules"
+              initialValues={initialConfigValues}
+            />
+          </div>
+        </div>
+      </section>
     </AdminShell>
   );
+}
+
+function SummaryCard({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-md border border-line bg-white p-4 shadow-sm">
+      <p className="text-xs font-black uppercase text-muted">{label}</p>
+      <p className="mt-2 text-2xl font-black text-ink">{value}</p>
+    </div>
+  );
+}
+
+function MissingBadge() {
+  return <span className="rounded-full bg-amber-50 px-3 py-1 text-xs font-black uppercase text-ink">Missing</span>;
 }
