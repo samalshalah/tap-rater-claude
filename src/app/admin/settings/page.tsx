@@ -3,6 +3,7 @@ import { AdminConfigForm } from "@/components/admin/admin-config-form";
 import { requireAdmin } from "@/lib/admin-auth";
 import { getAdminConfig } from "@/lib/cms-repository";
 import { getLaunchReadinessChecks } from "@/lib/launch-readiness";
+import { getMetaFeedSummary } from "@/lib/meta-feed";
 
 const statusStyles: Record<string, string> = {
   ready: "bg-teal-50 text-brand",
@@ -22,6 +23,7 @@ export default async function AdminSettingsPage() {
   await requireAdmin();
   const initialConfigValues = await getAdminConfig("settings");
   const checks = getLaunchReadinessChecks();
+  const feedSummary = getMetaFeedSummary();
 
   return (
     <AdminShell>
@@ -53,6 +55,33 @@ export default async function AdminSettingsPage() {
               ))}
             </tbody>
           </table>
+        </div>
+
+        <div className="mt-6 rounded-md border border-line bg-white shadow-sm">
+          <div className="border-b border-line p-4">
+            <h2 className="text-lg font-black text-ink">Sales channels</h2>
+            <p className="mt-1 text-sm text-muted">
+              Facebook & Instagram Shop reads from a live product feed -- point Commerce Manager's scheduled Data Feed fetch at
+              this URL and every product/price/stock change reflects automatically, no manual re-upload.
+            </p>
+          </div>
+          <div className="grid gap-4 p-4 md:grid-cols-3">
+            <div>
+              <p className="text-xs font-black uppercase text-muted">Feed URL</p>
+              <code className="mt-1 block break-all rounded-md bg-gray-50 p-2 text-xs text-ink">/feed/facebook-products.csv</code>
+            </div>
+            <div>
+              <p className="text-xs font-black uppercase text-muted">Products in feed</p>
+              <p className="mt-1 text-2xl font-black text-ink">
+                {feedSummary.productCount} <span className="text-sm font-normal text-muted">/ {feedSummary.totalActiveProducts} active</span>
+              </p>
+              <p className="mt-1 text-xs text-muted">Scoped to directly-buyable products with real photography.</p>
+            </div>
+            <div>
+              <p className="text-xs font-black uppercase text-muted">Sample</p>
+              <p className="mt-1 text-xs leading-5 text-muted">{feedSummary.sampleTitles.slice(0, 3).join(", ")}...</p>
+            </div>
+          </div>
         </div>
 
         <div className="mt-6 rounded-md border border-line bg-white p-5 shadow-sm">
