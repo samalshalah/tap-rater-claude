@@ -140,10 +140,10 @@ export default async function HomePage() {
             <h2 className="mt-3 text-[28px] font-semibold tracking-tightest text-ink sm:text-[34px]">Find your industry.</h2>
           </div>
           <div className="mt-12 grid gap-4 sm:grid-cols-2">
-            {industries.map((industry) => (
+            {industries.slice(0, 4).map((industry) => (
               <Link
                 key={industry.slug}
-                href={`/category/${industry.categorySlug}`}
+                href={`/use/${industry.useCaseSlug}`}
                 className="group overflow-hidden rounded-2xl bg-white transition hover:shadow-[0_8px_30px_rgba(0,0,0,0.08)]"
               >
                 <div className="p-6">

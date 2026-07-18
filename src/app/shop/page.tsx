@@ -72,11 +72,11 @@ export default async function ShopPage() {
       <section className="bg-white py-16 sm:py-20">
         <div className="mx-auto max-w-[1100px] px-6">
           <h2 className="text-[22px] font-semibold tracking-tightest text-ink">Find your industry</h2>
-          <div className="mt-8 grid gap-4 sm:grid-cols-2">
+          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {industries.map((industry) => (
               <Link
                 key={industry.slug}
-                href={`/category/${industry.categorySlug}`}
+                href={`/use/${industry.useCaseSlug}`}
                 className="group overflow-hidden rounded-2xl bg-surface transition hover:shadow-[0_8px_30px_rgba(0,0,0,0.08)]"
               >
                 <div className="p-6">
