@@ -8,14 +8,17 @@ Tap Rater is a print-on-demand NFC stand business. Every product below can be li
 2. **Custom printed stand** — a direct-link stand that's fully custom-printed (logo, business name, custom headline). Can point to a direct link or a hosted page.
 3. **Hosted Tap Page stand** — opens a Tap Rater hosted page with multiple links. Requires an account and a monthly subscription.
 
-## Slug vs. Tag
+## Categories, Slugs, and Tags — what each one is actually for
 
-This is the single most important rule in the catalog:
+This is the single most important rule in the catalog, and it was corrected on 2026-07-17 after an earlier pass had it backwards:
 
-- **Slugs are official relationships.** `Product.slug` is the product's unique identity and its URL (`/product/[slug]`). `Product.standCategorySlug` is the one category a product belongs to for Shop by Stand. `UseCase.recommendedProductSlugs` is the exact, ordered list of products shown on `/use/[slug]` — nothing shows up there by accident or by tag-matching.
-- **Tags are supporting metadata only.** `Product.tags` exist for search, filtering, SEO, and admin organization. Tags never control what renders on a category or use-case page. A product can share a tag with 50 other products without appearing anywhere near them in the actual site structure.
+- **Categories** (`standCategorySlug`) describe **what kind of stand this is** — review, social, appointment, feedback, menu & info, website & link, payment/tip/donation, loyalty & rewards, custom, or hosted tap page. One category per product. Drives `/shop/stands` and `/shop/stands/[categorySlug]`.
+- **Slugs** are the **permanent URL** for a product or a category (`/product/[slug]`, `/shop/stands/[categorySlug]`, `/use/[slug]`). Slugs are never used to express use-case membership.
+- **Tags** describe **which business/use case(s) a product belongs to** (restaurants-cafes, car-dealerships, healthcare-dental, etc.). A product's `tags` array includes every use case that recommends it. `/use/[slug]` pages query products by tag (`product.tags.includes(useCaseSlug)`) — this is the actual mechanism that lets one product appear on many Shop by Use pages without ever being duplicated into a separate SKU per use case.
 
-Concretely: `/use/car-dealerships` shows exactly the products listed in `useCases.find(u => u.slug === "car-dealerships").recommendedProductSlugs`, in that exact order. It does not show "everything tagged automotive."
+Concretely: `google-review-stand` has one category (`review-stands`) and one slug (its permanent URL), but its `tags` array includes `restaurants-cafes`, `car-dealerships`, `retail-grocery`, and every other use case that recommends it — which is exactly why the same Google Review Stand shows up on `/use/car-dealerships` and `/use/restaurants-cafes` without existing twice.
+
+`UseCase.recommendedProductSlugs` still exists in `src/data/use-cases.ts` as the place this is *authored* (it's much easier to write and review a curated list per use case than to hand-edit tags on 181 products), but at runtime it is used only as a display-order hint — the actual question "does this product belong on this page" is answered by `product.tags`, via `getProductsForUseCase()` in `src/data/catalog.ts`. If a product's tags and a use case's authored list ever disagree, tags win.
 
 ## Spec Terminology → Implementation Terminology
 

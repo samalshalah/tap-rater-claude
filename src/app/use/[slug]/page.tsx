@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { ProductCard } from "@/components/product/product-card";
 import { useCases, getUseCaseBySlug } from "@/data/use-cases";
 import { getActiveProducts } from "@/lib/products";
+import { getProductsForUseCase } from "@/data/catalog";
 import type { MigratedProduct } from "@/data/migrated-products";
 
 type PageProps = {
@@ -39,15 +40,17 @@ export default async function UseCasePage({ params }: PageProps) {
     notFound();
   }
 
-  const allProducts = getActiveProducts();
-  const productBySlug = new Map(allProducts.map((product) => [product.slug, product]));
+  const products = getActiveProducts();
+  const productBySlug = new Map(products.map((product) => [product.slug, product]));
 
-  // Order matters: recommendedProductSlugs controls exactly what appears and in
-  // what order, per the spec's explicit-relationship rule.
-  const recommended = useCase.recommendedProductSlugs.flatMap((productSlug) => {
-    const product = productBySlug.get(productSlug);
-    return product ? [product] : [];
-  });
+  // The real relationship: a product belongs to this use case if its tags say
+  // so. recommendedProductSlugs is only passed in here as a display-order hint
+  // -- it plays no part in *whether* a product shows up on this page.
+  const recommended = getProductsForUseCase(useCase.slug, useCase.recommendedProductSlugs);
+
+  // Featured stays a small, explicitly hand-picked highlight subset (not a
+  // separate relationship mechanism -- every featured product is also reachable
+  // through its tags in the list above).
   const featured = useCase.featuredProductSlugs.flatMap((productSlug) => {
     const product = productBySlug.get(productSlug);
     return product ? [product] : [];

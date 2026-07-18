@@ -8,6 +8,7 @@ import {
 } from "@/lib/products";
 import { standCategories } from "@/data/stand-categories";
 import { useCases } from "@/data/use-cases";
+import { getProductsForUseCase } from "@/data/catalog";
 
 describe("catalog categories", () => {
   it("exposes SEO category groups for the shop, including the 3 new catalog-v2 buckets", () => {
@@ -312,5 +313,31 @@ describe("catalog categories", () => {
   it("all 15 use cases exist with non-empty recommendedProductSlugs", () => {
     expect(useCases.length).toBe(15);
     expect(useCases.every((useCase) => useCase.recommendedProductSlugs.length > 0)).toBe(true);
+  });
+
+  it("determines Shop by Use membership via product.tags, not via slugs or duplicated products", () => {
+    const google = getProductBySlug("google-review-stand");
+
+    expect(google?.tags).toContain("car-dealerships");
+    expect(google?.tags).toContain("restaurants-cafes");
+    // Same product, many use cases -- no duplicate "google-review-stand-for-dealerships" SKU exists.
+    expect(getActiveProducts().filter((p) => p.title === "Google Review Stand")).toHaveLength(1);
+  });
+
+  it("getProductsForUseCase queries by tag membership and matches the authored use-case list exactly", () => {
+    const useCase = useCases.find((u) => u.slug === "car-dealerships")!;
+    const byTag = getProductsForUseCase(useCase.slug, useCase.recommendedProductSlugs);
+
+    expect(byTag.map((p) => p.slug)).toEqual(useCase.recommendedProductSlugs);
+    expect(byTag.every((p) => p.tags?.includes("car-dealerships"))).toBe(true);
+  });
+
+  it("never uses a tag as a product or category URL", () => {
+    const products = getActiveProducts();
+    for (const product of products) {
+      for (const tag of product.tags ?? []) {
+        expect(product.slug).not.toBe(tag);
+      }
+    }
   });
 });

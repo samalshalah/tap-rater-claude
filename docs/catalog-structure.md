@@ -21,7 +21,7 @@ Route: `/shop/stands` (index), `/shop/stands/[categorySlug]` (products in that c
 
 ## Shop by Use — 15 Use Cases
 
-Route: `/shop/use` (index), `/use/[slug]` (that use case's recommended products, in the exact order declared). Membership is controlled by `UseCase.recommendedProductSlugs` / `featuredProductSlugs` — explicit lists, not tag-matching.
+Route: `/shop/use` (index), `/use/[slug]` (that use case's recommended products). Membership is controlled by `product.tags` — a product belongs to a use case if its `tags` array includes that use case's slug. `UseCase.recommendedProductSlugs` is where this is authored (a curated list, easier to write and review than hand-tagging 181 products) and doubles as the display-order hint, but tags are the actual runtime relationship — see `docs/product-model.md`.
 
 1. Restaurants & Cafés — `restaurants-cafes`
 2. Car Dealerships — `car-dealerships`
