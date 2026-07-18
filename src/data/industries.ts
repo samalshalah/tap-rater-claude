@@ -15,11 +15,11 @@ export const industries: Industry[] = [
     useCaseSlug: "restaurants-cafes"
   },
   {
-    slug: "car-dealerships",
-    title: "Car Dealerships",
-    subhead: "Guide shoppers, book appointments, and improve the showroom experience.",
+    slug: "auto-dealer-repair",
+    title: "Auto Dealer & Repair",
+    subhead: "Guide shoppers, book service appointments, and improve the dealership and repair shop experience.",
     image: "/uploads/industries/car-dealerships.png",
-    useCaseSlug: "car-dealerships"
+    useCaseSlug: "auto-dealer-repair"
   },
   {
     slug: "front-desk-reception",

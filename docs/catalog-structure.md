@@ -24,7 +24,7 @@ Route: `/shop/stands` (index), `/shop/stands/[categorySlug]` (products in that c
 Route: `/shop/use` (index), `/use/[slug]` (that use case's recommended products). Membership is controlled by `product.tags` — a product belongs to a use case if its `tags` array includes that use case's slug. `UseCase.recommendedProductSlugs` is where this is authored (a curated list, easier to write and review than hand-tagging 181 products) and doubles as the display-order hint, but tags are the actual runtime relationship — see `docs/product-model.md`.
 
 1. Restaurants & Cafés — `restaurants-cafes`
-2. Car Dealerships — `car-dealerships`
+2. Auto Dealer & Repair — `auto-dealer-repair` (renamed from "Car Dealerships" 2026-07-17; old URL `/use/car-dealerships` redirects here)
 3. Front Desk & Reception — `front-desk-reception`
 4. Retail & Grocery — `retail-grocery`
 5. Hotels & Hospitality — `hotels-hospitality`
@@ -47,8 +47,8 @@ The original spec included a few "use X if it exists, otherwise Y" fallbacks. Re
 
 | Use case | Conditional reference | Resolution |
 |---|---|---|
-| Car Dealerships | `appointment-stand` if it exists, else `book-appointment-stand` | `appointment-stand` is not a real product slug → resolved to `book-appointment-stand` (already listed once; not duplicated). |
-| Car Dealerships | `feedback-stand` if it exists, else `rate-your-experience-stand` | `feedback-stand` is not a real product slug → resolved to `rate-your-experience-stand` (already listed once; not duplicated). |
+| Auto Dealer & Repair | `appointment-stand` if it exists, else `book-appointment-stand` | `appointment-stand` is not a real product slug → resolved to `book-appointment-stand` (already listed once; not duplicated). |
+| Auto Dealer & Repair | `feedback-stand` if it exists, else `rate-your-experience-stand` | `feedback-stand` is not a real product slug → resolved to `rate-your-experience-stand` (already listed once; not duplicated). |
 | Automotive Service & Repair | `surecritic-review-stand` if it exists, else exclude | Not in the approved product list → **excluded entirely**, per "otherwise do not include." |
 | Fitness, Classes & Studios (featured) | `book-a-class-stand` if it exists, else `book-appointment-stand` | Doesn't exist → resolved to `book-appointment-stand`. |
 | Fitness, Classes & Studios (recommended) | `book-a-class-stand` if it exists, else exclude | Doesn't exist → **excluded entirely** (different fallback instruction than the featured list, respected independently). |

@@ -282,8 +282,8 @@ describe("catalog categories", () => {
     expect(directLinkProducts.every((product) => product.requiresSubscription === false)).toBe(true);
   });
 
-  it("/use/car-dealerships includes Google, DealerRater, Cars.com, Social/Follow, Custom, and Hosted Tap Page, in the specified order", () => {
-    const useCase = useCases.find((item) => item.slug === "car-dealerships");
+  it("/use/auto-dealer-repair includes Google, DealerRater, Cars.com, Social/Follow, Custom, and Hosted Tap Page, in the specified order", () => {
+    const useCase = useCases.find((item) => item.slug === "auto-dealer-repair");
 
     expect(useCase).toBeDefined();
     expect(useCase?.recommendedProductSlugs).toEqual([
@@ -318,18 +318,18 @@ describe("catalog categories", () => {
   it("determines Shop by Use membership via product.tags, not via slugs or duplicated products", () => {
     const google = getProductBySlug("google-review-stand");
 
-    expect(google?.tags).toContain("car-dealerships");
+    expect(google?.tags).toContain("auto-dealer-repair");
     expect(google?.tags).toContain("restaurants-cafes");
     // Same product, many use cases -- no duplicate "google-review-stand-for-dealerships" SKU exists.
     expect(getActiveProducts().filter((p) => p.title === "Google Review Stand")).toHaveLength(1);
   });
 
   it("getProductsForUseCase queries by tag membership and matches the authored use-case list exactly", () => {
-    const useCase = useCases.find((u) => u.slug === "car-dealerships")!;
+    const useCase = useCases.find((u) => u.slug === "auto-dealer-repair")!;
     const byTag = getProductsForUseCase(useCase.slug, useCase.recommendedProductSlugs);
 
     expect(byTag.map((p) => p.slug)).toEqual(useCase.recommendedProductSlugs);
-    expect(byTag.every((p) => p.tags?.includes("car-dealerships"))).toBe(true);
+    expect(byTag.every((p) => p.tags?.includes("auto-dealer-repair"))).toBe(true);
   });
 
   it("never uses a tag as a product or category URL", () => {

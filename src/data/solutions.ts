@@ -8,7 +8,7 @@ export type SolutionLink = {
 // backs the photo-card "Find your industry" section and stays at its original 4).
 export const solutions: SolutionLink[] = [
   { slug: "restaurants-cafes", title: "Restaurants & Cafés", categorySlug: "menu" },
-  { slug: "car-dealerships", title: "Car Dealerships", categorySlug: "appointments" },
+  { slug: "auto-dealer-repair", title: "Auto Dealer & Repair", categorySlug: "appointments" },
   { slug: "front-desk-reception", title: "Front Desk & Reception", categorySlug: "feedback" },
   { slug: "retail-grocery", title: "Retail & Grocery", categorySlug: "reviews" },
   { slug: "hotels-hospitality", title: "Hotels & Hospitality", categorySlug: "reviews" },

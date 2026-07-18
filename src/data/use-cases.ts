@@ -9,9 +9,10 @@ export type UseCase = {
 };
 
 // Conditional-slug resolutions (per spec's own fallback instructions), documented here:
-// - car-dealerships: "appointment-stand" doesn't exist as a product slug -> resolved to
-//   "book-appointment-stand" (deduplicated against the explicit entry already in the list).
-// - car-dealerships: "feedback-stand" doesn't exist as a product slug -> resolved to
+// - auto-dealer-repair (originally "car-dealerships", renamed 2026-07-17): "appointment-stand"
+//   doesn't exist as a product slug -> resolved to "book-appointment-stand" (deduplicated
+//   against the explicit entry already in the list).
+// - auto-dealer-repair: "feedback-stand" doesn't exist as a product slug -> resolved to
 //   "rate-your-experience-stand" (deduplicated against the explicit entry already in the list).
 // - automotive-service-repair: "surecritic-review-stand" does not exist in the catalog and
 //   was not in the approved product list -> excluded entirely, per "otherwise do not include".
@@ -54,10 +55,10 @@ export const useCases: UseCase[] = [
     ]
   },
   {
-    slug: "car-dealerships",
-    name: "Car Dealerships",
-    description: "Guide shoppers, book appointments, and improve the showroom experience.",
-    tags: ["automotive", "dealership"],
+    slug: "auto-dealer-repair",
+    name: "Auto Dealer & Repair",
+    description: "Guide shoppers, book service appointments, and improve the dealership and repair shop experience.",
+    tags: ["automotive", "dealership", "repair"],
     featuredProductSlugs: ["google-review-stand", "dealerrater-review-stand", "cars-com-review-stand", "schedule-service-stand", "hosted-tap-page-stand"],
     recommendedProductSlugs: [
       "google-review-stand",
