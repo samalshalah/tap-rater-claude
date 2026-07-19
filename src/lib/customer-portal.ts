@@ -207,3 +207,28 @@ export async function updateOwnedDeviceDestination(
 
   return { ok: true };
 }
+
+export async function createCustomer(
+  client: CustomerPortalDbClient,
+  input: { email: string; name?: string; phone?: string }
+): Promise<{ ok: boolean; error?: string }> {
+  const email = input.email.trim().toLowerCase();
+
+  const { data: existing } = await client.from("customers").select("id").eq("email", email).maybeSingle();
+  if (existing) {
+    return { ok: false, error: "A customer with that email already exists." };
+  }
+
+  const { error } = await client.from("customers").insert({
+    email,
+    name: input.name?.trim() || null,
+    phone: input.phone?.trim() || null,
+    role: "customer"
+  });
+
+  if (error) {
+    return { ok: false, error: error.message };
+  }
+
+  return { ok: true };
+}

@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { getCustomerPortalFromClient, updateOwnedDeviceDestination, type CustomerPortalDbClient } from "@/lib/customer-portal";
+import { createCustomer, getCustomerPortalFromClient, updateOwnedDeviceDestination, type CustomerPortalDbClient } from "@/lib/customer-portal";
 
 describe("customer portal repository", () => {
   it("loads businesses, devices, destinations, and tap counts for a customer email", async () => {
@@ -107,6 +107,35 @@ describe("customer portal repository", () => {
 
     expect(result.ok).toBe(false);
   });
+
+  it("lets admin create a customer record directly (for phone orders, walk-ins, or test accounts)", async () => {
+    const db = createCustomerPortalDb({ customers: [], businesses: [], devices: [], tap_events: [] });
+
+    const result = await createCustomer(db.client, { email: "New.Customer@Example.com", name: "New Customer", phone: "555-0100" });
+
+    expect(result.ok).toBe(true);
+    expect(db.rows.customers[0]).toMatchObject({
+      email: "new.customer@example.com",
+      name: "New Customer",
+      phone: "555-0100",
+      role: "customer"
+    });
+  });
+
+  it("refuses to create a duplicate customer for an email that already exists", async () => {
+    const db = createCustomerPortalDb({
+      customers: [{ id: "customer-1", email: "existing@example.com" }],
+      businesses: [],
+      devices: [],
+      tap_events: []
+    });
+
+    const result = await createCustomer(db.client, { email: "existing@example.com" });
+
+    expect(result.ok).toBe(false);
+    expect(result.error).toContain("already exists");
+    expect(db.rows.customers).toHaveLength(1);
+  });
 });
 
 type TableName = "customers" | "businesses" | "devices" | "tap_events";
@@ -141,6 +170,10 @@ function createCustomerPortalDb(seed: Record<TableName, Array<Record<string, unk
             return { error: null };
           })
         })),
+        insert: vi.fn(async (values: Record<string, unknown>) => {
+          rows[table].push({ id: `generated-${rows[table].length + 1}`, ...values });
+          return { error: null };
+        }),
         then(resolve: (value: { data: Array<Record<string, unknown>>; error: null }) => void) {
           resolve({ data: matchRows(), error: null });
         }

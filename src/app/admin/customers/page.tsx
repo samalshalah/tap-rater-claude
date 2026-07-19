@@ -1,4 +1,5 @@
 import { AdminShell } from "@/components/admin/admin-shell";
+import { CreateCustomerForm } from "@/components/admin/create-customer-form";
 import { requireAdmin } from "@/lib/admin-auth";
 import { getAdminCustomers } from "@/lib/customers";
 import { formatPrice } from "@/lib/products";
@@ -39,6 +40,10 @@ export default async function AdminCustomersPage() {
           <SummaryCard label="Repeat customers" value={String(repeatCustomers)} />
           <SummaryCard label="Open requests" value={String(openRequests)} />
           <SummaryCard label="Lifetime revenue" value={formatPrice(totalRevenue)} />
+        </div>
+
+        <div className="mt-6">
+          <CreateCustomerForm />
         </div>
 
         <div className="mt-6 overflow-x-auto rounded-md border border-line bg-white shadow-sm">
