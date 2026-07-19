@@ -57,8 +57,8 @@ export const useCases: UseCase[] = [
   {
     slug: "auto-dealer-repair",
     name: "Auto Dealer & Repair",
-    description: "Guide shoppers, book service appointments, and improve the dealership and repair shop experience.",
-    tags: ["automotive", "dealership", "repair"],
+    description: "Guide shoppers, book service appointments, and improve the dealership and independent repair shop experience.",
+    tags: ["automotive", "dealership", "repair", "service"],
     featuredProductSlugs: ["google-review-stand", "dealerrater-review-stand", "cars-com-review-stand", "schedule-service-stand", "hosted-tap-page-stand"],
     recommendedProductSlugs: [
       "google-review-stand",
@@ -70,6 +70,7 @@ export const useCases: UseCase[] = [
       "edmunds-review-stand",
       "autotrader-review-stand",
       "carfax-review-stand",
+      "repairpal-review-stand",
       "schedule-service-stand",
       "book-appointment-stand",
       "rate-your-experience-stand",
@@ -317,27 +318,6 @@ export const useCases: UseCase[] = [
       "visit-our-website-stand",
       "join-our-newsletter-stand",
       "follow-us-stand",
-      "custom-nfc-stand",
-      "hosted-tap-page-stand"
-    ]
-  },
-  {
-    slug: "automotive-service-repair",
-    name: "Automotive Service & Repair",
-    description: "Capture reviews and make it easy to book the next service visit.",
-    tags: ["automotive", "repair", "service"],
-    featuredProductSlugs: ["google-review-stand", "repairpal-review-stand", "schedule-service-stand", "auto-service-menu-stand"],
-    recommendedProductSlugs: [
-      "google-review-stand",
-      "yelp-review-stand",
-      "facebook-review-stand",
-      "repairpal-review-stand",
-      "carfax-review-stand",
-      "schedule-service-stand",
-      "book-appointment-stand",
-      "auto-service-menu-stand",
-      "rate-your-experience-stand",
-      "request-a-quote-stand",
       "custom-nfc-stand",
       "hosted-tap-page-stand"
     ]

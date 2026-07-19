@@ -17,9 +17,9 @@ Route: `/shop/stands` (index), `/shop/stands/[categorySlug]` (products in that c
 | 9 | Custom Stands | `custom-stands` | 9 |
 | 10 | Hosted Tap Page Stands | `hosted-tap-page-stands` | 8 |
 
-**181 active products total.**
+**168 active products total** (13 Payment/Tip/Donation products discontinued 2026-07-18; see docs/phase-1-products.md).
 
-## Shop by Use — 15 Use Cases
+## Shop by Use — 14 Use Cases
 
 Route: `/shop/use` (index), `/use/[slug]` (that use case's recommended products). Membership is controlled by `product.tags` — a product belongs to a use case if its `tags` array includes that use case's slug. `UseCase.recommendedProductSlugs` is where this is authored (a curated list, easier to write and review than hand-tagging 181 products) and doubles as the display-order hint, but tags are the actual runtime relationship — see `docs/product-model.md`.
 
@@ -35,9 +35,8 @@ Route: `/shop/use` (index), `/use/[slug]` (that use case's recommended products)
 10. Real Estate — `real-estate`
 11. Events & Pop-Ups — `events-popups`
 12. Nonprofits & Donations — `nonprofits-donations`
-13. Automotive Service & Repair — `automotive-service-repair`
-14. Ecommerce & Retail Brands — `ecommerce-retail-brands`
-15. Fitness, Classes & Studios — `fitness-classes-studios`
+13. Ecommerce & Retail Brands — `ecommerce-retail-brands`
+14. Fitness, Classes & Studios — `fitness-classes-studios`
 
 A product can appear in many use cases (via `useCaseSlugs`, computed automatically from every `UseCase.recommendedProductSlugs`/`featuredProductSlugs` list that includes it) without ever being duplicated as a separate product record.
 
@@ -49,11 +48,11 @@ The original spec included a few "use X if it exists, otherwise Y" fallbacks. Re
 |---|---|---|
 | Auto Dealer & Repair | `appointment-stand` if it exists, else `book-appointment-stand` | `appointment-stand` is not a real product slug → resolved to `book-appointment-stand` (already listed once; not duplicated). |
 | Auto Dealer & Repair | `feedback-stand` if it exists, else `rate-your-experience-stand` | `feedback-stand` is not a real product slug → resolved to `rate-your-experience-stand` (already listed once; not duplicated). |
-| Automotive Service & Repair | `surecritic-review-stand` if it exists, else exclude | Not in the approved product list → **excluded entirely**, per "otherwise do not include." |
+| Automotive Service & Repair (merged into Auto Dealer & Repair, 2026-07-18 -- 11 of its 12 products were already duplicates) | `surecritic-review-stand` if it exists, else exclude | Not in the approved product list → **excluded entirely**, per "otherwise do not include." |
 | Fitness, Classes & Studios (featured) | `book-a-class-stand` if it exists, else `book-appointment-stand` | Doesn't exist → resolved to `book-appointment-stand`. |
 | Fitness, Classes & Studios (recommended) | `book-a-class-stand` if it exists, else exclude | Doesn't exist → **excluded entirely** (different fallback instruction than the featured list, respected independently). |
 
-No broken slugs remain — every `featuredProductSlugs` and `recommendedProductSlugs` entry across all 15 use cases resolves to a real, active product (enforced by an automated test).
+No broken slugs remain — every `featuredProductSlugs` and `recommendedProductSlugs` entry across all 14 use cases resolves to a real, active product (enforced by an automated test).
 
 ## Legacy Product Reconciliation
 

@@ -327,6 +327,7 @@ describe("catalog categories", () => {
       "edmunds-review-stand",
       "autotrader-review-stand",
       "carfax-review-stand",
+      "repairpal-review-stand",
       "schedule-service-stand",
       "book-appointment-stand",
       "rate-your-experience-stand",
@@ -341,8 +342,8 @@ describe("catalog categories", () => {
     expect(new Set(slugs).size).toBe(slugs.length);
   });
 
-  it("all 15 use cases exist with non-empty recommendedProductSlugs", () => {
-    expect(useCases.length).toBe(15);
+  it("all 14 use cases exist with non-empty recommendedProductSlugs (Automotive Service & Repair merged into Auto Dealer & Repair, 2026-07-18)", () => {
+    expect(useCases.length).toBe(14);
     expect(useCases.every((useCase) => useCase.recommendedProductSlugs.length > 0)).toBe(true);
   });
 
