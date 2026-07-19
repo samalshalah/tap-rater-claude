@@ -1,4 +1,5 @@
 import { AccountShell } from "@/components/account/account-shell";
+import { AccountDestinationEditor } from "@/components/account/account-destination-editor";
 import { ChangeRequestForm } from "@/components/account/change-request-form";
 import { getBusinessTapSummary, type BusinessTapSummary, type TapsByDay } from "@/lib/analytics";
 import { requireCustomer } from "@/lib/customer-auth";
@@ -42,6 +43,14 @@ export default async function AccountDevicesPage() {
                   <td className="p-4 text-muted">
                     <p>{device.destinationType ?? "-"}</p>
                     <p className="mt-1 max-w-[360px] truncate">{device.destinationUrl ?? ""}</p>
+                    <div className="mt-2">
+                      <AccountDestinationEditor
+                        deviceId={device.id}
+                        deviceCode={device.deviceCode}
+                        currentDestinationUrl={device.destinationUrl}
+                        currentDestinationType={device.destinationType}
+                      />
+                    </div>
                   </td>
                   <td className="p-4 font-bold text-ink">{device.tapCount}</td>
                 </tr>

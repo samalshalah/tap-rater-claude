@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { getCustomerPortalFromClient, type CustomerPortalDbClient } from "@/lib/customer-portal";
+import { getCustomerPortalFromClient, updateOwnedDeviceDestination, type CustomerPortalDbClient } from "@/lib/customer-portal";
 
 describe("customer portal repository", () => {
   it("loads businesses, devices, destinations, and tap counts for a customer email", async () => {
@@ -43,6 +43,70 @@ describe("customer portal repository", () => {
     expect(portal.businesses).toEqual([]);
     expect(portal.devices).toEqual([]);
   });
+
+  it("lets a customer update the destination link on their own device", async () => {
+    const db = createCustomerPortalDb({
+      customers: [{ id: "customer-1", email: "owner@example.com" }],
+      businesses: [],
+      devices: [{ id: "device-1", customer_id: "customer-1" }],
+      tap_events: []
+    });
+
+    const result = await updateOwnedDeviceDestination(db.client, {
+      deviceId: "device-1",
+      customerEmail: "owner@example.com",
+      destinationUrl: "https://g.page/r/example/review",
+      destinationType: "google_review"
+    });
+
+    expect(result.ok).toBe(true);
+    expect(db.rows.devices[0]).toMatchObject({
+      destination_url: "https://g.page/r/example/review",
+      destination_type: "google_review",
+      status: "active"
+    });
+  });
+
+  it("refuses to update a device that belongs to a different customer (security check)", async () => {
+    const db = createCustomerPortalDb({
+      customers: [
+        { id: "customer-1", email: "owner@example.com" },
+        { id: "customer-2", email: "someone-else@example.com" }
+      ],
+      businesses: [],
+      devices: [{ id: "device-1", customer_id: "customer-2" }], // owned by someone-else, not owner@example.com
+      tap_events: []
+    });
+
+    const result = await updateOwnedDeviceDestination(db.client, {
+      deviceId: "device-1",
+      customerEmail: "owner@example.com",
+      destinationUrl: "https://malicious.example.com/hijack",
+      destinationType: "custom"
+    });
+
+    expect(result.ok).toBe(false);
+    // The device row must remain untouched -- no destination_url was ever set on it.
+    expect(db.rows.devices[0].destination_url).toBeUndefined();
+  });
+
+  it("refuses to update a device that doesn't exist", async () => {
+    const db = createCustomerPortalDb({
+      customers: [{ id: "customer-1", email: "owner@example.com" }],
+      businesses: [],
+      devices: [],
+      tap_events: []
+    });
+
+    const result = await updateOwnedDeviceDestination(db.client, {
+      deviceId: "does-not-exist",
+      customerEmail: "owner@example.com",
+      destinationUrl: "https://example.com",
+      destinationType: "custom"
+    });
+
+    expect(result.ok).toBe(false);
+  });
 });
 
 type TableName = "customers" | "businesses" | "devices" | "tap_events";
@@ -68,6 +132,15 @@ function createCustomerPortalDb(seed: Record<TableName, Array<Record<string, unk
         }),
         maybeSingle: vi.fn(async () => ({ data: matchRows()[0] ?? null, error: null })),
         order: vi.fn(async () => ({ data: matchRows(), error: null })),
+        update: vi.fn((values: Record<string, unknown>) => ({
+          eq: vi.fn(async (column: string, value: unknown) => {
+            const target = rows[table].find((row) => row[column] === value);
+            if (target) {
+              Object.assign(target, values);
+            }
+            return { error: null };
+          })
+        })),
         then(resolve: (value: { data: Array<Record<string, unknown>>; error: null }) => void) {
           resolve({ data: matchRows(), error: null });
         }
@@ -77,5 +150,5 @@ function createCustomerPortalDb(seed: Record<TableName, Array<Record<string, unk
     }
   };
 
-  return { client: client as unknown as CustomerPortalDbClient };
+  return { client: client as unknown as CustomerPortalDbClient, rows };
 }

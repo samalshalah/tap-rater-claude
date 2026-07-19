@@ -161,3 +161,49 @@ function readRecord(value: unknown): Record<string, unknown> {
 function readString(value: unknown) {
   return typeof value === "string" && value.trim() ? value : undefined;
 }
+
+export async function updateOwnedDeviceDestination(
+  client: CustomerPortalDbClient,
+  input: { deviceId: string; customerEmail: string; destinationUrl: string; destinationType: string }
+): Promise<{ ok: boolean; error?: string }> {
+  const { data: customerRow, error: customerError } = await client
+    .from("customers")
+    .select("id")
+    .eq("email", input.customerEmail.toLowerCase())
+    .maybeSingle();
+
+  if (customerError || !customerRow) {
+    return { ok: false, error: "Customer not found." };
+  }
+
+  // Ownership check: only update a device that actually belongs to this
+  // logged-in customer. This is what makes it safe to skip the private
+  // activation code here (unlike first-time activation via /activate) -- the
+  // customer session itself is the proof of ownership for an *already*
+  // activated device.
+  const { data: deviceRow, error: deviceError } = await client
+    .from("devices")
+    .select("id, customer_id")
+    .eq("id", input.deviceId)
+    .maybeSingle();
+
+  if (deviceError || !deviceRow || deviceRow.customer_id !== customerRow.id) {
+    return { ok: false, error: "Device not found for this account." };
+  }
+
+  const { error: updateError } = await client
+    .from("devices")
+    .update({
+      destination_url: input.destinationUrl,
+      destination_type: input.destinationType,
+      status: "active",
+      updated_at: new Date().toISOString()
+    })
+    .eq("id", input.deviceId);
+
+  if (updateError) {
+    return { ok: false, error: updateError.message };
+  }
+
+  return { ok: true };
+}
