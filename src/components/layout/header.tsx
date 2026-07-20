@@ -12,28 +12,9 @@ import { useCases } from "@/data/use-cases";
 // payment-tip-donation-stands is intentionally excluded: that category was
 // discontinued (2026-07-18) and has zero active products, so it's hidden
 // from /shop/stands too -- keeping the nav consistent with that.
-// One representative, real-photographed product per stand category, used as a
-// small thumbnail in the mega-menu -- matching apple.com's pattern of
-// anchoring a nav section with a product image. Categories still on the
-// generic placeholder (Custom Stands, Hosted Tap Page Stands) intentionally
-// have none rather than showing a "photo coming soon" graphic at thumbnail size.
-const standCategoryThumbnails: Partial<Record<string, string>> = {
-  "review-stands": "/uploads/products/v5/google-review-stand.png",
-  "social-media-stands": "/uploads/products/v5/instagram-stand.png",
-  "appointment-stands": "/uploads/products/v5/book-your-next-visit-stand.png",
-  "feedback-stands": "/uploads/products/v5/rate-your-experience-stand.png",
-  "menu-info-stands": "/uploads/products/v5/menu-info-stand.png",
-  "website-link-stands": "/uploads/products/v5/visit-our-website-stand.png",
-  "loyalty-rewards-stands": "/uploads/products/v5/join-rewards-stand.png"
-};
-
 const shopStandCategoryLinks = standCategories
   .filter((category) => category.slug !== "payment-tip-donation-stands")
-  .map((category) => ({
-    href: `/shop/stands/${category.slug}`,
-    label: category.name,
-    image: standCategoryThumbnails[category.slug]
-  }));
+  .map((category) => ({ href: `/shop/stands/${category.slug}`, label: category.name }));
 
 const shopUseCaseLinks = useCases.map((useCase) => ({ href: `/use/${useCase.slug}`, label: useCase.name }));
 
@@ -243,7 +224,7 @@ export function Header() {
   );
 }
 
-type NavLinkItem = { href: string; label: string; image?: string };
+type NavLinkItem = { href: string; label: string };
 
 function ShopMegaMenu({
   isOpen,
@@ -323,20 +304,15 @@ function MegaMenuColumn({
   return (
     <div>
       <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-muted">{title}</p>
-      <div className="mt-4 grid max-h-72 gap-0.5 overflow-y-auto pr-2">
+      <div className="mt-4 grid gap-0.5">
         {links.map((link) => (
           <Link
             key={link.href + link.label}
             href={link.href}
             role="menuitem"
             onClick={onNavigate}
-            className="flex items-center gap-2.5 rounded-lg px-2 py-1.5 text-[13px] font-medium text-ink/80 transition hover:bg-surface hover:text-ink"
+            className="rounded-lg px-2 py-1.5 text-[13px] font-medium text-ink/80 transition hover:bg-surface hover:text-ink"
           >
-            {link.image ? (
-              <span className="relative h-8 w-8 shrink-0 overflow-hidden rounded-xl bg-surface">
-                <Image src={link.image} alt="" fill className="object-cover" sizes="32px" />
-              </span>
-            ) : null}
             {link.label}
           </Link>
         ))}
@@ -454,13 +430,8 @@ function MobileShopGroup({ title, links, onNavigate }: { title: string; links: N
             key={link.href + link.label}
             href={link.href}
             onClick={onNavigate}
-            className="flex items-center gap-2.5 rounded-lg px-2 py-2 text-[13px] text-muted transition hover:bg-surface hover:text-ink"
+            className="rounded-lg px-2 py-2 text-[13px] text-muted transition hover:bg-surface hover:text-ink"
           >
-            {link.image ? (
-              <span className="relative h-7 w-7 shrink-0 overflow-hidden rounded-xl bg-surface">
-                <Image src={link.image} alt="" fill className="object-cover" sizes="28px" />
-              </span>
-            ) : null}
             {link.label}
           </Link>
         ))}
