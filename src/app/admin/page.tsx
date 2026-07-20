@@ -10,7 +10,7 @@ export default async function AdminPage() {
     <AdminShell>
       <section className="mx-auto max-w-7xl px-4 py-8 md:px-8 lg:py-12">
         <p className="text-sm font-semibold uppercase text-brand">Admin</p>
-        <h1 className="mt-3 text-4xl font-semibold text-ink">Tap Rater backend</h1>
+        <h1 className="mt-3 text-[32px] font-semibold tracking-tightest text-ink sm:text-[38px]">Tap Rater backend</h1>
         <p className="mt-4 max-w-3xl leading-7 text-muted">
           Control the storefront, catalog, request queue, ecommerce operations, SEO, and launch settings from one dashboard.
         </p>
@@ -23,7 +23,7 @@ export default async function AdminPage() {
           ].map(([label, value, copy]) => (
             <article key={label} className="rounded-2xl border border-line bg-white p-5 shadow-sm">
               <p className="text-sm font-semibold text-muted">{label}</p>
-              <p className="mt-2 text-3xl font-semibold text-ink">{value}</p>
+              <p className="mt-2 text-[28px] font-semibold tracking-tightest text-ink">{value}</p>
               <p className="mt-2 text-sm leading-6 text-muted">{copy}</p>
             </article>
           ))}

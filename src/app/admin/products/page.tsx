@@ -16,7 +16,7 @@ export default async function AdminProductsPage() {
       <p className="text-sm font-semibold uppercase text-brand">Admin</p>
       <div className="mt-3 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
         <div>
-          <h1 className="text-4xl font-semibold text-ink">Products</h1>
+          <h1 className="text-[32px] font-semibold tracking-tightest text-ink sm:text-[38px]">Products</h1>
           <p className="mt-2 text-sm leading-6 text-muted">Create and manage product records, pricing, inventory status, visibility, and SEO.</p>
         </div>
         <Link href="/admin/products/new" className="rounded-full bg-ink px-5 py-3 text-sm font-medium text-white transition hover:bg-brand">

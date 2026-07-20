@@ -13,7 +13,7 @@ export default async function AdminMediaPage() {
       <section className="mx-auto max-w-7xl px-4 py-8 md:px-8 lg:py-12">
         <p className="text-sm font-semibold uppercase text-brand">Content</p>
         <div className="mt-3">
-          <h1 className="text-4xl font-semibold text-ink">Media</h1>
+          <h1 className="text-[32px] font-semibold tracking-tightest text-ink sm:text-[38px]">Media</h1>
           <p className="mt-2 max-w-3xl text-sm leading-6 text-muted">
             A catalog of image and video assets in use across the site -- product photos, hero images, and more -- so they're
             easy to find and reuse.

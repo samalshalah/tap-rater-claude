@@ -17,7 +17,7 @@ export default async function AdminInventoryPage() {
       <section className="mx-auto max-w-7xl px-4 py-8 md:px-8 lg:py-12">
         <p className="text-sm font-semibold uppercase text-brand">Commerce</p>
         <div className="mt-3">
-          <h1 className="text-4xl font-semibold text-ink">Inventory</h1>
+          <h1 className="text-[32px] font-semibold tracking-tightest text-ink sm:text-[38px]">Inventory</h1>
           <p className="mt-2 max-w-3xl text-sm leading-6 text-muted">
             Since every stand is printed on demand, "inventory" here means whether a product can currently be ordered, not a unit
             count. Checkout already respects this -- an out-of-stock product cannot be added to cart or checked out. Click a

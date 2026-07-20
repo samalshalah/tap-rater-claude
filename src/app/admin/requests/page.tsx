@@ -17,7 +17,7 @@ export default async function AdminRequestsPage() {
         <p className="text-sm font-semibold uppercase text-brand">Admin</p>
         <div className="mt-3 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
           <div>
-            <h1 className="text-4xl font-semibold text-ink">Requests</h1>
+            <h1 className="text-[32px] font-semibold tracking-tightest text-ink sm:text-[38px]">Requests</h1>
             <p className="mt-3 max-w-3xl leading-7 text-muted">
               Manage customer questions, setup submissions, and Tap Rater link change requests before checkout is live.
             </p>

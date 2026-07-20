@@ -30,7 +30,7 @@ export default async function AdminSettingsPage() {
       <section className="mx-auto max-w-7xl px-4 py-8 md:px-8 lg:py-12">
         <p className="text-sm font-semibold uppercase text-brand">System</p>
         <div className="mt-3">
-          <h1 className="text-4xl font-semibold text-ink">Settings & Launch Readiness</h1>
+          <h1 className="text-[32px] font-semibold tracking-tightest text-ink sm:text-[38px]">Settings & Launch Readiness</h1>
           <p className="mt-2 max-w-3xl text-sm leading-6 text-muted">
             A live check of what's actually configured on this environment right now, plus store-level notes.
           </p>

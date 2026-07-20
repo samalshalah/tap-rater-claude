@@ -13,7 +13,7 @@ export default async function AdminOrdersPage() {
         <p className="text-sm font-semibold uppercase text-brand">Commerce</p>
         <div className="mt-3 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
           <div>
-            <h1 className="text-4xl font-semibold text-ink">Orders</h1>
+            <h1 className="text-[32px] font-semibold tracking-tightest text-ink sm:text-[38px]">Orders</h1>
             <p className="mt-2 max-w-3xl text-sm leading-6 text-muted">
               Stripe test checkout creates pending orders, and the Stripe webhook marks them paid after checkout completes.
             </p>

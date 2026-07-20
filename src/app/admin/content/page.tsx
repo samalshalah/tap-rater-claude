@@ -9,7 +9,7 @@ export default async function AdminContentPage() {
     <AdminShell>
     <section className="mx-auto max-w-6xl px-4 py-8 md:px-8 lg:py-12">
       <p className="text-sm font-semibold uppercase text-brand">Admin</p>
-      <h1 className="mt-3 text-4xl font-semibold text-ink">Website content</h1>
+      <h1 className="mt-3 text-[32px] font-semibold tracking-tightest text-ink sm:text-[38px]">Website content</h1>
       <p className="mt-4 max-w-3xl leading-7 text-muted">
         Edit homepage copy, create CMS pages, and prepare SEO/content changes. Saved content uses Postgres when configured.
       </p>

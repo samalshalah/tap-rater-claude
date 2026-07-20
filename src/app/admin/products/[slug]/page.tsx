@@ -27,7 +27,7 @@ export default async function AdminProductEditorPage({ params }: AdminProductEdi
     <AdminShell>
     <section className="mx-auto max-w-5xl px-4 py-8 md:px-8 lg:py-12">
       <p className="text-sm font-semibold uppercase text-brand">Admin</p>
-      <h1 className="mt-3 text-4xl font-semibold text-ink">{isCreate ? "Create product" : "Edit product"}</h1>
+      <h1 className="mt-3 text-[32px] font-semibold tracking-tightest text-ink sm:text-[38px]">{isCreate ? "Create product" : "Edit product"}</h1>
       <p className="mt-4 leading-7 text-muted">
         Product records save to Postgres through a protected server-side API. The public storefront uses saved products when database persistence is configured and static products as fallback.
       </p>

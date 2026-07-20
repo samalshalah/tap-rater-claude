@@ -14,7 +14,7 @@ export default async function AdminShippingPage() {
       <section className="mx-auto max-w-7xl px-4 py-8 md:px-8 lg:py-12">
         <p className="text-sm font-semibold uppercase text-brand">Commerce</p>
         <div className="mt-3">
-          <h1 className="text-4xl font-semibold text-ink">Shipping</h1>
+          <h1 className="text-[32px] font-semibold tracking-tightest text-ink sm:text-[38px]">Shipping</h1>
           <p className="mt-2 max-w-3xl text-sm leading-6 text-muted">
             Configure the shipping rate, free-shipping threshold, and delivery estimate. This also directly drives the{" "}
             <code>/shipping-policy</code> page's bracketed placeholders once you fill it in here.

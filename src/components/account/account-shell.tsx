@@ -14,7 +14,7 @@ export function AccountShell({ children }: { children: ReactNode }) {
         <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
           <div>
             <p className="text-sm font-semibold uppercase text-brand">Tap Rater account</p>
-            <h1 className="mt-2 text-4xl font-semibold text-ink">Customer portal</h1>
+            <h1 className="mt-2 text-[32px] font-semibold tracking-tightest text-ink sm:text-[38px]">Customer portal</h1>
           </div>
           <nav className="flex flex-wrap gap-2">
             {links.map((link) => (

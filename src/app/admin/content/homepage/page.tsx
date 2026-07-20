@@ -11,7 +11,7 @@ export default async function AdminHomepageEditorPage() {
     <AdminShell>
     <section className="mx-auto max-w-4xl px-4 py-8 md:px-8 lg:py-12">
       <p className="text-sm font-semibold uppercase text-brand">Admin</p>
-      <h1 className="mt-3 text-4xl font-semibold text-ink">Homepage editor</h1>
+      <h1 className="mt-3 text-[32px] font-semibold tracking-tightest text-ink sm:text-[38px]">Homepage editor</h1>
       <p className="mt-4 leading-7 text-muted">
         These fields control the homepage hero when database persistence is configured. Without database credentials, the form will show the fallback content and saving returns a configuration message.
       </p>

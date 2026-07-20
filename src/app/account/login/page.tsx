@@ -20,7 +20,7 @@ export default async function AccountLoginPage({ searchParams }: LoginPageProps)
       <section className="mx-auto grid max-w-5xl gap-8 px-4 py-12 md:grid-cols-[0.85fr_1.15fr] md:px-6 md:py-16">
         <div className="space-y-4">
           <p className="text-sm font-semibold uppercase text-brand">Customer account</p>
-          <h1 className="text-4xl font-semibold leading-tight text-ink">Log in to Tap Rater</h1>
+          <h1 className="text-[32px] font-semibold tracking-tightest leading-tight text-ink sm:text-[38px]">Log in to Tap Rater</h1>
           <p className="text-lg leading-8 text-muted">
             Get a secure email link (or use a password) to view your business profile, activated devices, destination URLs, and
             basic tap counts.

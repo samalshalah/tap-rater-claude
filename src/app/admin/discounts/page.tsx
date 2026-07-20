@@ -12,7 +12,7 @@ export default async function AdminDiscountsPage() {
       <section className="mx-auto max-w-7xl px-4 py-8 md:px-8 lg:py-12">
         <p className="text-sm font-semibold uppercase text-brand">Commerce</p>
         <div className="mt-3">
-          <h1 className="text-4xl font-semibold text-ink">Discount Codes</h1>
+          <h1 className="text-[32px] font-semibold tracking-tightest text-ink sm:text-[38px]">Discount Codes</h1>
           <p className="mt-2 max-w-3xl text-sm leading-6 text-muted">
             Create and manage discount codes. Codes are stored and tracked here now; actually applying one to a checkout total is
             wired up alongside going live with Stripe.

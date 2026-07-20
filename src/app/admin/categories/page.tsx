@@ -18,7 +18,7 @@ export default async function AdminCategoriesPage() {
       <section className="mx-auto max-w-7xl px-4 py-8 md:px-8 lg:py-12">
         <p className="text-sm font-semibold uppercase text-brand">Commerce</p>
         <div className="mt-3">
-          <h1 className="text-4xl font-semibold text-ink">Categories & Use Cases</h1>
+          <h1 className="text-[32px] font-semibold tracking-tightest text-ink sm:text-[38px]">Categories & Use Cases</h1>
           <p className="mt-2 max-w-3xl text-sm leading-6 text-muted">
             Stand categories are what kind of stand a product is (Shop by Stand). Use cases are which business types recommend a
             product, via tags (Shop by Use). Both are defined in code (<code>src/data/stand-categories.ts</code> and{" "}

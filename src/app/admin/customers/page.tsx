@@ -19,7 +19,7 @@ export default async function AdminCustomersPage() {
         <p className="text-sm font-semibold uppercase text-brand">Operations</p>
         <div className="mt-3 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
           <div>
-            <h1 className="text-4xl font-semibold text-ink">Customers</h1>
+            <h1 className="text-[32px] font-semibold tracking-tightest text-ink sm:text-[38px]">Customers</h1>
             <p className="mt-2 max-w-3xl text-sm leading-6 text-muted">
               Every customer who has a saved account, a paid order, or a contact/setup/link-change request. Order totals and open
               requests are pulled directly from the database.
