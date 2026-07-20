@@ -1,5 +1,6 @@
 import { AdminShell } from "@/components/admin/admin-shell";
 import { CreateCustomerForm } from "@/components/admin/create-customer-form";
+import { PasswordSetupLinkGenerator } from "@/components/admin/password-setup-link-generator";
 import { requireAdmin } from "@/lib/admin-auth";
 import { getAdminCustomers } from "@/lib/customers";
 import { formatPrice } from "@/lib/products";
@@ -42,8 +43,9 @@ export default async function AdminCustomersPage() {
           <SummaryCard label="Lifetime revenue" value={formatPrice(totalRevenue)} />
         </div>
 
-        <div className="mt-6">
+        <div className="mt-6 grid gap-6 lg:grid-cols-2">
           <CreateCustomerForm />
+          <PasswordSetupLinkGenerator />
         </div>
 
         <div className="mt-6 overflow-x-auto rounded-md border border-line bg-white shadow-sm">

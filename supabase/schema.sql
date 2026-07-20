@@ -324,6 +324,8 @@ create table if not exists media_assets (
   created_at timestamptz not null default now()
 );
 
+alter table customers add column if not exists password_hash text;
+
 create table if not exists discount_codes (
   id uuid primary key default gen_random_uuid(),
   code text not null unique,

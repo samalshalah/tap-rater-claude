@@ -31,6 +31,19 @@ export function parseCustomerLoginToken(value: string | undefined, now = Date.no
   return payload ? { email: payload.email } : null;
 }
 
+const passwordSetupTokenTtlMs = 60 * 60 * 1000; // 1 hour -- longer than a login link,
+// since this is typically handed to the customer by the business owner
+// (email, text, in person) rather than clicked immediately from an inbox.
+
+export function createPasswordSetupToken(email: string, issuedAt = Date.now()) {
+  return createSignedValue(normalizeEmail(email), issuedAt);
+}
+
+export function parsePasswordSetupToken(value: string | undefined, now = Date.now()): CustomerSession | null {
+  const payload = parseSignedValue(value, passwordSetupTokenTtlMs, now);
+  return payload ? { email: payload.email } : null;
+}
+
 export async function requireCustomer() {
   const cookieStore = await cookies();
   const session = parseCustomerSession(cookieStore.get(customerCookieName)?.value);
