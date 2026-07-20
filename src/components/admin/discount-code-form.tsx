@@ -51,7 +51,7 @@ export function DiscountCodeForm() {
         <label className="grid gap-2 text-sm font-semibold text-ink">
           Code
           <input
-            className="rounded-xl border border-line bg-white px-4 py-3 font-normal uppercase text-ink"
+            className="rounded-xl border border-line bg-white px-4 py-3 font-normal uppercase text-ink outline-none transition focus:border-ink"
             name="code"
             placeholder="WELCOME10"
             required
@@ -59,7 +59,7 @@ export function DiscountCodeForm() {
         </label>
         <label className="grid gap-2 text-sm font-semibold text-ink">
           Type
-          <select className="rounded-xl border border-line bg-white px-4 py-3 font-normal" name="discountType" defaultValue="percent">
+          <select className="rounded-xl border border-line bg-white px-4 py-3 font-normal outline-none transition focus:border-ink" name="discountType" defaultValue="percent">
             <option value="percent">Percent off</option>
             <option value="fixed_cents">Fixed amount off (cents)</option>
           </select>
@@ -67,7 +67,7 @@ export function DiscountCodeForm() {
         <label className="grid gap-2 text-sm font-semibold text-ink">
           Value
           <input
-            className="rounded-xl border border-line bg-white px-4 py-3 font-normal text-ink"
+            className="rounded-xl border border-line bg-white px-4 py-3 font-normal text-ink outline-none transition focus:border-ink"
             name="value"
             inputMode="numeric"
             placeholder="10 for 10%, or 500 for $5.00 off"
@@ -76,23 +76,23 @@ export function DiscountCodeForm() {
         </label>
         <label className="grid gap-2 text-sm font-semibold text-ink">
           Status
-          <select className="rounded-xl border border-line bg-white px-4 py-3 font-normal" name="isActive" defaultValue="true">
+          <select className="rounded-xl border border-line bg-white px-4 py-3 font-normal outline-none transition focus:border-ink" name="isActive" defaultValue="true">
             <option value="true">Active</option>
             <option value="false">Inactive</option>
           </select>
         </label>
         <label className="grid gap-2 text-sm font-semibold text-ink">
           Usage limit (optional)
-          <input className="rounded-xl border border-line bg-white px-4 py-3 font-normal text-ink" name="usageLimit" inputMode="numeric" placeholder="Unlimited if blank" />
+          <input className="rounded-xl border border-line bg-white px-4 py-3 font-normal text-ink outline-none transition focus:border-ink" name="usageLimit" inputMode="numeric" placeholder="Unlimited if blank" />
         </label>
         <label className="grid gap-2 text-sm font-semibold text-ink">
           Expires (optional)
-          <input className="rounded-xl border border-line bg-white px-4 py-3 font-normal text-ink" name="expiresAt" type="date" />
+          <input className="rounded-xl border border-line bg-white px-4 py-3 font-normal text-ink outline-none transition focus:border-ink" name="expiresAt" type="date" />
         </label>
       </div>
       <label className="grid gap-2 text-sm font-semibold text-ink">
         Notes
-        <textarea className="rounded-xl border border-line bg-white px-4 py-3 font-normal text-ink" name="notes" rows={2} placeholder="What this code is for, who it's shared with" />
+        <textarea className="rounded-xl border border-line bg-white px-4 py-3 font-normal text-ink outline-none transition focus:border-ink" name="notes" rows={2} placeholder="What this code is for, who it's shared with" />
       </label>
       <div className="flex items-center gap-3">
         <button className="rounded-full bg-ink px-5 py-3 text-sm font-medium text-white transition hover:bg-brand disabled:cursor-not-allowed disabled:bg-line disabled:text-muted" disabled={isSaving}>

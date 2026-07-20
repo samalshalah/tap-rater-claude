@@ -23,9 +23,9 @@ export function ContactForm() {
 
   return (
     <form className="grid gap-4" onSubmit={submit}>
-      <input className="rounded-xl border border-line px-4 py-3" name="name" placeholder="Name" required />
-      <input className="rounded-xl border border-line px-4 py-3" name="email" type="email" placeholder="Email" required />
-      <textarea className="min-h-32 rounded-xl border border-line px-4 py-3" name="message" placeholder="Message" required />
+      <input className="rounded-xl border border-line px-4 py-3 outline-none transition focus:border-ink" name="name" placeholder="Name" required />
+      <input className="rounded-xl border border-line px-4 py-3 outline-none transition focus:border-ink" name="email" type="email" placeholder="Email" required />
+      <textarea className="min-h-32 rounded-xl border border-line px-4 py-3 outline-none transition focus:border-ink" name="message" placeholder="Message" required />
       <button className="rounded-full bg-brand px-5 py-3 text-sm font-medium text-white">Send message</button>
       {status ? <p className="text-sm font-semibold text-ink">{status}</p> : null}
     </form>

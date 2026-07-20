@@ -66,7 +66,7 @@ export function TaxConfigForm({ initialValues }: { initialValues: TaxConfigInput
 
       <label className="grid gap-2 text-sm font-semibold text-ink">
         Provider
-        <select className="rounded-xl border border-line px-4 py-3 font-normal" name="provider" defaultValue={initialValues.provider}>
+        <select className="rounded-xl border border-line px-4 py-3 font-normal outline-none transition focus:border-ink" name="provider" defaultValue={initialValues.provider}>
           <option value="manual">Manual rates (set below)</option>
           <option value="stripe_tax">Stripe Tax (automatic)</option>
           <option value="none">Not decided yet</option>
@@ -75,7 +75,7 @@ export function TaxConfigForm({ initialValues }: { initialValues: TaxConfigInput
 
       <label className="grid gap-2 text-sm font-semibold text-ink">
         Prices shown to customers
-        <select className="rounded-xl border border-line px-4 py-3 font-normal" name="pricesIncludeTax" defaultValue={initialValues.pricesIncludeTax ? "true" : "false"}>
+        <select className="rounded-xl border border-line px-4 py-3 font-normal outline-none transition focus:border-ink" name="pricesIncludeTax" defaultValue={initialValues.pricesIncludeTax ? "true" : "false"}>
           <option value="false">Tax added at checkout (prices shown are pre-tax)</option>
           <option value="true">Tax included in displayed price</option>
         </select>
@@ -86,7 +86,7 @@ export function TaxConfigForm({ initialValues }: { initialValues: TaxConfigInput
         {rows.map((row, index) => (
           <div key={index} className="flex items-center gap-3">
             <input
-              className="w-20 rounded-xl border border-line px-3 py-2 text-center font-normal uppercase text-ink"
+              className="w-20 rounded-xl border border-line px-3 py-2 text-center font-normal uppercase text-ink outline-none transition focus:border-ink"
               value={row.state}
               onChange={(e) => updateRow(index, "state", e.target.value)}
               maxLength={2}
@@ -94,7 +94,7 @@ export function TaxConfigForm({ initialValues }: { initialValues: TaxConfigInput
             />
             <div className="flex items-center gap-2">
               <input
-                className="w-24 rounded-xl border border-line px-3 py-2 font-normal text-ink"
+                className="w-24 rounded-xl border border-line px-3 py-2 font-normal text-ink outline-none transition focus:border-ink"
                 value={row.ratePercent}
                 onChange={(e) => updateRow(index, "ratePercent", e.target.value)}
                 inputMode="decimal"
@@ -114,7 +114,7 @@ export function TaxConfigForm({ initialValues }: { initialValues: TaxConfigInput
 
       <label className="grid gap-2 text-sm font-semibold text-ink">
         Notes
-        <textarea className="min-h-24 rounded-xl border border-line px-4 py-3 font-normal text-ink" name="notes" defaultValue={initialValues.notes} placeholder="Exemptions, accountant contact, filing schedule" />
+        <textarea className="min-h-24 rounded-xl border border-line px-4 py-3 font-normal text-ink outline-none transition focus:border-ink" name="notes" defaultValue={initialValues.notes} placeholder="Exemptions, accountant contact, filing schedule" />
       </label>
 
       <div className="flex items-center gap-3">

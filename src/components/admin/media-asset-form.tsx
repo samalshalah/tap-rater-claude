@@ -49,19 +49,19 @@ export function MediaAssetForm() {
       </p>
       <label className="grid gap-2 text-sm font-semibold text-ink">
         Title
-        <input className="rounded-xl border border-line bg-white px-4 py-3 font-normal text-ink" name="title" placeholder="Trustpilot Review Stand photo" required />
+        <input className="rounded-xl border border-line bg-white px-4 py-3 font-normal text-ink outline-none transition focus:border-ink" name="title" placeholder="Trustpilot Review Stand photo" required />
       </label>
       <label className="grid gap-2 text-sm font-semibold text-ink">
         URL / path
-        <input className="rounded-xl border border-line bg-white px-4 py-3 font-normal text-ink" name="src" placeholder="/uploads/products/v5/trustpilot-review-stand.png" required />
+        <input className="rounded-xl border border-line bg-white px-4 py-3 font-normal text-ink outline-none transition focus:border-ink" name="src" placeholder="/uploads/products/v5/trustpilot-review-stand.png" required />
       </label>
       <label className="grid gap-2 text-sm font-semibold text-ink">
         Alt text
-        <input className="rounded-xl border border-line bg-white px-4 py-3 font-normal text-ink" name="alt" placeholder="Tap Rater Trustpilot Review Stand" />
+        <input className="rounded-xl border border-line bg-white px-4 py-3 font-normal text-ink outline-none transition focus:border-ink" name="alt" placeholder="Tap Rater Trustpilot Review Stand" />
       </label>
       <label className="grid gap-2 text-sm font-semibold text-ink">
         Type
-        <select className="rounded-xl border border-line bg-white px-4 py-3 font-normal" name="assetType" defaultValue="image">
+        <select className="rounded-xl border border-line bg-white px-4 py-3 font-normal outline-none transition focus:border-ink" name="assetType" defaultValue="image">
           <option value="image">Image</option>
           <option value="video">Video</option>
         </select>

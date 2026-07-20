@@ -33,7 +33,7 @@ export function PageEditor() {
       <Textarea name="body" label="Page body" placeholder="Page content..." tall />
       <label className="grid gap-2 text-sm font-semibold text-ink">
         Status
-        <select className="rounded-xl border border-line px-4 py-3 font-normal" name="status" defaultValue="draft">
+        <select className="rounded-xl border border-line px-4 py-3 font-normal outline-none transition focus:border-ink" name="status" defaultValue="draft">
           <option value="draft">Draft</option>
           <option value="published">Published</option>
         </select>
@@ -48,7 +48,7 @@ function Input({ name, label, placeholder }: { name: string; label: string; plac
   return (
     <label className="grid gap-2 text-sm font-semibold text-ink">
       {label}
-      <input className="rounded-xl border border-line px-4 py-3 font-normal text-ink" name={name} placeholder={placeholder} required />
+      <input className="rounded-xl border border-line px-4 py-3 font-normal text-ink outline-none transition focus:border-ink" name={name} placeholder={placeholder} required />
     </label>
   );
 }

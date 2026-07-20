@@ -246,14 +246,14 @@ function DeviceRow({
           }}
         >
           <div className="grid grid-cols-2 gap-2">
-            <select name="status" defaultValue={device.status} className="rounded-xl border border-line px-3 py-2">
+            <select name="status" defaultValue={device.status} className="rounded-xl border border-line px-3 py-2 outline-none transition focus:border-ink">
               {statuses.map((status) => (
                 <option key={status} value={status}>
                   {status}
                 </option>
               ))}
             </select>
-            <select name="destinationType" defaultValue={device.destinationType ?? ""} className="rounded-xl border border-line px-3 py-2">
+            <select name="destinationType" defaultValue={device.destinationType ?? ""} className="rounded-xl border border-line px-3 py-2 outline-none transition focus:border-ink">
               {destinationTypes.map((type) => (
                 <option key={type || "none"} value={type}>
                   {type || "none"}
@@ -261,8 +261,8 @@ function DeviceRow({
               ))}
             </select>
           </div>
-          <input name="destinationUrl" defaultValue={device.destinationUrl ?? ""} placeholder="https://" className="rounded-xl border border-line px-3 py-2" />
-          <input name="label" defaultValue={device.label ?? ""} placeholder="Label" className="rounded-xl border border-line px-3 py-2" />
+          <input name="destinationUrl" defaultValue={device.destinationUrl ?? ""} placeholder="https://" className="rounded-xl border border-line px-3 py-2 outline-none transition focus:border-ink" />
+          <input name="label" defaultValue={device.label ?? ""} placeholder="Label" className="rounded-xl border border-line px-3 py-2 outline-none transition focus:border-ink" />
           <div className="flex flex-wrap gap-2">
             <button className="rounded-full bg-ink px-3 py-2 text-xs font-medium text-white transition hover:bg-brand">Save</button>
             <button type="button" onClick={() => onCopy(deviceUrl)} className="rounded-xl border border-line px-3 py-2 text-xs font-semibold text-ink">

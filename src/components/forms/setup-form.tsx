@@ -25,11 +25,11 @@ export function SetupForm() {
 
   return (
     <form className="grid gap-4" onSubmit={submit}>
-      <input className="rounded-xl border border-line px-4 py-3" name="name" placeholder="Name" required />
-      <input className="rounded-xl border border-line px-4 py-3" name="email" type="email" placeholder="Email" required />
-      <input className="rounded-xl border border-line px-4 py-3" name="businessName" placeholder="Business name" required />
-      <input className="rounded-xl border border-line px-4 py-3" name="reviewUrl" type="url" placeholder="Google, Facebook, Yelp, or feedback URL" required />
-      <textarea className="min-h-28 rounded-xl border border-line px-4 py-3" name="notes" placeholder="Product, color, or setup notes" />
+      <input className="rounded-xl border border-line px-4 py-3 outline-none transition focus:border-ink" name="name" placeholder="Name" required />
+      <input className="rounded-xl border border-line px-4 py-3 outline-none transition focus:border-ink" name="email" type="email" placeholder="Email" required />
+      <input className="rounded-xl border border-line px-4 py-3 outline-none transition focus:border-ink" name="businessName" placeholder="Business name" required />
+      <input className="rounded-xl border border-line px-4 py-3 outline-none transition focus:border-ink" name="reviewUrl" type="url" placeholder="Google, Facebook, Yelp, or feedback URL" required />
+      <textarea className="min-h-28 rounded-xl border border-line px-4 py-3 outline-none transition focus:border-ink" name="notes" placeholder="Product, color, or setup notes" />
       <button className="rounded-full bg-brand px-5 py-3 text-sm font-medium text-white">Send setup request</button>
       {status ? <p className="text-sm font-semibold text-ink">{status}</p> : null}
     </form>

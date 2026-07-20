@@ -133,7 +133,7 @@ export function ProductEditor({ product, categories, mode }: ProductEditorProps)
             <Input name="sku" label="SKU" defaultValue={product.sku} placeholder="TRATER01" />
             <label className="grid gap-2 text-sm font-semibold text-ink">
               Category
-              <select className="rounded-xl border border-line bg-white px-4 py-3 font-normal" name="categorySlug" defaultValue={product.categorySlug}>
+              <select className="rounded-xl border border-line bg-white px-4 py-3 font-normal outline-none transition focus:border-ink" name="categorySlug" defaultValue={product.categorySlug}>
                 {categories.map((category) => (
                   <option key={category.slug} value={category.slug}>
                     {category.title}
@@ -161,14 +161,14 @@ export function ProductEditor({ product, categories, mode }: ProductEditorProps)
             />
             <label className="grid gap-2 text-sm font-semibold text-ink">
               Stock status
-              <select className="rounded-xl border border-line bg-white px-4 py-3 font-normal" name="stockStatus" defaultValue={product.stockStatus}>
+              <select className="rounded-xl border border-line bg-white px-4 py-3 font-normal outline-none transition focus:border-ink" name="stockStatus" defaultValue={product.stockStatus}>
                 <option value="instock">In stock</option>
                 <option value="outofstock">Out of stock</option>
               </select>
             </label>
             <label className="grid gap-2 text-sm font-semibold text-ink">
               Visibility
-              <select className="rounded-xl border border-line bg-white px-4 py-3 font-normal" name="isActive" defaultValue={product.isActive ? "true" : "false"}>
+              <select className="rounded-xl border border-line bg-white px-4 py-3 font-normal outline-none transition focus:border-ink" name="isActive" defaultValue={product.isActive ? "true" : "false"}>
                 <option value="true">Active on storefront</option>
                 <option value="false">Inactive draft</option>
               </select>
@@ -193,7 +193,7 @@ export function ProductEditor({ product, categories, mode }: ProductEditorProps)
           <div className="grid gap-4 md:grid-cols-2">
             <label className="grid gap-2 text-sm font-semibold text-ink">
               Product type
-              <select className="rounded-xl border border-line bg-white px-4 py-3 font-normal" name="productType" defaultValue={product.productType}>
+              <select className="rounded-xl border border-line bg-white px-4 py-3 font-normal outline-none transition focus:border-ink" name="productType" defaultValue={product.productType}>
                 <option value="physical_redirect">Physical direct redirect</option>
                 <option value="physical_managed">Physical managed setup</option>
                 <option value="platform_landing_page">Platform landing page</option>
@@ -202,7 +202,7 @@ export function ProductEditor({ product, categories, mode }: ProductEditorProps)
             </label>
             <label className="grid gap-2 text-sm font-semibold text-ink">
               Service mode
-              <select className="rounded-xl border border-line bg-white px-4 py-3 font-normal" name="serviceMode" defaultValue={product.serviceMode}>
+              <select className="rounded-xl border border-line bg-white px-4 py-3 font-normal outline-none transition focus:border-ink" name="serviceMode" defaultValue={product.serviceMode}>
                 <option value="basic_redirect">Basic redirect</option>
                 <option value="managed_redirect">Managed redirect</option>
                 <option value="hosted_landing_page">Hosted landing page</option>
@@ -211,7 +211,7 @@ export function ProductEditor({ product, categories, mode }: ProductEditorProps)
             </label>
             <label className="grid gap-2 text-sm font-semibold text-ink">
               Checkout mode
-              <select className="rounded-xl border border-line bg-white px-4 py-3 font-normal" name="checkoutMode" defaultValue={product.checkoutMode}>
+              <select className="rounded-xl border border-line bg-white px-4 py-3 font-normal outline-none transition focus:border-ink" name="checkoutMode" defaultValue={product.checkoutMode}>
                 <option value="buy_now">Buy now</option>
                 <option value="request_quote">Request quote</option>
                 <option value="subscription">Subscription</option>
@@ -220,7 +220,7 @@ export function ProductEditor({ product, categories, mode }: ProductEditorProps)
             </label>
             <label className="grid gap-2 text-sm font-semibold text-ink">
               Activation type
-              <select className="rounded-xl border border-line bg-white px-4 py-3 font-normal" name="activationType" defaultValue={product.activationType}>
+              <select className="rounded-xl border border-line bg-white px-4 py-3 font-normal outline-none transition focus:border-ink" name="activationType" defaultValue={product.activationType}>
                 <option value="free_basic_activation">Free basic activation</option>
                 <option value="managed_setup">Managed setup</option>
                 <option value="premium_hosted_activation">Premium hosted activation</option>
@@ -229,7 +229,7 @@ export function ProductEditor({ product, categories, mode }: ProductEditorProps)
             <label className="grid gap-2 text-sm font-semibold text-ink">
               Account requirement
               <select
-                className="rounded-xl border border-line bg-white px-4 py-3 font-normal"
+                className="rounded-xl border border-line bg-white px-4 py-3 font-normal outline-none transition focus:border-ink"
                 name="requiresAccount"
                 defaultValue={product.requiresAccount ? "true" : "false"}
               >
@@ -240,7 +240,7 @@ export function ProductEditor({ product, categories, mode }: ProductEditorProps)
             <label className="grid gap-2 text-sm font-semibold text-ink">
               Subscription requirement
               <select
-                className="rounded-xl border border-line bg-white px-4 py-3 font-normal"
+                className="rounded-xl border border-line bg-white px-4 py-3 font-normal outline-none transition focus:border-ink"
                 name="requiresSubscription"
                 defaultValue={product.requiresSubscription ? "true" : "false"}
               >
@@ -251,7 +251,7 @@ export function ProductEditor({ product, categories, mode }: ProductEditorProps)
             <label className="grid gap-2 text-sm font-semibold text-ink">
               Landing page requirement
               <select
-                className="rounded-xl border border-line bg-white px-4 py-3 font-normal"
+                className="rounded-xl border border-line bg-white px-4 py-3 font-normal outline-none transition focus:border-ink"
                 name="requiresLandingPage"
                 defaultValue={product.requiresLandingPage ? "true" : "false"}
               >
@@ -306,7 +306,7 @@ export function ProductEditor({ product, categories, mode }: ProductEditorProps)
             <label className="grid gap-2 text-sm font-semibold text-ink">
               Logo option
               <select
-                className="rounded-xl border border-line bg-white px-4 py-3 font-normal"
+                className="rounded-xl border border-line bg-white px-4 py-3 font-normal outline-none transition focus:border-ink"
                 name="allowsLogoUpload"
                 defaultValue={product.allowsLogoUpload ? "true" : "false"}
               >
@@ -317,7 +317,7 @@ export function ProductEditor({ product, categories, mode }: ProductEditorProps)
             <label className="grid gap-2 text-sm font-semibold text-ink">
               Custom design option
               <select
-                className="rounded-xl border border-line bg-white px-4 py-3 font-normal"
+                className="rounded-xl border border-line bg-white px-4 py-3 font-normal outline-none transition focus:border-ink"
                 name="allowsCustomDesign"
                 defaultValue={product.allowsCustomDesign ? "true" : "false"}
               >
@@ -327,7 +327,7 @@ export function ProductEditor({ product, categories, mode }: ProductEditorProps)
             </label>
             <label className="grid gap-2 text-sm font-semibold text-ink">
               Default design mode
-              <select className="rounded-xl border border-line bg-white px-4 py-3 font-normal" name="designMode" defaultValue={product.designMode}>
+              <select className="rounded-xl border border-line bg-white px-4 py-3 font-normal outline-none transition focus:border-ink" name="designMode" defaultValue={product.designMode}>
                 <option value="standard">Standard</option>
                 <option value="logo">Logo</option>
                 <option value="custom">Custom</option>
@@ -349,7 +349,7 @@ export function ProductEditor({ product, categories, mode }: ProductEditorProps)
             <label className="grid gap-2 text-sm font-semibold text-ink">
               Stand category
               <select
-                className="rounded-xl border border-line bg-white px-4 py-3 font-normal"
+                className="rounded-xl border border-line bg-white px-4 py-3 font-normal outline-none transition focus:border-ink"
                 name="standCategorySlug"
                 defaultValue={product.standCategorySlug ?? ""}
               >
@@ -369,7 +369,7 @@ export function ProductEditor({ product, categories, mode }: ProductEditorProps)
             <label className="grid gap-2 text-sm font-semibold text-ink">
               Destination type
               <select
-                className="rounded-xl border border-line bg-white px-4 py-3 font-normal"
+                className="rounded-xl border border-line bg-white px-4 py-3 font-normal outline-none transition focus:border-ink"
                 name="destinationType"
                 defaultValue={product.destinationType ?? ""}
               >
@@ -404,7 +404,7 @@ export function ProductEditor({ product, categories, mode }: ProductEditorProps)
             <label className="grid gap-2 text-sm font-semibold text-ink">
               Logo
               <select
-                className="rounded-xl border border-line bg-white px-4 py-3 font-normal"
+                className="rounded-xl border border-line bg-white px-4 py-3 font-normal outline-none transition focus:border-ink"
                 name="supportsLogo"
                 defaultValue={product.supportsLogo === false ? "false" : "true"}
               >
@@ -415,7 +415,7 @@ export function ProductEditor({ product, categories, mode }: ProductEditorProps)
             <label className="grid gap-2 text-sm font-semibold text-ink">
               Business name
               <select
-                className="rounded-xl border border-line bg-white px-4 py-3 font-normal"
+                className="rounded-xl border border-line bg-white px-4 py-3 font-normal outline-none transition focus:border-ink"
                 name="supportsBusinessName"
                 defaultValue={product.supportsBusinessName === false ? "false" : "true"}
               >
@@ -426,7 +426,7 @@ export function ProductEditor({ product, categories, mode }: ProductEditorProps)
             <label className="grid gap-2 text-sm font-semibold text-ink">
               Custom headline
               <select
-                className="rounded-xl border border-line bg-white px-4 py-3 font-normal"
+                className="rounded-xl border border-line bg-white px-4 py-3 font-normal outline-none transition focus:border-ink"
                 name="supportsCustomHeadline"
                 defaultValue={product.supportsCustomHeadline ? "true" : "false"}
               >
@@ -437,7 +437,7 @@ export function ProductEditor({ product, categories, mode }: ProductEditorProps)
             <label className="grid gap-2 text-sm font-semibold text-ink">
               Multiple links
               <select
-                className="rounded-xl border border-line bg-white px-4 py-3 font-normal"
+                className="rounded-xl border border-line bg-white px-4 py-3 font-normal outline-none transition focus:border-ink"
                 name="supportsMultipleLinks"
                 defaultValue={product.supportsMultipleLinks ? "true" : "false"}
               >
@@ -491,7 +491,7 @@ function Input({
     <label className="grid gap-2 text-sm font-semibold text-ink">
       {label}
       <input
-        className="rounded-xl border border-line bg-white px-4 py-3 font-normal text-ink"
+        className="rounded-xl border border-line bg-white px-4 py-3 font-normal text-ink outline-none transition focus:border-ink"
         name={name}
         defaultValue={defaultValue}
         inputMode={inputMode}

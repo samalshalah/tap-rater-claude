@@ -61,7 +61,7 @@ export function AdminConfigForm({
       <label className="grid gap-2 text-sm font-semibold text-ink">
         {primaryLabel}
         <input
-          className="rounded-xl border border-line px-4 py-3 font-normal text-ink"
+          className="rounded-xl border border-line px-4 py-3 font-normal text-ink outline-none transition focus:border-ink"
           name="primary"
           defaultValue={initialValues?.settings?.primary ?? ""}
           placeholder={primaryPlaceholder}
@@ -71,7 +71,7 @@ export function AdminConfigForm({
       <label className="grid gap-2 text-sm font-semibold text-ink">
         {secondaryLabel}
         <input
-          className="rounded-xl border border-line px-4 py-3 font-normal text-ink"
+          className="rounded-xl border border-line px-4 py-3 font-normal text-ink outline-none transition focus:border-ink"
           name="secondary"
           defaultValue={initialValues?.settings?.secondary ?? ""}
           placeholder={secondaryPlaceholder}
@@ -81,7 +81,7 @@ export function AdminConfigForm({
       <label className="grid gap-2 text-sm font-semibold text-ink">
         {notesLabel}
         <textarea
-          className="min-h-28 rounded-xl border border-line px-4 py-3 font-normal text-ink"
+          className="min-h-28 rounded-xl border border-line px-4 py-3 font-normal text-ink outline-none transition focus:border-ink"
           name="notes"
           defaultValue={initialValues?.settings?.notes ?? ""}
           placeholder={notesPlaceholder}
@@ -89,7 +89,7 @@ export function AdminConfigForm({
       </label>
       <label className="grid gap-2 text-sm font-semibold text-ink">
         Status
-        <select className="rounded-xl border border-line px-4 py-3 font-normal text-ink" name="status" defaultValue={initialValues?.status ?? "draft"}>
+        <select className="rounded-xl border border-line px-4 py-3 font-normal text-ink outline-none transition focus:border-ink" name="status" defaultValue={initialValues?.status ?? "draft"}>
           <option value="draft">Draft</option>
           <option value="published">Published</option>
         </select>

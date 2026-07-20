@@ -47,7 +47,7 @@ export function ShippingConfigForm({ initialValues }: { initialValues: ShippingC
         <label className="grid gap-2 text-sm font-semibold text-ink">
           Flat rate (cents)
           <input
-            className="rounded-xl border border-line px-4 py-3 font-normal text-ink"
+            className="rounded-xl border border-line px-4 py-3 font-normal text-ink outline-none transition focus:border-ink"
             name="flatRateCents"
             inputMode="numeric"
             defaultValue={initialValues?.flatRateCents ?? ""}
@@ -58,7 +58,7 @@ export function ShippingConfigForm({ initialValues }: { initialValues: ShippingC
         <label className="grid gap-2 text-sm font-semibold text-ink">
           Free shipping over (cents, optional)
           <input
-            className="rounded-xl border border-line px-4 py-3 font-normal text-ink"
+            className="rounded-xl border border-line px-4 py-3 font-normal text-ink outline-none transition focus:border-ink"
             name="freeShippingThresholdCents"
             inputMode="numeric"
             defaultValue={initialValues?.freeShippingThresholdCents ?? ""}
@@ -68,7 +68,7 @@ export function ShippingConfigForm({ initialValues }: { initialValues: ShippingC
         <label className="grid gap-2 text-sm font-semibold text-ink">
           Estimated delivery
           <input
-            className="rounded-xl border border-line px-4 py-3 font-normal text-ink"
+            className="rounded-xl border border-line px-4 py-3 font-normal text-ink outline-none transition focus:border-ink"
             name="estimatedDeliveryDays"
             defaultValue={initialValues?.estimatedDeliveryDays ?? ""}
             placeholder="3-7 business days"
@@ -77,7 +77,7 @@ export function ShippingConfigForm({ initialValues }: { initialValues: ShippingC
         </label>
         <label className="grid gap-2 text-sm font-semibold text-ink">
           Ships internationally?
-          <select className="rounded-xl border border-line px-4 py-3 font-normal" name="shipsInternationally" defaultValue={initialValues?.shipsInternationally ? "true" : "false"}>
+          <select className="rounded-xl border border-line px-4 py-3 font-normal outline-none transition focus:border-ink" name="shipsInternationally" defaultValue={initialValues?.shipsInternationally ? "true" : "false"}>
             <option value="false">US only</option>
             <option value="true">Yes, internationally</option>
           </select>
@@ -85,7 +85,7 @@ export function ShippingConfigForm({ initialValues }: { initialValues: ShippingC
       </div>
       <label className="grid gap-2 text-sm font-semibold text-ink">
         Notes
-        <textarea className="min-h-24 rounded-xl border border-line px-4 py-3 font-normal text-ink" name="notes" defaultValue={initialValues?.notes ?? ""} placeholder="Carrier, packaging, handling time" />
+        <textarea className="min-h-24 rounded-xl border border-line px-4 py-3 font-normal text-ink outline-none transition focus:border-ink" name="notes" defaultValue={initialValues?.notes ?? ""} placeholder="Carrier, packaging, handling time" />
       </label>
       <div className="flex items-center gap-3">
         <button className="rounded-full bg-ink px-5 py-3 text-sm font-medium text-white transition hover:bg-brand disabled:cursor-not-allowed disabled:bg-line disabled:text-muted" disabled={isSaving}>

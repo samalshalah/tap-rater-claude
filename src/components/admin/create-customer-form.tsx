@@ -51,15 +51,15 @@ export function CreateCustomerForm() {
       <div className="grid gap-4 md:grid-cols-3">
         <label className="grid gap-2 text-sm font-semibold text-ink">
           Email
-          <input className="rounded-xl border border-line px-4 py-3 font-normal text-ink" name="email" type="email" placeholder="customer@example.com" required />
+          <input className="rounded-xl border border-line px-4 py-3 font-normal text-ink outline-none transition focus:border-ink" name="email" type="email" placeholder="customer@example.com" required />
         </label>
         <label className="grid gap-2 text-sm font-semibold text-ink">
           Name (optional)
-          <input className="rounded-xl border border-line px-4 py-3 font-normal text-ink" name="name" placeholder="Jane Doe" />
+          <input className="rounded-xl border border-line px-4 py-3 font-normal text-ink outline-none transition focus:border-ink" name="name" placeholder="Jane Doe" />
         </label>
         <label className="grid gap-2 text-sm font-semibold text-ink">
           Phone (optional)
-          <input className="rounded-xl border border-line px-4 py-3 font-normal text-ink" name="phone" placeholder="(555) 555-5555" />
+          <input className="rounded-xl border border-line px-4 py-3 font-normal text-ink outline-none transition focus:border-ink" name="phone" placeholder="(555) 555-5555" />
         </label>
       </div>
       <div className="flex items-center gap-3">

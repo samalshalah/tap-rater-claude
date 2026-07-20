@@ -51,7 +51,7 @@ function Input({ name, label, defaultValue }: { name: string; label: string; def
   return (
     <label className="grid gap-2 text-sm font-semibold text-ink">
       {label}
-      <input className="rounded-xl border border-line px-4 py-3 font-normal text-ink" name={name} defaultValue={defaultValue} required />
+      <input className="rounded-xl border border-line px-4 py-3 font-normal text-ink outline-none transition focus:border-ink" name={name} defaultValue={defaultValue} required />
     </label>
   );
 }
@@ -60,7 +60,7 @@ function Textarea({ name, label, defaultValue }: { name: string; label: string; 
   return (
     <label className="grid gap-2 text-sm font-semibold text-ink">
       {label}
-      <textarea className="min-h-28 rounded-xl border border-line px-4 py-3 font-normal text-ink" name={name} defaultValue={defaultValue} required />
+      <textarea className="min-h-28 rounded-xl border border-line px-4 py-3 font-normal text-ink outline-none transition focus:border-ink" name={name} defaultValue={defaultValue} required />
     </label>
   );
 }

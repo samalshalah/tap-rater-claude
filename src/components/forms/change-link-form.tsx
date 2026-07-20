@@ -25,11 +25,11 @@ export function ChangeLinkForm() {
 
   return (
     <form className="grid gap-4" onSubmit={submit}>
-      <input className="rounded-xl border border-line px-4 py-3" name="name" placeholder="Name" required />
-      <input className="rounded-xl border border-line px-4 py-3" name="email" type="email" placeholder="Email" required />
-      <input className="rounded-xl border border-line px-4 py-3" name="tapraterId" placeholder="TapRater ID or product SKU" required />
-      <input className="rounded-xl border border-line px-4 py-3" name="newReviewUrl" type="url" placeholder="New review or feedback URL" required />
-      <textarea className="min-h-28 rounded-xl border border-line px-4 py-3" name="notes" placeholder="Notes" />
+      <input className="rounded-xl border border-line px-4 py-3 outline-none transition focus:border-ink" name="name" placeholder="Name" required />
+      <input className="rounded-xl border border-line px-4 py-3 outline-none transition focus:border-ink" name="email" type="email" placeholder="Email" required />
+      <input className="rounded-xl border border-line px-4 py-3 outline-none transition focus:border-ink" name="tapraterId" placeholder="TapRater ID or product SKU" required />
+      <input className="rounded-xl border border-line px-4 py-3 outline-none transition focus:border-ink" name="newReviewUrl" type="url" placeholder="New review or feedback URL" required />
+      <textarea className="min-h-28 rounded-xl border border-line px-4 py-3 outline-none transition focus:border-ink" name="notes" placeholder="Notes" />
       <button className="rounded-full bg-brand px-5 py-3 text-sm font-medium text-white">Send change request</button>
       {status ? <p className="text-sm font-semibold text-ink">{status}</p> : null}
     </form>

@@ -41,7 +41,7 @@ export function RequestInbox({ requests }: { requests: AdminRequests }) {
         <label className="relative block">
           <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted" />
           <input
-            className="w-full rounded-xl border border-line py-3 pl-11 pr-4 text-sm text-ink"
+            className="w-full rounded-xl border border-line py-3 pl-11 pr-4 text-sm text-ink outline-none transition focus:border-ink"
             value={query}
             onChange={(event) => setQuery(event.target.value)}
             placeholder="Search by name, email, business, Tap Rater ID, or URL"
