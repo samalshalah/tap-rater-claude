@@ -21,25 +21,25 @@ export default async function ActivatePage({ searchParams }: ActivatePageProps) 
     <main className="bg-soft">
       <section className="mx-auto grid max-w-6xl gap-8 px-4 py-12 md:grid-cols-[0.8fr_1.2fr] md:px-6 md:py-16">
         <div className="space-y-5">
-          <p className="text-sm font-bold uppercase tracking-[0.16em] text-brand">Tap Rater activation</p>
+          <p className="text-sm font-medium uppercase tracking-[0.16em] text-brand">Tap Rater activation</p>
           <div className="space-y-4">
-            <h1 className="text-4xl font-black leading-tight text-ink md:text-5xl">Activate your Tap Rater</h1>
+            <h1 className="text-[32px] font-semibold tracking-tightest sm:text-[38px] leading-tight text-ink md:text-5xl">Activate your Tap Rater</h1>
             <p className="text-lg leading-8 text-muted">
               Connect your stand to your review, booking, or business link. Once activated, every scan of the NFC chip or QR code will use
               your saved destination.
             </p>
           </div>
           <div className="grid gap-3 text-sm text-muted">
-            <div className="rounded-md border border-line bg-white p-4">
-              <p className="font-bold text-ink">What you need</p>
+            <div className="rounded-2xl border border-line bg-white p-4">
+              <p className="font-medium text-ink">What you need</p>
               <p className="mt-1">Your device code, the private activation code from your package, and the destination URL.</p>
             </div>
-            <div className="rounded-md border border-line bg-white p-4">
-              <p className="font-bold text-ink">No account required yet</p>
+            <div className="rounded-2xl border border-line bg-white p-4">
+              <p className="font-medium text-ink">No account required yet</p>
               <p className="mt-1">We will create the customer and business record in the backend without opening the full portal.</p>
             </div>
-            <div className="rounded-md border border-line bg-white p-4">
-              <p className="font-bold text-ink">Need help?</p>
+            <div className="rounded-2xl border border-line bg-white p-4">
+              <p className="font-medium text-ink">Need help?</p>
               <Link href="/contact-us" className="mt-1 inline-block font-semibold text-brand">
                 Contact Tap Rater support
               </Link>

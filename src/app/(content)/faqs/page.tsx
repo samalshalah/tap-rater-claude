@@ -31,11 +31,11 @@ export default function FaqsPage() {
   return (
     <section className="mx-auto max-w-4xl px-4 py-12">
       <p className="text-sm font-semibold uppercase text-brand">Support</p>
-      <h1 className="mt-3 text-4xl font-black text-ink">Tap Rater FAQs</h1>
+      <h1 className="mt-3 text-[32px] font-semibold tracking-tightest sm:text-[38px] text-ink">Tap Rater FAQs</h1>
       <div className="mt-8 grid gap-4">
         {faqs.map((faq) => (
-          <article key={faq.question} className="rounded-md border border-line bg-white p-5">
-            <h2 className="text-lg font-black text-ink">{faq.question}</h2>
+          <article key={faq.question} className="rounded-2xl border border-line bg-white p-5">
+            <h2 className="text-[17px] font-semibold tracking-tightest text-ink">{faq.question}</h2>
             <p className="mt-2 leading-7 text-muted">{faq.answer}</p>
           </article>
         ))}

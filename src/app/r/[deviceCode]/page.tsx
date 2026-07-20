@@ -63,10 +63,10 @@ async function getRequestContext() {
 
 function DeviceShell({ eyebrow, title, body, children }: { eyebrow: string; title: string; body: string; children?: ReactNode }) {
   return (
-    <main className="min-h-[70vh] bg-gray-50 px-4 py-16">
-      <section className="mx-auto max-w-2xl rounded-md border border-line bg-white p-8 shadow-sm">
-        <p className="text-sm font-black uppercase text-brand">{eyebrow}</p>
-        <h1 className="mt-3 text-4xl font-black text-ink">{title}</h1>
+    <main className="min-h-[70vh] bg-surface px-4 py-16">
+      <section className="mx-auto max-w-2xl rounded-2xl border border-line bg-white p-8 shadow-sm">
+        <p className="text-sm font-semibold uppercase text-brand">{eyebrow}</p>
+        <h1 className="mt-3 text-[32px] font-semibold tracking-tightest sm:text-[38px] text-ink">{title}</h1>
         <p className="mt-4 leading-7 text-muted">{body}</p>
         {children ? <div className="mt-7">{children}</div> : null}
       </section>
@@ -85,7 +85,7 @@ function DeviceNotFound({ deviceCode, isConfigured }: { deviceCode: string; isCo
           : `Device lookup is not connected in this environment. Demo code TR-DEMO-GOOGLE is available for local testing.`
       }
     >
-      <Link href="/contact-us" className="inline-block rounded-md bg-brand px-5 py-3 text-sm font-bold text-white">
+      <Link href="/contact-us" className="inline-block rounded-full bg-brand px-5 py-3 text-sm font-medium text-white">
         Contact support
       </Link>
     </DeviceShell>
@@ -99,7 +99,7 @@ function DeviceNeedsActivation({ deviceCode }: { deviceCode: string }) {
       title="Activate this Tap Rater"
       body="This NFC or QR device is ready to be connected to a business destination. Use the private activation code included with the product."
     >
-      <Link href={`/activate?device=${encodeURIComponent(deviceCode)}`} className="inline-block rounded-md bg-brand px-5 py-3 text-sm font-bold text-white">
+      <Link href={`/activate?device=${encodeURIComponent(deviceCode)}`} className="inline-block rounded-full bg-brand px-5 py-3 text-sm font-medium text-white">
         Activate device
       </Link>
     </DeviceShell>
@@ -113,7 +113,7 @@ function DeviceUnavailable({ reason }: { reason: string }) {
       title="This Tap Rater is not available"
       body={`This device cannot be opened right now. Status: ${reason.replaceAll("_", " ")}.`}
     >
-      <Link href="/contact-us" className="inline-block rounded-md border border-line px-5 py-3 text-sm font-bold text-ink">
+      <Link href="/contact-us" className="inline-block rounded-xl border border-line px-5 py-3 text-sm font-medium text-ink">
         Get help
       </Link>
     </DeviceShell>
@@ -127,7 +127,7 @@ function LandingPageNotPublished({ device, landingPageId }: { device: PlatformDe
       title={device?.label ?? "Tap Rater hosted page"}
       body="This device is connected to a hosted Tap Rater page, but that page isn't published yet."
     >
-      <p className="rounded-md bg-gray-50 p-4 text-sm text-muted">Landing page ID: {landingPageId ?? "not assigned yet"}</p>
+      <p className="rounded-xl bg-surface p-4 text-sm text-muted">Landing page ID: {landingPageId ?? "not assigned yet"}</p>
     </DeviceShell>
   );
 }

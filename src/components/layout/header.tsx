@@ -333,7 +333,7 @@ function MegaMenuColumn({
             className="flex items-center gap-2.5 rounded-lg px-2 py-1.5 text-[13px] font-medium text-ink/80 transition hover:bg-surface hover:text-ink"
           >
             {link.image ? (
-              <span className="relative h-8 w-8 shrink-0 overflow-hidden rounded-md bg-surface">
+              <span className="relative h-8 w-8 shrink-0 overflow-hidden rounded-xl bg-surface">
                 <Image src={link.image} alt="" fill className="object-cover" sizes="32px" />
               </span>
             ) : null}
@@ -457,7 +457,7 @@ function MobileShopGroup({ title, links, onNavigate }: { title: string; links: N
             className="flex items-center gap-2.5 rounded-lg px-2 py-2 text-[13px] text-muted transition hover:bg-surface hover:text-ink"
           >
             {link.image ? (
-              <span className="relative h-7 w-7 shrink-0 overflow-hidden rounded-md bg-surface">
+              <span className="relative h-7 w-7 shrink-0 overflow-hidden rounded-xl bg-surface">
                 <Image src={link.image} alt="" fill className="object-cover" sizes="28px" />
               </span>
             ) : null}

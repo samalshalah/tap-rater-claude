@@ -98,19 +98,19 @@ export function GoogleBusinessSearch({ apiKey, onConfirm }: GoogleBusinessSearch
 
   if (!apiKey) {
     return (
-      <div className="rounded-md border border-line bg-soft p-4 text-sm text-muted">
+      <div className="rounded-2xl border border-line bg-soft p-4 text-sm text-muted">
         Google business search is not configured yet. Paste your Google review URL manually below.
       </div>
     );
   }
 
   return (
-    <div className="grid gap-3 rounded-md border border-line bg-soft p-4">
+    <div className="grid gap-3 rounded-2xl border border-line bg-soft p-4">
       <label className="grid gap-2 text-sm font-semibold text-ink">
         Search Google Business Profile
         <input
           ref={inputRef}
-          className="rounded-md border border-line bg-white px-4 py-3 text-sm font-medium outline-none focus:border-brand"
+          className="rounded-xl border border-line bg-white px-4 py-3 text-sm font-medium outline-none focus:border-brand"
           placeholder="Start typing your business name"
           autoComplete="off"
         />
@@ -120,14 +120,14 @@ export function GoogleBusinessSearch({ apiKey, onConfirm }: GoogleBusinessSearch
       {status === "fallback" ? <p className="text-sm text-muted">Google search could not load. Paste your Google review URL manually below.</p> : null}
 
       {selectedPlace ? (
-        <div className="rounded-md border border-line bg-white p-4 text-sm">
-          <p className="font-bold text-ink">{selectedPlace.name}</p>
+        <div className="rounded-2xl border border-line bg-white p-4 text-sm">
+          <p className="font-medium text-ink">{selectedPlace.name}</p>
           {selectedPlace.formattedAddress ? <p className="mt-1 text-muted">{selectedPlace.formattedAddress}</p> : null}
           <p className="mt-3 break-all text-brand">{selectedPlace.reviewUrl}</p>
           <button
             type="button"
             onClick={() => onConfirm(selectedPlace)}
-            className="mt-4 rounded-md bg-ink px-4 py-2 text-sm font-bold text-white transition hover:bg-brand"
+            className="mt-4 rounded-full bg-ink px-4 py-2 text-sm font-medium text-white transition hover:bg-brand"
           >
             Use this Google review link
           </button>

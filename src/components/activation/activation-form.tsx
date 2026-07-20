@@ -95,7 +95,7 @@ export function ActivationForm({ initialDeviceCode = "", googleMapsApiKey }: Act
             required
             value={form.deviceCode}
             onChange={(event) => updateField("deviceCode", event.target.value)}
-            className="rounded-md border border-line px-4 py-3 text-sm font-medium outline-none focus:border-brand"
+            className="rounded-xl border border-line px-4 py-3 text-sm font-medium outline-none focus:border-brand"
             placeholder="TR123"
             autoComplete="off"
           />
@@ -106,7 +106,7 @@ export function ActivationForm({ initialDeviceCode = "", googleMapsApiKey }: Act
             required
             value={form.activationCode}
             onChange={(event) => updateField("activationCode", event.target.value)}
-            className="rounded-md border border-line px-4 py-3 text-sm font-medium outline-none focus:border-brand"
+            className="rounded-xl border border-line px-4 py-3 text-sm font-medium outline-none focus:border-brand"
             placeholder="Code from your insert card"
             autoComplete="one-time-code"
           />
@@ -120,7 +120,7 @@ export function ActivationForm({ initialDeviceCode = "", googleMapsApiKey }: Act
             required
             value={form.name}
             onChange={(event) => updateField("name", event.target.value)}
-            className="rounded-md border border-line px-4 py-3 text-sm font-medium outline-none focus:border-brand"
+            className="rounded-xl border border-line px-4 py-3 text-sm font-medium outline-none focus:border-brand"
             autoComplete="name"
           />
         </label>
@@ -131,7 +131,7 @@ export function ActivationForm({ initialDeviceCode = "", googleMapsApiKey }: Act
             type="email"
             value={form.email}
             onChange={(event) => updateField("email", event.target.value)}
-            className="rounded-md border border-line px-4 py-3 text-sm font-medium outline-none focus:border-brand"
+            className="rounded-xl border border-line px-4 py-3 text-sm font-medium outline-none focus:border-brand"
             autoComplete="email"
           />
         </label>
@@ -143,7 +143,7 @@ export function ActivationForm({ initialDeviceCode = "", googleMapsApiKey }: Act
           required
           value={form.businessName}
           onChange={(event) => updateField("businessName", event.target.value)}
-          className="rounded-md border border-line px-4 py-3 text-sm font-medium outline-none focus:border-brand"
+          className="rounded-xl border border-line px-4 py-3 text-sm font-medium outline-none focus:border-brand"
           autoComplete="organization"
         />
       </label>
@@ -163,7 +163,7 @@ export function ActivationForm({ initialDeviceCode = "", googleMapsApiKey }: Act
                 googleFormattedAddress: destinationType === "google_review_url" ? current.googleFormattedAddress : ""
               }));
             }}
-            className="rounded-md border border-line px-4 py-3 text-sm font-medium outline-none focus:border-brand"
+            className="rounded-xl border border-line px-4 py-3 text-sm font-medium outline-none focus:border-brand"
           >
             {destinationOptions.map((option) => (
               <option key={option.value} value={option.value}>
@@ -187,7 +187,7 @@ export function ActivationForm({ initialDeviceCode = "", googleMapsApiKey }: Act
                 googleFormattedAddress: ""
               }))
             }
-            className="rounded-md border border-line px-4 py-3 text-sm font-medium outline-none focus:border-brand"
+            className="rounded-xl border border-line px-4 py-3 text-sm font-medium outline-none focus:border-brand"
             placeholder="https://"
             inputMode="url"
           />
@@ -199,8 +199,8 @@ export function ActivationForm({ initialDeviceCode = "", googleMapsApiKey }: Act
       ) : null}
 
       {form.googlePlaceId ? (
-        <div className="rounded-md border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-800">
-          <p className="font-bold">Google Business Profile selected</p>
+        <div className="rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-800">
+          <p className="font-medium">Google Business Profile selected</p>
           <p>{form.googlePlaceName}</p>
           {form.googleFormattedAddress ? <p>{form.googleFormattedAddress}</p> : null}
         </div>
@@ -208,7 +208,7 @@ export function ActivationForm({ initialDeviceCode = "", googleMapsApiKey }: Act
 
       {message ? (
         <div
-          className={`rounded-md border px-4 py-3 text-sm font-semibold ${
+          className={`rounded-2xl border px-4 py-3 text-sm font-semibold ${
             status === "success" ? "border-green-200 bg-green-50 text-green-800" : "border-red-200 bg-red-50 text-red-700"
           }`}
         >
@@ -224,7 +224,7 @@ export function ActivationForm({ initialDeviceCode = "", googleMapsApiKey }: Act
       <button
         type="submit"
         disabled={status === "saving"}
-        className="rounded-md bg-brand px-5 py-3 text-sm font-bold text-white transition hover:bg-ink disabled:cursor-not-allowed disabled:bg-muted"
+        className="rounded-full bg-brand px-5 py-3 text-sm font-medium text-white transition hover:bg-ink disabled:cursor-not-allowed disabled:bg-muted"
       >
         {status === "saving" ? "Activating..." : "Activate Tap Rater"}
       </button>

@@ -14,7 +14,7 @@ export default function SetupPage() {
     <section className="mx-auto grid max-w-6xl gap-10 px-4 py-12 lg:grid-cols-[0.8fr_1.2fr]">
       <div>
         <p className="text-sm font-semibold uppercase text-brand">Setup</p>
-        <h1 className="mt-3 text-4xl font-black text-ink">Setup New TapRater</h1>
+        <h1 className="mt-3 text-[32px] font-semibold tracking-tightest sm:text-[38px] text-ink">Setup New TapRater</h1>
         <p className="mt-4 leading-7 text-muted">
           Send the review or feedback URL you want connected to your Tap Rater product. This creates a backend setup request for the team to review.
         </p>
@@ -23,7 +23,7 @@ export default function SetupPage() {
           <p><strong className="text-ink">Helpful notes:</strong> product SKU, color, business location, or any launch deadline.</p>
         </div>
       </div>
-      <div className="rounded-md border border-line bg-white p-5 shadow-sm md:p-7">
+      <div className="rounded-2xl border border-line bg-white p-5 shadow-sm md:p-7">
         <SetupForm />
       </div>
     </section>

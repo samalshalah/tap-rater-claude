@@ -22,19 +22,19 @@ export default async function PublicLandingPage({ params }: LandingPageRouteProp
 function LandingPageNotFound({ slug, isConfigured }: { slug: string; isConfigured: boolean }) {
   return (
     <main className="min-h-[70vh] bg-soft px-4 py-16">
-      <section className="mx-auto max-w-2xl rounded-md border border-line bg-white p-8 shadow-sm">
-        <p className="text-sm font-black uppercase text-brand">Hosted page</p>
-        <h1 className="mt-3 text-4xl font-black text-ink">Landing page not found</h1>
+      <section className="mx-auto max-w-2xl rounded-2xl border border-line bg-white p-8 shadow-sm">
+        <p className="text-sm font-semibold uppercase text-brand">Hosted page</p>
+        <h1 className="mt-3 text-[32px] font-semibold tracking-tightest sm:text-[38px] text-ink">Landing page not found</h1>
         <p className="mt-4 leading-7 text-muted">
           {isConfigured
             ? `We could not find a published Tap Rater landing page for ${slug}.`
             : "Landing page storage is not connected in this environment. Try the local demo page at /l/demo."}
         </p>
         <div className="mt-7 flex flex-wrap gap-3">
-          <Link href="/l/demo" className="rounded-md bg-brand px-5 py-3 text-sm font-bold text-white">
+          <Link href="/l/demo" className="rounded-full bg-brand px-5 py-3 text-sm font-medium text-white">
             Open demo page
           </Link>
-          <Link href="/contact-us" className="rounded-md border border-line px-5 py-3 text-sm font-bold text-ink">
+          <Link href="/contact-us" className="rounded-xl border border-line px-5 py-3 text-sm font-medium text-ink">
             Contact support
           </Link>
         </div>

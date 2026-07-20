@@ -14,12 +14,12 @@ export default function ChangeTapRaterLinkPage() {
     <section className="mx-auto grid max-w-6xl gap-10 px-4 py-12 lg:grid-cols-[0.8fr_1.2fr]">
       <div>
         <p className="text-sm font-semibold uppercase text-brand">Link update</p>
-        <h1 className="mt-3 text-4xl font-black text-ink">Change TapRater Link</h1>
+        <h1 className="mt-3 text-[32px] font-semibold tracking-tightest sm:text-[38px] text-ink">Change TapRater Link</h1>
         <p className="mt-4 leading-7 text-muted">
           Use this form when your review page, survey, or feedback URL changes. The request is saved in the backend for admin follow-up.
         </p>
       </div>
-      <div className="rounded-md border border-line bg-white p-5 shadow-sm md:p-7">
+      <div className="rounded-2xl border border-line bg-white p-5 shadow-sm md:p-7">
         <ChangeLinkForm />
       </div>
     </section>
