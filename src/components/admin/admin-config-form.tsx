@@ -54,14 +54,14 @@ export function AdminConfigForm({
   return (
     <form className="grid gap-4" onSubmit={submit}>
       {initialValues ? (
-        <p className="rounded-md bg-teal-50 px-3 py-2 text-xs font-semibold text-brand">
+        <p className="rounded-xl bg-teal-50 px-3 py-2 text-xs font-semibold text-brand">
           Showing your last saved settings for {title.toLowerCase()}.
         </p>
       ) : null}
       <label className="grid gap-2 text-sm font-bold text-ink">
         {primaryLabel}
         <input
-          className="rounded-md border border-line px-4 py-3 font-normal text-ink"
+          className="rounded-xl border border-line px-4 py-3 font-normal text-ink"
           name="primary"
           defaultValue={initialValues?.settings?.primary ?? ""}
           placeholder={primaryPlaceholder}
@@ -71,7 +71,7 @@ export function AdminConfigForm({
       <label className="grid gap-2 text-sm font-bold text-ink">
         {secondaryLabel}
         <input
-          className="rounded-md border border-line px-4 py-3 font-normal text-ink"
+          className="rounded-xl border border-line px-4 py-3 font-normal text-ink"
           name="secondary"
           defaultValue={initialValues?.settings?.secondary ?? ""}
           placeholder={secondaryPlaceholder}
@@ -81,7 +81,7 @@ export function AdminConfigForm({
       <label className="grid gap-2 text-sm font-bold text-ink">
         {notesLabel}
         <textarea
-          className="min-h-28 rounded-md border border-line px-4 py-3 font-normal text-ink"
+          className="min-h-28 rounded-xl border border-line px-4 py-3 font-normal text-ink"
           name="notes"
           defaultValue={initialValues?.settings?.notes ?? ""}
           placeholder={notesPlaceholder}
@@ -89,12 +89,12 @@ export function AdminConfigForm({
       </label>
       <label className="grid gap-2 text-sm font-bold text-ink">
         Status
-        <select className="rounded-md border border-line px-4 py-3 font-normal text-ink" name="status" defaultValue={initialValues?.status ?? "draft"}>
+        <select className="rounded-xl border border-line px-4 py-3 font-normal text-ink" name="status" defaultValue={initialValues?.status ?? "draft"}>
           <option value="draft">Draft</option>
           <option value="published">Published</option>
         </select>
       </label>
-      <button className="rounded-md bg-brand px-5 py-3 text-sm font-bold text-white">Save {title}</button>
+      <button className="rounded-full bg-ink px-5 py-3 text-sm font-medium text-white transition hover:bg-brand">Save {title}</button>
       {status ? <p className="text-sm font-semibold text-ink">{status}</p> : null}
     </form>
   );

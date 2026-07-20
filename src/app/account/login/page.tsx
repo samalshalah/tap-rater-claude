@@ -19,13 +19,13 @@ export default async function AccountLoginPage({ searchParams }: LoginPageProps)
     <main className="min-h-screen bg-soft">
       <section className="mx-auto grid max-w-5xl gap-8 px-4 py-12 md:grid-cols-[0.85fr_1.15fr] md:px-6 md:py-16">
         <div className="space-y-4">
-          <p className="text-sm font-black uppercase text-brand">Customer account</p>
-          <h1 className="text-4xl font-black leading-tight text-ink">Log in to Tap Rater</h1>
+          <p className="text-sm font-semibold uppercase text-brand">Customer account</p>
+          <h1 className="text-4xl font-semibold leading-tight text-ink">Log in to Tap Rater</h1>
           <p className="text-lg leading-8 text-muted">
             Get a secure email link (or use a password) to view your business profile, activated devices, destination URLs, and
             basic tap counts.
           </p>
-          <div className="rounded-md border border-line bg-white p-4 text-sm text-muted shadow-sm">
+          <div className="rounded-2xl border border-line bg-white p-4 text-sm text-muted shadow-sm">
             You can edit your device's destination link directly from your account -- no need to submit a request and wait.
           </div>
         </div>

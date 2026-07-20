@@ -88,7 +88,7 @@ export function AccountDestinationEditor({
   }
 
   return (
-    <div className="mt-2 grid gap-2 rounded-md border border-line bg-gray-50 p-3">
+    <div className="mt-2 grid gap-2 rounded-2xl border border-line bg-surface p-3">
       <p className="text-xs font-bold text-ink">Update destination for {deviceCode}</p>
       <div className="flex flex-col gap-2 sm:flex-row">
         <input
@@ -100,12 +100,12 @@ export function AccountDestinationEditor({
             setMessage("");
           }}
           placeholder="https://..."
-          className="w-full rounded-md border border-line bg-white px-3 py-2 text-xs text-ink outline-none focus:border-ink"
+          className="w-full rounded-xl border border-line bg-white px-3 py-2 text-xs text-ink outline-none focus:border-ink"
         />
         <select
           value={destinationType}
           onChange={(e) => setDestinationType(e.target.value)}
-          className="rounded-md border border-line bg-white px-2 py-2 text-xs text-ink"
+          className="rounded-xl border border-line bg-white px-2 py-2 text-xs text-ink"
         >
           <option value="google_review">Google review</option>
           <option value="facebook_review">Facebook review</option>
@@ -119,7 +119,7 @@ export function AccountDestinationEditor({
           type="button"
           onClick={verifyLink}
           disabled={verifyState === "checking"}
-          className="shrink-0 rounded-md border border-line bg-white px-3 py-2 text-xs font-bold text-ink disabled:opacity-50"
+          className="shrink-0 rounded-xl border border-line bg-white px-3 py-2 text-xs font-bold text-ink disabled:opacity-50"
         >
           {verifyState === "checking" ? "Checking..." : verifyState === "verified" ? "Verified" : "Verify"}
         </button>
@@ -132,7 +132,7 @@ export function AccountDestinationEditor({
           type="button"
           onClick={save}
           disabled={verifyState !== "verified" || saveState === "saving"}
-          className="rounded-md bg-ink px-4 py-2 text-xs font-bold text-white disabled:cursor-not-allowed disabled:bg-gray-300"
+          className="rounded-full bg-ink px-4 py-2 text-xs font-bold text-white disabled:cursor-not-allowed disabled:bg-line disabled:text-muted"
         >
           {saveState === "saving" ? "Saving..." : "Save link"}
         </button>

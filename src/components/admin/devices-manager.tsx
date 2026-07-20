@@ -126,7 +126,7 @@ export function DevicesManager({ initialDevices, configured, siteUrl }: DevicesM
   return (
     <div className="mt-8 grid gap-6">
       {!configured ? (
-        <div className="rounded-md border border-amber-200 bg-amber-50 p-4 text-sm font-semibold text-ink">
+        <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm font-semibold text-ink">
           Database persistence is not configured yet. Devices can be planned here, but records cannot be loaded or saved.
         </div>
       ) : null}
@@ -138,9 +138,9 @@ export function DevicesManager({ initialDevices, configured, siteUrl }: DevicesM
         <SummaryCard label="Tap events" value={String(summary.taps)} />
       </div>
 
-      <form onSubmit={createDevice} className="grid gap-4 rounded-md border border-line bg-white p-5 shadow-sm">
+      <form onSubmit={createDevice} className="grid gap-4 rounded-2xl border border-line bg-white p-5 shadow-sm">
         <div>
-          <h2 className="text-xl font-black text-ink">Create device</h2>
+          <h2 className="text-xl font-semibold text-ink">Create device</h2>
           <p className="mt-1 text-sm text-muted">Leave codes blank to auto-generate. The activation code is shown once after creation.</p>
         </div>
         <div className="grid gap-4 md:grid-cols-5">
@@ -150,34 +150,34 @@ export function DevicesManager({ initialDevices, configured, siteUrl }: DevicesM
           <TextInput label="Activation code" value={createForm.activationCode} placeholder="Auto" onChange={(value) => setCreateForm((form) => ({ ...form, activationCode: value }))} />
           <TextInput label="Label" value={createForm.label} placeholder="Counter stand" onChange={(value) => setCreateForm((form) => ({ ...form, label: value }))} />
         </div>
-        <button disabled={!configured} className="w-fit rounded-md bg-brand px-5 py-3 text-sm font-bold text-white disabled:cursor-not-allowed disabled:bg-muted">
+        <button disabled={!configured} className="w-fit rounded-full bg-ink px-5 py-3 text-sm font-medium text-white transition hover:bg-brand disabled:cursor-not-allowed disabled:bg-line disabled:text-muted">
           Create device
         </button>
       </form>
 
       {createdDevice ? (
-        <div className="rounded-md border border-green-200 bg-green-50 p-5 text-sm text-green-900">
-          <p className="font-black">Activation code shown once</p>
+        <div className="rounded-2xl border border-green-200 bg-green-50 p-5 text-sm text-green-900">
+          <p className="font-semibold">Activation code shown once</p>
           <p className="mt-2">Device: {createdDevice.deviceCode}</p>
           <p className="mt-1">Activation code: {createdDevice.activationCode}</p>
           <p className="mt-1 break-all">Device URL: {createdDevice.deviceUrl}</p>
           <div className="mt-4 flex flex-wrap gap-3">
-            <button type="button" onClick={() => copyText(createdDevice.deviceUrl)} className="rounded-md bg-white px-4 py-2 font-bold text-ink">
+            <button type="button" onClick={() => copyText(createdDevice.deviceUrl)} className="rounded-full bg-white px-4 py-2 font-bold text-ink">
               Copy device URL
             </button>
-            <button type="button" onClick={() => copyText(activationInstructions(createdDevice.deviceCode))} className="rounded-md bg-white px-4 py-2 font-bold text-ink">
+            <button type="button" onClick={() => copyText(activationInstructions(createdDevice.deviceCode))} className="rounded-full bg-white px-4 py-2 font-bold text-ink">
               Copy activation instructions
             </button>
           </div>
         </div>
       ) : null}
 
-      {message ? <div className="rounded-md border border-line bg-white p-4 text-sm font-semibold text-ink shadow-sm">{message}</div> : null}
+      {message ? <div className="rounded-2xl border border-line bg-white p-4 text-sm font-semibold text-ink shadow-sm">{message}</div> : null}
 
-      <div className="overflow-x-auto rounded-md border border-line bg-white shadow-sm">
+      <div className="overflow-x-auto rounded-2xl border border-line bg-white shadow-sm">
         <table className="w-full min-w-[1300px] border-collapse text-left text-sm">
           <thead>
-            <tr className="border-b border-line bg-gray-50 text-xs uppercase text-muted">
+            <tr className="border-b border-line bg-surface text-xs uppercase text-muted">
               <th className="p-4">Device code</th>
               <th className="p-4">Product</th>
               <th className="p-4">Mode</th>
@@ -223,11 +223,11 @@ function DeviceRow({
 }) {
   return (
     <tr className="border-b border-line align-top last:border-b-0">
-      <td className="p-4 font-black text-ink">{device.deviceCode}</td>
+      <td className="p-4 font-semibold text-ink">{device.deviceCode}</td>
       <td className="p-4 text-muted">{device.productType}</td>
       <td className="p-4 text-muted">{device.serviceMode}</td>
       <td className="p-4">
-        <span className="rounded-full bg-gray-100 px-3 py-1 text-xs font-black uppercase text-ink">{device.status}</span>
+        <span className="rounded-full bg-gray-100 px-3 py-1 text-xs font-semibold uppercase text-ink">{device.status}</span>
       </td>
       <td className="p-4 text-muted">{device.businessName ?? "-"}</td>
       <td className="p-4 text-muted">{device.customerEmail ?? "-"}</td>
@@ -246,14 +246,14 @@ function DeviceRow({
           }}
         >
           <div className="grid grid-cols-2 gap-2">
-            <select name="status" defaultValue={device.status} className="rounded-md border border-line px-3 py-2">
+            <select name="status" defaultValue={device.status} className="rounded-xl border border-line px-3 py-2">
               {statuses.map((status) => (
                 <option key={status} value={status}>
                   {status}
                 </option>
               ))}
             </select>
-            <select name="destinationType" defaultValue={device.destinationType ?? ""} className="rounded-md border border-line px-3 py-2">
+            <select name="destinationType" defaultValue={device.destinationType ?? ""} className="rounded-xl border border-line px-3 py-2">
               {destinationTypes.map((type) => (
                 <option key={type || "none"} value={type}>
                   {type || "none"}
@@ -261,14 +261,14 @@ function DeviceRow({
               ))}
             </select>
           </div>
-          <input name="destinationUrl" defaultValue={device.destinationUrl ?? ""} placeholder="https://" className="rounded-md border border-line px-3 py-2" />
-          <input name="label" defaultValue={device.label ?? ""} placeholder="Label" className="rounded-md border border-line px-3 py-2" />
+          <input name="destinationUrl" defaultValue={device.destinationUrl ?? ""} placeholder="https://" className="rounded-xl border border-line px-3 py-2" />
+          <input name="label" defaultValue={device.label ?? ""} placeholder="Label" className="rounded-xl border border-line px-3 py-2" />
           <div className="flex flex-wrap gap-2">
-            <button className="rounded-md bg-brand px-3 py-2 text-xs font-bold text-white">Save</button>
-            <button type="button" onClick={() => onCopy(deviceUrl)} className="rounded-md border border-line px-3 py-2 text-xs font-bold text-ink">
+            <button className="rounded-full bg-ink px-3 py-2 text-xs font-medium text-white transition hover:bg-brand">Save</button>
+            <button type="button" onClick={() => onCopy(deviceUrl)} className="rounded-xl border border-line px-3 py-2 text-xs font-bold text-ink">
               Copy URL
             </button>
-            <button type="button" onClick={() => onCopy(activationInstructions)} className="rounded-md border border-line px-3 py-2 text-xs font-bold text-ink">
+            <button type="button" onClick={() => onCopy(activationInstructions)} className="rounded-xl border border-line px-3 py-2 text-xs font-bold text-ink">
               Copy instructions
             </button>
           </div>
@@ -280,9 +280,9 @@ function DeviceRow({
 
 function SummaryCard({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-md border border-line bg-white p-4 shadow-sm">
-      <p className="text-xs font-black uppercase text-muted">{label}</p>
-      <p className="mt-2 text-2xl font-black text-ink">{value}</p>
+    <div className="rounded-2xl border border-line bg-white p-4 shadow-sm">
+      <p className="text-xs font-semibold uppercase text-muted">{label}</p>
+      <p className="mt-2 text-2xl font-semibold text-ink">{value}</p>
     </div>
   );
 }
@@ -291,7 +291,7 @@ function TextInput({ label, value, placeholder, onChange }: { label: string; val
   return (
     <label className="grid gap-2 text-sm font-semibold text-ink">
       {label}
-      <input value={value} placeholder={placeholder} onChange={(event) => onChange(event.target.value)} className="rounded-md border border-line px-3 py-2 text-sm" />
+      <input value={value} placeholder={placeholder} onChange={(event) => onChange(event.target.value)} className="rounded-xl border border-line px-3 py-2 text-sm" />
     </label>
   );
 }
@@ -300,7 +300,7 @@ function Select({ label, value, options, onChange }: { label: string; value: str
   return (
     <label className="grid gap-2 text-sm font-semibold text-ink">
       {label}
-      <select value={value} onChange={(event) => onChange(event.target.value)} className="rounded-md border border-line px-3 py-2 text-sm">
+      <select value={value} onChange={(event) => onChange(event.target.value)} className="rounded-xl border border-line px-3 py-2 text-sm">
         {options.map((option) => (
           <option key={option} value={option}>
             {option}

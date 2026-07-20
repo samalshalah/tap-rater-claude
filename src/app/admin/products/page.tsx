@@ -16,15 +16,15 @@ export default async function AdminProductsPage() {
       <p className="text-sm font-semibold uppercase text-brand">Admin</p>
       <div className="mt-3 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
         <div>
-          <h1 className="text-4xl font-black text-ink">Products</h1>
+          <h1 className="text-4xl font-semibold text-ink">Products</h1>
           <p className="mt-2 text-sm leading-6 text-muted">Create and manage product records, pricing, inventory status, visibility, and SEO.</p>
         </div>
-        <Link href="/admin/products/new" className="rounded-md bg-brand px-5 py-3 text-sm font-bold text-white">
+        <Link href="/admin/products/new" className="rounded-full bg-ink px-5 py-3 text-sm font-medium text-white transition hover:bg-brand">
           Create product
         </Link>
       </div>
       {!canSave ? (
-        <div className="mt-6 rounded-md border border-amber-200 bg-amber-50 p-4 text-sm font-semibold text-ink">
+        <div className="mt-6 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm font-semibold text-ink">
           Database persistence is not configured yet. Product edits cannot be saved.
         </div>
       ) : null}
@@ -34,10 +34,10 @@ export default async function AdminProductsPage() {
         <SummaryCard label="Drafts" value={String(products.filter((product) => !product.isActive).length)} />
         <SummaryCard label="Out of stock" value={String(products.filter((product) => product.stockStatus === "outofstock").length)} />
       </div>
-      <div className="mt-6 overflow-x-auto rounded-md border border-line bg-white shadow-sm">
+      <div className="mt-6 overflow-x-auto rounded-2xl border border-line bg-white shadow-sm">
         <table className="w-full min-w-[980px] border-collapse text-left text-sm">
           <thead>
-            <tr className="border-b border-line bg-gray-50 text-xs uppercase text-muted">
+            <tr className="border-b border-line bg-surface text-xs uppercase text-muted">
               <th className="p-4">Product</th>
               <th className="p-4">SKU</th>
               <th className="p-4">Category</th>
@@ -57,12 +57,12 @@ export default async function AdminProductsPage() {
                 <td className="p-4 text-muted">{formatPrice(product.basePriceCents)}</td>
                 <td className="p-4 text-muted">{product.salePriceCents ? formatPrice(product.salePriceCents) : "-"}</td>
                 <td className="p-4">
-                  <span className={product.stockStatus === "instock" ? "rounded-full bg-teal-50 px-3 py-1 text-xs font-black uppercase text-brand" : "rounded-full bg-gray-100 px-3 py-1 text-xs font-black uppercase text-muted"}>
+                  <span className={product.stockStatus === "instock" ? "rounded-full bg-teal-50 px-3 py-1 text-xs font-semibold uppercase text-brand" : "rounded-full bg-gray-100 px-3 py-1 text-xs font-semibold uppercase text-muted"}>
                     {product.stockStatus === "instock" ? "In stock" : "Out of stock"}
                   </span>
                 </td>
                 <td className="p-4">
-                  <span className={product.isActive ? "rounded-full bg-teal-50 px-3 py-1 text-xs font-black uppercase text-brand" : "rounded-full bg-amber-50 px-3 py-1 text-xs font-black uppercase text-ink"}>
+                  <span className={product.isActive ? "rounded-full bg-teal-50 px-3 py-1 text-xs font-semibold uppercase text-brand" : "rounded-full bg-amber-50 px-3 py-1 text-xs font-semibold uppercase text-ink"}>
                     {product.isActive ? "Active" : "Inactive"}
                   </span>
                 </td>
@@ -81,9 +81,9 @@ export default async function AdminProductsPage() {
 
 function SummaryCard({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-md border border-line bg-white p-4 shadow-sm">
-      <p className="text-xs font-black uppercase text-muted">{label}</p>
-      <p className="mt-2 text-2xl font-black text-ink">{value}</p>
+    <div className="rounded-2xl border border-line bg-white p-4 shadow-sm">
+      <p className="text-xs font-semibold uppercase text-muted">{label}</p>
+      <p className="mt-2 text-2xl font-semibold text-ink">{value}</p>
     </div>
   );
 }

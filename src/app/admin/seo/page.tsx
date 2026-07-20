@@ -19,9 +19,9 @@ export default async function AdminSeoPage() {
   return (
     <AdminShell>
       <section className="mx-auto max-w-7xl px-4 py-8 md:px-8 lg:py-12">
-        <p className="text-sm font-black uppercase text-brand">Growth</p>
+        <p className="text-sm font-semibold uppercase text-brand">Growth</p>
         <div className="mt-3">
-          <h1 className="text-4xl font-black text-ink">SEO</h1>
+          <h1 className="text-4xl font-semibold text-ink">SEO</h1>
           <p className="mt-2 max-w-3xl text-sm leading-6 text-muted">
             Sitemap and robots.txt are generated automatically from the live catalog --{" "}
             <Link href="/sitemap.xml" className="text-brand hover:text-brand-dark">
@@ -42,13 +42,13 @@ export default async function AdminSeoPage() {
           <SummaryCard label="Missing SEO description" value={String(missingSeoDescription.length)} />
         </div>
 
-        <div className="mt-6 rounded-md border border-line bg-white shadow-sm">
+        <div className="mt-6 rounded-2xl border border-line bg-white shadow-sm">
           <div className="border-b border-line p-4">
-            <h2 className="text-lg font-black text-ink">Category SEO</h2>
+            <h2 className="text-lg font-semibold text-ink">Category SEO</h2>
           </div>
           <table className="w-full border-collapse text-left text-sm">
             <thead>
-              <tr className="border-b border-line bg-gray-50 text-xs uppercase text-muted">
+              <tr className="border-b border-line bg-surface text-xs uppercase text-muted">
                 <th className="p-4">Category</th>
                 <th className="p-4">SEO title</th>
                 <th className="p-4">SEO description</th>
@@ -67,9 +67,9 @@ export default async function AdminSeoPage() {
         </div>
 
         {missingSeoTitle.length > 0 ? (
-          <div className="mt-6 rounded-md border border-line bg-white shadow-sm">
+          <div className="mt-6 rounded-2xl border border-line bg-white shadow-sm">
             <div className="border-b border-line p-4">
-              <h2 className="text-lg font-black text-ink">Products missing an SEO title ({missingSeoTitle.length})</h2>
+              <h2 className="text-lg font-semibold text-ink">Products missing an SEO title ({missingSeoTitle.length})</h2>
               <p className="mt-1 text-sm text-muted">Falls back to the product title, which is fine, but a dedicated SEO title usually converts better in search results.</p>
             </div>
             <table className="w-full border-collapse text-left text-sm">
@@ -92,8 +92,8 @@ export default async function AdminSeoPage() {
           </div>
         ) : null}
 
-        <div className="mt-6 rounded-md border border-line bg-white p-5 shadow-sm">
-          <h2 className="text-xl font-black text-ink">Notes</h2>
+        <div className="mt-6 rounded-2xl border border-line bg-white p-5 shadow-sm">
+          <h2 className="text-xl font-semibold text-ink">Notes</h2>
           <div className="mt-5">
             <AdminConfigForm
               area="seo"
@@ -115,13 +115,13 @@ export default async function AdminSeoPage() {
 
 function SummaryCard({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-md border border-line bg-white p-4 shadow-sm">
-      <p className="text-xs font-black uppercase text-muted">{label}</p>
-      <p className="mt-2 text-2xl font-black text-ink">{value}</p>
+    <div className="rounded-2xl border border-line bg-white p-4 shadow-sm">
+      <p className="text-xs font-semibold uppercase text-muted">{label}</p>
+      <p className="mt-2 text-2xl font-semibold text-ink">{value}</p>
     </div>
   );
 }
 
 function MissingBadge() {
-  return <span className="rounded-full bg-amber-50 px-3 py-1 text-xs font-black uppercase text-ink">Missing</span>;
+  return <span className="rounded-full bg-amber-50 px-3 py-1 text-xs font-semibold uppercase text-ink">Missing</span>;
 }

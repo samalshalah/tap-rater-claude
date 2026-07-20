@@ -30,8 +30,8 @@ export function StockToggle({ slug, initialStatus }: { slug: string; initialStat
       disabled={isSaving}
       className={
         status === "instock"
-          ? "rounded-full bg-teal-50 px-3 py-1 text-xs font-black uppercase text-brand transition hover:bg-teal-100 disabled:opacity-50"
-          : "rounded-full bg-gray-100 px-3 py-1 text-xs font-black uppercase text-muted transition hover:bg-gray-200 disabled:opacity-50"
+          ? "rounded-full bg-teal-50 px-3 py-1 text-xs font-semibold uppercase text-brand transition hover:bg-teal-100 disabled:opacity-50"
+          : "rounded-full bg-gray-100 px-3 py-1 text-xs font-semibold uppercase text-muted transition hover:bg-gray-200 disabled:opacity-50"
       }
     >
       {isSaving ? "Saving..." : status === "instock" ? "In stock" : "Out of stock"}

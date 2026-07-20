@@ -21,10 +21,10 @@ export default async function AccountDevicesPage() {
       </div>
 
       <div className="grid gap-6 lg:grid-cols-[1fr_360px]">
-        <div className="overflow-x-auto rounded-md border border-line bg-white shadow-sm">
+        <div className="overflow-x-auto rounded-2xl border border-line bg-white shadow-sm">
           <table className="w-full min-w-[860px] border-collapse text-left text-sm">
             <thead>
-              <tr className="border-b border-line bg-gray-50 text-xs uppercase text-muted">
+              <tr className="border-b border-line bg-surface text-xs uppercase text-muted">
                 <th className="p-4">Device</th>
                 <th className="p-4">Product</th>
                 <th className="p-4">Status</th>
@@ -35,10 +35,10 @@ export default async function AccountDevicesPage() {
             <tbody>
               {portal.devices.map((device) => (
                 <tr key={device.id} className="border-b border-line last:border-b-0">
-                  <td className="p-4 font-black text-ink">{device.deviceCode}</td>
+                  <td className="p-4 font-semibold text-ink">{device.deviceCode}</td>
                   <td className="p-4 text-muted">{device.productType}</td>
                   <td className="p-4">
-                    <span className="rounded-full bg-gray-100 px-3 py-1 text-xs font-black uppercase text-ink">{device.status}</span>
+                    <span className="rounded-full bg-gray-100 px-3 py-1 text-xs font-semibold uppercase text-ink">{device.status}</span>
                   </td>
                   <td className="p-4 text-muted">
                     <p>{device.destinationType ?? "-"}</p>
@@ -67,8 +67,8 @@ export default async function AccountDevicesPage() {
         </div>
 
         <div className="grid gap-4">
-          <div className="rounded-md border border-line bg-white p-4 shadow-sm">
-            <h2 className="font-black text-ink">Taps by day</h2>
+          <div className="rounded-2xl border border-line bg-white p-4 shadow-sm">
+            <h2 className="font-semibold text-ink">Taps by day</h2>
             <div className="mt-3 grid gap-2 text-sm">
               {analytics.tapsByDay.map((day) => (
                 <div key={day.date} className="flex items-center justify-between border-b border-line py-2 last:border-b-0">
@@ -80,7 +80,7 @@ export default async function AccountDevicesPage() {
             </div>
           </div>
           <ChangeRequestForm deviceCode={portal.devices[0]?.deviceCode} />
-          <div className="rounded-md border border-line bg-white p-4 text-sm leading-6 text-muted shadow-sm">
+          <div className="rounded-2xl border border-line bg-white p-4 text-sm leading-6 text-muted shadow-sm">
             Direct destination editing is intentionally disabled for the first portal version. Support will verify change requests before updating
             device links.
           </div>
@@ -111,9 +111,9 @@ function buildCustomerAnalytics(summaries: BusinessTapSummary[]) {
 
 function SummaryCard({ label, value }: { label: string; value: number }) {
   return (
-    <div className="rounded-md border border-line bg-white p-4 shadow-sm">
-      <p className="text-xs font-black uppercase text-muted">{label}</p>
-      <p className="mt-2 text-2xl font-black text-ink">{value}</p>
+    <div className="rounded-2xl border border-line bg-white p-4 shadow-sm">
+      <p className="text-xs font-semibold uppercase text-muted">{label}</p>
+      <p className="mt-2 text-2xl font-semibold text-ink">{value}</p>
     </div>
   );
 }

@@ -42,8 +42,8 @@ export function CreateCustomerForm() {
   }
 
   return (
-    <form className="grid gap-4 rounded-md border border-line bg-white p-5 shadow-sm" onSubmit={submit}>
-      <h2 className="text-lg font-black text-ink">Add a customer</h2>
+    <form className="grid gap-4 rounded-2xl border border-line bg-white p-5 shadow-sm" onSubmit={submit}>
+      <h2 className="text-lg font-semibold text-ink">Add a customer</h2>
       <p className="text-sm leading-6 text-muted">
         For phone orders, walk-ins, or test accounts. This just creates the contact record -- customers log in with a magic link
         sent to their email, there's no password to set here.
@@ -51,19 +51,19 @@ export function CreateCustomerForm() {
       <div className="grid gap-4 md:grid-cols-3">
         <label className="grid gap-2 text-sm font-bold text-ink">
           Email
-          <input className="rounded-md border border-line px-4 py-3 font-normal text-ink" name="email" type="email" placeholder="customer@example.com" required />
+          <input className="rounded-xl border border-line px-4 py-3 font-normal text-ink" name="email" type="email" placeholder="customer@example.com" required />
         </label>
         <label className="grid gap-2 text-sm font-bold text-ink">
           Name (optional)
-          <input className="rounded-md border border-line px-4 py-3 font-normal text-ink" name="name" placeholder="Jane Doe" />
+          <input className="rounded-xl border border-line px-4 py-3 font-normal text-ink" name="name" placeholder="Jane Doe" />
         </label>
         <label className="grid gap-2 text-sm font-bold text-ink">
           Phone (optional)
-          <input className="rounded-md border border-line px-4 py-3 font-normal text-ink" name="phone" placeholder="(555) 555-5555" />
+          <input className="rounded-xl border border-line px-4 py-3 font-normal text-ink" name="phone" placeholder="(555) 555-5555" />
         </label>
       </div>
       <div className="flex items-center gap-3">
-        <button className="w-fit rounded-md bg-brand px-5 py-3 text-sm font-bold text-white disabled:cursor-not-allowed disabled:bg-gray-300" disabled={isSaving}>
+        <button className="w-fit rounded-full bg-ink px-5 py-3 text-sm font-medium text-white transition hover:bg-brand disabled:cursor-not-allowed disabled:bg-line disabled:text-muted" disabled={isSaving}>
           {isSaving ? "Creating..." : "Create customer"}
         </button>
         {status ? <p className={status.tone === "success" ? "text-sm font-bold text-brand" : "text-sm font-bold text-red-600"}>{status.message}</p> : null}

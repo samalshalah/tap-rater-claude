@@ -17,8 +17,8 @@ export default async function SetPasswordPage({ searchParams }: PageProps) {
     <main className="min-h-screen bg-soft">
       <section className="mx-auto grid max-w-lg gap-6 px-4 py-16">
         <div>
-          <p className="text-sm font-black uppercase text-brand">Customer account</p>
-          <h1 className="mt-3 text-3xl font-black text-ink">Set your password</h1>
+          <p className="text-sm font-semibold uppercase text-brand">Customer account</p>
+          <h1 className="mt-3 text-3xl font-semibold text-ink">Set your password</h1>
           <p className="mt-3 text-sm leading-6 text-muted">
             Choose a password for faster login next time. You can still use an email link instead whenever you'd rather.
           </p>

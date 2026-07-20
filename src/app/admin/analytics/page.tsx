@@ -13,14 +13,14 @@ export default async function AdminAnalyticsPage() {
       <section className="mx-auto max-w-7xl px-4 py-8 md:px-8 lg:py-12">
         <p className="text-sm font-semibold uppercase text-brand">Growth</p>
         <div className="mt-3">
-          <h1 className="text-4xl font-black text-ink">Analytics</h1>
+          <h1 className="text-4xl font-semibold text-ink">Analytics</h1>
           <p className="mt-2 max-w-3xl text-sm leading-6 text-muted">
             Lightweight platform reporting from device taps, landing page clicks, and form submissions. Raw IP data is not shown here.
           </p>
         </div>
 
         {!configured ? (
-          <div className="mt-6 rounded-md border border-amber-200 bg-amber-50 p-4 text-sm font-semibold text-ink">
+          <div className="mt-6 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm font-semibold text-ink">
             Database persistence is not configured yet. Analytics will appear after tap events and submissions can be read.
           </div>
         ) : null}
@@ -98,17 +98,17 @@ export default async function AdminAnalyticsPage() {
 
 function SummaryCard({ label, value }: { label: string; value: number }) {
   return (
-    <div className="rounded-md border border-line bg-white p-4 shadow-sm">
-      <p className="text-xs font-black uppercase text-muted">{label}</p>
-      <p className="mt-2 text-2xl font-black text-ink">{value}</p>
+    <div className="rounded-2xl border border-line bg-white p-4 shadow-sm">
+      <p className="text-xs font-semibold uppercase text-muted">{label}</p>
+      <p className="mt-2 text-2xl font-semibold text-ink">{value}</p>
     </div>
   );
 }
 
 function Panel({ title, children }: { title: string; children: ReactNode }) {
   return (
-    <section className="rounded-md border border-line bg-white p-5 shadow-sm">
-      <h2 className="text-lg font-black text-ink">{title}</h2>
+    <section className="rounded-2xl border border-line bg-white p-5 shadow-sm">
+      <h2 className="text-lg font-semibold text-ink">{title}</h2>
       <div className="mt-4">{children}</div>
     </section>
   );

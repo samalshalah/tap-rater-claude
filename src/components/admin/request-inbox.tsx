@@ -37,11 +37,11 @@ export function RequestInbox({ requests }: { requests: AdminRequests }) {
 
   return (
     <div className="grid gap-6">
-      <div className="grid gap-4 rounded-md border border-line bg-white p-4 shadow-sm lg:grid-cols-[1fr_auto] lg:items-center">
+      <div className="grid gap-4 rounded-2xl border border-line bg-white p-4 shadow-sm lg:grid-cols-[1fr_auto] lg:items-center">
         <label className="relative block">
           <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted" />
           <input
-            className="w-full rounded-md border border-line py-3 pl-11 pr-4 text-sm text-ink"
+            className="w-full rounded-xl border border-line py-3 pl-11 pr-4 text-sm text-ink"
             value={query}
             onChange={(event) => setQuery(event.target.value)}
             placeholder="Search by name, email, business, Tap Rater ID, or URL"
@@ -55,7 +55,7 @@ export function RequestInbox({ requests }: { requests: AdminRequests }) {
             return (
               <button
                 key={tab.id}
-                className={isActive ? "rounded-md bg-ink px-4 py-3 text-sm font-bold text-white" : "rounded-md border border-line px-4 py-3 text-sm font-bold text-ink"}
+                className={isActive ? "rounded-full bg-ink px-4 py-3 text-[13px] font-medium text-white" : "rounded-full border border-line px-4 py-3 text-[13px] font-medium text-ink"}
                 onClick={() => setActiveTab(tab.id)}
                 type="button"
               >
@@ -117,11 +117,11 @@ function RequestSection({ title, count, children }: { title: string; count: numb
   return (
     <section>
       <div className="flex flex-col gap-1 md:flex-row md:items-end md:justify-between">
-        <h2 className="text-2xl font-black text-ink">{title}</h2>
+        <h2 className="text-2xl font-semibold text-ink">{title}</h2>
         <p className="text-sm font-semibold text-muted">{count} shown</p>
       </div>
       <div className="mt-4 grid gap-4">
-        {count === 0 ? <p className="rounded-md border border-line bg-white p-5 text-sm text-muted">No matching requests.</p> : children}
+        {count === 0 ? <p className="rounded-2xl border border-line bg-white p-5 text-sm text-muted">No matching requests.</p> : children}
       </div>
     </section>
   );
@@ -141,12 +141,12 @@ function RequestCard({
   children: ReactNode;
 }) {
   return (
-    <article className="rounded-md border border-line bg-white p-5 shadow-sm">
+    <article className="rounded-2xl border border-line bg-white p-5 shadow-sm">
       <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
         <div>
           <div className="flex flex-wrap items-center gap-2">
-            <h3 className="text-lg font-black text-ink">{name || "Unknown customer"}</h3>
-            {status ? <span className="rounded-full bg-gray-100 px-3 py-1 text-xs font-black uppercase text-muted">{status}</span> : null}
+            <h3 className="text-lg font-semibold text-ink">{name || "Unknown customer"}</h3>
+            {status ? <span className="rounded-full bg-gray-100 px-3 py-1 text-xs font-semibold uppercase text-muted">{status}</span> : null}
           </div>
           <a className="mt-1 inline-flex items-center gap-2 text-sm font-bold text-brand" href={`mailto:${email}`}>
             <Mail size={15} />
@@ -172,7 +172,7 @@ function Field({ label, value, link = false, multiline = false }: { label: strin
 
   return (
     <div className={multiline ? "md:col-span-2" : ""}>
-      <p className="text-xs font-black uppercase text-muted">{label}</p>
+      <p className="text-xs font-semibold uppercase text-muted">{label}</p>
       {link ? (
         <a className="mt-1 block break-words text-sm font-semibold text-brand" href={value} target="_blank" rel="noreferrer">
           {value}

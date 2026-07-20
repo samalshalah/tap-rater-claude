@@ -49,7 +49,7 @@ export function SetPasswordForm({ token }: { token: string }) {
 
   if (!token) {
     return (
-      <div className="rounded-md border border-red-200 bg-red-50 p-4 text-sm font-semibold text-red-700">
+      <div className="rounded-xl border border-red-200 bg-red-50 p-4 text-sm font-semibold text-red-700">
         This link is missing its token. Ask for a new password setup link.
       </div>
     );
@@ -64,7 +64,7 @@ export function SetPasswordForm({ token }: { token: string }) {
           type="password"
           value={password}
           onChange={(event) => setPassword(event.target.value)}
-          className="rounded-md border border-line px-4 py-3 text-sm font-medium outline-none focus:border-brand"
+          className="rounded-xl border border-line px-4 py-3 text-sm font-medium outline-none focus:border-brand"
           autoComplete="new-password"
           placeholder="At least 8 characters"
         />
@@ -76,19 +76,19 @@ export function SetPasswordForm({ token }: { token: string }) {
           type="password"
           value={confirmPassword}
           onChange={(event) => setConfirmPassword(event.target.value)}
-          className="rounded-md border border-line px-4 py-3 text-sm font-medium outline-none focus:border-brand"
+          className="rounded-xl border border-line px-4 py-3 text-sm font-medium outline-none focus:border-brand"
           autoComplete="new-password"
         />
       </label>
       <button
         disabled={isSaving}
-        className="rounded-md bg-brand px-5 py-3 text-sm font-bold text-white transition hover:bg-ink disabled:cursor-not-allowed disabled:bg-muted"
+        className="rounded-full bg-ink px-5 py-3 text-sm font-medium text-white transition hover:bg-ink disabled:cursor-not-allowed disabled:bg-line disabled:text-muted"
       >
         {isSaving ? "Saving..." : "Set password"}
       </button>
       {status ? (
         <div
-          className={`rounded-md border px-4 py-3 text-sm font-semibold ${
+          className={`rounded-2xl border px-4 py-3 text-sm font-semibold ${
             status.tone === "error" ? "border-red-200 bg-red-50 text-red-700" : "border-green-200 bg-green-50 text-green-800"
           }`}
         >

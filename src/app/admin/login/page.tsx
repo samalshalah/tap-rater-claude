@@ -13,8 +13,8 @@ export default function AdminLoginPage() {
   return (
     <section className="mx-auto max-w-md px-4 py-16">
       <p className="text-sm font-semibold uppercase text-brand">Admin</p>
-      <h1 className="mt-3 text-3xl font-black text-ink">Tap Rater admin login</h1>
-      <div className="mt-8 rounded-md border border-line bg-white p-5 shadow-sm">
+      <h1 className="mt-3 text-3xl font-semibold text-ink">Tap Rater admin login</h1>
+      <div className="mt-8 rounded-2xl border border-line bg-white p-5 shadow-sm">
         <LoginForm />
       </div>
     </section>

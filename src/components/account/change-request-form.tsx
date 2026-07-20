@@ -34,14 +34,14 @@ export function ChangeRequestForm({ deviceCode }: { deviceCode?: string }) {
   }
 
   return (
-    <form onSubmit={submitRequest} className="grid gap-3 rounded-md border border-line bg-white p-4 shadow-sm">
-      <p className="font-black text-ink">Request destination change</p>
+    <form onSubmit={submitRequest} className="grid gap-3 rounded-2xl border border-line bg-white p-4 shadow-sm">
+      <p className="font-semibold text-ink">Request destination change</p>
       <input
         required
         value={tapraterId}
         onChange={(event) => setTapraterId(event.target.value)}
         placeholder="Tap Rater ID"
-        className="rounded-md border border-line px-3 py-2 text-sm"
+        className="rounded-xl border border-line px-3 py-2 text-sm"
       />
       <input
         required
@@ -49,19 +49,19 @@ export function ChangeRequestForm({ deviceCode }: { deviceCode?: string }) {
         value={newReviewUrl}
         onChange={(event) => setNewReviewUrl(event.target.value)}
         placeholder="https://new-destination.example"
-        className="rounded-md border border-line px-3 py-2 text-sm"
+        className="rounded-xl border border-line px-3 py-2 text-sm"
       />
       <textarea
         value={notes}
         onChange={(event) => setNotes(event.target.value)}
         placeholder="Notes for support"
-        className="min-h-24 rounded-md border border-line px-3 py-2 text-sm"
+        className="min-h-24 rounded-xl border border-line px-3 py-2 text-sm"
       />
-      <button disabled={status === "saving"} className="w-fit rounded-md bg-brand px-4 py-2 text-sm font-bold text-white disabled:bg-muted">
+      <button disabled={status === "saving"} className="w-fit rounded-full bg-ink px-4 py-2 text-sm font-medium text-white transition hover:bg-brand disabled:bg-muted">
         {status === "saving" ? "Sending..." : "Send request"}
       </button>
       {message ? (
-        <p className={`rounded-md px-3 py-2 text-sm font-semibold ${status === "success" ? "bg-green-50 text-green-800" : "bg-red-50 text-red-700"}`}>
+        <p className={`rounded-xl px-3 py-2 text-sm font-semibold ${status === "success" ? "bg-green-50 text-green-800" : "bg-red-50 text-red-700"}`}>
           {message}
         </p>
       ) : null}

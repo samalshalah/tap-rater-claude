@@ -16,22 +16,22 @@ export default async function AdminCustomersPage() {
   return (
     <AdminShell>
       <section className="mx-auto max-w-7xl px-4 py-8 md:px-8 lg:py-12">
-        <p className="text-sm font-black uppercase text-brand">Operations</p>
+        <p className="text-sm font-semibold uppercase text-brand">Operations</p>
         <div className="mt-3 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
           <div>
-            <h1 className="text-4xl font-black text-ink">Customers</h1>
+            <h1 className="text-4xl font-semibold text-ink">Customers</h1>
             <p className="mt-2 max-w-3xl text-sm leading-6 text-muted">
               Every customer who has a saved account, a paid order, or a contact/setup/link-change request. Order totals and open
               requests are pulled directly from the database.
             </p>
           </div>
-          <div className="rounded-md border border-line bg-white px-4 py-3 text-sm font-bold text-ink">
+          <div className="rounded-xl border border-line bg-white px-4 py-3 text-sm font-bold text-ink">
             {customers.length} customers
           </div>
         </div>
 
         {!configured ? (
-          <div className="mt-6 rounded-md border border-amber-200 bg-amber-50 p-4 text-sm font-semibold text-ink">
+          <div className="mt-6 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm font-semibold text-ink">
             Database persistence is not configured yet. Connect a database to see real customers here.
           </div>
         ) : null}
@@ -48,10 +48,10 @@ export default async function AdminCustomersPage() {
           <PasswordSetupLinkGenerator />
         </div>
 
-        <div className="mt-6 overflow-x-auto rounded-md border border-line bg-white shadow-sm">
+        <div className="mt-6 overflow-x-auto rounded-2xl border border-line bg-white shadow-sm">
           <table className="w-full min-w-[860px] border-collapse text-left text-sm">
             <thead>
-              <tr className="border-b border-line bg-gray-50 text-xs uppercase text-muted">
+              <tr className="border-b border-line bg-surface text-xs uppercase text-muted">
                 <th className="p-4">Customer</th>
                 <th className="p-4">Orders</th>
                 <th className="p-4">Lifetime spend</th>
@@ -67,10 +67,10 @@ export default async function AdminCustomersPage() {
                     <p className="text-muted">{customer.email}</p>
                   </td>
                   <td className="p-4 text-ink">{customer.orderCount}</td>
-                  <td className="p-4 font-black text-ink">{formatPrice(customer.totalSpentCents)}</td>
+                  <td className="p-4 font-semibold text-ink">{formatPrice(customer.totalSpentCents)}</td>
                   <td className="p-4">
                     {customer.openRequestCount > 0 ? (
-                      <span className="rounded-full bg-amber-50 px-3 py-1 text-xs font-black uppercase text-ink">
+                      <span className="rounded-full bg-amber-50 px-3 py-1 text-xs font-semibold uppercase text-ink">
                         {customer.openRequestCount} open
                       </span>
                     ) : (
@@ -97,9 +97,9 @@ export default async function AdminCustomersPage() {
 
 function SummaryCard({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-md border border-line bg-white p-4 shadow-sm">
-      <p className="text-xs font-black uppercase text-muted">{label}</p>
-      <p className="mt-2 text-2xl font-black text-ink">{value}</p>
+    <div className="rounded-2xl border border-line bg-white p-4 shadow-sm">
+      <p className="text-xs font-semibold uppercase text-muted">{label}</p>
+      <p className="mt-2 text-2xl font-semibold text-ink">{value}</p>
     </div>
   );
 }

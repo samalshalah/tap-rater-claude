@@ -17,19 +17,19 @@ export default async function AdminRequestsPage() {
         <p className="text-sm font-semibold uppercase text-brand">Admin</p>
         <div className="mt-3 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
           <div>
-            <h1 className="text-4xl font-black text-ink">Requests</h1>
+            <h1 className="text-4xl font-semibold text-ink">Requests</h1>
             <p className="mt-3 max-w-3xl leading-7 text-muted">
               Manage customer questions, setup submissions, and Tap Rater link change requests before checkout is live.
             </p>
           </div>
-          <div className="rounded-md border border-line bg-white p-4 text-sm shadow-sm">
-            <p className="font-black text-ink">{requests.contacts.length + requests.setups.length + requests.linkChanges.length}</p>
+          <div className="rounded-2xl border border-line bg-white p-4 text-sm shadow-sm">
+            <p className="font-semibold text-ink">{requests.contacts.length + requests.setups.length + requests.linkChanges.length}</p>
             <p className="mt-1 text-muted">total requests</p>
           </div>
         </div>
 
         {!isConfigured ? (
-          <div className="mt-6 rounded-md border border-amber-200 bg-amber-50 p-4 text-sm font-semibold text-ink">
+          <div className="mt-6 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm font-semibold text-ink">
             Database persistence is not configured yet. Add DATABASE_URL for Neon, or Supabase server credentials, to view saved requests.
           </div>
         ) : null}

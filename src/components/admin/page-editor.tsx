@@ -33,12 +33,12 @@ export function PageEditor() {
       <Textarea name="body" label="Page body" placeholder="Page content..." tall />
       <label className="grid gap-2 text-sm font-bold text-ink">
         Status
-        <select className="rounded-md border border-line px-4 py-3 font-normal" name="status" defaultValue="draft">
+        <select className="rounded-xl border border-line px-4 py-3 font-normal" name="status" defaultValue="draft">
           <option value="draft">Draft</option>
           <option value="published">Published</option>
         </select>
       </label>
-      <button className="rounded-md bg-brand px-5 py-3 text-sm font-bold text-white">Save page</button>
+      <button className="rounded-full bg-ink px-5 py-3 text-sm font-medium text-white transition hover:bg-brand">Save page</button>
       {status ? <p className="text-sm font-semibold text-ink">{status}</p> : null}
     </form>
   );
@@ -48,7 +48,7 @@ function Input({ name, label, placeholder }: { name: string; label: string; plac
   return (
     <label className="grid gap-2 text-sm font-bold text-ink">
       {label}
-      <input className="rounded-md border border-line px-4 py-3 font-normal text-ink" name={name} placeholder={placeholder} required />
+      <input className="rounded-xl border border-line px-4 py-3 font-normal text-ink" name={name} placeholder={placeholder} required />
     </label>
   );
 }
@@ -57,7 +57,7 @@ function Textarea({ name, label, placeholder, tall = false }: { name: string; la
   return (
     <label className="grid gap-2 text-sm font-bold text-ink">
       {label}
-      <textarea className={`${tall ? "min-h-56" : "min-h-24"} rounded-md border border-line px-4 py-3 font-normal text-ink`} name={name} placeholder={placeholder} required />
+      <textarea className={`${tall ? "min-h-56" : "min-h-24"} rounded-xl border border-line px-4 py-3 font-normal text-ink`} name={name} placeholder={placeholder} required />
     </label>
   );
 }

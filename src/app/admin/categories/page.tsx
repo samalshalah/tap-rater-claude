@@ -16,9 +16,9 @@ export default async function AdminCategoriesPage() {
   return (
     <AdminShell>
       <section className="mx-auto max-w-7xl px-4 py-8 md:px-8 lg:py-12">
-        <p className="text-sm font-black uppercase text-brand">Commerce</p>
+        <p className="text-sm font-semibold uppercase text-brand">Commerce</p>
         <div className="mt-3">
-          <h1 className="text-4xl font-black text-ink">Categories & Use Cases</h1>
+          <h1 className="text-4xl font-semibold text-ink">Categories & Use Cases</h1>
           <p className="mt-2 max-w-3xl text-sm leading-6 text-muted">
             Stand categories are what kind of stand a product is (Shop by Stand). Use cases are which business types recommend a
             product, via tags (Shop by Use). Both are defined in code (<code>src/data/stand-categories.ts</code> and{" "}
@@ -28,14 +28,14 @@ export default async function AdminCategoriesPage() {
         </div>
 
         <div className="mt-8 grid gap-6 lg:grid-cols-2">
-          <div className="rounded-md border border-line bg-white shadow-sm">
+          <div className="rounded-2xl border border-line bg-white shadow-sm">
             <div className="border-b border-line p-4">
-              <h2 className="text-lg font-black text-ink">Stand categories</h2>
+              <h2 className="text-lg font-semibold text-ink">Stand categories</h2>
               <p className="mt-1 text-sm text-muted">{standCategories.length} categories -- Shop by Stand</p>
             </div>
             <table className="w-full border-collapse text-left text-sm">
               <thead>
-                <tr className="border-b border-line bg-gray-50 text-xs uppercase text-muted">
+                <tr className="border-b border-line bg-surface text-xs uppercase text-muted">
                   <th className="p-3">Category</th>
                   <th className="p-3">Active products</th>
                 </tr>
@@ -51,7 +51,7 @@ export default async function AdminCategoriesPage() {
                       </td>
                       <td className="p-3">
                         {count === 0 ? (
-                          <span className="rounded-full bg-amber-50 px-3 py-1 text-xs font-black uppercase text-ink">
+                          <span className="rounded-full bg-amber-50 px-3 py-1 text-xs font-semibold uppercase text-ink">
                             0 -- hidden from nav
                           </span>
                         ) : (
@@ -67,14 +67,14 @@ export default async function AdminCategoriesPage() {
             </table>
           </div>
 
-          <div className="rounded-md border border-line bg-white shadow-sm">
+          <div className="rounded-2xl border border-line bg-white shadow-sm">
             <div className="border-b border-line p-4">
-              <h2 className="text-lg font-black text-ink">Use cases</h2>
+              <h2 className="text-lg font-semibold text-ink">Use cases</h2>
               <p className="mt-1 text-sm text-muted">{useCases.length} use cases -- Shop by Use, membership via tags</p>
             </div>
             <table className="w-full border-collapse text-left text-sm">
               <thead>
-                <tr className="border-b border-line bg-gray-50 text-xs uppercase text-muted">
+                <tr className="border-b border-line bg-surface text-xs uppercase text-muted">
                   <th className="p-3">Use case</th>
                   <th className="p-3">Tagged products</th>
                 </tr>
@@ -101,9 +101,9 @@ export default async function AdminCategoriesPage() {
           </div>
         </div>
 
-        <div className="mt-6 rounded-md border border-line bg-white shadow-sm">
+        <div className="mt-6 rounded-2xl border border-line bg-white shadow-sm">
           <div className="border-b border-line p-4">
-            <h2 className="text-lg font-black text-ink">Shop by Use category groups (legacy)</h2>
+            <h2 className="text-lg font-semibold text-ink">Shop by Use category groups (legacy)</h2>
             <p className="mt-1 text-sm text-muted">
               {catalogCategories.length} groups -- these are the older category buckets behind /category/[slug] and the /shop
               grid, kept alongside the newer stand-category/use-case system above.
@@ -111,7 +111,7 @@ export default async function AdminCategoriesPage() {
           </div>
           <table className="w-full border-collapse text-left text-sm">
             <thead>
-              <tr className="border-b border-line bg-gray-50 text-xs uppercase text-muted">
+              <tr className="border-b border-line bg-surface text-xs uppercase text-muted">
                 <th className="p-3">Category</th>
                 <th className="p-3">Active products</th>
               </tr>
@@ -127,7 +127,7 @@ export default async function AdminCategoriesPage() {
                     </td>
                     <td className="p-3">
                       {count === 0 ? (
-                        <span className="rounded-full bg-amber-50 px-3 py-1 text-xs font-black uppercase text-ink">
+                        <span className="rounded-full bg-amber-50 px-3 py-1 text-xs font-semibold uppercase text-ink">
                           0 -- hidden from nav
                         </span>
                       ) : (

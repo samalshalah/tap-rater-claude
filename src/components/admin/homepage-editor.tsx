@@ -41,7 +41,7 @@ export function HomepageEditor({ content }: { content: HomepageContentInput }) {
       </div>
       <Input name="featuredBadge" label="Featured badge" defaultValue={content.featuredBadge} />
       <Input name="featuredLabel" label="Featured product label" defaultValue={content.featuredLabel} />
-      <button className="rounded-md bg-brand px-5 py-3 text-sm font-bold text-white">Save homepage</button>
+      <button className="rounded-full bg-ink px-5 py-3 text-sm font-medium text-white transition hover:bg-brand">Save homepage</button>
       {status ? <p className="text-sm font-semibold text-ink">{status}</p> : null}
     </form>
   );
@@ -51,7 +51,7 @@ function Input({ name, label, defaultValue }: { name: string; label: string; def
   return (
     <label className="grid gap-2 text-sm font-bold text-ink">
       {label}
-      <input className="rounded-md border border-line px-4 py-3 font-normal text-ink" name={name} defaultValue={defaultValue} required />
+      <input className="rounded-xl border border-line px-4 py-3 font-normal text-ink" name={name} defaultValue={defaultValue} required />
     </label>
   );
 }
@@ -60,7 +60,7 @@ function Textarea({ name, label, defaultValue }: { name: string; label: string; 
   return (
     <label className="grid gap-2 text-sm font-bold text-ink">
       {label}
-      <textarea className="min-h-28 rounded-md border border-line px-4 py-3 font-normal text-ink" name={name} defaultValue={defaultValue} required />
+      <textarea className="min-h-28 rounded-xl border border-line px-4 py-3 font-normal text-ink" name={name} defaultValue={defaultValue} required />
     </label>
   );
 }

@@ -10,9 +10,9 @@ export default async function AccountBusinessPage() {
     <AccountShell>
       <div className="grid gap-5 md:grid-cols-2">
         {portal.businesses.map((business) => (
-          <article key={business.id} className="rounded-md border border-line bg-white p-5 shadow-sm">
-            <p className="text-xs font-black uppercase text-brand">{business.status ?? "active"}</p>
-            <h2 className="mt-2 text-2xl font-black text-ink">{business.businessName}</h2>
+          <article key={business.id} className="rounded-2xl border border-line bg-white p-5 shadow-sm">
+            <p className="text-xs font-semibold uppercase text-brand">{business.status ?? "active"}</p>
+            <h2 className="mt-2 text-2xl font-semibold text-ink">{business.businessName}</h2>
             <div className="mt-4 grid gap-2 text-sm text-muted">
               <BusinessLink label="Website" value={business.websiteUrl} />
               <BusinessLink label="Google review" value={business.googleReviewUrl} />
@@ -23,7 +23,7 @@ export default async function AccountBusinessPage() {
           </article>
         ))}
         {portal.businesses.length === 0 ? (
-          <div className="rounded-md border border-line bg-white p-6 text-muted shadow-sm">No business profile found for this account yet.</div>
+          <div className="rounded-2xl border border-line bg-white p-6 text-muted shadow-sm">No business profile found for this account yet.</div>
         ) : null}
       </div>
     </AccountShell>

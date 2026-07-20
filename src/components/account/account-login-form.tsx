@@ -107,14 +107,14 @@ export function AccountLoginForm({ token }: { token?: string }) {
               type="email"
               value={email}
               onChange={(event) => setEmail(event.target.value)}
-              className="rounded-md border border-line px-4 py-3 text-sm font-medium outline-none focus:border-brand"
+              className="rounded-xl border border-line px-4 py-3 text-sm font-medium outline-none focus:border-brand"
               autoComplete="email"
               placeholder="owner@example.com"
             />
           </label>
           <button
             disabled={status === "loading"}
-            className="rounded-md bg-brand px-5 py-3 text-sm font-bold text-white transition hover:bg-ink disabled:cursor-not-allowed disabled:bg-muted"
+            className="rounded-full bg-ink px-5 py-3 text-sm font-medium text-white transition hover:bg-ink disabled:cursor-not-allowed disabled:bg-line disabled:text-muted"
           >
             {status === "loading" ? "Sending..." : "Send login link"}
           </button>
@@ -128,7 +128,7 @@ export function AccountLoginForm({ token }: { token?: string }) {
               type="email"
               value={email}
               onChange={(event) => setEmail(event.target.value)}
-              className="rounded-md border border-line px-4 py-3 text-sm font-medium outline-none focus:border-brand"
+              className="rounded-xl border border-line px-4 py-3 text-sm font-medium outline-none focus:border-brand"
               autoComplete="email"
               placeholder="owner@example.com"
             />
@@ -140,14 +140,14 @@ export function AccountLoginForm({ token }: { token?: string }) {
               type="password"
               value={password}
               onChange={(event) => setPassword(event.target.value)}
-              className="rounded-md border border-line px-4 py-3 text-sm font-medium outline-none focus:border-brand"
+              className="rounded-xl border border-line px-4 py-3 text-sm font-medium outline-none focus:border-brand"
               autoComplete="current-password"
               placeholder="Your password"
             />
           </label>
           <button
             disabled={status === "loading"}
-            className="rounded-md bg-brand px-5 py-3 text-sm font-bold text-white transition hover:bg-ink disabled:cursor-not-allowed disabled:bg-muted"
+            className="rounded-full bg-ink px-5 py-3 text-sm font-medium text-white transition hover:bg-ink disabled:cursor-not-allowed disabled:bg-line disabled:text-muted"
           >
             {status === "loading" ? "Logging in..." : "Log in"}
           </button>
@@ -158,7 +158,7 @@ export function AccountLoginForm({ token }: { token?: string }) {
       )}
 
       {message ? (
-        <div className={`rounded-md border px-4 py-3 text-sm font-semibold ${status === "error" ? "border-red-200 bg-red-50 text-red-700" : "border-green-200 bg-green-50 text-green-800"}`}>
+        <div className={`rounded-2xl border px-4 py-3 text-sm font-semibold ${status === "error" ? "border-red-200 bg-red-50 text-red-700" : "border-green-200 bg-green-50 text-green-800"}`}>
           {message}
           {devMagicLink ? (
             <a href={devMagicLink} className="mt-2 block break-all text-brand underline">

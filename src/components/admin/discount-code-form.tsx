@@ -45,13 +45,13 @@ export function DiscountCodeForm() {
   }
 
   return (
-    <form className="grid gap-4 rounded-md border border-line bg-white p-4 shadow-sm" onSubmit={submit}>
-      <h2 className="text-lg font-black text-ink">New discount code</h2>
+    <form className="grid gap-4 rounded-2xl border border-line bg-white p-4 shadow-sm" onSubmit={submit}>
+      <h2 className="text-lg font-semibold text-ink">New discount code</h2>
       <div className="grid gap-4 md:grid-cols-2">
         <label className="grid gap-2 text-sm font-bold text-ink">
           Code
           <input
-            className="rounded-md border border-line bg-white px-4 py-3 font-normal uppercase text-ink"
+            className="rounded-xl border border-line bg-white px-4 py-3 font-normal uppercase text-ink"
             name="code"
             placeholder="WELCOME10"
             required
@@ -59,7 +59,7 @@ export function DiscountCodeForm() {
         </label>
         <label className="grid gap-2 text-sm font-bold text-ink">
           Type
-          <select className="rounded-md border border-line bg-white px-4 py-3 font-normal" name="discountType" defaultValue="percent">
+          <select className="rounded-xl border border-line bg-white px-4 py-3 font-normal" name="discountType" defaultValue="percent">
             <option value="percent">Percent off</option>
             <option value="fixed_cents">Fixed amount off (cents)</option>
           </select>
@@ -67,7 +67,7 @@ export function DiscountCodeForm() {
         <label className="grid gap-2 text-sm font-bold text-ink">
           Value
           <input
-            className="rounded-md border border-line bg-white px-4 py-3 font-normal text-ink"
+            className="rounded-xl border border-line bg-white px-4 py-3 font-normal text-ink"
             name="value"
             inputMode="numeric"
             placeholder="10 for 10%, or 500 for $5.00 off"
@@ -76,26 +76,26 @@ export function DiscountCodeForm() {
         </label>
         <label className="grid gap-2 text-sm font-bold text-ink">
           Status
-          <select className="rounded-md border border-line bg-white px-4 py-3 font-normal" name="isActive" defaultValue="true">
+          <select className="rounded-xl border border-line bg-white px-4 py-3 font-normal" name="isActive" defaultValue="true">
             <option value="true">Active</option>
             <option value="false">Inactive</option>
           </select>
         </label>
         <label className="grid gap-2 text-sm font-bold text-ink">
           Usage limit (optional)
-          <input className="rounded-md border border-line bg-white px-4 py-3 font-normal text-ink" name="usageLimit" inputMode="numeric" placeholder="Unlimited if blank" />
+          <input className="rounded-xl border border-line bg-white px-4 py-3 font-normal text-ink" name="usageLimit" inputMode="numeric" placeholder="Unlimited if blank" />
         </label>
         <label className="grid gap-2 text-sm font-bold text-ink">
           Expires (optional)
-          <input className="rounded-md border border-line bg-white px-4 py-3 font-normal text-ink" name="expiresAt" type="date" />
+          <input className="rounded-xl border border-line bg-white px-4 py-3 font-normal text-ink" name="expiresAt" type="date" />
         </label>
       </div>
       <label className="grid gap-2 text-sm font-bold text-ink">
         Notes
-        <textarea className="rounded-md border border-line bg-white px-4 py-3 font-normal text-ink" name="notes" rows={2} placeholder="What this code is for, who it's shared with" />
+        <textarea className="rounded-xl border border-line bg-white px-4 py-3 font-normal text-ink" name="notes" rows={2} placeholder="What this code is for, who it's shared with" />
       </label>
       <div className="flex items-center gap-3">
-        <button className="rounded-md bg-brand px-5 py-3 text-sm font-bold text-white disabled:cursor-not-allowed disabled:bg-gray-300" disabled={isSaving}>
+        <button className="rounded-full bg-ink px-5 py-3 text-sm font-medium text-white transition hover:bg-brand disabled:cursor-not-allowed disabled:bg-line disabled:text-muted" disabled={isSaving}>
           {isSaving ? "Saving..." : "Create discount code"}
         </button>
         {status ? (

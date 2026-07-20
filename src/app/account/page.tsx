@@ -20,16 +20,16 @@ export default async function AccountPage() {
       </div>
 
       <div className="mt-6 grid gap-5 md:grid-cols-3">
-        <Link href="/account/business" className="rounded-md border border-line bg-white p-5 shadow-sm">
-          <h2 className="font-black text-ink">Business profile</h2>
+        <Link href="/account/business" className="rounded-2xl border border-line bg-white p-5 shadow-sm">
+          <h2 className="font-semibold text-ink">Business profile</h2>
           <p className="mt-2 text-sm leading-6 text-muted">Review business names and saved public links.</p>
         </Link>
-        <Link href="/account/devices" className="rounded-md border border-line bg-white p-5 shadow-sm">
-          <h2 className="font-black text-ink">Devices</h2>
+        <Link href="/account/devices" className="rounded-2xl border border-line bg-white p-5 shadow-sm">
+          <h2 className="font-semibold text-ink">Devices</h2>
           <p className="mt-2 text-sm leading-6 text-muted">View status, destinations, and tap counts for your stands.</p>
         </Link>
-        <div className="rounded-md border border-line bg-white p-5 shadow-sm">
-          <h2 className="font-black text-ink">Upgrade to Pro later</h2>
+        <div className="rounded-2xl border border-line bg-white p-5 shadow-sm">
+          <h2 className="font-semibold text-ink">Upgrade to Pro later</h2>
           <p className="mt-2 text-sm leading-6 text-muted">Hosted landing pages, advanced analytics, and multi-location tools will be added later. No payment is enabled.</p>
         </div>
       </div>
@@ -39,13 +39,13 @@ export default async function AccountPage() {
 
 function SummaryCard({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-md border border-line bg-white p-4 shadow-sm">
-      <p className="text-xs font-black uppercase text-muted">{label}</p>
-      <p className="mt-2 text-2xl font-black text-ink">{value}</p>
+    <div className="rounded-2xl border border-line bg-white p-4 shadow-sm">
+      <p className="text-xs font-semibold uppercase text-muted">{label}</p>
+      <p className="mt-2 text-2xl font-semibold text-ink">{value}</p>
     </div>
   );
 }
 
 function PortalMessage({ message }: { message: string }) {
-  return <div className="mb-6 rounded-md border border-amber-200 bg-amber-50 p-4 text-sm font-semibold text-ink">{message}</div>;
+  return <div className="mb-6 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm font-semibold text-ink">{message}</div>;
 }

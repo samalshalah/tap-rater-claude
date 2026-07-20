@@ -57,8 +57,8 @@ export function TaxConfigForm({ initialValues }: { initialValues: TaxConfigInput
   }
 
   return (
-    <form className="grid gap-4 rounded-md border border-line bg-white p-5 shadow-sm" onSubmit={submit}>
-      <h2 className="text-xl font-black text-ink">Tax configuration</h2>
+    <form className="grid gap-4 rounded-2xl border border-line bg-white p-5 shadow-sm" onSubmit={submit}>
+      <h2 className="text-xl font-semibold text-ink">Tax configuration</h2>
       <p className="text-sm leading-6 text-muted">
         Rates are stored per state, not hardcoded, so adding nexus in a new state later is just another row here -- no code
         change needed. Confirm rates with an accountant, especially if local/county tax adds on top of the state rate.
@@ -66,7 +66,7 @@ export function TaxConfigForm({ initialValues }: { initialValues: TaxConfigInput
 
       <label className="grid gap-2 text-sm font-bold text-ink">
         Provider
-        <select className="rounded-md border border-line px-4 py-3 font-normal" name="provider" defaultValue={initialValues.provider}>
+        <select className="rounded-xl border border-line px-4 py-3 font-normal" name="provider" defaultValue={initialValues.provider}>
           <option value="manual">Manual rates (set below)</option>
           <option value="stripe_tax">Stripe Tax (automatic)</option>
           <option value="none">Not decided yet</option>
@@ -75,7 +75,7 @@ export function TaxConfigForm({ initialValues }: { initialValues: TaxConfigInput
 
       <label className="grid gap-2 text-sm font-bold text-ink">
         Prices shown to customers
-        <select className="rounded-md border border-line px-4 py-3 font-normal" name="pricesIncludeTax" defaultValue={initialValues.pricesIncludeTax ? "true" : "false"}>
+        <select className="rounded-xl border border-line px-4 py-3 font-normal" name="pricesIncludeTax" defaultValue={initialValues.pricesIncludeTax ? "true" : "false"}>
           <option value="false">Tax added at checkout (prices shown are pre-tax)</option>
           <option value="true">Tax included in displayed price</option>
         </select>
@@ -86,7 +86,7 @@ export function TaxConfigForm({ initialValues }: { initialValues: TaxConfigInput
         {rows.map((row, index) => (
           <div key={index} className="flex items-center gap-3">
             <input
-              className="w-20 rounded-md border border-line px-3 py-2 text-center font-normal uppercase text-ink"
+              className="w-20 rounded-xl border border-line px-3 py-2 text-center font-normal uppercase text-ink"
               value={row.state}
               onChange={(e) => updateRow(index, "state", e.target.value)}
               maxLength={2}
@@ -94,7 +94,7 @@ export function TaxConfigForm({ initialValues }: { initialValues: TaxConfigInput
             />
             <div className="flex items-center gap-2">
               <input
-                className="w-24 rounded-md border border-line px-3 py-2 font-normal text-ink"
+                className="w-24 rounded-xl border border-line px-3 py-2 font-normal text-ink"
                 value={row.ratePercent}
                 onChange={(e) => updateRow(index, "ratePercent", e.target.value)}
                 inputMode="decimal"
@@ -114,11 +114,11 @@ export function TaxConfigForm({ initialValues }: { initialValues: TaxConfigInput
 
       <label className="grid gap-2 text-sm font-bold text-ink">
         Notes
-        <textarea className="min-h-24 rounded-md border border-line px-4 py-3 font-normal text-ink" name="notes" defaultValue={initialValues.notes} placeholder="Exemptions, accountant contact, filing schedule" />
+        <textarea className="min-h-24 rounded-xl border border-line px-4 py-3 font-normal text-ink" name="notes" defaultValue={initialValues.notes} placeholder="Exemptions, accountant contact, filing schedule" />
       </label>
 
       <div className="flex items-center gap-3">
-        <button className="rounded-md bg-brand px-5 py-3 text-sm font-bold text-white disabled:cursor-not-allowed disabled:bg-gray-300" disabled={isSaving}>
+        <button className="rounded-full bg-ink px-5 py-3 text-sm font-medium text-white transition hover:bg-brand disabled:cursor-not-allowed disabled:bg-line disabled:text-muted" disabled={isSaving}>
           {isSaving ? "Saving..." : "Save tax settings"}
         </button>
         {status ? <p className={status.tone === "success" ? "text-sm font-bold text-brand" : "text-sm font-bold text-red-600"}>{status.message}</p> : null}

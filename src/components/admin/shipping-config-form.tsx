@@ -37,8 +37,8 @@ export function ShippingConfigForm({ initialValues }: { initialValues: ShippingC
   }
 
   return (
-    <form className="grid gap-4 rounded-md border border-line bg-white p-5 shadow-sm" onSubmit={submit}>
-      <h2 className="text-xl font-black text-ink">Shipping configuration</h2>
+    <form className="grid gap-4 rounded-2xl border border-line bg-white p-5 shadow-sm" onSubmit={submit}>
+      <h2 className="text-xl font-semibold text-ink">Shipping configuration</h2>
       <p className="text-sm leading-6 text-muted">
         These are the actual numbers checkout will use once wired in. Fill in your real rate and delivery window before going
         live -- these fields don't have a sensible default I can guess for you.
@@ -47,7 +47,7 @@ export function ShippingConfigForm({ initialValues }: { initialValues: ShippingC
         <label className="grid gap-2 text-sm font-bold text-ink">
           Flat rate (cents)
           <input
-            className="rounded-md border border-line px-4 py-3 font-normal text-ink"
+            className="rounded-xl border border-line px-4 py-3 font-normal text-ink"
             name="flatRateCents"
             inputMode="numeric"
             defaultValue={initialValues?.flatRateCents ?? ""}
@@ -58,7 +58,7 @@ export function ShippingConfigForm({ initialValues }: { initialValues: ShippingC
         <label className="grid gap-2 text-sm font-bold text-ink">
           Free shipping over (cents, optional)
           <input
-            className="rounded-md border border-line px-4 py-3 font-normal text-ink"
+            className="rounded-xl border border-line px-4 py-3 font-normal text-ink"
             name="freeShippingThresholdCents"
             inputMode="numeric"
             defaultValue={initialValues?.freeShippingThresholdCents ?? ""}
@@ -68,7 +68,7 @@ export function ShippingConfigForm({ initialValues }: { initialValues: ShippingC
         <label className="grid gap-2 text-sm font-bold text-ink">
           Estimated delivery
           <input
-            className="rounded-md border border-line px-4 py-3 font-normal text-ink"
+            className="rounded-xl border border-line px-4 py-3 font-normal text-ink"
             name="estimatedDeliveryDays"
             defaultValue={initialValues?.estimatedDeliveryDays ?? ""}
             placeholder="3-7 business days"
@@ -77,7 +77,7 @@ export function ShippingConfigForm({ initialValues }: { initialValues: ShippingC
         </label>
         <label className="grid gap-2 text-sm font-bold text-ink">
           Ships internationally?
-          <select className="rounded-md border border-line px-4 py-3 font-normal" name="shipsInternationally" defaultValue={initialValues?.shipsInternationally ? "true" : "false"}>
+          <select className="rounded-xl border border-line px-4 py-3 font-normal" name="shipsInternationally" defaultValue={initialValues?.shipsInternationally ? "true" : "false"}>
             <option value="false">US only</option>
             <option value="true">Yes, internationally</option>
           </select>
@@ -85,10 +85,10 @@ export function ShippingConfigForm({ initialValues }: { initialValues: ShippingC
       </div>
       <label className="grid gap-2 text-sm font-bold text-ink">
         Notes
-        <textarea className="min-h-24 rounded-md border border-line px-4 py-3 font-normal text-ink" name="notes" defaultValue={initialValues?.notes ?? ""} placeholder="Carrier, packaging, handling time" />
+        <textarea className="min-h-24 rounded-xl border border-line px-4 py-3 font-normal text-ink" name="notes" defaultValue={initialValues?.notes ?? ""} placeholder="Carrier, packaging, handling time" />
       </label>
       <div className="flex items-center gap-3">
-        <button className="rounded-md bg-brand px-5 py-3 text-sm font-bold text-white disabled:cursor-not-allowed disabled:bg-gray-300" disabled={isSaving}>
+        <button className="rounded-full bg-ink px-5 py-3 text-sm font-medium text-white transition hover:bg-brand disabled:cursor-not-allowed disabled:bg-line disabled:text-muted" disabled={isSaving}>
           {isSaving ? "Saving..." : "Save shipping settings"}
         </button>
         {status ? <p className={status.tone === "success" ? "text-sm font-bold text-brand" : "text-sm font-bold text-red-600"}>{status.message}</p> : null}

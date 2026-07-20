@@ -10,21 +10,21 @@ export default async function AdminOrdersPage() {
   return (
     <AdminShell>
       <section className="mx-auto max-w-7xl px-4 py-8 md:px-8 lg:py-12">
-        <p className="text-sm font-black uppercase text-brand">Commerce</p>
+        <p className="text-sm font-semibold uppercase text-brand">Commerce</p>
         <div className="mt-3 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
           <div>
-            <h1 className="text-4xl font-black text-ink">Orders</h1>
+            <h1 className="text-4xl font-semibold text-ink">Orders</h1>
             <p className="mt-2 max-w-3xl text-sm leading-6 text-muted">
               Stripe test checkout creates pending orders, and the Stripe webhook marks them paid after checkout completes.
             </p>
           </div>
-          <div className="rounded-md border border-line bg-white px-4 py-3 text-sm font-bold text-ink">
+          <div className="rounded-xl border border-line bg-white px-4 py-3 text-sm font-bold text-ink">
             {orders.length} orders
           </div>
         </div>
 
         {!configured ? (
-          <div className="mt-6 rounded-md border border-amber-200 bg-amber-50 p-4 text-sm font-semibold text-ink">
+          <div className="mt-6 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm font-semibold text-ink">
             Database persistence is not configured yet. Stripe checkout stays disabled until orders can be persisted.
           </div>
         ) : null}
@@ -36,10 +36,10 @@ export default async function AdminOrdersPage() {
           <SummaryCard label="Revenue" value={formatPrice(orders.filter((order) => order.status === "paid").reduce((sum, order) => sum + order.total_cents, 0))} />
         </div>
 
-        <div className="mt-6 overflow-x-auto rounded-md border border-line bg-white shadow-sm">
+        <div className="mt-6 overflow-x-auto rounded-2xl border border-line bg-white shadow-sm">
           <table className="w-full min-w-[980px] border-collapse text-left text-sm">
             <thead>
-              <tr className="border-b border-line bg-gray-50 text-xs uppercase text-muted">
+              <tr className="border-b border-line bg-surface text-xs uppercase text-muted">
                 <th className="p-4">Stripe session</th>
                 <th className="p-4">Customer</th>
                 <th className="p-4">Items</th>
@@ -61,9 +61,9 @@ export default async function AdminOrdersPage() {
                       ? order.line_items_json.map((item) => `${item.quantity} x ${item.title}`).join(", ")
                       : "-"}
                   </td>
-                  <td className="p-4 font-black text-ink">{formatPrice(order.total_cents)}</td>
+                  <td className="p-4 font-semibold text-ink">{formatPrice(order.total_cents)}</td>
                   <td className="p-4">
-                    <span className={order.status === "paid" ? "rounded-full bg-teal-50 px-3 py-1 text-xs font-black uppercase text-brand" : "rounded-full bg-amber-50 px-3 py-1 text-xs font-black uppercase text-ink"}>
+                    <span className={order.status === "paid" ? "rounded-full bg-teal-50 px-3 py-1 text-xs font-semibold uppercase text-brand" : "rounded-full bg-amber-50 px-3 py-1 text-xs font-semibold uppercase text-ink"}>
                       {order.status.replace("_", " ")}
                     </span>
                   </td>
@@ -87,9 +87,9 @@ export default async function AdminOrdersPage() {
 
 function SummaryCard({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-md border border-line bg-white p-4 shadow-sm">
-      <p className="text-xs font-black uppercase text-muted">{label}</p>
-      <p className="mt-2 text-2xl font-black text-ink">{value}</p>
+    <div className="rounded-2xl border border-line bg-white p-4 shadow-sm">
+      <p className="text-xs font-semibold uppercase text-muted">{label}</p>
+      <p className="mt-2 text-2xl font-semibold text-ink">{value}</p>
     </div>
   );
 }

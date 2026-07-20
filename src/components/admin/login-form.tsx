@@ -31,9 +31,9 @@ export function LoginForm() {
 
   return (
     <form className="grid gap-4" onSubmit={submit}>
-      <input className="rounded-md border border-line px-4 py-3" name="email" type="email" placeholder="Admin email" required />
-      <input className="rounded-md border border-line px-4 py-3" name="password" type="password" placeholder="Password" required />
-      <button className="rounded-md bg-brand px-5 py-3 text-sm font-bold text-white">Log in</button>
+      <input className="rounded-xl border border-line px-4 py-3" name="email" type="email" placeholder="Admin email" required />
+      <input className="rounded-xl border border-line px-4 py-3" name="password" type="password" placeholder="Password" required />
+      <button className="rounded-full bg-ink px-5 py-3 text-sm font-medium text-white transition hover:bg-brand">Log in</button>
       {status ? <p className="text-sm font-semibold text-ink">{status}</p> : null}
     </form>
   );
