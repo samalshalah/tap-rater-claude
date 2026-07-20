@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { Breadcrumb } from "@/components/layout/breadcrumb";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
@@ -55,9 +56,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
     <>
       <section className="border-b border-line bg-white py-16 sm:py-20">
         <div className="mx-auto max-w-[1100px] px-6">
-          <Link href="/shop" className="text-[13px] font-medium text-brand hover:text-brand-dark">
-            &lsaquo; Shop all products
-          </Link>
+          <Breadcrumb items={[{ label: "Shop", href: "/shop" }, { label: category.title }]} />
           {hero ? (
             <div className="relative mt-6 aspect-[16/8] w-full overflow-hidden rounded-2xl">
               <Image src={hero.src} alt={hero.alt} fill className="object-cover" priority />

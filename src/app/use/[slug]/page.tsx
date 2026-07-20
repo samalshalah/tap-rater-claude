@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { ProductCard } from "@/components/product/product-card";
+import { Breadcrumb } from "@/components/layout/breadcrumb";
 import { useCases, getUseCaseBySlug } from "@/data/use-cases";
 import { getStorefrontProducts } from "@/lib/product-repository";
 import type { MigratedProduct } from "@/data/migrated-products";
@@ -66,9 +67,7 @@ export default async function UseCasePage({ params }: PageProps) {
     <>
       <section className="border-b border-line bg-white py-16 sm:py-20">
         <div className="mx-auto max-w-[1100px] px-6">
-          <Link href="/shop/use" className="text-[13px] font-medium text-brand hover:text-brand-dark">
-            &lsaquo; Shop by use
-          </Link>
+          <Breadcrumb items={[{ label: "Shop", href: "/shop" }, { label: "Shop by Use", href: "/shop/use" }, { label: useCase.name }]} />
           <h1 className="mt-6 max-w-2xl text-[34px] font-semibold tracking-tightest text-ink sm:text-[44px]">{useCase.name}</h1>
           <p className="mt-4 max-w-2xl text-[15px] leading-6 text-muted">{useCase.description}</p>
         </div>

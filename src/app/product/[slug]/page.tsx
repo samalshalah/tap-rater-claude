@@ -8,6 +8,7 @@ import { getStandCategoryBySlug } from "@/data/stand-categories";
 import { getUseCaseBySlug } from "@/data/use-cases";
 import { ProductCard } from "@/components/product/product-card";
 import { ProductGallery } from "@/components/product/product-gallery";
+import { Breadcrumb } from "@/components/layout/breadcrumb";
 import { DestinationLinkField } from "@/components/product/destination-link-field";
 import {
   getStorefrontProductBySlug,
@@ -119,15 +120,13 @@ export default async function ProductPage({ params }: ProductPageProps) {
         <div className="mx-auto grid max-w-[1100px] gap-10 px-6 py-12 lg:grid-cols-[0.95fr_1.05fr] lg:py-16">
           <ProductGallery product={product} />
           <div>
-            <div className="flex flex-wrap items-center gap-2 text-[13px] text-muted">
-              <Link href="/shop" className="text-brand hover:text-brand-dark">Shop</Link>
-              {category ? (
-                <>
-                  <span>/</span>
-                  <Link href={`/category/${category.slug}`} className="text-brand hover:text-brand-dark">{category.title}</Link>
-                </>
-              ) : null}
-            </div>
+            <Breadcrumb
+              items={[
+                { label: "Shop", href: "/shop" },
+                ...(category ? [{ label: category.title, href: `/category/${category.slug}` }] : []),
+                { label: product.title }
+              ]}
+            />
 
             <div className="mt-4 flex flex-wrap items-center gap-2">
               <span className={product.stockStatus === "instock" ? "rounded-full bg-brand/10 px-3 py-1 text-[11px] font-medium uppercase tracking-wide text-brand" : "rounded-full bg-surface px-3 py-1 text-[11px] font-medium uppercase tracking-wide text-muted"}>
