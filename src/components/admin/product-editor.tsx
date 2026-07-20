@@ -124,14 +124,14 @@ export function ProductEditor({ product, categories, mode }: ProductEditorProps)
       <div className="grid gap-5">
         <section className="grid gap-4 rounded-2xl border border-line bg-surface p-4">
           <div>
-            <h2 className="text-lg font-semibold text-ink">Product identity</h2>
+            <h2 className="text-[18px] font-semibold tracking-tightest text-ink">Product identity</h2>
             <p className="mt-1 text-sm text-muted">Core catalog data used by product cards, product pages, and admin lists.</p>
           </div>
           <div className="grid gap-4 md:grid-cols-2">
             <Input name="title" label="Title" defaultValue={product.title} placeholder="White Stand - Google Review" />
             <Input name="slug" label="Slug" defaultValue={product.slug} placeholder="google-review-white-stand" />
             <Input name="sku" label="SKU" defaultValue={product.sku} placeholder="TRATER01" />
-            <label className="grid gap-2 text-sm font-bold text-ink">
+            <label className="grid gap-2 text-sm font-semibold text-ink">
               Category
               <select className="rounded-xl border border-line bg-white px-4 py-3 font-normal" name="categorySlug" defaultValue={product.categorySlug}>
                 {categories.map((category) => (
@@ -146,7 +146,7 @@ export function ProductEditor({ product, categories, mode }: ProductEditorProps)
 
         <section className="grid gap-4 rounded-2xl border border-line bg-surface p-4">
           <div>
-            <h2 className="text-lg font-semibold text-ink">Pricing and availability</h2>
+            <h2 className="text-[18px] font-semibold tracking-tightest text-ink">Pricing and availability</h2>
             <p className="mt-1 text-sm text-muted">Prices are stored in cents so $49.00 is entered as 4900.</p>
           </div>
           <div className="grid gap-4 md:grid-cols-2">
@@ -159,14 +159,14 @@ export function ProductEditor({ product, categories, mode }: ProductEditorProps)
               placeholder="Optional"
               required={false}
             />
-            <label className="grid gap-2 text-sm font-bold text-ink">
+            <label className="grid gap-2 text-sm font-semibold text-ink">
               Stock status
               <select className="rounded-xl border border-line bg-white px-4 py-3 font-normal" name="stockStatus" defaultValue={product.stockStatus}>
                 <option value="instock">In stock</option>
                 <option value="outofstock">Out of stock</option>
               </select>
             </label>
-            <label className="grid gap-2 text-sm font-bold text-ink">
+            <label className="grid gap-2 text-sm font-semibold text-ink">
               Visibility
               <select className="rounded-xl border border-line bg-white px-4 py-3 font-normal" name="isActive" defaultValue={product.isActive ? "true" : "false"}>
                 <option value="true">Active on storefront</option>
@@ -178,7 +178,7 @@ export function ProductEditor({ product, categories, mode }: ProductEditorProps)
 
         <section className="grid gap-4 rounded-2xl border border-line bg-surface p-4">
           <div>
-            <h2 className="text-lg font-semibold text-ink">Product copy</h2>
+            <h2 className="text-[18px] font-semibold tracking-tightest text-ink">Product copy</h2>
             <p className="mt-1 text-sm text-muted">Short copy appears on cards; full copy appears on product pages.</p>
           </div>
           <Textarea name="shortDescription" label="Short description" defaultValue={product.shortDescription} />
@@ -187,11 +187,11 @@ export function ProductEditor({ product, categories, mode }: ProductEditorProps)
 
         <section className="grid gap-4 rounded-2xl border border-line bg-surface p-4">
           <div>
-            <h2 className="text-lg font-semibold text-ink">Service strategy</h2>
+            <h2 className="text-[18px] font-semibold tracking-tightest text-ink">Service strategy</h2>
             <p className="mt-1 text-sm text-muted">Controls storefront badges and the activation expectations shown to customers.</p>
           </div>
           <div className="grid gap-4 md:grid-cols-2">
-            <label className="grid gap-2 text-sm font-bold text-ink">
+            <label className="grid gap-2 text-sm font-semibold text-ink">
               Product type
               <select className="rounded-xl border border-line bg-white px-4 py-3 font-normal" name="productType" defaultValue={product.productType}>
                 <option value="physical_redirect">Physical direct redirect</option>
@@ -200,7 +200,7 @@ export function ProductEditor({ product, categories, mode }: ProductEditorProps)
                 <option value="bundle">Bundle</option>
               </select>
             </label>
-            <label className="grid gap-2 text-sm font-bold text-ink">
+            <label className="grid gap-2 text-sm font-semibold text-ink">
               Service mode
               <select className="rounded-xl border border-line bg-white px-4 py-3 font-normal" name="serviceMode" defaultValue={product.serviceMode}>
                 <option value="basic_redirect">Basic redirect</option>
@@ -209,7 +209,7 @@ export function ProductEditor({ product, categories, mode }: ProductEditorProps)
                 <option value="multi_location_platform">Multi-location platform</option>
               </select>
             </label>
-            <label className="grid gap-2 text-sm font-bold text-ink">
+            <label className="grid gap-2 text-sm font-semibold text-ink">
               Checkout mode
               <select className="rounded-xl border border-line bg-white px-4 py-3 font-normal" name="checkoutMode" defaultValue={product.checkoutMode}>
                 <option value="buy_now">Buy now</option>
@@ -218,7 +218,7 @@ export function ProductEditor({ product, categories, mode }: ProductEditorProps)
                 <option value="contact_sales">Contact sales</option>
               </select>
             </label>
-            <label className="grid gap-2 text-sm font-bold text-ink">
+            <label className="grid gap-2 text-sm font-semibold text-ink">
               Activation type
               <select className="rounded-xl border border-line bg-white px-4 py-3 font-normal" name="activationType" defaultValue={product.activationType}>
                 <option value="free_basic_activation">Free basic activation</option>
@@ -226,7 +226,7 @@ export function ProductEditor({ product, categories, mode }: ProductEditorProps)
                 <option value="premium_hosted_activation">Premium hosted activation</option>
               </select>
             </label>
-            <label className="grid gap-2 text-sm font-bold text-ink">
+            <label className="grid gap-2 text-sm font-semibold text-ink">
               Account requirement
               <select
                 className="rounded-xl border border-line bg-white px-4 py-3 font-normal"
@@ -237,7 +237,7 @@ export function ProductEditor({ product, categories, mode }: ProductEditorProps)
                 <option value="true">Customer account required</option>
               </select>
             </label>
-            <label className="grid gap-2 text-sm font-bold text-ink">
+            <label className="grid gap-2 text-sm font-semibold text-ink">
               Subscription requirement
               <select
                 className="rounded-xl border border-line bg-white px-4 py-3 font-normal"
@@ -248,7 +248,7 @@ export function ProductEditor({ product, categories, mode }: ProductEditorProps)
                 <option value="true">Subscription required for hosted features</option>
               </select>
             </label>
-            <label className="grid gap-2 text-sm font-bold text-ink">
+            <label className="grid gap-2 text-sm font-semibold text-ink">
               Landing page requirement
               <select
                 className="rounded-xl border border-line bg-white px-4 py-3 font-normal"
@@ -267,7 +267,7 @@ export function ProductEditor({ product, categories, mode }: ProductEditorProps)
             />
           </div>
           <fieldset className="grid gap-3">
-            <legend className="text-sm font-bold text-ink">Supported destinations</legend>
+            <legend className="text-sm font-semibold text-ink">Supported destinations</legend>
             <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
               {supportedDestinationOptions.map((destination) => (
                 <label key={destination} className="flex items-center gap-2 rounded-xl border border-line bg-white px-3 py-2 text-sm font-semibold text-ink">
@@ -283,7 +283,7 @@ export function ProductEditor({ product, categories, mode }: ProductEditorProps)
             </div>
           </fieldset>
           <fieldset className="grid gap-3">
-            <legend className="text-sm font-bold text-ink">Customization options</legend>
+            <legend className="text-sm font-semibold text-ink">Customization options</legend>
             <p className="text-sm text-muted">Logo and custom design details are collected after request. This does not enable automated uploads.</p>
             <div className="grid gap-2 md:grid-cols-3">
               {customizationOptionLabels.map((option) => (
@@ -303,7 +303,7 @@ export function ProductEditor({ product, categories, mode }: ProductEditorProps)
             </div>
           </fieldset>
           <div className="grid gap-4 md:grid-cols-3">
-            <label className="grid gap-2 text-sm font-bold text-ink">
+            <label className="grid gap-2 text-sm font-semibold text-ink">
               Logo option
               <select
                 className="rounded-xl border border-line bg-white px-4 py-3 font-normal"
@@ -314,7 +314,7 @@ export function ProductEditor({ product, categories, mode }: ProductEditorProps)
                 <option value="false">No logo setup</option>
               </select>
             </label>
-            <label className="grid gap-2 text-sm font-bold text-ink">
+            <label className="grid gap-2 text-sm font-semibold text-ink">
               Custom design option
               <select
                 className="rounded-xl border border-line bg-white px-4 py-3 font-normal"
@@ -325,7 +325,7 @@ export function ProductEditor({ product, categories, mode }: ProductEditorProps)
                 <option value="false">No custom design</option>
               </select>
             </label>
-            <label className="grid gap-2 text-sm font-bold text-ink">
+            <label className="grid gap-2 text-sm font-semibold text-ink">
               Default design mode
               <select className="rounded-xl border border-line bg-white px-4 py-3 font-normal" name="designMode" defaultValue={product.designMode}>
                 <option value="standard">Standard</option>
@@ -338,7 +338,7 @@ export function ProductEditor({ product, categories, mode }: ProductEditorProps)
 
         <section className="grid gap-4 rounded-2xl border border-line bg-surface p-4">
           <div>
-            <h2 className="text-lg font-semibold text-ink">Catalog v2 -- stand category and use cases</h2>
+            <h2 className="text-[18px] font-semibold tracking-tightest text-ink">Catalog v2 -- stand category and use cases</h2>
             <p className="mt-1 text-sm leading-6 text-muted">
               Stand category is what kind of stand this is (Shop by Stand). Tags are which business/use case this product
               belongs to (Shop by Use) -- a product can carry many tags without ever being duplicated as a separate SKU.
@@ -346,7 +346,7 @@ export function ProductEditor({ product, categories, mode }: ProductEditorProps)
             </p>
           </div>
           <div className="grid gap-4 md:grid-cols-3">
-            <label className="grid gap-2 text-sm font-bold text-ink">
+            <label className="grid gap-2 text-sm font-semibold text-ink">
               Stand category
               <select
                 className="rounded-xl border border-line bg-white px-4 py-3 font-normal"
@@ -366,7 +366,7 @@ export function ProductEditor({ product, categories, mode }: ProductEditorProps)
                 <option value="hosted-tap-page-stands">Hosted Tap Page Stands</option>
               </select>
             </label>
-            <label className="grid gap-2 text-sm font-bold text-ink">
+            <label className="grid gap-2 text-sm font-semibold text-ink">
               Destination type
               <select
                 className="rounded-xl border border-line bg-white px-4 py-3 font-normal"
@@ -401,7 +401,7 @@ export function ProductEditor({ product, categories, mode }: ProductEditorProps)
             placeholder="restaurants-cafes, retail-grocery, review, universal"
           />
           <div className="grid gap-4 md:grid-cols-4">
-            <label className="grid gap-2 text-sm font-bold text-ink">
+            <label className="grid gap-2 text-sm font-semibold text-ink">
               Logo
               <select
                 className="rounded-xl border border-line bg-white px-4 py-3 font-normal"
@@ -412,7 +412,7 @@ export function ProductEditor({ product, categories, mode }: ProductEditorProps)
                 <option value="false">Not supported</option>
               </select>
             </label>
-            <label className="grid gap-2 text-sm font-bold text-ink">
+            <label className="grid gap-2 text-sm font-semibold text-ink">
               Business name
               <select
                 className="rounded-xl border border-line bg-white px-4 py-3 font-normal"
@@ -423,7 +423,7 @@ export function ProductEditor({ product, categories, mode }: ProductEditorProps)
                 <option value="false">Not supported</option>
               </select>
             </label>
-            <label className="grid gap-2 text-sm font-bold text-ink">
+            <label className="grid gap-2 text-sm font-semibold text-ink">
               Custom headline
               <select
                 className="rounded-xl border border-line bg-white px-4 py-3 font-normal"
@@ -434,7 +434,7 @@ export function ProductEditor({ product, categories, mode }: ProductEditorProps)
                 <option value="true">Supported</option>
               </select>
             </label>
-            <label className="grid gap-2 text-sm font-bold text-ink">
+            <label className="grid gap-2 text-sm font-semibold text-ink">
               Multiple links
               <select
                 className="rounded-xl border border-line bg-white px-4 py-3 font-normal"
@@ -450,7 +450,7 @@ export function ProductEditor({ product, categories, mode }: ProductEditorProps)
 
         <section className="grid gap-4 rounded-2xl border border-line bg-surface p-4">
           <div>
-            <h2 className="text-lg font-semibold text-ink">SEO</h2>
+            <h2 className="text-[18px] font-semibold tracking-tightest text-ink">SEO</h2>
             <p className="mt-1 text-sm text-muted">Used by public product metadata when this product is published.</p>
           </div>
           <Input name="seoTitle" label="SEO title" defaultValue={product.seoTitle ?? ""} required={false} placeholder="Google Review Stand for Businesses" />
@@ -463,7 +463,7 @@ export function ProductEditor({ product, categories, mode }: ProductEditorProps)
           {isSaving ? "Saving..." : mode === "create" ? "Create product" : "Save product"}
         </button>
         {status ? (
-          <p className={status.tone === "success" ? "text-sm font-bold text-brand" : "text-sm font-bold text-red-600"}>
+          <p className={status.tone === "success" ? "text-sm font-semibold text-brand" : "text-sm font-semibold text-red-600"}>
             {status.message}
           </p>
         ) : null}
@@ -488,7 +488,7 @@ function Input({
   required?: boolean;
 }) {
   return (
-    <label className="grid gap-2 text-sm font-bold text-ink">
+    <label className="grid gap-2 text-sm font-semibold text-ink">
       {label}
       <input
         className="rounded-xl border border-line bg-white px-4 py-3 font-normal text-ink"
@@ -504,7 +504,7 @@ function Input({
 
 function Textarea({ name, label, defaultValue, tall = false, required = true }: { name: string; label: string; defaultValue: string; tall?: boolean; required?: boolean }) {
   return (
-    <label className="grid gap-2 text-sm font-bold text-ink">
+    <label className="grid gap-2 text-sm font-semibold text-ink">
       {label}
       <textarea className={`${tall ? "min-h-44" : "min-h-24"} rounded-xl border border-line bg-white px-4 py-3 font-normal text-ink`} name={name} defaultValue={defaultValue} required={required} />
     </label>

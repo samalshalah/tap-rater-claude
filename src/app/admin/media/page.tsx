@@ -30,7 +30,7 @@ export default async function AdminMediaPage() {
           <MediaAssetForm />
 
           <div className="rounded-2xl border border-line bg-white p-4 shadow-sm">
-            <h2 className="text-lg font-semibold text-ink">{assets.length} registered assets</h2>
+            <h2 className="text-[18px] font-semibold tracking-tightest text-ink">{assets.length} registered assets</h2>
             <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {assets.map((asset) => (
                 <div key={asset.id} className="rounded-2xl border border-line p-3">
@@ -43,7 +43,7 @@ export default async function AdminMediaPage() {
                       Video asset
                     </div>
                   )}
-                  <p className="mt-2 text-xs font-bold text-ink">{asset.title}</p>
+                  <p className="mt-2 text-xs font-semibold text-ink">{asset.title}</p>
                   <p className="truncate text-xs text-muted">{asset.src}</p>
                 </div>
               ))}

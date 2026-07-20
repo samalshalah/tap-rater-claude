@@ -140,7 +140,7 @@ export function DevicesManager({ initialDevices, configured, siteUrl }: DevicesM
 
       <form onSubmit={createDevice} className="grid gap-4 rounded-2xl border border-line bg-white p-5 shadow-sm">
         <div>
-          <h2 className="text-xl font-semibold text-ink">Create device</h2>
+          <h2 className="text-[20px] font-semibold tracking-tightest text-ink">Create device</h2>
           <p className="mt-1 text-sm text-muted">Leave codes blank to auto-generate. The activation code is shown once after creation.</p>
         </div>
         <div className="grid gap-4 md:grid-cols-5">
@@ -162,10 +162,10 @@ export function DevicesManager({ initialDevices, configured, siteUrl }: DevicesM
           <p className="mt-1">Activation code: {createdDevice.activationCode}</p>
           <p className="mt-1 break-all">Device URL: {createdDevice.deviceUrl}</p>
           <div className="mt-4 flex flex-wrap gap-3">
-            <button type="button" onClick={() => copyText(createdDevice.deviceUrl)} className="rounded-full bg-white px-4 py-2 font-bold text-ink">
+            <button type="button" onClick={() => copyText(createdDevice.deviceUrl)} className="rounded-full bg-white px-4 py-2 font-semibold text-ink">
               Copy device URL
             </button>
-            <button type="button" onClick={() => copyText(activationInstructions(createdDevice.deviceCode))} className="rounded-full bg-white px-4 py-2 font-bold text-ink">
+            <button type="button" onClick={() => copyText(activationInstructions(createdDevice.deviceCode))} className="rounded-full bg-white px-4 py-2 font-semibold text-ink">
               Copy activation instructions
             </button>
           </div>
@@ -235,7 +235,7 @@ function DeviceRow({
         <p>{device.destinationType ?? "-"}</p>
         <p className="mt-1 max-w-[240px] truncate">{device.destinationUrl ?? ""}</p>
       </td>
-      <td className="p-4 font-bold text-ink">{device.tapCount}</td>
+      <td className="p-4 font-semibold text-ink">{device.tapCount}</td>
       <td className="p-4 text-muted">{device.activatedAt ? new Date(device.activatedAt).toLocaleDateString() : "-"}</td>
       <td className="p-4">
         <form
@@ -265,10 +265,10 @@ function DeviceRow({
           <input name="label" defaultValue={device.label ?? ""} placeholder="Label" className="rounded-xl border border-line px-3 py-2" />
           <div className="flex flex-wrap gap-2">
             <button className="rounded-full bg-ink px-3 py-2 text-xs font-medium text-white transition hover:bg-brand">Save</button>
-            <button type="button" onClick={() => onCopy(deviceUrl)} className="rounded-xl border border-line px-3 py-2 text-xs font-bold text-ink">
+            <button type="button" onClick={() => onCopy(deviceUrl)} className="rounded-xl border border-line px-3 py-2 text-xs font-semibold text-ink">
               Copy URL
             </button>
-            <button type="button" onClick={() => onCopy(activationInstructions)} className="rounded-xl border border-line px-3 py-2 text-xs font-bold text-ink">
+            <button type="button" onClick={() => onCopy(activationInstructions)} className="rounded-xl border border-line px-3 py-2 text-xs font-semibold text-ink">
               Copy instructions
             </button>
           </div>
@@ -282,7 +282,7 @@ function SummaryCard({ label, value }: { label: string; value: string }) {
   return (
     <div className="rounded-2xl border border-line bg-white p-4 shadow-sm">
       <p className="text-xs font-semibold uppercase text-muted">{label}</p>
-      <p className="mt-2 text-2xl font-semibold text-ink">{value}</p>
+      <p className="mt-2 text-[26px] font-semibold tracking-tightest text-ink">{value}</p>
     </div>
   );
 }

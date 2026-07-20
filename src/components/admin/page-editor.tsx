@@ -31,7 +31,7 @@ export function PageEditor() {
       <Input name="seoTitle" label="SEO title" placeholder="About Tap Rater" />
       <Textarea name="seoDescription" label="SEO description" placeholder="Short search result description." />
       <Textarea name="body" label="Page body" placeholder="Page content..." tall />
-      <label className="grid gap-2 text-sm font-bold text-ink">
+      <label className="grid gap-2 text-sm font-semibold text-ink">
         Status
         <select className="rounded-xl border border-line px-4 py-3 font-normal" name="status" defaultValue="draft">
           <option value="draft">Draft</option>
@@ -46,7 +46,7 @@ export function PageEditor() {
 
 function Input({ name, label, placeholder }: { name: string; label: string; placeholder: string }) {
   return (
-    <label className="grid gap-2 text-sm font-bold text-ink">
+    <label className="grid gap-2 text-sm font-semibold text-ink">
       {label}
       <input className="rounded-xl border border-line px-4 py-3 font-normal text-ink" name={name} placeholder={placeholder} required />
     </label>
@@ -55,7 +55,7 @@ function Input({ name, label, placeholder }: { name: string; label: string; plac
 
 function Textarea({ name, label, placeholder, tall = false }: { name: string; label: string; placeholder: string; tall?: boolean }) {
   return (
-    <label className="grid gap-2 text-sm font-bold text-ink">
+    <label className="grid gap-2 text-sm font-semibold text-ink">
       {label}
       <textarea className={`${tall ? "min-h-56" : "min-h-24"} rounded-xl border border-line px-4 py-3 font-normal text-ink`} name={name} placeholder={placeholder} required />
     </label>

@@ -42,7 +42,7 @@ export default async function AdminDiscountsPage() {
               <tbody>
                 {discounts.map((discount) => (
                   <tr key={discount.id} className="border-b border-line last:border-b-0">
-                    <td className="p-4 font-mono font-bold text-ink">{discount.code}</td>
+                    <td className="p-4 font-mono font-semibold text-ink">{discount.code}</td>
                     <td className="p-4 text-ink">
                       {discount.discountType === "percent" ? `${discount.value}% off` : `$${(discount.value / 100).toFixed(2)} off`}
                     </td>

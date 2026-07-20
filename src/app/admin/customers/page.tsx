@@ -25,7 +25,7 @@ export default async function AdminCustomersPage() {
               requests are pulled directly from the database.
             </p>
           </div>
-          <div className="rounded-xl border border-line bg-white px-4 py-3 text-sm font-bold text-ink">
+          <div className="rounded-xl border border-line bg-white px-4 py-3 text-sm font-semibold text-ink">
             {customers.length} customers
           </div>
         </div>
@@ -63,7 +63,7 @@ export default async function AdminCustomersPage() {
               {customers.map((customer) => (
                 <tr key={customer.id} className="border-b border-line last:border-b-0">
                   <td className="p-4">
-                    <p className="font-bold text-ink">{customer.name ?? customer.email}</p>
+                    <p className="font-semibold text-ink">{customer.name ?? customer.email}</p>
                     <p className="text-muted">{customer.email}</p>
                   </td>
                   <td className="p-4 text-ink">{customer.orderCount}</td>
@@ -99,7 +99,7 @@ function SummaryCard({ label, value }: { label: string; value: string }) {
   return (
     <div className="rounded-2xl border border-line bg-white p-4 shadow-sm">
       <p className="text-xs font-semibold uppercase text-muted">{label}</p>
-      <p className="mt-2 text-2xl font-semibold text-ink">{value}</p>
+      <p className="mt-2 text-[26px] font-semibold tracking-tightest text-ink">{value}</p>
     </div>
   );
 }

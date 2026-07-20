@@ -44,7 +44,7 @@ export default async function AdminSeoPage() {
 
         <div className="mt-6 rounded-2xl border border-line bg-white shadow-sm">
           <div className="border-b border-line p-4">
-            <h2 className="text-lg font-semibold text-ink">Category SEO</h2>
+            <h2 className="text-[18px] font-semibold tracking-tightest text-ink">Category SEO</h2>
           </div>
           <table className="w-full border-collapse text-left text-sm">
             <thead>
@@ -57,7 +57,7 @@ export default async function AdminSeoPage() {
             <tbody>
               {categories.map((category) => (
                 <tr key={category.slug} className="border-b border-line last:border-b-0">
-                  <td className="p-4 font-bold text-ink">{category.title}</td>
+                  <td className="p-4 font-semibold text-ink">{category.title}</td>
                   <td className="p-4 text-muted">{category.seoTitle ?? <MissingBadge />}</td>
                   <td className="p-4 text-muted">{category.seoDescription ? "Set" : <MissingBadge />}</td>
                 </tr>
@@ -69,16 +69,16 @@ export default async function AdminSeoPage() {
         {missingSeoTitle.length > 0 ? (
           <div className="mt-6 rounded-2xl border border-line bg-white shadow-sm">
             <div className="border-b border-line p-4">
-              <h2 className="text-lg font-semibold text-ink">Products missing an SEO title ({missingSeoTitle.length})</h2>
+              <h2 className="text-[18px] font-semibold tracking-tightest text-ink">Products missing an SEO title ({missingSeoTitle.length})</h2>
               <p className="mt-1 text-sm text-muted">Falls back to the product title, which is fine, but a dedicated SEO title usually converts better in search results.</p>
             </div>
             <table className="w-full border-collapse text-left text-sm">
               <tbody>
                 {missingSeoTitle.slice(0, 25).map((product) => (
                   <tr key={product.slug} className="border-b border-line last:border-b-0">
-                    <td className="p-4 font-bold text-ink">{product.title}</td>
+                    <td className="p-4 font-semibold text-ink">{product.title}</td>
                     <td className="p-4">
-                      <Link href={`/admin/products/${product.slug}`} className="font-bold text-brand hover:text-brand-dark">
+                      <Link href={`/admin/products/${product.slug}`} className="font-semibold text-brand hover:text-brand-dark">
                         Edit &rsaquo;
                       </Link>
                     </td>
@@ -93,7 +93,7 @@ export default async function AdminSeoPage() {
         ) : null}
 
         <div className="mt-6 rounded-2xl border border-line bg-white p-5 shadow-sm">
-          <h2 className="text-xl font-semibold text-ink">Notes</h2>
+          <h2 className="text-[20px] font-semibold tracking-tightest text-ink">Notes</h2>
           <div className="mt-5">
             <AdminConfigForm
               area="seo"
@@ -117,7 +117,7 @@ function SummaryCard({ label, value }: { label: string; value: string }) {
   return (
     <div className="rounded-2xl border border-line bg-white p-4 shadow-sm">
       <p className="text-xs font-semibold uppercase text-muted">{label}</p>
-      <p className="mt-2 text-2xl font-semibold text-ink">{value}</p>
+      <p className="mt-2 text-[26px] font-semibold tracking-tightest text-ink">{value}</p>
     </div>
   );
 }

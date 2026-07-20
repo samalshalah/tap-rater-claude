@@ -33,7 +33,7 @@ export default async function AccountBusinessPage() {
 function BusinessLink({ label, value }: { label: string; value?: string }) {
   return (
     <p>
-      <span className="font-bold text-ink">{label}:</span> {value ? <span className="break-all">{value}</span> : "-"}
+      <span className="font-semibold text-ink">{label}:</span> {value ? <span className="break-all">{value}</span> : "-"}
     </p>
   );
 }

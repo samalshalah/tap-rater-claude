@@ -53,7 +53,7 @@ export function AdminSectionPage({
       <div className="mt-8 grid gap-5 lg:grid-cols-[1.1fr_0.9fr]">
         {config ? (
           <div className="rounded-2xl border border-line bg-white p-5 shadow-sm lg:col-span-2">
-            <h2 className="text-xl font-semibold text-ink">Editable settings</h2>
+            <h2 className="text-[20px] font-semibold tracking-tightest text-ink">Editable settings</h2>
             <p className="mt-2 text-sm leading-6 text-muted">
               Save operational settings for this admin area. These records are stored in Postgres `site_content` when configured.
             </p>
@@ -73,7 +73,7 @@ export function AdminSectionPage({
           </div>
         ) : null}
         <div className="rounded-2xl border border-line bg-white p-5 shadow-sm">
-          <h2 className="text-xl font-semibold text-ink">Controls included</h2>
+          <h2 className="text-[20px] font-semibold tracking-tightest text-ink">Controls included</h2>
           <div className="mt-4 grid gap-3">
             {primaryItems.map((item) => (
               <div key={item} className="rounded-2xl border border-line bg-surface p-4 text-sm font-semibold text-ink">
@@ -83,7 +83,7 @@ export function AdminSectionPage({
           </div>
         </div>
         <div className="rounded-2xl border border-line bg-white p-5 shadow-sm">
-          <h2 className="text-xl font-semibold text-ink">Next implementation steps</h2>
+          <h2 className="text-[20px] font-semibold tracking-tightest text-ink">Next implementation steps</h2>
           <div className="mt-4 grid gap-3">
             {nextItems.map((item) => (
               <div key={item} className="rounded-2xl border border-line p-4 text-sm leading-6 text-muted">

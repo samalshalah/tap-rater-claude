@@ -22,7 +22,7 @@ export default async function AdminPage() {
             ["CMS", "Active", "Homepage and content editors"]
           ].map(([label, value, copy]) => (
             <article key={label} className="rounded-2xl border border-line bg-white p-5 shadow-sm">
-              <p className="text-sm font-bold text-muted">{label}</p>
+              <p className="text-sm font-semibold text-muted">{label}</p>
               <p className="mt-2 text-3xl font-semibold text-ink">{value}</p>
               <p className="mt-2 text-sm leading-6 text-muted">{copy}</p>
             </article>

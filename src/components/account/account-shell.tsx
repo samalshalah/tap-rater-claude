@@ -18,7 +18,7 @@ export function AccountShell({ children }: { children: ReactNode }) {
           </div>
           <nav className="flex flex-wrap gap-2">
             {links.map((link) => (
-              <Link key={link.href} href={link.href} className="rounded-2xl border border-line bg-white px-4 py-2 text-sm font-bold text-ink shadow-sm">
+              <Link key={link.href} href={link.href} className="rounded-2xl border border-line bg-white px-4 py-2 text-sm font-semibold text-ink shadow-sm">
                 {link.label}
               </Link>
             ))}

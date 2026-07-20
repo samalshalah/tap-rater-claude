@@ -34,13 +34,13 @@ export default async function AdminInventoryPage() {
         {outOfStock.length > 0 ? (
           <div className="mt-6 rounded-2xl border border-line bg-white shadow-sm">
             <div className="border-b border-line p-4">
-              <h2 className="text-lg font-semibold text-ink">Currently out of stock ({outOfStock.length})</h2>
+              <h2 className="text-[18px] font-semibold tracking-tightest text-ink">Currently out of stock ({outOfStock.length})</h2>
             </div>
             <table className="w-full border-collapse text-left text-sm">
               <tbody>
                 {outOfStock.map((product) => (
                   <tr key={product.slug} className="border-b border-line last:border-b-0">
-                    <td className="p-4 font-bold text-ink">{product.title}</td>
+                    <td className="p-4 font-semibold text-ink">{product.title}</td>
                     <td className="p-4 text-muted">{getCategoryBySlug(product.categorySlug)?.title ?? product.categorySlug}</td>
                     <td className="p-4">
                       <StockToggle slug={product.slug} initialStatus={product.stockStatus} />
@@ -58,7 +58,7 @@ export default async function AdminInventoryPage() {
 
         <div className="mt-6 overflow-x-auto rounded-2xl border border-line bg-white shadow-sm">
           <div className="border-b border-line p-4">
-            <h2 className="text-lg font-semibold text-ink">All active products ({activeProducts.length})</h2>
+            <h2 className="text-[18px] font-semibold tracking-tightest text-ink">All active products ({activeProducts.length})</h2>
           </div>
           <table className="w-full min-w-[640px] border-collapse text-left text-sm">
             <thead>
@@ -71,7 +71,7 @@ export default async function AdminInventoryPage() {
             <tbody>
               {activeProducts.map((product) => (
                 <tr key={product.slug} className="border-b border-line last:border-b-0">
-                  <td className="p-4 font-bold text-ink">{product.title}</td>
+                  <td className="p-4 font-semibold text-ink">{product.title}</td>
                   <td className="p-4 text-muted">{getCategoryBySlug(product.categorySlug)?.title ?? product.categorySlug}</td>
                   <td className="p-4">
                     <StockToggle slug={product.slug} initialStatus={product.stockStatus} />

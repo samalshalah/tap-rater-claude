@@ -36,7 +36,7 @@ export function PasswordSetupLinkGenerator() {
 
   return (
     <form className="grid gap-3 rounded-2xl border border-line bg-white p-5 shadow-sm" onSubmit={submit}>
-      <h2 className="text-lg font-semibold text-ink">Password setup link</h2>
+      <h2 className="text-[18px] font-semibold tracking-tightest text-ink">Password setup link</h2>
       <p className="text-sm leading-6 text-muted">
         Generates a one-hour link the customer opens to set their own password -- this never sees or stores a password value
         here, the customer types it themselves on the page the link opens.
@@ -52,20 +52,20 @@ export function PasswordSetupLinkGenerator() {
         />
         <button
           disabled={isGenerating}
-          className="shrink-0 rounded-full bg-ink px-4 py-2.5 text-sm font-bold text-white disabled:opacity-50"
+          className="shrink-0 rounded-full bg-ink px-4 py-2.5 text-sm font-semibold text-white disabled:opacity-50"
         >
           {isGenerating ? "Generating..." : "Generate link"}
         </button>
       </div>
       {link ? (
         <div className="rounded-xl bg-teal-50 p-3 text-xs">
-          <p className="font-bold text-brand">Send this link to the customer:</p>
+          <p className="font-semibold text-brand">Send this link to the customer:</p>
           <a href={link} className="mt-1 block break-all text-brand underline">
             {link}
           </a>
         </div>
       ) : null}
-      {status ? <p className="text-sm font-bold text-red-600">{status.message}</p> : null}
+      {status ? <p className="text-sm font-semibold text-red-600">{status.message}</p> : null}
     </form>
   );
 }

@@ -38,13 +38,13 @@ export default async function AdminSettingsPage() {
 
         <div className="mt-6 rounded-2xl border border-line bg-white shadow-sm">
           <div className="border-b border-line p-4">
-            <h2 className="text-lg font-semibold text-ink">Launch readiness</h2>
+            <h2 className="text-[18px] font-semibold tracking-tightest text-ink">Launch readiness</h2>
           </div>
           <table className="w-full border-collapse text-left text-sm">
             <tbody>
               {checks.map((check) => (
                 <tr key={check.id} className="border-b border-line last:border-b-0">
-                  <td className="w-56 p-4 font-bold text-ink">{check.label}</td>
+                  <td className="w-56 p-4 font-semibold text-ink">{check.label}</td>
                   <td className="w-40 p-4">
                     <span className={`rounded-full px-3 py-1 text-xs font-semibold uppercase ${statusStyles[check.status]}`}>
                       {statusLabels[check.status]}
@@ -59,7 +59,7 @@ export default async function AdminSettingsPage() {
 
         <div className="mt-6 rounded-2xl border border-line bg-white shadow-sm">
           <div className="border-b border-line p-4">
-            <h2 className="text-lg font-semibold text-ink">Sales channels</h2>
+            <h2 className="text-[18px] font-semibold tracking-tightest text-ink">Sales channels</h2>
             <p className="mt-1 text-sm text-muted">
               Facebook & Instagram Shop reads from a live product feed -- point Commerce Manager's scheduled Data Feed fetch at
               this URL and every product/price/stock change reflects automatically, no manual re-upload.
@@ -72,7 +72,7 @@ export default async function AdminSettingsPage() {
             </div>
             <div>
               <p className="text-xs font-semibold uppercase text-muted">Products in feed</p>
-              <p className="mt-1 text-2xl font-semibold text-ink">
+              <p className="mt-1 text-[26px] font-semibold tracking-tightest text-ink">
                 {feedSummary.productCount} <span className="text-sm font-normal text-muted">/ {feedSummary.totalActiveProducts} active</span>
               </p>
               <p className="mt-1 text-xs text-muted">Scoped to directly-buyable products with real photography.</p>
@@ -85,7 +85,7 @@ export default async function AdminSettingsPage() {
         </div>
 
         <div className="mt-6 rounded-2xl border border-line bg-white p-5 shadow-sm">
-          <h2 className="text-xl font-semibold text-ink">Store notes</h2>
+          <h2 className="text-[20px] font-semibold tracking-tightest text-ink">Store notes</h2>
           <p className="mt-2 text-sm leading-6 text-muted">
             Notification email and any operational notes for the team. Saved to the database when connected.
           </p>

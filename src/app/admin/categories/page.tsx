@@ -30,7 +30,7 @@ export default async function AdminCategoriesPage() {
         <div className="mt-8 grid gap-6 lg:grid-cols-2">
           <div className="rounded-2xl border border-line bg-white shadow-sm">
             <div className="border-b border-line p-4">
-              <h2 className="text-lg font-semibold text-ink">Stand categories</h2>
+              <h2 className="text-[18px] font-semibold tracking-tightest text-ink">Stand categories</h2>
               <p className="mt-1 text-sm text-muted">{standCategories.length} categories -- Shop by Stand</p>
             </div>
             <table className="w-full border-collapse text-left text-sm">
@@ -46,7 +46,7 @@ export default async function AdminCategoriesPage() {
                   return (
                     <tr key={category.slug} className="border-b border-line last:border-b-0">
                       <td className="p-3">
-                        <p className="font-bold text-ink">{category.name}</p>
+                        <p className="font-semibold text-ink">{category.name}</p>
                         <p className="text-xs text-muted">{category.slug}</p>
                       </td>
                       <td className="p-3">
@@ -55,7 +55,7 @@ export default async function AdminCategoriesPage() {
                             0 -- hidden from nav
                           </span>
                         ) : (
-                          <Link href={`/shop/stands/${category.slug}`} className="font-bold text-brand hover:text-brand-dark">
+                          <Link href={`/shop/stands/${category.slug}`} className="font-semibold text-brand hover:text-brand-dark">
                             {count} products &rsaquo;
                           </Link>
                         )}
@@ -69,7 +69,7 @@ export default async function AdminCategoriesPage() {
 
           <div className="rounded-2xl border border-line bg-white shadow-sm">
             <div className="border-b border-line p-4">
-              <h2 className="text-lg font-semibold text-ink">Use cases</h2>
+              <h2 className="text-[18px] font-semibold tracking-tightest text-ink">Use cases</h2>
               <p className="mt-1 text-sm text-muted">{useCases.length} use cases -- Shop by Use, membership via tags</p>
             </div>
             <table className="w-full border-collapse text-left text-sm">
@@ -85,11 +85,11 @@ export default async function AdminCategoriesPage() {
                   return (
                     <tr key={useCase.slug} className="border-b border-line last:border-b-0">
                       <td className="p-3">
-                        <p className="font-bold text-ink">{useCase.name}</p>
+                        <p className="font-semibold text-ink">{useCase.name}</p>
                         <p className="text-xs text-muted">{useCase.slug}</p>
                       </td>
                       <td className="p-3">
-                        <Link href={`/use/${useCase.slug}`} className="font-bold text-brand hover:text-brand-dark">
+                        <Link href={`/use/${useCase.slug}`} className="font-semibold text-brand hover:text-brand-dark">
                           {count} products &rsaquo;
                         </Link>
                       </td>
@@ -103,7 +103,7 @@ export default async function AdminCategoriesPage() {
 
         <div className="mt-6 rounded-2xl border border-line bg-white shadow-sm">
           <div className="border-b border-line p-4">
-            <h2 className="text-lg font-semibold text-ink">Shop by Use category groups (legacy)</h2>
+            <h2 className="text-[18px] font-semibold tracking-tightest text-ink">Shop by Use category groups (legacy)</h2>
             <p className="mt-1 text-sm text-muted">
               {catalogCategories.length} groups -- these are the older category buckets behind /category/[slug] and the /shop
               grid, kept alongside the newer stand-category/use-case system above.
@@ -122,7 +122,7 @@ export default async function AdminCategoriesPage() {
                 return (
                   <tr key={category.slug} className="border-b border-line last:border-b-0">
                     <td className="p-3">
-                      <p className="font-bold text-ink">{category.title}</p>
+                      <p className="font-semibold text-ink">{category.title}</p>
                       <p className="text-xs text-muted">{category.slug}</p>
                     </td>
                     <td className="p-3">
@@ -131,7 +131,7 @@ export default async function AdminCategoriesPage() {
                           0 -- hidden from nav
                         </span>
                       ) : (
-                        <Link href={`/category/${category.slug}`} className="font-bold text-brand hover:text-brand-dark">
+                        <Link href={`/category/${category.slug}`} className="font-semibold text-brand hover:text-brand-dark">
                           {count} products &rsaquo;
                         </Link>
                       )}

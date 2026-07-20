@@ -53,7 +53,7 @@ export default async function AdminAnalyticsPage() {
                 <tbody>
                   {summary.topDevices.map((device) => (
                     <tr key={device.deviceId} className="border-b border-line last:border-b-0">
-                      <td className="p-3 font-bold text-ink">{device.deviceCode}</td>
+                      <td className="p-3 font-semibold text-ink">{device.deviceCode}</td>
                       <td className="p-3 text-muted">{device.status ?? "-"}</td>
                       <td className="p-3 text-muted">{device.tapCount}</td>
                       <td className="p-3 text-muted">{device.destinationClicks}</td>
@@ -80,7 +80,7 @@ export default async function AdminAnalyticsPage() {
                 <tbody>
                   {summary.topBusinesses.map((business) => (
                     <tr key={business.businessId} className="border-b border-line last:border-b-0">
-                      <td className="p-3 font-bold text-ink">{business.businessId}</td>
+                      <td className="p-3 font-semibold text-ink">{business.businessId}</td>
                       <td className="p-3 text-muted">{business.tapCount}</td>
                       <td className="p-3 text-muted">{business.submissions}</td>
                     </tr>
@@ -100,7 +100,7 @@ function SummaryCard({ label, value }: { label: string; value: number }) {
   return (
     <div className="rounded-2xl border border-line bg-white p-4 shadow-sm">
       <p className="text-xs font-semibold uppercase text-muted">{label}</p>
-      <p className="mt-2 text-2xl font-semibold text-ink">{value}</p>
+      <p className="mt-2 text-[26px] font-semibold tracking-tightest text-ink">{value}</p>
     </div>
   );
 }
@@ -108,7 +108,7 @@ function SummaryCard({ label, value }: { label: string; value: number }) {
 function Panel({ title, children }: { title: string; children: ReactNode }) {
   return (
     <section className="rounded-2xl border border-line bg-white p-5 shadow-sm">
-      <h2 className="text-lg font-semibold text-ink">{title}</h2>
+      <h2 className="text-[18px] font-semibold tracking-tightest text-ink">{title}</h2>
       <div className="mt-4">{children}</div>
     </section>
   );

@@ -52,7 +52,7 @@ export default async function AccountDevicesPage() {
                       />
                     </div>
                   </td>
-                  <td className="p-4 font-bold text-ink">{device.tapCount}</td>
+                  <td className="p-4 font-semibold text-ink">{device.tapCount}</td>
                 </tr>
               ))}
               {portal.devices.length === 0 ? (

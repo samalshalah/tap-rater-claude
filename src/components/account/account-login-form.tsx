@@ -81,7 +81,7 @@ export function AccountLoginForm({ token }: { token?: string }) {
 
   return (
     <div className="grid gap-4 rounded-lg border border-line bg-white p-5 shadow-sm md:p-7">
-      <div className="flex gap-2 text-xs font-bold">
+      <div className="flex gap-2 text-xs font-semibold">
         <button
           type="button"
           onClick={() => setMode("magic_link")}

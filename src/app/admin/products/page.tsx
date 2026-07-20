@@ -51,7 +51,7 @@ export default async function AdminProductsPage() {
           <tbody>
             {products.map((product) => (
               <tr className="border-b border-line last:border-b-0" key={product.slug}>
-                <td className="p-4 font-bold text-ink">{product.title}</td>
+                <td className="p-4 font-semibold text-ink">{product.title}</td>
                 <td className="p-4 text-muted">{product.sku}</td>
                 <td className="p-4 text-muted">{getCategoryBySlug(product.categorySlug)?.title ?? product.categorySlug}</td>
                 <td className="p-4 text-muted">{formatPrice(product.basePriceCents)}</td>
@@ -67,7 +67,7 @@ export default async function AdminProductsPage() {
                   </span>
                 </td>
                 <td className="p-4">
-                  <Link className="font-bold text-brand" href={`/admin/products/${product.slug}`}>Edit</Link>
+                  <Link className="font-semibold text-brand" href={`/admin/products/${product.slug}`}>Edit</Link>
                 </td>
               </tr>
             ))}
@@ -83,7 +83,7 @@ function SummaryCard({ label, value }: { label: string; value: string }) {
   return (
     <div className="rounded-2xl border border-line bg-white p-4 shadow-sm">
       <p className="text-xs font-semibold uppercase text-muted">{label}</p>
-      <p className="mt-2 text-2xl font-semibold text-ink">{value}</p>
+      <p className="mt-2 text-[26px] font-semibold tracking-tightest text-ink">{value}</p>
     </div>
   );
 }

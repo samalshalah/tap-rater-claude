@@ -81,7 +81,7 @@ export function AccountDestinationEditor({
 
   if (!editing) {
     return (
-      <button type="button" onClick={() => setEditing(true)} className="text-xs font-bold text-brand hover:text-brand-dark">
+      <button type="button" onClick={() => setEditing(true)} className="text-xs font-semibold text-brand hover:text-brand-dark">
         {saveState === "success" ? "Saved -- edit again" : "Edit link"}
       </button>
     );
@@ -89,7 +89,7 @@ export function AccountDestinationEditor({
 
   return (
     <div className="mt-2 grid gap-2 rounded-2xl border border-line bg-surface p-3">
-      <p className="text-xs font-bold text-ink">Update destination for {deviceCode}</p>
+      <p className="text-xs font-semibold text-ink">Update destination for {deviceCode}</p>
       <div className="flex flex-col gap-2 sm:flex-row">
         <input
           type="url"
@@ -119,7 +119,7 @@ export function AccountDestinationEditor({
           type="button"
           onClick={verifyLink}
           disabled={verifyState === "checking"}
-          className="shrink-0 rounded-xl border border-line bg-white px-3 py-2 text-xs font-bold text-ink disabled:opacity-50"
+          className="shrink-0 rounded-xl border border-line bg-white px-3 py-2 text-xs font-semibold text-ink disabled:opacity-50"
         >
           {verifyState === "checking" ? "Checking..." : verifyState === "verified" ? "Verified" : "Verify"}
         </button>
@@ -132,11 +132,11 @@ export function AccountDestinationEditor({
           type="button"
           onClick={save}
           disabled={verifyState !== "verified" || saveState === "saving"}
-          className="rounded-full bg-ink px-4 py-2 text-xs font-bold text-white disabled:cursor-not-allowed disabled:bg-line disabled:text-muted"
+          className="rounded-full bg-ink px-4 py-2 text-xs font-semibold text-white disabled:cursor-not-allowed disabled:bg-line disabled:text-muted"
         >
           {saveState === "saving" ? "Saving..." : "Save link"}
         </button>
-        <button type="button" onClick={() => setEditing(false)} className="text-xs font-bold text-muted">
+        <button type="button" onClick={() => setEditing(false)} className="text-xs font-semibold text-muted">
           Cancel
         </button>
       </div>

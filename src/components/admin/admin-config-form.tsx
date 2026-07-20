@@ -58,7 +58,7 @@ export function AdminConfigForm({
           Showing your last saved settings for {title.toLowerCase()}.
         </p>
       ) : null}
-      <label className="grid gap-2 text-sm font-bold text-ink">
+      <label className="grid gap-2 text-sm font-semibold text-ink">
         {primaryLabel}
         <input
           className="rounded-xl border border-line px-4 py-3 font-normal text-ink"
@@ -68,7 +68,7 @@ export function AdminConfigForm({
           required
         />
       </label>
-      <label className="grid gap-2 text-sm font-bold text-ink">
+      <label className="grid gap-2 text-sm font-semibold text-ink">
         {secondaryLabel}
         <input
           className="rounded-xl border border-line px-4 py-3 font-normal text-ink"
@@ -78,7 +78,7 @@ export function AdminConfigForm({
           required
         />
       </label>
-      <label className="grid gap-2 text-sm font-bold text-ink">
+      <label className="grid gap-2 text-sm font-semibold text-ink">
         {notesLabel}
         <textarea
           className="min-h-28 rounded-xl border border-line px-4 py-3 font-normal text-ink"
@@ -87,7 +87,7 @@ export function AdminConfigForm({
           placeholder={notesPlaceholder}
         />
       </label>
-      <label className="grid gap-2 text-sm font-bold text-ink">
+      <label className="grid gap-2 text-sm font-semibold text-ink">
         Status
         <select className="rounded-xl border border-line px-4 py-3 font-normal text-ink" name="status" defaultValue={initialValues?.status ?? "draft"}>
           <option value="draft">Draft</option>

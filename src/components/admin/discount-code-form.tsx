@@ -46,9 +46,9 @@ export function DiscountCodeForm() {
 
   return (
     <form className="grid gap-4 rounded-2xl border border-line bg-white p-4 shadow-sm" onSubmit={submit}>
-      <h2 className="text-lg font-semibold text-ink">New discount code</h2>
+      <h2 className="text-[18px] font-semibold tracking-tightest text-ink">New discount code</h2>
       <div className="grid gap-4 md:grid-cols-2">
-        <label className="grid gap-2 text-sm font-bold text-ink">
+        <label className="grid gap-2 text-sm font-semibold text-ink">
           Code
           <input
             className="rounded-xl border border-line bg-white px-4 py-3 font-normal uppercase text-ink"
@@ -57,14 +57,14 @@ export function DiscountCodeForm() {
             required
           />
         </label>
-        <label className="grid gap-2 text-sm font-bold text-ink">
+        <label className="grid gap-2 text-sm font-semibold text-ink">
           Type
           <select className="rounded-xl border border-line bg-white px-4 py-3 font-normal" name="discountType" defaultValue="percent">
             <option value="percent">Percent off</option>
             <option value="fixed_cents">Fixed amount off (cents)</option>
           </select>
         </label>
-        <label className="grid gap-2 text-sm font-bold text-ink">
+        <label className="grid gap-2 text-sm font-semibold text-ink">
           Value
           <input
             className="rounded-xl border border-line bg-white px-4 py-3 font-normal text-ink"
@@ -74,23 +74,23 @@ export function DiscountCodeForm() {
             required
           />
         </label>
-        <label className="grid gap-2 text-sm font-bold text-ink">
+        <label className="grid gap-2 text-sm font-semibold text-ink">
           Status
           <select className="rounded-xl border border-line bg-white px-4 py-3 font-normal" name="isActive" defaultValue="true">
             <option value="true">Active</option>
             <option value="false">Inactive</option>
           </select>
         </label>
-        <label className="grid gap-2 text-sm font-bold text-ink">
+        <label className="grid gap-2 text-sm font-semibold text-ink">
           Usage limit (optional)
           <input className="rounded-xl border border-line bg-white px-4 py-3 font-normal text-ink" name="usageLimit" inputMode="numeric" placeholder="Unlimited if blank" />
         </label>
-        <label className="grid gap-2 text-sm font-bold text-ink">
+        <label className="grid gap-2 text-sm font-semibold text-ink">
           Expires (optional)
           <input className="rounded-xl border border-line bg-white px-4 py-3 font-normal text-ink" name="expiresAt" type="date" />
         </label>
       </div>
-      <label className="grid gap-2 text-sm font-bold text-ink">
+      <label className="grid gap-2 text-sm font-semibold text-ink">
         Notes
         <textarea className="rounded-xl border border-line bg-white px-4 py-3 font-normal text-ink" name="notes" rows={2} placeholder="What this code is for, who it's shared with" />
       </label>
@@ -99,7 +99,7 @@ export function DiscountCodeForm() {
           {isSaving ? "Saving..." : "Create discount code"}
         </button>
         {status ? (
-          <p className={status.tone === "success" ? "text-sm font-bold text-brand" : "text-sm font-bold text-red-600"}>{status.message}</p>
+          <p className={status.tone === "success" ? "text-sm font-semibold text-brand" : "text-sm font-semibold text-red-600"}>{status.message}</p>
         ) : null}
       </div>
       <p className="text-xs leading-5 text-muted">
