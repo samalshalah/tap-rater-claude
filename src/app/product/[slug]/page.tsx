@@ -185,7 +185,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
               <p className="flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-brand" strokeWidth={1.5} /> No monthly fee for basic activation</p>
               <p className="flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-brand" strokeWidth={1.5} /> Connects to one destination URL</p>
               <p className="flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-brand" strokeWidth={1.5} /> Tap or scan ready</p>
-              <p className="flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-brand" strokeWidth={1.5} /> Stripe stays in test mode</p>
+              <p className="flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-brand" strokeWidth={1.5} /> No app needed for customers to tap or scan</p>
             </div>
 
             {designOptions.length > 0 ? (
