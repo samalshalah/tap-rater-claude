@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { ProductCard } from "@/components/product/product-card";
+import { ShopProductBrowser } from "@/components/product/shop-product-browser";
 import { getStorefrontProducts } from "@/lib/product-repository";
 import { getCatalogCategories } from "@/lib/products";
 import { industries } from "@/data/industries";
@@ -107,10 +107,8 @@ export default async function ShopPage() {
             <h2 className="text-[22px] font-semibold tracking-tightest text-ink">All products</h2>
             <p className="text-[13px] text-muted">{products.length} products available</p>
           </div>
-          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {products.map((product) => (
-              <ProductCard key={product.slug} product={product} />
-            ))}
+          <div className="mt-8">
+            <ShopProductBrowser products={products} categories={categories} />
           </div>
         </div>
       </section>
