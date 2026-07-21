@@ -254,10 +254,10 @@ function ShopMegaMenu({
         </svg>
       </button>
       {isOpen ? (
-        <div role="menu" aria-label="Shop" className="absolute left-1/2 top-full w-[min(880px,90vw)] -translate-x-1/2 pt-3">
-          <div className="grid grid-cols-3 gap-8 rounded-3xl border border-line/70 bg-white/95 p-8 shadow-[0_24px_70px_rgba(0,0,0,0.12)] backdrop-blur-xl">
+        <div role="menu" aria-label="Shop" className="absolute left-1/2 top-full w-[min(860px,92vw)] -translate-x-1/2 pt-3">
+          <div className="grid grid-cols-[0.85fr_1.3fr_0.85fr] gap-8 rounded-3xl border border-line/70 bg-white/95 p-8 shadow-[0_24px_70px_rgba(0,0,0,0.12)] backdrop-blur-xl">
             <MegaMenuColumn title="Shop by Stand" links={shopStandCategoryLinks} onNavigate={onClose} viewAllHref="/shop/stands" viewAllLabel="View all categories" />
-            <MegaMenuColumn title="Shop by Use" links={shopUseCaseLinks} onNavigate={onClose} viewAllHref="/shop/use" viewAllLabel="View all business types" />
+            <MegaMenuColumn title="Shop by Use" links={shopUseCaseLinks} onNavigate={onClose} viewAllHref="/shop/use" viewAllLabel="View all business types" twoColumn />
             <div>
               <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-muted">Quick links</p>
               <div className="mt-4 grid gap-0.5">
@@ -293,25 +293,27 @@ function MegaMenuColumn({
   links,
   onNavigate,
   viewAllHref,
-  viewAllLabel
+  viewAllLabel,
+  twoColumn
 }: {
   title: string;
   links: NavLinkItem[];
   onNavigate: () => void;
   viewAllHref: string;
   viewAllLabel: string;
+  twoColumn?: boolean;
 }) {
   return (
     <div>
       <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-muted">{title}</p>
-      <div className="mt-4 grid gap-0.5">
+      <div className={twoColumn ? "mt-4 columns-2 gap-x-5" : "mt-4 grid gap-0.5"}>
         {links.map((link) => (
           <Link
             key={link.href + link.label}
             href={link.href}
             role="menuitem"
             onClick={onNavigate}
-            className="rounded-lg px-2 py-1.5 text-[13px] font-medium text-ink/80 transition hover:bg-surface hover:text-ink"
+            className="block rounded-lg px-2 py-1.5 text-[13px] font-medium text-ink/80 transition hover:bg-surface hover:text-ink"
           >
             {link.label}
           </Link>
