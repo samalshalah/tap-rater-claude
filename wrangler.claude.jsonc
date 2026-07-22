@@ -5,6 +5,8 @@
   "compatibility_date": "2026-07-09",
   "compatibility_flags": ["nodejs_compat"],
   "keep_vars": true,
+  "workers_dev": true,
+  "routes": ["taprater.com/*", "www.taprater.com/*"],
   "assets": {
     "directory": ".open-next/assets",
     "binding": "ASSETS"
@@ -13,6 +15,6 @@
     "enabled": true
   },
   "vars": {
-    "NEXT_PUBLIC_SITE_URL": "https://tap-rater-app-claude.sam-alshalah1.workers.dev"
+    "NEXT_PUBLIC_SITE_URL": "https://taprater.com"
   }
 }
