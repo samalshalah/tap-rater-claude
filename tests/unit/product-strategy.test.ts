@@ -17,12 +17,16 @@ describe("Tap Rater product strategy", () => {
     expect(doc).toContain("Phase 3");
   });
 
-  it("positions the temporary homepage around the coming-soon launch", () => {
+  it("promotes the storefront experience to the canonical homepage", () => {
     const homepage = readFileSync("src/app/page.tsx", "utf8");
+    const storefrontHomepage = readFileSync("src/app/home-preview/page.tsx", "utf8");
+    const siteShell = readFileSync("src/components/layout/site-shell.tsx", "utf8");
 
-    expect(homepage).toContain("New storefront launching soon");
-    expect(homepage).toContain("Tap Rater is getting ready.");
-    expect(homepage).toContain("NFC review stands, smart tap links, and local business reputation tools");
+    expect(homepage).toContain("StorefrontHomePage");
+    expect(homepage).toContain('canonical: "/"');
+    expect(storefrontHomepage).toContain("Tap. Scan. Review.");
+    expect(storefrontHomepage).toContain('href="/shop"');
+    expect(siteShell).not.toContain('NO_CHROME_PATHS = ["/"]');
   });
 
   it("documents the platform domain split, redirect engine, and database entities", () => {
