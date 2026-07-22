@@ -1,5 +1,4 @@
 import Image from "next/image";
-import Link from "next/link";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -43,20 +42,6 @@ export default function HomePage() {
             <p className="mt-6 max-w-[540px] text-[17px] leading-7 text-muted sm:text-[19px]">
               We are preparing the public storefront for NFC review stands, smart tap links, and local business reputation tools.
             </p>
-            <div className="mt-9 flex flex-col gap-3 sm:flex-row">
-              <Link
-                href="/contact-us"
-                className="inline-flex h-12 items-center justify-center rounded-full bg-ink px-7 text-[15px] font-medium text-white transition hover:bg-brand"
-              >
-                Contact Tap Rater
-              </Link>
-              <Link
-                href="/admin/login"
-                className="inline-flex h-12 items-center justify-center rounded-full border border-line px-7 text-[15px] font-medium text-ink transition hover:border-ink"
-              >
-                Admin login
-              </Link>
-            </div>
           </div>
 
           <div className="relative mx-auto aspect-[4/5] w-full max-w-[360px] lg:max-w-none">
