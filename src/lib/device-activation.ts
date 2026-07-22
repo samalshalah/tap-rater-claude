@@ -1,5 +1,6 @@
 import { createHash, timingSafeEqual } from "node:crypto";
 import { getSupabaseAdmin, hasSupabaseAdminConfig } from "@/lib/db";
+import { generateStandShortCode, getPermanentStandPath, normalizeStandShortCode, type StandLinkType } from "@/lib/stand-domain";
 export { generateGoogleReviewUrl } from "@/lib/google-review";
 
 export type ActivationDestinationType =
@@ -53,6 +54,9 @@ type DeviceRow = {
   device_code: string;
   activation_code_hash: string;
   status: string;
+  product_type?: string;
+  label?: string | null;
+  public_slug?: string | null;
 };
 
 type CustomerRow = {
@@ -185,6 +189,8 @@ export async function activateDeviceWithClient(
     googleFormattedAddress: input.googleFormattedAddress
   });
   const platformDestinationType = normalizeDestinationType(input.destinationType);
+  const publicSlug = normalizeStandShortCode(device.public_slug ?? device.device_code.toLowerCase()) ?? generateStandShortCode();
+  const standMetadata = activationStandMetadata(input.destinationType, device.product_type, device.label);
 
   const { error: deviceUpdateError } = await client
     .from("devices")
@@ -194,6 +200,18 @@ export async function activateDeviceWithClient(
       business_id: business.id,
       destination_type: platformDestinationType,
       destination_url: destinationUrl,
+      product_slug: standMetadata.productSlug,
+      product_name: standMetadata.productName,
+      stand_category: standMetadata.standCategory,
+      public_slug: publicSlug,
+      permanent_url_path: getPermanentStandPath(publicSlug),
+      stand_mode: "redirect",
+      stand_status: "active",
+      print_status: "printed",
+      nfc_programmed: true,
+      qr_generated: true,
+      required_link_types: [standMetadata.linkType],
+      supported_providers: standMetadata.provider ? [standMetadata.provider] : [],
       activated_at: new Date().toISOString(),
       updated_at: new Date().toISOString()
     })
@@ -201,6 +219,19 @@ export async function activateDeviceWithClient(
 
   if (deviceUpdateError) {
     throw new Error("Device could not be activated.");
+  }
+
+  const { error: linkError } = await client.from("stand_destination_links").insert({
+    customer_stand_id: device.id,
+    label: standMetadata.linkLabel,
+    type: standMetadata.linkType,
+    provider: standMetadata.provider,
+    url: destinationUrl,
+    sort_order: 0,
+    is_active: true
+  });
+  if (linkError) {
+    throw new Error("Stand destination could not be created.");
   }
 
   await logActivationAttempt(client, { deviceCode, email, ipHash: context.ipHash, success: true, reason: "activated" });
@@ -342,6 +373,21 @@ function businessDestinationColumn(destinationType: ActivationDestinationType) {
 
 function canonicalActivationCode(activationCode: string) {
   return activationCode.trim().toUpperCase();
+}
+
+function activationStandMetadata(destinationType: ActivationDestinationType, productType?: string, label?: string | null) {
+  const values: Record<ActivationDestinationType, { standCategory: string; linkType: StandLinkType; provider: string | null; linkLabel: string }> = {
+    google_review_url: { standCategory: "review-stands", linkType: "review", provider: "google", linkLabel: "Review us on Google" },
+    direct_url: { standCategory: "website-link-stands", linkType: "website", provider: "website", linkLabel: "Visit our website" },
+    facebook_url: { standCategory: "review-stands", linkType: "review", provider: "facebook", linkLabel: "Review us on Facebook" },
+    yelp_url: { standCategory: "review-stands", linkType: "review", provider: "yelp", linkLabel: "Review us on Yelp" },
+    booking_url: { standCategory: "appointment-stands", linkType: "booking", provider: null, linkLabel: "Book an appointment" },
+    social_url: { standCategory: "social-media-stands", linkType: "social", provider: null, linkLabel: "Follow us" }
+  };
+  const metadata = values[destinationType];
+  const productSlug = productType?.trim().replaceAll("_", "-") || `${metadata.linkType}-stand`;
+  const productName = label?.trim() || productSlug.split("-").map((part) => part[0]?.toUpperCase() + part.slice(1)).join(" ");
+  return { ...metadata, productSlug, productName };
 }
 
 function failure(reason: ActivationFailureReason, message: string): ActivationResult {

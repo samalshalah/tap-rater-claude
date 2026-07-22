@@ -16,7 +16,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Login link is invalid or expired." }, { status: 401 });
   }
 
-  const response = NextResponse.json({ ok: true, redirectTo: "/account" });
+  const response = NextResponse.json({ ok: true, redirectTo: "/dashboard" });
   response.cookies.set(customerCookieName, createCustomerSessionValue(token.email), {
     httpOnly: true,
     sameSite: "lax",

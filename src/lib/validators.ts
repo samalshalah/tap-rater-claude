@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { standLinkTypes, standPrintStatuses, standStatuses } from "@/lib/stand-domain";
 
 const productCustomizationOptions = ["standard_design", "add_logo", "custom_design"] as const;
 
@@ -231,6 +232,60 @@ export const accountChangeRequestSchema = z.object({
 export type AccountLoginRequestInput = z.infer<typeof accountLoginRequestSchema>;
 export type AccountLoginVerifyInput = z.infer<typeof accountLoginVerifySchema>;
 export type AccountChangeRequestInput = z.infer<typeof accountChangeRequestSchema>;
+
+const optionalPublicUrl = z.union([z.string().trim().url().max(2048), z.literal("")]).optional().default("");
+
+export const dashboardBusinessSchema = z.object({
+  businessId: z.string().uuid().optional(),
+  businessName: z.string().trim().min(2).max(160),
+  logoUrl: optionalPublicUrl,
+  websiteUrl: optionalPublicUrl,
+  phone: z.string().trim().max(60).optional().default(""),
+  address: z.string().trim().max(500).optional().default("")
+});
+
+export const dashboardStandSetupSchema = z.object({
+  links: z
+    .array(
+      z.object({
+        label: z.string().trim().min(1).max(100),
+        type: z.enum(standLinkTypes),
+        provider: z.string().trim().max(80).optional().default(""),
+        url: z.string().trim().url().max(2048),
+        isActive: z.boolean().default(true)
+      })
+    )
+    .max(30),
+  hostedPageConfig: z
+    .object({
+      pageTitle: z.string().trim().min(1).max(120),
+      pageSubtitle: z.string().trim().max(240).optional().default(""),
+      businessLogoUrl: optionalPublicUrl,
+      theme: z.string().trim().max(40).optional().default("light"),
+      primaryColor: z.string().trim().regex(/^#[0-9a-fA-F]{6}$/).optional().default("#0a6c64")
+    })
+    .optional(),
+  completeSetup: z.boolean().default(false)
+});
+
+export const adminCustomerStandCreateSchema = z.object({
+  customerEmail: z.string().trim().email().max(180),
+  businessName: z.string().trim().min(2).max(160),
+  productSlug: z.string().trim().min(2).max(160).regex(/^[a-z0-9-]+$/),
+  initialDestinationUrl: optionalPublicUrl
+});
+
+export const adminCustomerStandUpdateSchema = z.object({
+  status: z.enum(standStatuses),
+  printStatus: z.enum(standPrintStatuses),
+  nfcProgrammed: z.boolean(),
+  qrGenerated: z.boolean()
+});
+
+export type DashboardBusinessInput = z.infer<typeof dashboardBusinessSchema>;
+export type DashboardStandSetupInput = z.infer<typeof dashboardStandSetupSchema>;
+export type AdminCustomerStandCreateInput = z.infer<typeof adminCustomerStandCreateSchema>;
+export type AdminCustomerStandUpdateInput = z.infer<typeof adminCustomerStandUpdateSchema>;
 
 export const adminConfigSchema = z.object({
   area: z.string().trim().min(2).max(80).regex(/^[a-z0-9-]+$/),

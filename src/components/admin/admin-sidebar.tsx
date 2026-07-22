@@ -12,6 +12,7 @@ import {
   Megaphone,
   Package,
   Percent,
+  RadioTower,
   Search,
   Settings,
   ShoppingBag,
@@ -25,6 +26,7 @@ import { adminNavigationGroups } from "@/lib/admin-navigation";
 const icons = {
   Dashboard: LayoutDashboard,
   Requests: ClipboardList,
+  Stands: RadioTower,
   Orders: ShoppingBag,
   Customers: Users,
   Products: Package,

@@ -8,6 +8,8 @@ export const REQUIRED_PLATFORM_TABLES = [
   "customers",
   "businesses",
   "devices",
+  "stand_destination_links",
+  "hosted_tap_page_configs",
   "landing_pages",
   "tap_events",
   "form_submissions",

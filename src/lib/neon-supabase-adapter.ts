@@ -58,6 +58,43 @@ const tableColumns = {
     "landing_page_id",
     "label",
     "activated_at",
+    "product_id",
+    "product_slug",
+    "product_name",
+    "stand_category",
+    "public_slug",
+    "permanent_url_path",
+    "stand_mode",
+    "stand_status",
+    "print_status",
+    "nfc_programmed",
+    "qr_generated",
+    "required_link_types",
+    "supported_providers",
+    "order_item_key",
+    "created_at",
+    "updated_at"
+  ],
+  stand_destination_links: [
+    "id",
+    "customer_stand_id",
+    "label",
+    "type",
+    "provider",
+    "url",
+    "sort_order",
+    "is_active",
+    "created_at",
+    "updated_at"
+  ],
+  hosted_tap_page_configs: [
+    "id",
+    "customer_stand_id",
+    "page_title",
+    "page_subtitle",
+    "business_logo_url",
+    "theme",
+    "primary_color",
     "created_at",
     "updated_at"
   ],
@@ -117,6 +154,14 @@ const tableColumns = {
     "seo_title",
     "seo_description",
     "is_active",
+    "stand_category_slug",
+    "destination_type",
+    "platform_slug",
+    "tags",
+    "supports_logo",
+    "supports_business_name",
+    "supports_custom_headline",
+    "supports_multiple_links",
     "created_at",
     "updated_at"
   ],
@@ -145,11 +190,12 @@ const tableColumns = {
 type TableName = keyof typeof tableColumns;
 
 const jsonbColumns = new Set(["payload", "buttons_json", "form_config_json", "payload_json", "line_items_json", "customer_details_json"]);
-const textArrayColumns = new Set(["supported_destinations", "customization_options"]);
+const textArrayColumns = new Set(["supported_destinations", "customization_options", "tags", "required_link_types", "supported_providers"]);
 const defaultConflictTargets: Partial<Record<TableName, string>> = {
   orders: "stripe_checkout_session_id",
   products: "slug",
-  site_content: "key"
+  site_content: "key",
+  hosted_tap_page_configs: "customer_stand_id"
 };
 
 export function getDatabaseUrlFromEnv(env: Record<string, string | undefined> = process.env) {

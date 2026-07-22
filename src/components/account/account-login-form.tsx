@@ -26,7 +26,7 @@ export function AccountLoginForm({ token }: { token?: string }) {
         if (!response.ok) {
           throw new Error(body?.error ?? "Login link is invalid or expired.");
         }
-        window.location.href = body?.redirectTo ?? "/account";
+        window.location.href = body?.redirectTo ?? "/dashboard";
       })
       .catch((error) => {
         setStatus("error");
@@ -76,7 +76,7 @@ export function AccountLoginForm({ token }: { token?: string }) {
       return;
     }
 
-    window.location.href = "/account";
+    window.location.href = "/dashboard";
   }
 
   return (

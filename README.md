@@ -419,6 +419,8 @@ Stripe secrets should stay test-mode only until live checkout is explicitly appr
 
 ## Known Not Live Yet
 
+Customer Stand architecture, routes, schema application, and order-provisioning notes are documented in [`docs/customer-stands.md`](docs/customer-stands.md).
+
 - Live Stripe payments.
 - Live paid orders.
 - Live Stripe webhooks.

@@ -27,6 +27,9 @@ export async function POST(request: Request) {
         if (!result.ok) {
           return NextResponse.json({ error: "Paid order could not be saved." }, { status: 500 });
         }
+        // TODO: Call createCustomerStandForOrderItem only after checkout stores
+        // an authenticated customer ID and selected business ID. Email alone is
+        // not a safe ownership contract for automatic stand assignment.
       }
     }
 

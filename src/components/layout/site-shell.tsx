@@ -4,11 +4,9 @@ import { usePathname } from "next/navigation";
 import { Footer } from "@/components/layout/footer";
 import { Header } from "@/components/layout/header";
 
-// Admin (/admin) and the customer account portal (/account) each have their
-// own dedicated shell (AdminShell / AccountShell) -- they should never also
-// carry the marketing site's Header/Footer on top of that. Everything else
-// (the storefront) gets the normal site chrome.
-const NO_CHROME_PREFIXES = ["/admin", "/account"];
+// Operational and public stand surfaces use dedicated shells and should not
+// also carry the marketing site's header and footer.
+const NO_CHROME_PREFIXES = ["/admin", "/account", "/dashboard", "/t"];
 const NO_CHROME_PATHS = ["/"];
 
 export function SiteShell({ children }: { children: React.ReactNode }) {

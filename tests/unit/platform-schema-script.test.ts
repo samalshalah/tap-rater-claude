@@ -8,6 +8,8 @@ describe("platform schema check script", () => {
       "customers",
       "businesses",
       "devices",
+      "stand_destination_links",
+      "hosted_tap_page_configs",
       "landing_pages",
       "tap_events",
       "form_submissions",
@@ -25,6 +27,8 @@ describe("platform schema check script", () => {
     expect(result.ok).toBe(false);
     expect(result.missingTables).toEqual([
       "businesses",
+      "stand_destination_links",
+      "hosted_tap_page_configs",
       "landing_pages",
       "tap_events",
       "form_submissions",

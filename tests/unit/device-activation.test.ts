@@ -80,6 +80,12 @@ describe("device activation", () => {
       destination_type: "google_review",
       destination_url: "https://g.page/r/local-shop"
     });
+    expect(db.inserted.stand_destination_links[0]).toMatchObject({
+      customer_stand_id: "device-1",
+      type: "review",
+      provider: "google",
+      url: "https://g.page/r/local-shop"
+    });
     expect(db.inserted.device_activation_attempts.at(-1)).toMatchObject({
       device_code: "TR123",
       email: "owner@example.com",
@@ -153,26 +159,29 @@ describe("device activation", () => {
   });
 });
 
-type TableName = "devices" | "customers" | "businesses" | "device_activation_attempts";
+type TableName = "devices" | "customers" | "businesses" | "device_activation_attempts" | "stand_destination_links";
 
 function createActivationDb(seed: { devices: Array<Record<string, unknown>> }) {
   const rows: Record<TableName, Array<Record<string, unknown>>> = {
     devices: [...seed.devices],
     customers: [],
     businesses: [],
-    device_activation_attempts: []
+    device_activation_attempts: [],
+    stand_destination_links: []
   };
   const inserted: Record<TableName, Array<Record<string, unknown>>> = {
     devices: [],
     customers: [],
     businesses: [],
-    device_activation_attempts: []
+    device_activation_attempts: [],
+    stand_destination_links: []
   };
   const updated: Record<TableName, Array<Record<string, unknown>>> = {
     devices: [],
     customers: [],
     businesses: [],
-    device_activation_attempts: []
+    device_activation_attempts: [],
+    stand_destination_links: []
   };
   let nextCustomer = 1;
   let nextBusiness = 1;

@@ -356,3 +356,177 @@ alter table products add column if not exists supports_multiple_links boolean no
 
 create index if not exists products_stand_category_slug_idx on products(stand_category_slug);
 create index if not exists products_tags_idx on products using gin(tags);
+
+-- Customer Stand foundation (2026-07-22).
+-- `devices` remains the physical-instance table so activation, redirects, and
+-- existing ownership records continue to work. The columns below expose that
+-- same record as the Customer Stand domain model used by /t and /dashboard.
+alter table devices add column if not exists product_id uuid references products(id) on delete set null;
+alter table devices add column if not exists product_slug text;
+alter table devices add column if not exists product_name text;
+alter table devices add column if not exists stand_category text;
+alter table devices add column if not exists public_slug text;
+alter table devices add column if not exists permanent_url_path text;
+alter table devices add column if not exists stand_mode text not null default 'redirect';
+alter table devices add column if not exists stand_status text not null default 'setup_required';
+alter table devices add column if not exists print_status text not null default 'not_ready';
+alter table devices add column if not exists nfc_programmed boolean not null default false;
+alter table devices add column if not exists qr_generated boolean not null default false;
+alter table devices add column if not exists required_link_types text[] not null default array[]::text[];
+alter table devices add column if not exists supported_providers text[] not null default array[]::text[];
+alter table devices add column if not exists order_item_key text;
+
+with stand_slugs as (
+  select
+    id,
+    coalesce(
+      public_slug,
+      case
+        when lower(device_code) ~ '^[a-z0-9-]{6,32}$' then lower(device_code)
+        else substr(encode(gen_random_bytes(8), 'hex'), 1, 10)
+      end
+    ) as resolved_public_slug
+  from devices
+)
+update devices
+set
+  public_slug = stand_slugs.resolved_public_slug,
+  permanent_url_path = '/t/' || stand_slugs.resolved_public_slug,
+  product_slug = coalesce(product_slug, lower(replace(product_type, '_', '-'))),
+  product_name = coalesce(product_name, label, initcap(replace(product_type, '_', ' '))),
+  stand_category = coalesce(
+    stand_category,
+    case
+      when product_type in ('google_review', 'facebook_review', 'yelp_profile', 'multi_platform_review') then 'review-stands'
+      when product_type = 'appointment_booking' then 'appointment-stands'
+      when product_type = 'social_follow' then 'social-media-stands'
+      when product_type = 'wifi_menu' then 'menu-info-stands'
+      when product_type = 'feedback_form' then 'feedback-stands'
+      else 'website-link-stands'
+    end
+  ),
+  stand_mode = case when service_mode = 'premium_landing_page' then 'hosted_page' else 'redirect' end,
+  stand_status = case
+    when status = 'active' then 'active'
+    when status = 'paused' then 'paused'
+    when status in ('lost', 'retired') then 'archived'
+    else 'setup_required'
+  end
+from stand_slugs
+where devices.id = stand_slugs.id
+  and (devices.public_slug is null or devices.permanent_url_path is null);
+
+create unique index if not exists devices_public_slug_idx on devices(public_slug);
+create unique index if not exists devices_order_item_key_idx on devices(order_item_key) where order_item_key is not null;
+create index if not exists devices_stand_status_idx on devices(stand_status);
+create index if not exists devices_print_status_idx on devices(print_status);
+create index if not exists devices_product_slug_idx on devices(product_slug);
+
+do $$
+begin
+  alter table devices drop constraint if exists devices_stand_mode_check;
+  alter table devices add constraint devices_stand_mode_check check (stand_mode in ('redirect', 'hosted_page'));
+
+  alter table devices drop constraint if exists devices_stand_status_check;
+  alter table devices add constraint devices_stand_status_check check (
+    stand_status in ('setup_required', 'ready_for_print', 'active', 'paused', 'archived')
+  );
+
+  alter table devices drop constraint if exists devices_print_status_check;
+  alter table devices add constraint devices_print_status_check check (
+    print_status in ('not_ready', 'ready', 'printed', 'shipped')
+  );
+
+  alter table devices drop constraint if exists devices_public_slug_check;
+  alter table devices add constraint devices_public_slug_check check (
+    public_slug is null or public_slug ~ '^[a-z0-9-]{6,32}$'
+  );
+
+  alter table devices drop constraint if exists devices_permanent_url_path_check;
+  alter table devices add constraint devices_permanent_url_path_check check (
+    public_slug is null or permanent_url_path = '/t/' || public_slug
+  );
+end $$;
+
+create or replace function protect_customer_stand_permanent_url()
+returns trigger
+language plpgsql
+as $$
+begin
+  if old.public_slug is not null and new.public_slug is distinct from old.public_slug then
+    raise exception 'Customer Stand public_slug is immutable';
+  end if;
+
+  if old.permanent_url_path is not null and new.permanent_url_path is distinct from old.permanent_url_path then
+    raise exception 'Customer Stand permanent_url_path is immutable';
+  end if;
+
+  return new;
+end;
+$$;
+
+drop trigger if exists devices_protect_permanent_url on devices;
+create trigger devices_protect_permanent_url
+before update of public_slug, permanent_url_path on devices
+for each row execute function protect_customer_stand_permanent_url();
+
+create table if not exists stand_destination_links (
+  id uuid primary key default gen_random_uuid(),
+  customer_stand_id uuid not null references devices(id) on delete cascade,
+  label text not null,
+  type text not null,
+  provider text,
+  url text not null,
+  sort_order integer not null default 0,
+  is_active boolean not null default true,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  constraint stand_destination_links_type_check check (
+    type in ('review', 'social', 'booking', 'menu', 'website', 'phone', 'email', 'map', 'survey', 'custom')
+  ),
+  constraint stand_destination_links_http_url_check check (url ~* '^https?://')
+);
+
+create index if not exists stand_destination_links_stand_id_idx on stand_destination_links(customer_stand_id);
+create index if not exists stand_destination_links_active_order_idx on stand_destination_links(customer_stand_id, is_active, sort_order);
+
+insert into stand_destination_links (customer_stand_id, label, type, provider, url, sort_order, is_active)
+select
+  devices.id,
+  coalesce(devices.label, 'Open link'),
+  case
+    when devices.destination_type in ('google_review', 'facebook_review', 'yelp_profile') then 'review'
+    when devices.destination_type = 'booking' then 'booking'
+    when devices.destination_type = 'social' then 'social'
+    when devices.destination_type in ('menu', 'wifi') then 'menu'
+    else 'custom'
+  end,
+  case
+    when devices.destination_type = 'google_review' then 'google'
+    when devices.destination_type = 'facebook_review' then 'facebook'
+    when devices.destination_type = 'yelp_profile' then 'yelp'
+    else null
+  end,
+  devices.destination_url,
+  0,
+  true
+from devices
+where devices.destination_url is not null
+  and devices.destination_url ~* '^https?://'
+  and not exists (
+    select 1 from stand_destination_links where stand_destination_links.customer_stand_id = devices.id
+  );
+
+create table if not exists hosted_tap_page_configs (
+  id uuid primary key default gen_random_uuid(),
+  customer_stand_id uuid not null unique references devices(id) on delete cascade,
+  page_title text not null,
+  page_subtitle text,
+  business_logo_url text,
+  theme text,
+  primary_color text,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+create index if not exists hosted_tap_page_configs_stand_id_idx on hosted_tap_page_configs(customer_stand_id);
