@@ -25,7 +25,7 @@ const tableColumns = {
   contact_requests: ["id", "name", "email", "message", "status", "created_at"],
   setup_requests: ["id", "name", "email", "business_name", "review_url", "notes", "status", "created_at"],
   change_link_requests: ["id", "name", "email", "taprater_id", "new_review_url", "notes", "status", "created_at"],
-  customers: ["id", "email", "name", "phone", "role", "email_verified_at", "created_at", "updated_at"],
+  customers: ["id", "email", "name", "phone", "role", "email_verified_at", "password_hash", "created_at", "updated_at"],
   businesses: [
     "id",
     "customer_id",

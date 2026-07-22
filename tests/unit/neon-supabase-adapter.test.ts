@@ -61,6 +61,20 @@ describe("Neon Supabase adapter", () => {
     expect(query.mock.calls[0][0]).toContain("returning devices.id, devices.device_code");
   });
 
+  it("supports customer password hash reads and updates", async () => {
+    const query = vi.fn().mockResolvedValueOnce([{ password_hash: "stored-hash" }]).mockResolvedValueOnce([]);
+    const client = createNeonSupabaseAdapter(query);
+
+    const selected = await client.from("customers").select("password_hash").eq("email", "owner@example.com").maybeSingle();
+    const updated = await client.from("customers").update({ password_hash: "new-hash" }).eq("email", "owner@example.com");
+
+    expect(selected).toEqual({ data: { password_hash: "stored-hash" }, error: null });
+    expect(updated.error).toBeNull();
+    expect(query.mock.calls[0][0]).toContain("select customers.password_hash from customers");
+    expect(query.mock.calls[1][0]).toContain("update customers set password_hash = $1 where customers.email = $2");
+    expect(query.mock.calls[1][1]).toEqual(["new-hash", "owner@example.com"]);
+  });
+
   it("upserts JSON content using the table conflict target", async () => {
     const query = vi.fn().mockResolvedValue([]);
     const client = createNeonSupabaseAdapter(query);
