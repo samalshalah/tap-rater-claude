@@ -9,10 +9,13 @@ import { Header } from "@/components/layout/header";
 // carry the marketing site's Header/Footer on top of that. Everything else
 // (the storefront) gets the normal site chrome.
 const NO_CHROME_PREFIXES = ["/admin", "/account"];
+const NO_CHROME_PATHS = ["/"];
 
 export function SiteShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const hideChrome = NO_CHROME_PREFIXES.some((prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`));
+  const hideChrome =
+    NO_CHROME_PATHS.includes(pathname) ||
+    NO_CHROME_PREFIXES.some((prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`));
 
   if (hideChrome) {
     return <div className="min-h-screen bg-white">{children}</div>;

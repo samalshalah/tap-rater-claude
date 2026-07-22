@@ -17,11 +17,12 @@ describe("Tap Rater product strategy", () => {
     expect(doc).toContain("Phase 3");
   });
 
-  it("positions the homepage around NFC products and hosted reputation pages", () => {
+  it("positions the temporary homepage around the coming-soon launch", () => {
     const homepage = readFileSync("src/app/page.tsx", "utf8");
 
-    expect(homepage).toContain("Tap. Scan. Review.");
-    expect(homepage).toContain("More than a sign. A reputation platform.");
+    expect(homepage).toContain("New storefront launching soon");
+    expect(homepage).toContain("Tap Rater is getting ready.");
+    expect(homepage).toContain("NFC review stands, smart tap links, and local business reputation tools");
   });
 
   it("documents the platform domain split, redirect engine, and database entities", () => {
